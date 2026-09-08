@@ -7,10 +7,14 @@ decisions and phase status don't have to be re-explained from scratch every time
 > orientation guide (how we work, the determinism rules, the full phase status, what is deferred,
 > and what is *explicitly removed from scope and must not be built*). The raw plan documents for
 > the three most recent tickets are archived in `docs/plan-archive/`. As of the last session:
-> **691/691 tests, two consecutive clean runs, 0 build warnings; Phases 0-16 + all follow-up
-> passes complete; Phase 17 (Application, Persistence & UI) is next and not started.**
+> **699/699 tests, three consecutive clean runs, 0 build warnings; Phases 0-16 + all follow-up
+> passes complete; Phase 17 Part 1 (`WorldStateStore` + `CricketManager.App`) is DONE - the
+> project is a saveable, resumable, git-tracked game now. The graphical UI and the live
+> seeded-world domestic-pyramid determinism fix are still open.**
 > **First-time testing is NOT needed - the baseline is already verified; a single `dotnet build`
 > to confirm a clean compile is enough to start.**
+> **The project is now tracked in git** (the earlier "no git" standing decision was reversed by
+> the owner) - see "Git version control" under the Phase 17 writeup below.
 
 ## What this project is
 
@@ -79,7 +83,7 @@ file's phase status before building on top of them.** This file is the source of
 | Post-16-B | Deferred-Items Completion Sweep (Phases 10/12/13/15/16 + the Match-Engine Tactical Pass) | **DONE (646/646)** - the user's own directive: nothing deferred against Phases 10-16 should carry into Phase 17. Six passes, each additive and tested: Phase 10 domestic depth (a real 3-tier promotion/relegation chain, a 3-format domestic season, associate nations as real teams with a qualifier, competition expansion/contraction, WC-qualification points); Phase 12 board/coach/media (a chairman's agenda + owner trajectory shaping the season budget, coach-player relationships, board objectives beyond results, franchise-circuit assistant coaches); Phase 13 market depth (multi-year sponsor contracts, persistent player agents pushing wages); Phase 15 conditions & rare events (wind-boundary asymmetry, a re-used/drop-in strip worn from ball one, a TV umpire without full DRS, post-rain per-over transition, footmark rough split by bowling arm, the franchise **Impact Player** as a real 12-deep roster addition, **retired hurt**); and the **Match-Engine Tactical Pass** itself - the batched §2.x in-match micro-tactics named as their own future pass since Phase 4: ODI middle-overs intent, partnership style fit, keeper-standing-up-to-seam, technical-flaw dismissal *frequency* (not just shape), two new balls in an ODI, within-innings dew, an opposition-hand-aware XI nudge, a spinner turning away from the bat drawing a real slip, and captain-quality now genuinely scaling the declaration and follow-on decisions - plus a real, deterministic conduct cost for a sustained leg-theory barrage. A genuinely diagnosed and fixed regression along the way (the situational-field-aggression mechanic, tried directly in the live per-over field build, diluted the established "poor captaincy costs runs" signal even fully decorrelated from captain quality - reverted to an unwired-but-documented building block rather than force it in) and a real crash found and fixed (`Phase7MatchHooks`'s new leg-theory lookup used `ToDictionary` across both XIs, which throws on the rare case of a player appearing in both - fixed to `GroupBy`/`First`). See "PHASE 10-16 DEFERRED-ITEMS COMPLETION SWEEP" below for the full six-pass writeup. A small, honestly-scoped remainder of §2.x items stays deferred - see that section's own closing list. |
 | Meeting Ticket | Meeting-Driven Selection/Auction, Franchise Identity Evolution, Cleanup | **DONE (673/673, two consecutive clean runs, 0 warnings)** - a large external ticket, worked through the mandatory Research -> Plan -> Implement gate (real web research on BCCI-style panels/IPL auction practice, direct source verification, a written plan reviewed and approved before any code). Stage 1 (this session): **Director of Cricket removed entirely** (a clean, surgical deletion - confirmed nothing else in the codebase depended on it); **Impact Player removed entirely** (it had already been half-dead - `MatchSetup.ImpactPlayerEdge` was superseded and permanently zero); and the **national selection panel restructured as staff, never an authority** - new `StaffRole.Selector`/`ChiefSelector` hired via `AiClubManagementService.FillSelectionPanel` (the exact deterministic staff-hire pattern every other backroom seat uses), a new `NationalPoolMeetingService` narrating the existing annual pool refresh (plus an extra meeting once ahead of a major tournament) as a genuine meeting with attendees and findings, and the per-series `SelectionMeetingService` meeting made genuinely discretionary (`ManagerPreferences.HoldSelectionMeetings` + a thoroughness/turnover-driven AI trigger) rather than firing unconditionally. Folded in alongside A per the user's own request: a repeated `Outvoted` panel decision now has real consequences (`NationalBoard.ConsecutiveOutvotes`, a chairman-trust hit, a `StorylineKind.SelectorsAtWar` narrative, and a confidence dent for the player carried over the room). **Found along the way**: a confirmed, pre-existing latent determinism bug in `JobMarketService.GatherApplications` (candidate loops ordered by `.Id`, a non-seed-derived Guid) - in Stage 1 routed around, and in the Stage 2 determinism pass **actually fixed** (stable `(LastName, FirstName)` order; `Appoint` threads its own `random`). **Stage 2 (this session)**: franchise identity evolution (`FranchiseIdentityService` - `FranchiseArchetype` drift from results and from a new coach's philosophy, deterministic, with a hysteresis clock); first-hand-knowledge auction weighting (`Player`/`Coach.CareerTeamIds` + `FirstHandKnowledgeService`, a bounded confidence lever on the auction ceiling, gated off for global stars); the pre-auction war-room + EOI-conversion + post-auction-review meeting trio (narrative wraps of existing auction computations); no-fixed-squad-templates (`FranchiseAuctionService.RoleEmphasis` - archetype/identity reshapes composition on top of the `SquadNeeds` depth floor); needs-priority (not overseas-first) bidding order; and the **generic N-tier promotion/relegation generator** (`GenerateTieredDomesticStructure`, built + unit-tested) - its **live wiring into the seeded world was DEFERRED**: it reproducibly amplified a latent, not-fully-root-caused non-determinism over a long multi-year sim, and shipping a non-deterministic world is not acceptable, so the seeded world keeps its flat top-flight T20 cup and the wiring is on the deferred register (Phase 17). Plus the standing-status digest fold-in. See "MEETING-DRIVEN SELECTION TICKET" below for the full writeup and the plan file this ticket worked from. **A follow-up CORRECTIONS pass (680/680, four consecutive clean runs)** then reverted the Stage-2 auction queue-jump (a misreading - set order is role/tier only; priority now drives how hard a franchise fights + a real lost-must-have -> plan-B promotion), extended `RoleEmphasis` with home-ground conditions + last-campaign diagnosis and added a per-`Competition` `HomePitchInfluence` (≈0 for ICC/franchise, full for domestic first-class) gating pitch doctoring with a quality-floor bad-outcome branch, **corrected franchise coaching to genuine year-round multi-year `CoachingContract` employment** (hired before the auction, re-hired immediately on a sack; the DoC stays out on purpose), gave a national coach agency to call his own pool meeting + a one-shot per-competition meeting skip, and fixed a `FirstHandKnowledgeService` linear scan. See "MEETING-DRIVEN SELECTION TICKET - CORRECTIONS PASS". |
 | Seven-Suggestions | 7 review-process features + a cricket-personnel-careers subsystem | **DONE (691/691, 0 warnings)** - a review-process suggestion prompt (7 optional features), worked through the mandatory Research -> Plan -> Implement gate (real-source verification of the ICC revenue split, eligibility/stand-down rules, Article 2.7 irrevocability, England's 2022->2025 coaching split, BCCI selector eligibility). User's call: **build everything**, all four open questions per recommendation, PLUS four expansions the user added. 11 slices: **S5** `IccRevenueService` + a light national finance loop (a ~$600M pool by a 4-weight formula, India capped and the majors flattened, a growing associate pool, feeding national `Team.Finances` + `BoardYouthInvestment`); **S7** `FullMembershipService` - an associate earns Test status on a sustained record, telegraphed then granted, **IRREVOCABLE** (Article 2.7), admitted to the WTC/ODI Championship; **S6** `RepresentationDriftService` - opportunity/bitterness-driven allegiance switches with the ICC 3-year stand-down (zero Associate->Full), heritage routes, personality-shaped outcomes (a `Loyal` player retires rather than switch), the reversible Rankin case; **NEW-C** `PlayerRetirementCareerService` - a retiree's second career routed by playing-career weight + temperament to head coach / specialist / scout / selector / mentor (legends only) / out of the game; **NEW-B** national selectors are ex-cricketers only (BCCI caps threshold, retired 5+ years, most-capped is chairman; a brand-new save bootstraps a starting panel); **NEW-D** `Coach.AdditionalRoles` - a skilled willing head coach at a small side doubles as his own batting/bowling coach; **S2** national `CoachingStructure` mirroring `CaptaincyPattern` - a board splits the head-coach job under format-clash pressure and reunifies when the coordination friction bites (the England arc); **NEW-A** real year-round multi-league franchise `StaffContract`s with the same availability rules as the head coach; **S1** `Team.OwnershipGroupId` - multi-league ownership groups give each other a first-hand auction read; **S3** `Player.CommercialAppeal` (computed) feeding image-rights + a transfer-wish nudge; **S4** a `NeedsMatchFitnessUntil` gate - a long-injury returnee needs domestic cricket before an international recall. Two Guid-ordering determinism bugs caught and fixed before testing. See "SEVEN-SUGGESTIONS PASS + CRICKET-PERSONNEL-CAREERS SUBSYSTEM" and the plan file `seven-suggestions.md`. |
-| 17 | Application, Persistence & UI | **PLANNED** - `WorldStateStore` (a save currently loses ~19 `WorldState` collections), a `CricketManager.App` headless game loop (`new` / `advance` / `status`), build hygiene (`Directory.Build.props`, `.gitignore`, `.editorconfig`), then a graphical UI as its own long sub-track. The persistence bridge MAY be pulled forward to Phase 10 if a save/resume workflow is wanted sooner. |
+| 17 | Application, Persistence & UI | **PART 1 DONE (699/699)** - `WorldStateStore` (the whole `WorldState` + `GameCalendar` as one JSON document, reusing `SqliteRepository<T>`; a real `System.Text.Json` get-only-collection bug found and fixed along the way - see the writeup), `WorldSeeder.AssembleWorldState`, and `CricketManager.App` (`new`/`advance`/`status`, testable `AppCommands` + a thin CLI shim) are all built and tested. Build hygiene (`Directory.Build.props`, `.editorconfig`) done; the project is now tracked in git (the owner reversed the earlier "no git" decision mid-pass). **Still open**: a graphical UI (its own long sub-track) and the live seeded-world domestic-pyramid determinism fix (unrelated to this pass, tracked separately). See "PHASE 17 - APPLICATION, PERSISTENCE & UI (PART 1)" below. |
 | 18 | Real-World Data Import | **PLANNED** - the external-data-layer: import real players / teams / competitions / grounds and the real ICC Future Tours Programme + Cricsheet match history to replace (or seed alongside) the fictional `WorldSeeder` world. A DATA swap against the seams already named everywhere, not an engine rewrite. Also home to the domestic **draft** league type (review §8.10) as a real-world league variant. |
 
 ### Phase 3 (Competitions, Grounds, Facilities, Finances)
@@ -8552,6 +8556,10 @@ added and one pre-existing test's seed count was widened rather than counted as 
 
 ### Phase 17 - Application, Persistence & UI
 
+**Part 1 (`WorldStateStore` + `CricketManager.App`) is now DONE - see the full writeup under
+"PHASE 17 - APPLICATION, PERSISTENCE & UI (PART 1)" further down this file. This section is the
+original pre-implementation note, kept as the historical planning record.**
+
 The "make it a saveable, playable game" track. Not a current pass; scheduled after the depth
 phases per the user, though the persistence bridge may be pulled forward to Phase 10 if a
 save/resume workflow is wanted sooner.
@@ -9601,6 +9609,163 @@ static was introduced; all new RNG consumption is deterministic).
 
 ---
 
+## PHASE 17 - APPLICATION, PERSISTENCE & UI (PART 1: `WorldStateStore` + `CricketManager.App`) - COMPLETE
+
+**Status: DONE. 699/699 tests, three consecutive clean full-suite runs, 0 build warnings.** Worked
+through the Research -> Plan -> Implement gate (for internal architecture work, "research" was
+thorough codebase verification with file:line citations in place of web research - see the plan
+file, `immutable-snacking-robin.md`, in the plan archive). Mid-implementation, the owner reversed
+the project's long-standing "no git" decision and asked for the project to be tracked in git going
+forward - folded into this pass; see "Git version control" below. The graphical UI, the live
+seeded-world domestic-pyramid determinism fix, and the remaining harness/hygiene items stay
+deferred - see the updated register.
+
+### `WorldStateStore` - the whole simulated world, one JSON document
+
+New `src/CricketManager.Data/Persistence/WorldSaveDocument.cs` (a thin wrapper: a fixed `Guid Id`
+constant since there is always at most one world per save directory, `WorldState World`,
+`GameCalendar Calendar`, an `int SchemaVersion` forward-compat guard, `DateTimeOffset SavedAtUtc`)
++ `WorldStateStore.cs` (`SaveAsync`/`LoadAsync`/`ExistsAsync`), reusing `SqliteRepository<T>`
+**completely unmodified** against one more table (`WorldSaveDocuments`) in the same `game.db` file
+`GameDataContext` already writes to for a save directory - a save directory still means exactly
+one file. `LoadAsync` calls `WorldState.Reindex()` before returning, so a caller never has to
+remember that step separately (the same "welding application to indexing" discipline
+`WorldState.ApplyInjury` already established).
+
+**Investigation found `GameDataContext`'s 25 entity-per-table repositories are not actually wired
+into the live simulation loop at all** - `CricketManager.Domain` has zero references to
+`GameDataContext` anywhere, and `WorldClockService.AdvanceDay`/`FixturePlayService.PlayDueFixtures`
+take only `WorldState` + `GameCalendar`. They are generic, tested CRUD infrastructure, exercised
+only by hand-built per-entity save/reload tests, never by a real running world -
+`WorldStateStore` is the **first** persistence path the simulation loop actually uses. This is
+also why `GameDataContext.CareerStats` (already flagged in its own doc comment as "removable once
+WorldStateStore lands") was deliberately left alone: a real test still exercises it directly, and
+removing a dead-but-harmless fixture for a purely cosmetic gain wasn't worth touching a passing
+test for.
+
+**The two shapes that don't fit a plain JSON document** - `WorldState.PlannedRosters`
+(`IDictionary<(Guid CompetitionId, int Year), List<Guid>>`, a tuple dictionary KEY, which JSON has
+no native representation for) and `SeasonContributions` (`IDictionary<Guid, Dictionary<Guid,
+(string Name, double Rating)>>`, a `ValueTuple` VALUE, which `System.Text.Json` cannot serialize by
+default) - each get a hand-written `JsonConverter<T>` (new
+`src/CricketManager.Domain/Common/WorldStateJsonConverters.cs`, matching the existing
+`Common/AbilityScale.cs` precedent for shared, non-narrative helpers), applied via
+`[JsonConverter(typeof(...))]` **directly on the property** in `WorldClockService.cs` rather than
+registered in `SqliteRepository`'s shared serializer options - zero changes to
+`SqliteRepository.cs`, so the other 24 repositories' behaviour is untouched even in theory.
+`PlannedRosters` converts to/from a JSON array of `{CompetitionId, Year, RosterPlayerIds}` objects
+(never round-tripping a tuple through a fragile composite string key); `SeasonContributions`
+converts to/from nested JSON objects keyed by `Guid.ToString()` at each level.
+
+### A real bug the round-trip test caught, not a hypothetical one
+
+`WorldState` has **ten get-only `Dictionary<...>` properties** (`MatchesThisSeason`,
+`MatchesThisSeasonByFormat`, `RecentDevelopmentByPlayer`, `WorldCupQualificationPoints`,
+`MatchdayIncomeThisSeason`, `SeasonCrowdFill`, `PendingPressStories`, `CareerStats`, `YearForm`,
+`MonthForm` - every one of them `{ get; } = new();`, no setter, no `init`). The first version of
+the round-trip test (a real seeded, multi-year-advanced world saved and reloaded) failed
+immediately: `world.CareerStats.Count` was 272 before saving, **0** after reloading. Traced to
+`System.Text.Json`'s default `JsonObjectCreationHandling.Replace` behaviour - for a property with
+no setter, "replace" has nothing to assign into, so the deserializer silently skips populating it,
+leaving it at whatever the parameterless constructor produced (an empty dictionary). Serialization
+TO json worked fine (the getter is still called for output); only the READ side silently dropped
+the data. **This would have been the exact same silent-data-loss bug this pass exists to close**,
+just moved from "the whole field is unhandled" to "this specific field is unhandled" - caught only
+because the test snapshotted counts before saving and compared them after loading, rather than
+just checking the round trip didn't throw. Fixed with
+`[JsonObjectCreationHandling(JsonObjectCreationHandling.Populate)]` on all ten properties (a
+per-property attribute, .NET 8+, telling the deserializer to populate the EXISTING instance the
+getter returns rather than try to replace it) - the same "property-level attribute, zero changes
+elsewhere" discipline the two custom converters already use. Confirmed with a direct assertion on
+`CareerStats` (272 -> 272) plus every other collection category in the same test.
+
+### `WorldSeeder.AssembleWorldState` - promoted from a private test helper
+
+A canonical `InternationalWorld -> WorldState` assembler already existed, but only as a private
+test helper (`WorldFromInternational` in `Program.cs`, used by the 25-year longevity test and a
+handful of others, each hand-rolling a slightly different, usually-incomplete subset). Promoted to
+a public, static, RNG-free method on `WorldSeeder` (`src/CricketManager.Data/Seeding/WorldSeeder.cs`)
+- verified complete against the full `InternationalWorld` shape, including confirming
+`InternationalWorld.Teams` already includes franchise teams (`WorldSeeder.cs` appends them into
+the same list it returns as `Teams`; `FranchiseTeams` is a filtered convenience view, not a
+separate set to merge). The existing test helper was left alone (zero risk either way, and it
+still passes unchanged) rather than redirected, since nothing required touching it.
+
+### `CricketManager.App` - the headless game loop
+
+New fourth project (`src/CricketManager.App`, `OutputType=Exe`, references `CricketManager.Data`),
+added to the `.sln`. Command LOGIC lives in a static `AppCommands` class
+(`NewGame`/`Advance`/`Status`, each returning a plain result record with no console I/O baked in),
+so `CricketManager.Tests` (which gained a project reference to `CricketManager.App`) tests them
+directly in-process rather than spawning a subprocess - matching the existing hand-rolled
+`TestRunner` style. `Program.cs` is a thin argument-parsing shim over the three commands.
+
+- **`new <save-dir>`** - seeds via `WorldSeeder.GenerateInternationalWorld` (the rich multi-country
+  world, not the older single-country MVP path) + `AssembleWorldState`, builds a `GameCalendar`,
+  saves via `WorldStateStore`. Refuses to silently overwrite an existing save unless `--force` is
+  passed (checked via `WorldStateStore.ExistsAsync`) - a save is not something to clobber by
+  accident, even in solo local use.
+- **`advance <save-dir> [--days N | --weeks N | --to yyyy-MM-dd]`** - loads, moves the clock via
+  `WorldClockService.AdvanceDays`/`AdvanceWeeks`/`AdvanceTo` (day-by-day underneath either way, so
+  no intervening day's events are skipped), saves back, and prints a curated subset of "headline"
+  event types (season completions, dismissals, retirements, trophies won, promotions/relegations,
+  Hall of Fame inductions, takeovers, boardroom coups) rather than every one of the ~100+
+  `GameEventType` values, which would drown the console.
+- **`status <save-dir>`** - read-only: current date, team/player counts, competitions/seasons
+  completed, and - if any `Coach.IsHumanControlled` coach exists (the flag already existed, unused
+  until now) - that coach's own club. A fresh headless game reports "none (fully AI-driven)", which
+  is correct: this pass deliberately does **not** add a "pick/create a human-controlled club"
+  concept to `new` - that is a real player-facing UX decision belonging to the future graphical-UI
+  sub-track, not this persistence-and-loop pass.
+- Smoke-tested manually end to end (`new` -> `advance --days 45` -> `status`, the overwrite guard,
+  `--force`, `--to`, a missing-save error path) before the automated tests were written, per the
+  "cheaper to catch a runtime issue by hand than wait for the suite" discipline.
+
+### Git version control (mid-pass addendum, per the owner)
+
+The owner reversed the standing "no git" decision mid-session and asked for the project to be
+tracked in git going forward. `git init`, a `.gitignore` (build output, IDE cruft, local save-game
+data, `.claude/settings.local.json` - machine-local Claude Code session settings, not project
+source), and one baseline commit (`04f2e9f`) capturing the project exactly as it stood immediately
+before any Phase 17 code landed (691/691 tests, 0 warnings) - a clean revert point predating this
+pass. `HANDOFF.md`'s "no git" note is now stale and updated below. Global git config already had
+`user.name`/`user.email` set, so no config was touched (the "never update git config" rule was
+never in tension with this).
+
+### Build hygiene (17.4)
+
+Root `Directory.Build.props` (`TreatWarningsAsErrors`, `LangVersion=latest`, shared across all 4
+projects - the build's long-standing "0 warnings" bar is now enforced by the build itself, not
+just a habit) and a config-only `.editorconfig` (indentation/encoding conventions + a handful of
+`:suggestion`-severity C# style preferences; **no formatter was run over the existing tree** -
+there was no git history predating this repo's first commit to fall back on if a mass reformat had
+gone wrong). No stale `net8.0` build-artifact directories were found under `tests/.../obj` -
+nothing to clean.
+
+### Eight new tests (691 -> 699)
+
+A hand-built `WorldState` round-tripping both tuple-shaped collections plus a Guid-keyed dict, a
+string-keyed dict, a `HashSet`-backed `ISet<string>`, and the scalar `MarketIndex`; a
+`Reindex()`-after-load functional check (a controlled injury's date-bucketed recovery still fires
+correctly post-reload); a real seeded, multi-year-advanced world round-tripped with a
+before/after count comparison across every collection category (this is the test that caught the
+`JsonObjectCreationHandling` bug); a determinism-preserving check (save mid-run, reload, continue -
+matches a from-scratch continuously-advanced copy of the same seed, using the same
+`OrderBy(FullName)`-snapshot comparison the pre-existing "same seed, same world twice" test
+already established); `WorldSeeder.AssembleWorldState` completeness (every `InternationalWorld`
+category present, franchise teams folded into `Teams`); `AppCommands.NewGame`'s overwrite guard and
+`--force`; `AppCommands.Advance`'s day/week/target-date modes and its missing-save error path; and
+a `NewGame` -> `Advance` -> `Status` integration test.
+
+### Verification
+
+`dotnet build CricketManager.sln -c Release` clean (0 warnings) after every slice and again with
+the new `CricketManager.App` project included. Full suite, **three consecutive clean runs**
+(save/load determinism-adjacent work, per the project's own "extra runs" rule) at
+**699/699**, 0 warnings.
+
+---
+
 ## CONSOLIDATED DEFERRED-ITEMS REGISTER (maintained - the single source of truth)
 
 This table is the index. Every item is either NOW (the wiring & tech-debt pass above), a
@@ -9673,10 +9838,10 @@ Phase 17 or Phase 18 that the sweep did NOT touch are still accurate as written.
 
 | Item | Source | Notes |
 |---|---|---|
-| `WorldStateStore` - persist the whole `WorldState` as one JSON document + `Save`/`Load` bridge | §0.1, §0.2 | a save currently loses ~19 `WorldState` collections; MAY be pulled forward to Phase 10 |
-| `CricketManager.App` - headless console game loop (`new` / `advance` / `status`) | §0.1 | the entry point the project has been building toward |
-| Build hygiene: `Directory.Build.props` (warnings-as-errors), `.gitignore`, `.editorconfig` | §0.6 | no `git init` per the user; the config files ride along here |
-| A graphical UI | §0 | its own long sub-track after the console app |
+| `WorldStateStore` - persist the whole `WorldState` as one JSON document + `Save`/`Load` bridge | §0.1, §0.2 | **DONE** (Phase 17 Part 1) - also fixed a real `System.Text.Json` bug along the way (ten get-only `WorldState` dictionaries were silently coming back empty on reload; see the writeup) |
+| `CricketManager.App` - headless console game loop (`new` / `advance` / `status`) | §0.1 | **DONE** (Phase 17 Part 1) - `AppCommands` + a thin CLI shim, tested in-process |
+| Build hygiene: `Directory.Build.props` (warnings-as-errors), `.editorconfig` | §0.6 | **DONE** (Phase 17 Part 1). `git init` + a `.gitignore` + a baseline commit are also done - the owner reversed the "no git" decision mid-pass; `HANDOFF.md`'s note is stale and should be corrected |
+| A graphical UI | §0 | still open - its own long sub-track after the console app |
 | Stale `net8.0` build artifacts under `tests/.../obj` | §0.8 | harmless; clean whenever |
 | Test-harness: per-test timeout, split the 16.6k-line `Program.cs` into topic files, a `[slow]` tag for the multi-year integration tests | §0.7 | deferred from the NOW pass - low value, risks churn |
 | **The live seeded-world domestic pyramid (requirement I's wiring)** - `GenerateInternationalWorld` calling `GenerateTieredDomesticStructure` instead of the flat top-flight T20 cup. The generic N-tier generator is BUILT and unit-tested and `CompetitionSeasonRunner` already walks an arbitrary-length promotion/relegation chain, so this is a small change - but it reproducibly amplified a latent, not-fully-root-caused non-determinism over a long multi-year sim (a seeded world with several same-window domestic competitions per country pushes a `Guid.NewGuid()`-ordered iteration, first reachable a couple of sim-years in, into flipping an outcome). Two genuine contributing bugs were found and FIXED along the way (`JobMarketService.GatherApplications` `.Id` ordering; `FixturePlayService`/`CompetitionSeasonRunner` fixture sorts with no seed-stable tiebreak) and the generator now refuses a 2-club division, which cut the rate a lot - but not provably to zero. | Meeting ticket, Stage 2 | **Phase 17** - once the residual non-determinism is root-caused (it involves iteration order of a `Guid`-keyed collection reachable only after ~2 sim-years, which the fixes above narrowed but did not close), the wiring is a one-line change. |

@@ -1,3 +1,5 @@
+using System.Text.Json.Serialization;
+using CricketManager.Domain.Common;
 using CricketManager.Domain.Entities;
 using CricketManager.Domain.Enums;
 using CricketManager.Domain.ValueObjects;
@@ -87,6 +89,7 @@ public sealed class WorldState
     /// unknown rather than as "nobody was picked". Phase 4's match engine is the writer - it
     /// should call RecordAppearance for every player in every XI.
     /// </summary>
+    [JsonObjectCreationHandling(JsonObjectCreationHandling.Populate)]
     public Dictionary<Guid, int> MatchesThisSeason { get; } = new();
 
     /// <summary>
@@ -94,6 +97,7 @@ public sealed class WorldState
     /// retirement) needs "how much Test cricket did he actually get this season" as its own
     /// signal, separate from his overall workload. Reset on rollover alongside MatchesThisSeason.
     /// </summary>
+    [JsonObjectCreationHandling(JsonObjectCreationHandling.Populate)]
     public Dictionary<Guid, Dictionary<MatchFormat, int>> MatchesThisSeasonByFormat { get; } = new();
 
     /// <summary>
@@ -105,6 +109,7 @@ public sealed class WorldState
     /// than tenure alone would give him. Reset to empty each quarterly tick. Inert (nobody reads
     /// it) until Wave 4 wires the staff-development signal.
     /// </summary>
+    [JsonObjectCreationHandling(JsonObjectCreationHandling.Populate)]
     public Dictionary<Guid, double> RecentDevelopmentByPlayer { get; } = new();
 
     /// <summary>
@@ -138,6 +143,7 @@ public sealed class WorldState
     /// FixturePlayService adds to it after every fixture; CompetitionSeasonRunner reads it to name
     /// the player of the series when the season finishes, then clears that season's entry.
     /// </summary>
+    [JsonConverter(typeof(SeasonContributionsJsonConverter))]
     public IDictionary<Guid, Dictionary<Guid, (string Name, double Rating)>> SeasonContributions { get; init; }
         = new Dictionary<Guid, Dictionary<Guid, (string, double)>>();
 
@@ -149,6 +155,7 @@ public sealed class WorldState
     /// it here rather than recomputing at creation time is what makes promotion/relegation apply
     /// exactly once even when a cross-year window means the just-finished season is not year-1.
     /// </summary>
+    [JsonConverter(typeof(PlannedRostersJsonConverter))]
     public IDictionary<(Guid CompetitionId, int Year), List<Guid>> PlannedRosters { get; init; }
         = new Dictionary<(Guid, int), List<Guid>>();
 
@@ -172,6 +179,7 @@ public sealed class WorldState
     /// Phase 10: a running World-Cup-qualification tally per national team, moved by bilateral
     /// series and the Test/ODI Championships. Feeds seeding / direct entry to the next global event.
     /// </summary>
+    [JsonObjectCreationHandling(JsonObjectCreationHandling.Populate)]
     public Dictionary<Guid, double> WorldCupQualificationPoints { get; } = new();
 
     /// <summary>
@@ -258,6 +266,7 @@ public sealed class WorldState
     /// by FixturePlayService as fixtures are played, read and cleared by the annual finance
     /// settlement. A team with no home fixtures this season simply has no entry.
     /// </summary>
+    [JsonObjectCreationHandling(JsonObjectCreationHandling.Populate)]
     public Dictionary<Guid, double> MatchdayIncomeThisSeason { get; } = new();
 
     /// <summary>
@@ -265,6 +274,7 @@ public sealed class WorldState
     /// fill rates (one per fixture). Read by CompetitionReputationService at season end to move a
     /// competition's earned reputation, then cleared.
     /// </summary>
+    [JsonObjectCreationHandling(JsonObjectCreationHandling.Populate)]
     public Dictionary<Guid, List<double>> SeasonCrowdFill { get; } = new();
 
     /// <summary>
@@ -272,15 +282,19 @@ public sealed class WorldState
     /// coach id. Set by PressConferenceService when a notable event lands, cleared once he has
     /// faced the media. Most coaches carry none most of the time.
     /// </summary>
+    [JsonObjectCreationHandling(JsonObjectCreationHandling.Populate)]
     public Dictionary<Guid, ValueObjects.PressStoryline> PendingPressStories { get; } = new();
 
     /// <summary>Phase 7, Slice 7.5: the flat per-(player,format) career-stats cache the match engine never populated. Keyed "playerId|format". Updated by CareerStatsService as matches are played; read by MilestoneService and the profile/records systems.</summary>
+    [JsonObjectCreationHandling(JsonObjectCreationHandling.Populate)]
     public Dictionary<string, PlayerCareerStats> CareerStats { get; } = new();
 
     /// <summary>Phase 7, Slice 7.5: running form tallies for the current YEAR, keyed by player id. Fed by FixturePlayService, read by AwardsService at the annual rollover, cleared there.</summary>
+    [JsonObjectCreationHandling(JsonObjectCreationHandling.Populate)]
     public Dictionary<Guid, ValueObjects.PlayerFormTally> YearForm { get; } = new();
 
     /// <summary>Phase 7, Slice 7.5: running form tallies for the current MONTH, keyed by player id. Cleared on the monthly tick after the player-of-the-month award is decided.</summary>
+    [JsonObjectCreationHandling(JsonObjectCreationHandling.Populate)]
     public Dictionary<Guid, ValueObjects.PlayerFormTally> MonthForm { get; } = new();
 
     /// <summary>Phase 12: the live season-narrative storylines. Reviewed monthly by NarrativeService; a resolved storyline is kept until it is pruned so the payoff can be read.</summary>

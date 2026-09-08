@@ -1,0 +1,14 @@
+<Project>
+
+  <!--
+    Phase 17 (build hygiene): shared across every project in the solution. The build has been at
+    0 warnings for the life of the project (verified before every "done" claim in CLAUDE.md) - this
+    makes that an enforced property of the build itself rather than a habit someone has to
+    remember to check.
+  -->
+  <PropertyGroup>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+
+</Project>

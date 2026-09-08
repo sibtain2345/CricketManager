@@ -86,6 +86,45 @@ public sealed class WorldSeeder
         _worldStartDate = worldStartDate ?? new DateOnly(2026, 6, 1);
     }
 
+    /// <summary>
+    /// Phase 17: drops an <see cref="InternationalWorld"/> - "everything in one bag ready to drop
+    /// into a WorldState" per that record's own doc comment - into a real, playable
+    /// <see cref="WorldState"/>. Promoted from a pattern every full-world integration test in the
+    /// suite already hand-rolled slightly differently (the most complete version was a private
+    /// test helper, <c>WorldFromInternational</c>); this is the one production version, so
+    /// <c>CricketManager.App</c>'s <c>new</c> command and any future caller don't have to
+    /// re-invent it. Franchise teams are NOT added separately - <see cref="InternationalWorld.Teams"/>
+    /// already includes them (WorldSeeder's own generation appends franchise teams into the same
+    /// list it returns as <c>Teams</c>; <see cref="InternationalWorld.FranchiseTeams"/> is a
+    /// filtered convenience view for callers that want to look at franchises specifically).
+    ///
+    /// Pure and RNG-free - a straight reshaping of already-generated data, so calling it never
+    /// perturbs any seeded RNG stream.
+    /// </summary>
+    public static WorldState AssembleWorldState(InternationalWorld world)
+    {
+        var state = new WorldState
+        {
+            Teams = world.Teams.ToDictionary(t => t.Id),
+            Grounds = world.Grounds.ToDictionary(g => g.Id),
+            Players = world.Players.ToList(),
+            Projects = new List<InfrastructureProject>()
+        };
+
+        foreach (var c in world.Competitions) state.Competitions.Add(c);
+        foreach (var s in world.Seasons) state.CompetitionSeasons.Add(s);
+        foreach (var f in world.Fixtures) state.Fixtures.Add(f);
+        foreach (var r in world.Rivalries) state.Rivalries.Add(r);
+        foreach (var p in world.NationalPools) state.NationalPools.Add(p);
+        foreach (var u in world.Umpires) state.Umpires.Add(u);
+        foreach (var pc in world.PlayerContracts) state.PlayerContracts.Add(pc);
+        foreach (var kv in world.CountryProfiles) state.CountryProfiles[kv.Key] = kv.Value;
+        foreach (var p in world.Pundits) state.Pundits.Add(p);
+        foreach (var a in world.Agents) state.Agents.Add(a);
+
+        return state;
+    }
+
     public (List<Team> Teams, List<Player> Players) GenerateStarterWorld(string country = "Pakistan", int teamCount = 4, int squadSize = 13)
     {
         _nationality = country;

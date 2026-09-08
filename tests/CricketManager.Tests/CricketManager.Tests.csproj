@@ -11,6 +11,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\CricketManager.Domain\CricketManager.Domain.csproj" />
     <ProjectReference Include="..\..\src\CricketManager.Data\CricketManager.Data.csproj" />
+    <ProjectReference Include="..\..\src\CricketManager.App\CricketManager.App.csproj" />
   </ItemGroup>
 
 </Project>

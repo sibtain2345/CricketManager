@@ -37,17 +37,20 @@ authoritative record of *what* has been built and *what* is deferred.**
 
 A Football-Manager-depth cricket **coaching / management** simulator (the player is a coach, not a
 cricketer). Deep, probabilistic, data-driven simulation underneath; a 2D/textual match presentation
-eventually. Built in **C# / .NET 10**, three projects:
+eventually. Built in **C# / .NET 10**, four projects:
 
 | Project | Role |
 |---|---|
 | `src/CricketManager.Domain` | the entire simulation. **Zero external NuGet dependencies by design** — do not add one without a very strong reason. |
-| `src/CricketManager.Data` | `SqliteRepository<T>` (a JSON-column hybrid over SQLite) bundled by `GameDataContext`; `WorldSeeder` (the fictional starting world). |
+| `src/CricketManager.Data` | `SqliteRepository<T>` (a JSON-column hybrid over SQLite) bundled by `GameDataContext`; `WorldStateStore` (persists the whole `WorldState`+`GameCalendar` as one JSON document — the real save path); `WorldSeeder` (the fictional starting world, + `AssembleWorldState`). |
+| `src/CricketManager.App` | **Phase 17, new.** A headless console game loop — `new` / `advance` / `status` — over `WorldStateStore`. Command logic lives in `AppCommands` (testable in-process); `Program.cs` is a thin CLI shim. |
 | `tests/CricketManager.Tests` | a **hand-rolled console `TestRunner`** (NOT xUnit — the early sandbox had no NuGet). One big `Program.cs`, one `TestRunner.Run(name, () => {...})` / `RunAsync` per test, appended before the final `Environment.Exit(TestRunner.Summarize())`. |
 
-There is **no `git` repository and no version control** — this is a deliberate standing decision by
-the project owner. Do not run `git init`. Config files like `Directory.Build.props` / `.editorconfig`
-are planned to ride along with Phase 17.
+**The project is now tracked in git.** The earlier "no `git`" standing decision was reversed by the
+owner during the Phase 17 session — `git init`, a `.gitignore`, and a baseline commit (`04f2e9f`,
+capturing the project exactly as it stood immediately before any Phase 17 code landed) are done.
+Normal git discipline applies from here: only commit when explicitly asked, never force-push to
+main, review `git status` before staging, etc. — the general "Executing actions with care" rules.
 
 ### Build & test commands
 
@@ -175,8 +178,9 @@ iteration; see 2.3).
 
 ## 3. Phase status (as of this handoff)
 
-**Everything through Phase 16 is COMPLETE**, plus every rectification / follow-up / sweep pass.
-**691/691 tests, 0 warnings.**
+**Everything through Phase 16 is COMPLETE**, plus every rectification / follow-up / sweep pass, plus
+**Phase 17 Part 1** (`WorldStateStore` + `CricketManager.App`). **699/699 tests, 0 warnings.** The
+project is a saveable, resumable, git-tracked game now — not just a simulation library.
 
 | Phase | Status |
 |---|---|
@@ -200,25 +204,19 @@ iteration; see 2.3).
 | Meeting-Driven Selection Ticket + Corrections | DoC & Impact-Player-*rule* removed; selection panel restructured as staff; franchise identity evolution; first-hand-knowledge auction weighting; franchise coaching corrected to year-round multi-year contracts; per-`Competition` `HomePitchInfluence` — **done (680 tests)** |
 | Seven-Suggestions Pass + Cricket-Personnel-Careers | ICC revenue + light national finance loop (S5); Full-Membership grant, irrevocable (S7); representation drift with the 3-year stand-down (S6); retiree career pathways (NEW-C); ex-cricketer-only national selectors (NEW-B); multi-role head coaches (NEW-D); national `CoachingStructure` split/reunify (S2); real franchise staff contracts (NEW-A); ownership groups (S1); `Player.CommercialAppeal` (S3); match-fitness gate (S4) — **done (691 tests)** |
 | Pre-Phase-17 closeout | NEW-D training-effect wiring; tech-debt list housekeeping (items 4/7/9 were stale — all done) — **done** |
-| **17** | **Application, Persistence & UI — PLANNED, not started** |
+| **17, Part 1** | **`WorldStateStore` (whole-`WorldState` JSON persistence) + `CricketManager.App` (`new`/`advance`/`status`) — done (699 tests).** Caught and fixed a real `System.Text.Json` bug along the way (ten get-only `WorldState` dictionaries silently came back empty on reload — `[JsonObjectCreationHandling(Populate)]` fixes it). Git version control added mid-pass (owner reversed the "no git" decision). **Still open: a graphical UI, and the live seeded-world domestic-pyramid determinism fix (§4.1 below, unrelated to this pass).** |
 | **18** | **Real-World Data Import — PLANNED, not started** |
 
 ---
 
-## 4. What is deferred (nothing blocks Phase 17)
+## 4. What is deferred
 
-### 4.1 Phase 17's own scope (start here)
+### 4.1 Phase 17's remaining scope
 
-- **`WorldStateStore`** — persist the entire `WorldState` as one JSON document + a `Save(world, dir)`
-  / `Load(dir)` bridge. Right now a save loses ~19 `WorldState` collections (news archive, record
-  book, Hall of Fame, mentoring groups, captaincy profiles, planned rosters, development history,
-  the market index, every in-season accumulator, …). MAY be pulled forward before the rest of
-  Phase 17 if a save/resume workflow is wanted sooner.
-- **`CricketManager.App`** — a headless console game loop (`new` / `advance` / `status`), the entry
-  point the whole project has been building toward. Scriptable; a future UI drives the same code.
-- **Build hygiene** — `Directory.Build.props` (warnings-as-errors), `.editorconfig`. (`.gitignore`
-  is pointless without a repo; no `git init` — owner's call.) Also: stale `net8.0` artifacts under
-  `tests/.../obj` (harmless, clean whenever).
+- **`WorldStateStore` + `CricketManager.App` — DONE.** See `CLAUDE.md` → "PHASE 17 - APPLICATION,
+  PERSISTENCE & UI (PART 1)" for the full writeup, including the real `System.Text.Json` bug it
+  found and fixed. Build hygiene (`Directory.Build.props`, `.editorconfig`) is done too, and the
+  project is now git-tracked (see §1 above).
 - **A graphical UI** — its own long sub-track after the console app exists. Every prior phase
   shipped as "an API + a headless default" specifically so the test suite and a future UI drive the
   same path — keep that.
@@ -273,7 +271,6 @@ engine rewrite. Also the home of the domestic **draft** league type.
   thing. Do not build the live substitution, do not "flag it as deferred", do not re-raise it.
 - **"Timed out" (§1.8 dismissal type)** — removed from scope per an earlier owner call. Not built,
   not deferred.
-- **`git init` / version control** — the owner's explicit standing decision. Do not add it.
 - **A `Country` entity** — the roadmap originally named one; it lives on `CountryProfile` (the
   per-nation record every service already reads) and a parallel entity would just duplicate the key.
   Do not create a `Country` entity.
@@ -301,6 +298,18 @@ engine rewrite. Also the home of the domestic **draft** league type.
 - **Match engine**: `MatchSimulator` / `MultiDayMatchSimulator` (simulate — never mutates the
   world) are kept separate from `MatchRecorder` / `MultiDayMatchRecorder` (record — writes the
   permanent state). `BallOutcomeModel` + `InningsSimulator` are the ball-by-ball core.
+- **`WorldStateStore`** (`src/CricketManager.Data/Persistence`) — the real save path. Persists the
+  whole `WorldState` + `GameCalendar` as one `WorldSaveDocument` row via `SqliteRepository<T>`
+  (unmodified), in the same `game.db` file `GameDataContext` uses for a save directory.
+  `SaveAsync`/`LoadAsync`/`ExistsAsync`. `LoadAsync` calls `WorldState.Reindex()` for you.
+  `GameDataContext`'s other 25 entity-per-table repositories are NOT wired into the live simulation
+  loop (confirmed: `CricketManager.Domain` has zero references to `GameDataContext`) — they're
+  generic, tested CRUD infrastructure, a separate concern from `WorldStateStore`.
+- **`CricketManager.App`** (`src/CricketManager.App`) — `AppCommands.NewGame`/`Advance`/`Status`
+  (testable, no console I/O) behind a thin `Program.cs` CLI shim. `NewGame` calls
+  `WorldSeeder.GenerateInternationalWorld` + the new `WorldSeeder.AssembleWorldState(InternationalWorld)`
+  (promoted from a private test helper — the canonical way to turn a freshly seeded world into a
+  playable `WorldState`).
 - **Persistence**: `SqliteRepository<T>` (one `(Id TEXT PRIMARY KEY, Json TEXT)` table per entity
   type, `System.Text.Json`) bundled by `GameDataContext`. Deliberately a JSON-column hybrid, not a
   relational mapping — the trigger to promote it would be a query that needs a SQL `WHERE` on a
@@ -315,11 +324,15 @@ engine rewrite. Also the home of the domestic **draft** league type.
 ## 7. Recommended first move
 
 Confirm the build is clean, then either:
-- **Start Phase 17** with `WorldStateStore` (the highest-leverage single piece — it makes the whole
-  thing a saveable game), following the Research → Plan → Implement gate and presenting a plan; or
-- if the owner points you at the **domestic-pyramid determinism** first, build the 2-seed repro
-  harness, bisect, fix, then wire the pyramid in — and run the suite **twice consecutively clean**
-  (that one warrants 3–4 runs given it's a determinism fix).
+- **The graphical UI** — Phase 17's remaining sub-track. `AppCommands`/`WorldStateStore` are the
+  API surface it drives; needs its own scoping conversation with the owner (what kind of UI —
+  terminal/TUI, web, desktop?) before a plan.
+- **The domestic-pyramid determinism fix** — build the 2-seed repro harness, bisect, fix, then wire
+  `GenerateTieredDomesticStructure` into `GenerateInternationalWorld` — and run the suite **3–4
+  consecutive clean times** (a determinism fix warrants more than the usual two).
+- **Phase 18** (real-world data import) if the owner wants to move past the persistence/UI track
+  entirely for now.
 
-Whatever you do: update `CLAUDE.md` + `README.md` + the plan file at the end, run the suite twice
-clean, and hand back a register-format summary.
+Whatever you do: update `CLAUDE.md` + `README.md` + the plan file at the end, run the suite at
+least twice clean, and hand back a register-format summary. If the work touches git-tracked files,
+follow the standard git discipline (`git status` before staging, only commit when asked).

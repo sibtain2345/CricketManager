@@ -1,4 +1,6 @@
+using CricketManager.App;
 using CricketManager.Data;
+using CricketManager.Data.Persistence;
 using CricketManager.Data.Seeding;
 using CricketManager.Domain.Entities;
 using CricketManager.Domain.Enums;
@@ -19605,6 +19607,324 @@ TestRunner.Run("S4: after a long layoff a player needs match fitness before an i
 
     var later = avail.GetAvailability(p, new DateOnly(2026, 10, 1), MatchFormat.ODI, selectingForNationalTeam: true);
     TestRunner.IsTrue(later.IsAvailable, "the window expires and he is back in the international reckoning");
+});
+
+// ==================== PHASE 17 - APPLICATION, PERSISTENCE & UI ====================
+
+await TestRunner.RunAsync("Phase 17: WorldStateStore round-trips the two tuple-shaped WorldState collections (PlannedRosters, SeasonContributions) plus a Guid-keyed dict, a string-keyed dict, a HashSet-backed set and the market-index scalar", async () =>
+{
+    var tempDir = Path.Combine(Path.GetTempPath(), "cricketmanager_test_" + Guid.NewGuid());
+    try
+    {
+        var teamA = new Team { Name = "Team A" };
+        var teamB = new Team { Name = "Team B" };
+        var player1 = MatchTestData.MakePlayer("Player One", 12);
+        var player2 = MatchTestData.MakePlayer("Player Two", 11);
+        var competitionId = Guid.NewGuid();
+        var seasonId = Guid.NewGuid();
+
+        var world = new WorldState
+        {
+            Teams = new Dictionary<Guid, Team> { [teamA.Id] = teamA, [teamB.Id] = teamB },
+            Grounds = new Dictionary<Guid, Ground>(),
+            Players = new List<Player> { player1, player2 },
+            Projects = new List<InfrastructureProject>(),
+            MarketIndex = 1.37
+        };
+        world.PlannedRosters[(competitionId, 2029)] = new List<Guid> { player1.Id, player2.Id };
+        world.SeasonContributions[seasonId] = new Dictionary<Guid, (string Name, double Rating)>
+        {
+            [player1.Id] = ("Player One", 42.5),
+            [player2.Id] = ("Player Two", -3.2)
+        };
+        world.PromotionRelegationResolved.Add($"{competitionId}|2029");
+        world.CountryProfiles["Narnia"] = new CountryProfile { Nationality = "Narnia", EconomicScale = 2.4 };
+
+        var calendar = new GameCalendar(new DateOnly(2026, 1, 1), worldSeed: 3);
+        var store = new WorldStateStore(tempDir);
+        await store.SaveAsync(world, calendar);
+
+        var (reloaded, _) = (await new WorldStateStore(tempDir).LoadAsync())!.Value;
+
+        TestRunner.AreEqual(1.37, reloaded.MarketIndex, "the scalar MarketIndex survives");
+
+        TestRunner.IsTrue(reloaded.PlannedRosters.TryGetValue((competitionId, 2029), out var roster), "the tuple-keyed PlannedRosters entry survives by its (Guid, int) key");
+        TestRunner.AreEqual(2, roster!.Count, "the roster's own list survives");
+        TestRunner.IsTrue(roster.Contains(player1.Id) && roster.Contains(player2.Id), "the roster's player ids survive");
+
+        TestRunner.IsTrue(reloaded.SeasonContributions.TryGetValue(seasonId, out var contributions), "the SeasonContributions outer Guid key survives");
+        TestRunner.IsTrue(contributions!.TryGetValue(player1.Id, out var entry1), "the inner Guid key survives");
+        TestRunner.AreEqual("Player One", entry1.Name, "the tuple's Name element survives");
+        TestRunner.AreEqual(42.5, entry1.Rating, "the tuple's Rating element survives");
+        TestRunner.AreEqual(-3.2, contributions[player2.Id].Rating, "a negative rating survives too");
+
+        TestRunner.IsTrue(reloaded.PromotionRelegationResolved.Contains($"{competitionId}|2029"), "the HashSet-backed ISet<string> survives");
+
+        TestRunner.AreEqual(2.4, reloaded.CountryProfiles["Narnia"].EconomicScale, "the string-keyed CountryProfiles dict survives");
+
+        TestRunner.AreEqual(2, reloaded.Teams.Count, "the Guid-keyed Teams dict survives");
+        TestRunner.IsTrue(reloaded.Teams.Values.Any(t => t.Name == "Team A"), "a specific team survives by value");
+    }
+    finally
+    {
+        if (Directory.Exists(tempDir)) Directory.Delete(tempDir, recursive: true);
+    }
+});
+
+await TestRunner.RunAsync("Phase 17: WorldStateStore.LoadAsync rebuilds the due-date indexes (Reindex) so date-bucketed injury recovery still works after a reload", async () =>
+{
+    var tempDir = Path.Combine(Path.GetTempPath(), "cricketmanager_test_" + Guid.NewGuid());
+    try
+    {
+        var (teams, players) = new WorldSeeder(seed: 21, worldStartDate: new DateOnly(2026, 1, 1)).GenerateStarterWorld(teamCount: 2, squadSize: 12);
+        var world = new WorldState { Teams = teams.ToDictionary(t => t.Id), Grounds = new Dictionary<Guid, Ground>(), Players = players.ToList(), Projects = new List<InfrastructureProject>() };
+        var calendar = new GameCalendar(new DateOnly(2026, 1, 1), worldSeed: 21);
+
+        var injured = players[0];
+        var injury = world.ApplyInjury(injured, InjuryType.Hamstring, InjurySeverity.Niggle, new DateOnly(2026, 1, 10), random: new Random(9));
+        TestRunner.IsTrue(injured.CurrentInjury is not null, "the player is genuinely injured before saving");
+        var returnDate = injury.ExpectedReturnDate;
+
+        var store = new WorldStateStore(tempDir);
+        await store.SaveAsync(world, calendar);
+
+        var (reloadedWorld, reloadedCalendar) = (await new WorldStateStore(tempDir).LoadAsync())!.Value;
+        var reloadedInjured = reloadedWorld.Players.First(p => p.Id == injured.Id);
+        TestRunner.IsTrue(reloadedInjured.CurrentInjury is not null, "the injury survived the round trip");
+
+        new WorldClockService().AdvanceTo(reloadedCalendar, reloadedWorld, returnDate.AddDays(1));
+        TestRunner.IsTrue(reloadedInjured.CurrentInjury is null, "the date-bucketed recovery fired after a reload - Reindex() rebuilt the index correctly");
+    }
+    finally
+    {
+        if (Directory.Exists(tempDir)) Directory.Delete(tempDir, recursive: true);
+    }
+});
+
+await TestRunner.RunAsync("Phase 17: a real seeded, multi-year-advanced world round-trips through WorldStateStore intact", async () =>
+{
+    var tempDir = Path.Combine(Path.GetTempPath(), "cricketmanager_test_" + Guid.NewGuid());
+    try
+    {
+        var seeder = new WorldSeeder(seed: 555, worldStartDate: new DateOnly(2026, 1, 1));
+        var iw = seeder.GenerateInternationalWorld(new[] { "Pakistan", "Australia" }, teamsPerCountry: 3, squadSize: 12, seasonYear: 2026);
+        var world = WorldSeeder.AssembleWorldState(iw);
+        var calendar = new GameCalendar(new DateOnly(2026, 1, 1), worldSeed: 555);
+
+        new WorldClockService().AdvanceTo(calendar, world, new DateOnly(2028, 6, 1));
+
+        // Snapshot the shape of the world before saving - the round trip must not lose or gain
+        // a single row from any of these, whatever the actual run happened to produce.
+        int teamCount = world.Teams.Count;
+        int playerCount = world.Players.Count;
+        int retiredCount = world.Players.Count(p => p.IsRetired);
+        int competitionCount = world.Competitions.Count;
+        int seasonCount = world.CompetitionSeasons.Count;
+        int fixtureCount = world.Fixtures.Count;
+        int countryProfileCount = world.CountryProfiles.Count;
+        int newsCount = world.NewsArchive.Count;
+        int recordCount = world.RecordBook.Count;
+        int hallOfFameCount = world.HallOfFame.Count;
+        int awardCount = world.Awards.Count;
+        int careerStatsCount = world.CareerStats.Count;
+        int storylineCount = world.Storylines.Count;
+        var firstTeam = world.Teams.Values.OrderBy(t => t.Name).First();
+
+        var store = new WorldStateStore(tempDir);
+        await store.SaveAsync(world, calendar);
+
+        // A fresh WorldStateStore against the same directory simulates reloading in a new process.
+        var (reloadedWorld, reloadedCalendar) = (await new WorldStateStore(tempDir).LoadAsync())!.Value;
+
+        TestRunner.AreEqual(teamCount, reloadedWorld.Teams.Count, "team count survives");
+        TestRunner.AreEqual(playerCount, reloadedWorld.Players.Count, "player count survives");
+        TestRunner.AreEqual(retiredCount, reloadedWorld.Players.Count(p => p.IsRetired), "retired count survives");
+        TestRunner.AreEqual(competitionCount, reloadedWorld.Competitions.Count, "competition count survives");
+        TestRunner.AreEqual(seasonCount, reloadedWorld.CompetitionSeasons.Count, "season count survives");
+        TestRunner.AreEqual(fixtureCount, reloadedWorld.Fixtures.Count, "fixture count survives");
+        TestRunner.AreEqual(countryProfileCount, reloadedWorld.CountryProfiles.Count, "country-profile count survives (string-keyed dict)");
+        TestRunner.AreEqual(newsCount, reloadedWorld.NewsArchive.Count, "news archive survives");
+        TestRunner.AreEqual(recordCount, reloadedWorld.RecordBook.Count, "record book survives (string-keyed dict)");
+        TestRunner.AreEqual(hallOfFameCount, reloadedWorld.HallOfFame.Count, "hall of fame survives");
+        TestRunner.AreEqual(awardCount, reloadedWorld.Awards.Count, "awards survive");
+        TestRunner.AreEqual(careerStatsCount, reloadedWorld.CareerStats.Count, "career stats survive");
+        TestRunner.AreEqual(storylineCount, reloadedWorld.Storylines.Count, "storylines survive");
+        TestRunner.AreEqual(world.MarketIndex, reloadedWorld.MarketIndex, "the market index scalar survives");
+
+        var reloadedFirstTeam = reloadedWorld.Teams.Values.OrderBy(t => t.Name).First();
+        TestRunner.AreEqual(firstTeam.Name, reloadedFirstTeam.Name, "a team's identity survives");
+        TestRunner.AreEqual(firstTeam.Strength, reloadedFirstTeam.Strength, "a team's Strength survives");
+        TestRunner.AreEqual(firstTeam.Reputation.Domestic, reloadedFirstTeam.Reputation.Domestic, "a nested value object (Reputation) survives");
+
+        TestRunner.AreEqual(calendar.CurrentDate, reloadedCalendar.CurrentDate, "the calendar's current date survives");
+        TestRunner.AreEqual(calendar.WorldSeed, reloadedCalendar.WorldSeed, "the calendar's world seed survives");
+    }
+    finally
+    {
+        if (Directory.Exists(tempDir)) Directory.Delete(tempDir, recursive: true);
+    }
+});
+
+await TestRunner.RunAsync("Phase 17: saving mid-run and reloading does not perturb determinism - a save/reload/continue world matches a from-scratch continuously-advanced copy", async () =>
+{
+    var tempDir = Path.Combine(Path.GetTempPath(), "cricketmanager_test_" + Guid.NewGuid());
+    try
+    {
+        static List<string> Snapshot(WorldState world) =>
+            world.Players.OrderBy(p => p.FullName)
+                .Select(p => $"{p.FullName}|{p.CurrentAbility}|{p.IsRetired}|{p.RetirementDate}")
+                .ToList();
+
+        var target = new DateOnly(2032, 1, 1);
+
+        // Copy A: advanced straight through, never saved.
+        var (teamsA, playersA) = new WorldSeeder(seed: 909, worldStartDate: new DateOnly(2026, 1, 1)).GenerateStarterWorld(teamCount: 3, squadSize: 13);
+        var worldA = new WorldState { Teams = teamsA.ToDictionary(t => t.Id), Grounds = new Dictionary<Guid, Ground>(), Players = playersA.ToList(), Projects = new List<InfrastructureProject>() };
+        var calendarA = new GameCalendar(new DateOnly(2026, 1, 1), worldSeed: 4242);
+        new WorldClockService().AdvanceTo(calendarA, worldA, target);
+
+        // Copy B: advanced partway, saved, reloaded into a fresh WorldState/GameCalendar, then
+        // advanced the rest of the way - proving the bridge itself introduces no RNG drift.
+        var (teamsB, playersB) = new WorldSeeder(seed: 909, worldStartDate: new DateOnly(2026, 1, 1)).GenerateStarterWorld(teamCount: 3, squadSize: 13);
+        var worldB = new WorldState { Teams = teamsB.ToDictionary(t => t.Id), Grounds = new Dictionary<Guid, Ground>(), Players = playersB.ToList(), Projects = new List<InfrastructureProject>() };
+        var calendarB = new GameCalendar(new DateOnly(2026, 1, 1), worldSeed: 4242);
+        new WorldClockService().AdvanceTo(calendarB, worldB, new DateOnly(2028, 7, 1));
+
+        var store = new WorldStateStore(tempDir);
+        await store.SaveAsync(worldB, calendarB);
+
+        var (reloadedWorldB, reloadedCalendarB) = (await new WorldStateStore(tempDir).LoadAsync())!.Value;
+        new WorldClockService().AdvanceTo(reloadedCalendarB, reloadedWorldB, target);
+
+        TestRunner.IsTrue(Snapshot(worldA).SequenceEqual(Snapshot(reloadedWorldB)),
+            "six years of ageing/retirement, with a save+reload in the middle, must match an unsaved run of the same seed");
+    }
+    finally
+    {
+        if (Directory.Exists(tempDir)) Directory.Delete(tempDir, recursive: true);
+    }
+});
+
+TestRunner.Run("Phase 17: WorldSeeder.AssembleWorldState builds a complete, playable WorldState from an InternationalWorld", () =>
+{
+    var seeder = new WorldSeeder(seed: 88, worldStartDate: new DateOnly(2026, 1, 1));
+    var iw = seeder.GenerateInternationalWorld(new[] { "Pakistan", "Australia" }, teamsPerCountry: 3, squadSize: 12, seasonYear: 2026);
+
+    var world = WorldSeeder.AssembleWorldState(iw);
+
+    TestRunner.AreEqual(iw.Teams.Count, world.Teams.Count, "every team from the bag is present");
+    TestRunner.AreEqual(iw.Grounds.Count, world.Grounds.Count, "every ground is present");
+    TestRunner.AreEqual(iw.Players.Count, world.Players.Count, "every player is present");
+    TestRunner.AreEqual(iw.Competitions.Count, world.Competitions.Count, "every competition is present");
+    TestRunner.AreEqual(iw.Seasons.Count, world.CompetitionSeasons.Count, "every season is present");
+    TestRunner.AreEqual(iw.Fixtures.Count, world.Fixtures.Count, "every fixture is present");
+    TestRunner.AreEqual(iw.Rivalries.Count, world.Rivalries.Count, "every rivalry is present");
+    TestRunner.AreEqual(iw.NationalPools.Count, world.NationalPools.Count, "every national pool is present");
+    TestRunner.AreEqual(iw.Umpires.Count, world.Umpires.Count, "every umpire is present");
+    TestRunner.AreEqual(iw.PlayerContracts.Count, world.PlayerContracts.Count, "every player contract is present");
+    TestRunner.AreEqual(iw.CountryProfiles.Count, world.CountryProfiles.Count, "every country profile is present");
+    TestRunner.AreEqual(iw.Pundits.Count, world.Pundits.Count, "every pundit is present");
+    TestRunner.AreEqual(iw.Agents.Count, world.Agents.Count, "every agent is present");
+
+    // Franchise teams are folded into Teams, not merged separately - InternationalWorld.Teams
+    // already includes them (WorldSeeder appends franchise teams into the same list it returns).
+    TestRunner.IsTrue(iw.FranchiseTeams.Count > 0, "the seeded world has franchise teams (sanity check on the fixture itself)");
+    TestRunner.IsTrue(iw.FranchiseTeams.All(f => world.Teams.ContainsKey(f.Id)), "every franchise team is present in world.Teams");
+
+    // A world assembled this way is immediately playable, exactly like every hand-rolled test build.
+    var events = new WorldClockService().AdvanceDays(new GameCalendar(new DateOnly(2026, 1, 1), worldSeed: 88), world, 30);
+    TestRunner.IsTrue(events.Count >= 0, "the assembled world advances without throwing");
+});
+
+await TestRunner.RunAsync("Phase 17: AppCommands.NewGame creates a loadable save and refuses to overwrite without --force", async () =>
+{
+    var tempDir = Path.Combine(Path.GetTempPath(), "cricketmanager_test_" + Guid.NewGuid());
+    try
+    {
+        var result = await AppCommands.NewGame(tempDir, seed: 501, startDate: new DateOnly(2026, 1, 1),
+            countries: new[] { "Pakistan", "England" }, teamsPerCountry: 3, squadSize: 12);
+
+        TestRunner.AreEqual(501, result.WorldSeed, "the requested seed is used");
+        TestRunner.AreEqual(new DateOnly(2026, 1, 1), result.StartDate, "the requested start date is used");
+        TestRunner.IsTrue(result.TeamCount > 0 && result.PlayerCount > 0 && result.CompetitionCount > 0, "a real world was actually generated");
+
+        var loaded = await new WorldStateStore(tempDir).LoadAsync();
+        TestRunner.IsTrue(loaded is not null, "the save is genuinely loadable");
+        TestRunner.AreEqual(result.TeamCount, loaded!.Value.World.Teams.Count, "the saved world matches what NewGame reported");
+
+        var threw = false;
+        try { await AppCommands.NewGame(tempDir, seed: 502); }
+        catch (InvalidOperationException) { threw = true; }
+        TestRunner.IsTrue(threw, "a second `new` without --force refuses to overwrite the existing save");
+
+        var forced = await AppCommands.NewGame(tempDir, seed: 502, force: true);
+        TestRunner.AreEqual(502, forced.WorldSeed, "--force genuinely overwrites with the new world");
+    }
+    finally
+    {
+        if (Directory.Exists(tempDir)) Directory.Delete(tempDir, recursive: true);
+    }
+});
+
+await TestRunner.RunAsync("Phase 17: AppCommands.Advance moves the calendar forward and reports a sensible event summary", async () =>
+{
+    var tempDir = Path.Combine(Path.GetTempPath(), "cricketmanager_test_" + Guid.NewGuid());
+    var noSaveDir = Path.Combine(Path.GetTempPath(), "cricketmanager_test_" + Guid.NewGuid());
+    try
+    {
+        await AppCommands.NewGame(tempDir, seed: 601, startDate: new DateOnly(2026, 1, 1),
+            countries: new[] { "Pakistan", "Australia" }, teamsPerCountry: 3, squadSize: 12);
+
+        var byDays = await AppCommands.Advance(tempDir, days: 20);
+        TestRunner.AreEqual(new DateOnly(2026, 1, 1), byDays.FromDate, "advance reports the correct starting date");
+        TestRunner.AreEqual(new DateOnly(2026, 1, 21), byDays.ToDate, "20 days genuinely elapse");
+
+        var byWeeks = await AppCommands.Advance(tempDir, weeks: 2);
+        TestRunner.AreEqual(new DateOnly(2026, 1, 21), byWeeks.FromDate, "advance continues from where the last one left off");
+        TestRunner.AreEqual(new DateOnly(2026, 2, 4), byWeeks.ToDate, "2 weeks genuinely elapse");
+
+        var toTarget = await AppCommands.Advance(tempDir, to: new DateOnly(2026, 6, 1));
+        TestRunner.AreEqual(new DateOnly(2026, 6, 1), toTarget.ToDate, "--to advances to an exact target date");
+        TestRunner.IsTrue(toTarget.TotalEvents > 0, "a genuine multi-month advance produces real events");
+
+        var threw = false;
+        try { await AppCommands.Advance(noSaveDir, days: 1); }
+        catch (InvalidOperationException) { threw = true; }
+        TestRunner.IsTrue(threw, "advancing a save directory with no save fails with a clear error");
+    }
+    finally
+    {
+        if (Directory.Exists(tempDir)) Directory.Delete(tempDir, recursive: true);
+        if (Directory.Exists(noSaveDir)) Directory.Delete(noSaveDir, recursive: true);
+    }
+});
+
+await TestRunner.RunAsync("Phase 17: AppCommands.Status reports correctly on a fresh save and after advancing; a full new -> advance -> status loop works end to end", async () =>
+{
+    var tempDir = Path.Combine(Path.GetTempPath(), "cricketmanager_test_" + Guid.NewGuid());
+    try
+    {
+        var newResult = await AppCommands.NewGame(tempDir, seed: 701, startDate: new DateOnly(2026, 1, 1),
+            countries: new[] { "Pakistan", "England" }, teamsPerCountry: 3, squadSize: 12);
+
+        var freshStatus = await AppCommands.Status(tempDir);
+        TestRunner.AreEqual(new DateOnly(2026, 1, 1), freshStatus.CurrentDate, "status reports the fresh save's date");
+        TestRunner.AreEqual(701, freshStatus.WorldSeed, "status reports the world seed");
+        TestRunner.AreEqual(newResult.TeamCount, freshStatus.TeamCount, "status agrees with what NewGame reported");
+        TestRunner.AreEqual(newResult.PlayerCount, freshStatus.ActivePlayerCount, "nobody is retired on day one");
+        TestRunner.AreEqual(0, freshStatus.RetiredPlayerCount, "nobody is retired on day one");
+        TestRunner.IsTrue(freshStatus.HumanCoachName is null, "a fresh headless game has no human-controlled coach");
+
+        await AppCommands.Advance(tempDir, to: new DateOnly(2027, 6, 1));
+
+        var laterStatus = await AppCommands.Status(tempDir);
+        TestRunner.AreEqual(new DateOnly(2027, 6, 1), laterStatus.CurrentDate, "status reflects the advanced date");
+        TestRunner.IsTrue(laterStatus.SeasonsCompleted >= 0, "seasons-completed count is reported");
+    }
+    finally
+    {
+        if (Directory.Exists(tempDir)) Directory.Delete(tempDir, recursive: true);
+    }
 });
 
 Environment.Exit(TestRunner.Summarize());

@@ -15,5 +15,6 @@ saves/
 *.db-shm
 *.db-wal
 
-# Claude Code local session settings (machine-specific, not project source)
+# Claude Code local session settings/state (machine-specific, not project source)
 .claude/settings.local.json
+.claude/scheduled_tasks.lock
