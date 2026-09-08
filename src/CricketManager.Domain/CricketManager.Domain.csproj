@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- The hand-rolled test project reaches a few internal helpers directly (e.g.
+         MatchRecorder.EstimateBowlingStrength, FixturePlayService.EnsureIncluded) to test them
+         in isolation without driving a full match sim. -->
+    <InternalsVisibleTo Include="CricketManager.Tests" />
+  </ItemGroup>
+
+</Project>

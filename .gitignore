@@ -1,0 +1,19 @@
+# Build output
+[Bb]in/
+[Oo]bj/
+*.user
+*.suo
+
+# IDE / editor cruft
+.vs/
+.idea/
+*.DotSettings.user
+
+# Local save-game data (CricketManager.App writes a save directory per game; never commit one)
+saves/
+*.db
+*.db-shm
+*.db-wal
+
+# Claude Code local session settings (machine-specific, not project source)
+.claude/settings.local.json
