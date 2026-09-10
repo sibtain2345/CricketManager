@@ -9766,6 +9766,75 @@ the new `CricketManager.App` project included. Full suite, **three consecutive c
 
 ---
 
+## GRAPHICAL UI MOCKUP (Phase 17 sub-track) - IN PROGRESS
+
+The graphical-UI sub-track flagged above ("its own long sub-track after the console app exists")
+is under active development as a single-file HTML mockup at `docs/ui-mockup/cover-point-mockup.html`
+(now well past 2.2MB - edits go through one-shot Python find/replace scripts, never the Edit tool,
+same discipline this file already documents for the C# side's own throwaway build scripts; those
+scripts are NOT committed once used). Real reference assets live in `docs/external_game_reference/`
+(Cricket Coach 2014's bitmap chrome/icons and Football Manager 23's real layout-XML/design-vocabulary,
+both catalogued in that directory's own `GUIDE.md`) under a strict two-principle discipline recorded
+in the session's plan file: **Principle 1** - no CC2014/FM23 text, narrative, or game logic is ever
+borrowed, only three specific visual things are (fielder/position markers, real fielding-position
+names, ground-type graphics) - every plan, dialogue, stat and line of copy is this project's own,
+driven by the domain events this project's own C# services would actually produce. **Principle 2** -
+FM23 supplies UI *structure* (layout patterns, information density, widget naming), CC2014 supplies
+the pixel *finish* (buttons, panel chrome, icons).
+
+**Screens built so far**: Portal, Squad, Tactics (fixture/analysis context, Full Squad + ordered
+Lineup tables, Roles, bowling/batting plan dropdowns, field placement), Transfers & Auction
+(incoming/outgoing activity, targets, auction countdown, season-filterable transfer history), Player
+Profile (Overview/Attributes/Bio/Career/Contract sub-tabs), Fixtures, Inbox, and Match Day (a full
+immersive match-mode takeover: Preview -> Toss -> XI reveal -> Live simulation with real
+CC2014-audio, per-bowler field placement, a live ball-by-ball over-ticker, and Scorecard/Analysis
+sub-tabs). A collapsible, full-height, single-scroll-region left-sidebar app-shell replaced an
+earlier top-nav design mid-session, on direct user feedback.
+
+**Player-coach negotiation system (this pass):** a real "Actions" dropdown on the Player Profile
+header (FM's own interaction-menu pattern, wording entirely fresh) - Offer New Contract / Discuss a
+Transfer / Discuss Playing Time / Praise / Criticize Recent Form, each opening a shared modal.
+Contract offers use a live wage SLIDER (not fixed presets - real negotiation isn't three discrete
+price points, per direct correction) with a live sentiment meter, a signing-bonus slider, contract
+length/squad-role dropdowns, three built-in clauses (First XI guarantee, century/MOTM bonus, release
+clause) plus a real "+ Add a clause" picker (loyalty bonus, appearance fee, signing-on bonus,
+no-trade clause, international call-up bonus, promotion wage-rise). The negotiation is a genuine
+re-suggest LOOP, not one-shot: "Suggest terms" can be clicked repeatedly with adjusted terms, ending
+only when the deal is accepted or the player has heard three genuine lowball offers in a row and
+walks away from the table for now (a tracked `lowballStreak`, not a coin flip) - per the user's own
+correction that a forced Back-Out/Advance gate after a single offer was wrong; real negotiation stays
+open until the player explicitly refuses or a deal is struck. The four dialogue-style interactions
+(transfer/role/praise/criticize) use a manager-TONE chooser (Sincere/Reasonable/Assertive/Passionate
+for the two negotiation-style conversations; In private/To the press for the two performance-reaction
+ones) - each tone shows what the manager actually says ("You:") and the player's in-character
+response ("Him:") as a chat-bubble conversation log, per the user's own explicit correction that a
+generic three-tile response was too shallow.
+
+**Live match "at the crease" cards, and Career Stats, rebuilt richer (this pass):** the narrow rail's
+batter/bowler summary now mirrors a real professional scorecard widget's density (the user supplied
+a reference screenshot) - per batter R(B)/4s/6s/SR, runs against the current bowler this spell,
+last-10-overs figures, T20-career snapshot; per bowler overs-runs-wickets, dot/4s/6s breakdown,
+economy, T20-career snapshot; plus partnership/last-wicket/DRS-reviews-remaining lines - stacked
+vertically to fit the existing narrow rail column rather than the reference's wide table. Career
+Stats (was one thin batting-only table missing HS, NO, BBI, BBM and stumpings entirely) is now two
+real tables: **Batting Career** (Mat/Inns/NO/Runs/HS/Avg/SR/100/50/4s/6s/Ct/St - fielding folded
+into batting, the real convention) and **Bowling Career** (Mat/Inns/Balls/Runs/Wkts/BBI/BBM/Avg/
+Econ/SR/4w/5w), every format row present even when unplayed - "&mdash;" for not-played, a real "0"
+only for a genuine zero on a format actually played.
+
+**Workflow discipline established this pass, per direct user instruction:** the mockup lives inside
+the repo now (`docs/ui-mockup/`, moved from an out-of-repo scratchpad once the owner reversed the
+"no git" decision - see "Git version control" above); this file gets an entry like this one whenever
+a screen/feature is completed; a git commit happens only once the user has explicitly reviewed and
+accepted that round of work **and** said to move on - never proactively mid-review.
+
+**Not yet built**: Finances, Boardroom, National/International, Academy/Youth, Records & Hall of
+Fame, World/Rankings, Staff/Club - all named and asset-mapped in the session's plan file, not yet
+started. Franchise-specific transfer/auction screens (retention, trade, EOI meeting, live-bidding
+room) are explicitly deferred per the user's own call - confirmed needed eventually, not now.
+
+---
+
 ## CONSOLIDATED DEFERRED-ITEMS REGISTER (maintained - the single source of truth)
 
 This table is the index. Every item is either NOW (the wiring & tech-debt pass above), a
