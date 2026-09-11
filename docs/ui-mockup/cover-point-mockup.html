@@ -950,6 +950,16 @@
   .board-budget-label { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 2px; }
   .board-budget-label > span:first-child { font-size: var(--fs-small); font-weight: 700; color: var(--ink); }
   .board-budget-amt { font-family: var(--font-mono); font-size: var(--fs-body-lg); font-weight: 700; color: var(--gold); }
+
+  /* ---------- Staff: roster rows ---------- */
+  .staff-row { display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 10px 0; border-top: 1px solid var(--border-soft); }
+  .staff-row:first-of-type { border-top: none; padding-top: 0; }
+  .staff-row-main { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
+  .staff-name { font-weight: 700; color: var(--ink); font-size: var(--fs-small); }
+  .staff-role-label { font-size: var(--fs-caption); color: var(--ink-faint); }
+  .staff-row-meta { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+  .staff-tenure { font-size: var(--fs-micro); color: var(--ink-faint); white-space: nowrap; }
+  .staff-row.vacant .staff-name { color: var(--ink-faint); font-style: italic; }
 </style>
 
 <!--
@@ -984,6 +994,7 @@
     <symbol id="i-swap" viewBox="0 0 24 24"><path d="M4 8h14M14.5 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M20 16H6M9.5 12l-4 4 4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
     <symbol id="i-cash" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 7.3v9.4M14.6 9.2c0-1-1.1-1.7-2.4-1.7-1.4 0-2.5.8-2.5 1.8 0 2.6 5 1.2 5 3.8 0 1-1.1 1.9-2.6 1.9-1.4 0-2.6-.8-2.6-1.8" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></symbol>
     <symbol id="i-briefcase" viewBox="0 0 24 24"><rect x="3.2" y="8" width="17.6" height="11.5" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M8.5 8V6.3a2 2 0 012-2h3a2 2 0 012 2V8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M3.2 13.2h17.6" stroke="currentColor" stroke-width="1.6"/><rect x="10.6" y="12.1" width="2.8" height="2.6" rx="0.5" fill="currentColor"/></symbol>
+    <symbol id="i-badge" viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="15" rx="2.5" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="10.8" r="2.4" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M8 17.3c0-1.8 1.8-3 4-3s4 1.2 4 3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" fill="none"/></symbol>
   </defs>
 </svg>
 
@@ -1040,6 +1051,7 @@
     <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-transfers" data-tab="transfers" title="Transfers"><svg class="icon"><use href="#i-swap"/></svg><span class="tab-label">Transfers</span></button>
     <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-finances" data-tab="finances" title="Finances"><svg class="icon"><use href="#i-cash"/></svg><span class="tab-label">Finances</span></button>
     <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-boardroom" data-tab="boardroom" title="Boardroom"><svg class="icon"><use href="#i-briefcase"/></svg><span class="tab-label">Boardroom</span></button>
+    <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-staff" data-tab="staff" title="Staff"><svg class="icon"><use href="#i-badge"/></svg><span class="tab-label">Staff</span></button>
     <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-player" data-tab="player" title="Player"><svg class="icon"><use href="#i-user"/></svg><span class="tab-label">Player</span></button>
     <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-fixtures" data-tab="fixtures" title="Fixtures"><svg class="icon"><use href="#i-cal-list"/></svg><span class="tab-label">Fixtures</span></button>
     <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-international" data-tab="international" title="International"><svg class="icon"><use href="#i-plane"/></svg><span class="tab-label">International</span></button>
@@ -2043,6 +2055,66 @@
     </div>
   </section>
 
+  <!-- ================= STAFF ================= -->
+  <section class="panel" id="panel-staff" role="tabpanel" hidden>
+    <div class="panel-head"><h1>Staff</h1><div class="sub">Islamabad Icons &middot; backroom staff &middot; committed <strong id="staff-budget-readout" style="color:var(--gold)">$375K of $380K</strong></div></div>
+    <div class="plan-desc" style="margin-bottom:2px">You hire and release backroom staff at will &mdash; the board doesn&rsquo;t sign off on each appointment individually. Spend past the Staff Budget the board has granted you, though, and it will genuinely count against you at the next review.</div>
+
+    <div class="tactics-grid" style="margin-top:14px">
+      <div class="analysis-card">
+        <span class="eyebrow"><svg class="icon sm"><use href="#i-users"/></svg> Coaching</span>
+        <div class="staff-row" data-role="assistant">
+          <div class="staff-row-main"><span class="staff-name">Farhan Sheikh</span><span class="staff-role-label">Assistant Coach</span></div>
+          <div class="staff-row-meta"><span class="facility-tier-badge tier-excellent">Excellent</span><span class="staff-tenure">4 seasons</span></div>
+        </div>
+        <div class="staff-row vacant" data-role="batting-coach">
+          <div class="staff-row-main"><span class="staff-name">Vacant</span><span class="staff-role-label">Batting Coach</span></div>
+          <div class="staff-row-meta"><button class="facility-request-btn" onclick="openStaffRecruit('batting-coach')">Recruit</button></div>
+        </div>
+        <div class="staff-row" data-role="bowling-coach">
+          <div class="staff-row-main"><span class="staff-name">Imran Qureshi</span><span class="staff-role-label">Bowling Coach</span></div>
+          <div class="staff-row-meta"><span class="facility-tier-badge tier-good">Good</span><span class="staff-tenure">2 seasons</span></div>
+        </div>
+        <div class="staff-row" data-role="fielding-coach">
+          <div class="staff-row-main"><span class="staff-name">Ali Rizwan</span><span class="staff-role-label">Fielding Coach</span></div>
+          <div class="staff-row-meta"><span class="facility-tier-badge tier-average">Average</span><span class="staff-tenure">1 season</span></div>
+        </div>
+        <div class="staff-row" data-role="fitness">
+          <div class="staff-row-main"><span class="staff-name">Bilal Aslam</span><span class="staff-role-label">Strength &amp; Conditioning</span></div>
+          <div class="staff-row-meta"><span class="facility-tier-badge tier-good">Good</span><span class="staff-tenure">3 seasons</span></div>
+        </div>
+        <div class="staff-row vacant" data-role="mental">
+          <div class="staff-row-main"><span class="staff-name">Vacant</span><span class="staff-role-label">Mental Performance Coach</span></div>
+          <div class="staff-row-meta"><button class="facility-request-btn" onclick="openStaffRecruit('mental')">Recruit</button></div>
+        </div>
+      </div>
+      <div class="analysis-card">
+        <span class="eyebrow"><svg class="icon sm"><use href="#i-medical"/></svg> Recruitment &amp; Medical</span>
+        <div class="staff-row" data-role="chief-scout">
+          <div class="staff-row-main"><span class="staff-name">Waseem Butt</span><span class="staff-role-label">Chief Scout</span></div>
+          <div class="staff-row-meta"><span class="facility-tier-badge tier-excellent">Excellent</span><span class="staff-tenure">5 seasons</span></div>
+        </div>
+        <div class="staff-row" data-role="scout">
+          <div class="staff-row-main"><span class="staff-name">Kamran Iqbal</span><span class="staff-role-label">Domestic Scout</span></div>
+          <div class="staff-row-meta"><span class="facility-tier-badge tier-average">Average</span><span class="staff-tenure">1 season</span></div>
+        </div>
+        <div class="staff-row vacant" data-role="analyst">
+          <div class="staff-row-main"><span class="staff-name">Vacant</span><span class="staff-role-label">Data Analyst</span></div>
+          <div class="staff-row-meta"><button class="facility-request-btn" onclick="openStaffRecruit('analyst')">Recruit</button></div>
+        </div>
+        <div class="staff-row" data-role="physio">
+          <div class="staff-row-main"><span class="staff-name">Dr. Sana Malik</span><span class="staff-role-label">Head Physiotherapist</span></div>
+          <div class="staff-row-meta"><span class="facility-tier-badge tier-good">Good</span><span class="staff-tenure">2 seasons</span></div>
+        </div>
+        <div class="staff-row vacant" data-role="mentor">
+          <div class="staff-row-main"><span class="staff-name">Vacant</span><span class="staff-role-label">Mentor</span></div>
+          <div class="staff-row-meta"><button class="facility-request-btn" onclick="openStaffRecruit('mentor')">Recruit</button></div>
+        </div>
+        <div class="role-hint" style="margin-top:10px">A Mentor doesn&rsquo;t coach directly &mdash; he strengthens the mentoring bonds already forming in the dressing room between your senior pros and your promising kids.</div>
+      </div>
+    </div>
+  </section>
+
   <!-- ================= PLAYER PROFILE ================= -->
   <section class="panel" id="panel-player" role="tabpanel" hidden>
     <div class="player-header">
@@ -2643,6 +2715,28 @@
     <div class="negotiation-actions">
       <button class="btn-ghost" id="br-cancel-btn" onclick="closeBudgetRequest()">Cancel</button>
       <button class="btn-primary" id="br-primary-btn" onclick="submitBudgetRequest()">Submit request</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="staff-recruit-backdrop" onclick="if(event.target===this) closeStaffRecruit()">
+  <div class="negotiation-modal" role="dialog" aria-modal="true" aria-labelledby="staff-recruit-title">
+    <div class="negotiation-head">
+      <div class="player-club-crest-sm" style="width:46px;height:46px;border-radius:11px;flex-shrink:0"></div>
+      <div>
+        <h2 id="staff-recruit-title">Recruit: Batting Coach</h2>
+        <div class="sub" id="staff-recruit-sub">A shortlist your scouting network has put together</div>
+      </div>
+      <button class="negotiation-close" onclick="closeStaffRecruit()" aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px"><path d="M5 5l14 14M19 5L5 19"/></svg></button>
+    </div>
+    <div class="negotiation-body">
+      <div class="negotiation-section">
+        <span class="eyebrow"><svg class="icon sm"><use href="#i-badge"/></svg> Shortlist</span>
+        <div id="staff-recruit-list"></div>
+      </div>
+    </div>
+    <div class="negotiation-actions">
+      <button class="btn-ghost" onclick="closeStaffRecruit()">Cancel</button>
     </div>
   </div>
 </div>
@@ -3517,6 +3611,70 @@
       slider.max = parseInt(slider.max, 10) + amt;
     });
     renderBoardBudgets();
+  }
+
+  var STAFF_ROLE_LABELS = {
+    'batting-coach': 'Batting Coach', 'mental': 'Mental Performance Coach',
+    'analyst': 'Data Analyst', 'mentor': 'Mentor'
+  };
+  var STAFF_VACANCY_CANDIDATES = {
+    'batting-coach': [
+      { name: 'Sarfraz Bhatti', tierClass: 'tier-excellent', tierLabel: 'Excellent', wage: 80 },
+      { name: 'Noman Sheikh', tierClass: 'tier-good', tierLabel: 'Good', wage: 58 },
+      { name: 'Adeel Raza', tierClass: 'tier-average', tierLabel: 'Average', wage: 35 }
+    ],
+    'mental': [
+      { name: 'Dr. Ayesha Farooq', tierClass: 'tier-excellent', tierLabel: 'Excellent', wage: 65 },
+      { name: 'Zubair Khan', tierClass: 'tier-good', tierLabel: 'Good', wage: 45 },
+      { name: 'Hina Malik', tierClass: 'tier-average', tierLabel: 'Average', wage: 28 }
+    ],
+    'analyst': [
+      { name: 'Faisal Chaudhry', tierClass: 'tier-excellent', tierLabel: 'Excellent', wage: 60 },
+      { name: 'Rabia Aziz', tierClass: 'tier-good', tierLabel: 'Good', wage: 42 },
+      { name: 'Omar Siddiqui', tierClass: 'tier-average', tierLabel: 'Average', wage: 26 }
+    ],
+    'mentor': [
+      { name: 'Younis Baig', tierClass: 'tier-excellent', tierLabel: 'Excellent', wage: 50 },
+      { name: 'Asif Karim', tierClass: 'tier-good', tierLabel: 'Good', wage: 34 },
+      { name: 'Tariq Mehmood', tierClass: 'tier-average', tierLabel: 'Average', wage: 20 }
+    ]
+  };
+  var staffCommitted = 375;
+  var currentStaffRecruitKey = null;
+  function openStaffRecruit(key) {
+    currentStaffRecruitKey = key;
+    var candidates = STAFF_VACANCY_CANDIDATES[key];
+    document.getElementById('staff-recruit-title').textContent = 'Recruit: ' + STAFF_ROLE_LABELS[key];
+    var list = document.getElementById('staff-recruit-list');
+    list.innerHTML = candidates.map(function (cand) {
+      return '<div class="standing-row"><div><div style="font-weight:700;color:var(--ink);font-size:var(--fs-small)">' + cand.name + '</div>' +
+        '<div style="font-size:var(--fs-micro);color:var(--ink-faint)">Wage ask ' + fmtBoardAmt(cand.wage) + '/yr</div></div>' +
+        '<div style="display:flex;align-items:center;gap:10px"><span class="facility-tier-badge ' + cand.tierClass + '">' + cand.tierLabel + '</span>' +
+        '<button class="facility-request-btn" onclick="hireStaff(\'' + key + '\',\'' + cand.name + '\',\'' + cand.tierClass + '\',\'' + cand.tierLabel + '\',' + cand.wage + ')">Hire</button></div></div>';
+    }).join('');
+    document.getElementById('staff-recruit-backdrop').classList.add('open');
+  }
+  function closeStaffRecruit() {
+    document.getElementById('staff-recruit-backdrop').classList.remove('open');
+  }
+  function hireStaff(roleKey, name, tierClass, tierLabel, wage) {
+    var row = document.querySelector('.staff-row[data-role="' + roleKey + '"]');
+    if (row) {
+      row.classList.remove('vacant');
+      row.querySelector('.staff-row-main').innerHTML = '<span class="staff-name">' + name + '</span><span class="staff-role-label">' + STAFF_ROLE_LABELS[roleKey] + '</span>';
+      row.querySelector('.staff-row-meta').innerHTML = '<span class="facility-tier-badge ' + tierClass + '">' + tierLabel + '</span><span class="staff-tenure">Just appointed</span>';
+    }
+    staffCommitted += wage;
+    updateStaffBudgetReadout();
+    closeStaffRecruit();
+  }
+  function updateStaffBudgetReadout() {
+    var el = document.getElementById('staff-budget-readout');
+    if (!el) return;
+    var cap = (typeof boardBudget !== 'undefined') ? boardBudget.staff : 380;
+    var over = staffCommitted > cap;
+    el.style.color = over ? 'var(--ball)' : 'var(--gold)';
+    el.textContent = fmtBoardAmt(staffCommitted) + ' of ' + fmtBoardAmt(cap);
   }
 
   function toggleNextBatsmanPicker() {

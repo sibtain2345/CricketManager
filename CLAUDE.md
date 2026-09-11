@@ -9967,8 +9967,22 @@ is the one place an approved request actually grows both that category and `BOAR
 (the linked-slider redistribution logic itself - dragging one up pulls the others down
 proportionally - was already correct from the first build and needed no change).
 
-**Not yet built**: Academy/Youth, Records & Hall of Fame, World/Rankings, Staff/Club - all named
-and asset-mapped in the session's plan file, not yet started. Franchise-specific transfer/auction
+**Staff screen built** - its own sidebar tab, right after Boardroom (club/people screens grouped
+together): the backroom roster grouped into Coaching (Assistant/Batting/Bowling/Fielding coaches,
+Strength & Conditioning, Mental Performance) and Recruitment & Medical (Chief Scout, Scout, Data
+Analyst, Head Physiotherapist, Mentor). Each filled role shows a real wording-tier quality badge
+(reusing the SAME `.facility-tier-badge` wording-tier convention Finances established for facility
+quality - never a bar here either) plus tenure; each vacant role shows a "Recruit" button that
+opens a real shortlist of three tiered candidates with a wage ask, hired from directly with no
+negotiation - deliberately matching the actual C# domain model, where `StaffRecruitmentService.
+GenerateShortlist` + `StaffCareerService.Hire` really is "generate a shortlist, hire from it," with
+no back-and-forth (unlike a player contract, which genuinely does negotiate). A live "committed vs
+Staff Budget" readout reads the SAME `boardBudget.staff` global the Boardroom screen's own budget
+sliders already own, so hiring here and adjusting the Staff Budget slider there are visibly the one
+system, not two disconnected numbers.
+
+**Not yet built**: Academy/Youth, Records & Hall of Fame, World/Rankings - all named and
+asset-mapped in the session's plan file, not yet started. Franchise-specific transfer/auction
 screens (retention, trade, EOI meeting, live-bidding room) are explicitly deferred per the user's
 own call - confirmed needed eventually, not now.
 
