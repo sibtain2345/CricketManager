@@ -10003,9 +10003,26 @@ decision is made, mirroring the Staff-recruit screen's directness - no negotiati
 kid either). A final "Academy squad" card shows returning prospects from prior intakes with a
 plain-language development-trend line each.
 
-**Records & Hall of Fame, and World/Rankings, are next** - not yet built. Franchise-specific
-transfer/auction screens (retention, trade, EOI meeting, live-bidding room) are explicitly
-deferred per the user's own call - confirmed needed eventually, not now.
+**Records screen built, again researched against the real game first.** Confirmed via web
+research: FM's club-history page is organised around a Trophy Cabinet (season-by-season honours),
+Match Records (Biggest Win, Most Goals in a Match, ...), and Player Club/Career records (Most
+Career Appearances, top scorers) - the exact shape this project's own C# domain already models in
+full: `CompetitionSeason.ChampionTeamId` history, `RecordProgressionService` (highest/lowest team
+total, highest individual score, best bowling in an innings, highest partnership - plus the newer
+`RecordCategory` entries), `CareerStatsAggregationService`'s leaderboards, and
+`HallOfFameService.ConsiderInduction`'s real citation-bearing induction. Sidebar tab placed right
+after International, before Inbox. A full-width Trophy Cabinet card (reusing the SAME
+`.notes-log`/`.notes-log-item` dated-entry pattern the Boardroom's board-notes log already
+established) lists past titles; a two-column grid holds Match Records (six real record types,
+naming the club's own already-established squad/duty-roster names - Hamza Malik, Adeel Hayat,
+Bilal Nadeem - for continuity across screens rather than inventing new ones) and Career
+Leaderboards; a Hall of Fame card inducts one self-authored club legend with a real citation. A
+deliberately static, read-only reference screen (no JS beyond the shared page chrome) - matching
+FM's own Club History, which is itself a read-only reference, not an interactive one.
+
+**World/Rankings is next** - not yet built. Franchise-specific transfer/auction screens
+(retention, trade, EOI meeting, live-bidding room) are explicitly deferred per the user's own
+call - confirmed needed eventually, not now.
 
 ---
 

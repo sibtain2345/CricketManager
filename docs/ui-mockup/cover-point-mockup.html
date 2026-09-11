@@ -1057,6 +1057,7 @@
     <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-player" data-tab="player" title="Player"><svg class="icon"><use href="#i-user"/></svg><span class="tab-label">Player</span></button>
     <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-fixtures" data-tab="fixtures" title="Fixtures"><svg class="icon"><use href="#i-cal-list"/></svg><span class="tab-label">Fixtures</span></button>
     <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-international" data-tab="international" title="International"><svg class="icon"><use href="#i-plane"/></svg><span class="tab-label">International</span></button>
+    <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-records" data-tab="records" title="Records"><svg class="icon"><use href="#i-trophy"/></svg><span class="tab-label">Records</span></button>
     <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-inbox" data-tab="inbox" title="Inbox"><svg class="icon"><use href="#i-inbox"/></svg><span class="tab-label">Inbox</span></button>
   </div>
 </nav>
@@ -2628,6 +2629,48 @@
           <div class="trophy-side"><img class="flag-icon" src="data:image/png;base64,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" alt="IND"><span>India</span></div>
         </div>
       </div>
+    </div>
+  </section>
+
+  <!-- ================= RECORDS ================= -->
+  <section class="panel" id="panel-records" role="tabpanel" hidden>
+    <div class="panel-head"><h1>Records</h1><div class="sub">Islamabad Icons &middot; club history &amp; honours</div></div>
+
+    <div class="analysis-card">
+      <span class="eyebrow"><svg class="icon sm"><use href="#i-trophy"/></svg> Trophy cabinet</span>
+      <div class="notes-log">
+        <div class="notes-log-item"><span class="note-date">2023</span>Pakistan T20 Cup &mdash; Champions</div>
+        <div class="notes-log-item"><span class="note-date">2021</span>Pakistan T20 Cup &mdash; Runners-up</div>
+        <div class="notes-log-item"><span class="note-date">2019</span>Pakistan T20 Cup &mdash; Champions</div>
+      </div>
+    </div>
+
+    <div class="tactics-grid" style="margin-top:16px">
+      <div class="analysis-card">
+        <span class="eyebrow"><svg class="icon sm"><use href="#i-bat-ball"/></svg> Match records</span>
+        <div class="bio-line"><span class="k">Highest team total</span><span>218/4 vs Lahore Lions, 2023</span></div>
+        <div class="bio-line"><span class="k">Lowest team total (all out)</span><span>71 all out vs Quetta Falcons, 2020</span></div>
+        <div class="bio-line"><span class="k">Highest successful chase</span><span>196/6 vs Karachi Kings, 2022</span></div>
+        <div class="bio-line"><span class="k">Highest individual score</span><span>142* &middot; Hamza Malik vs Multan Sultans, 2023</span></div>
+        <div class="bio-line"><span class="k">Best bowling, an innings</span><span>6/18 &middot; Adeel Hayat vs Peshawar Zalmi, 2021</span></div>
+        <div class="bio-line"><span class="k">Highest partnership</span><span>187 (3rd wkt) &middot; Malik &amp; Khan vs Lahore Lions, 2023</span></div>
+      </div>
+      <div class="analysis-card">
+        <span class="eyebrow"><svg class="icon sm"><use href="#i-trend-up"/></svg> Career leaderboards</span>
+        <div class="bio-line"><span class="k">Most runs</span><span>Hamza Malik &middot; 3,214</span></div>
+        <div class="bio-line"><span class="k">Most wickets</span><span>Adeel Hayat &middot; 187</span></div>
+        <div class="bio-line"><span class="k">Most catches</span><span>Bilal Nadeem &middot; 64</span></div>
+        <div class="role-hint" style="margin-top:10px">Every century and every five-for is kept on the honour board chronologically, exactly as a real ground keeps one &mdash; a new name at the top never removes the last.</div>
+      </div>
+    </div>
+
+    <div class="analysis-card" style="margin-top:16px">
+      <span class="eyebrow"><svg class="icon sm"><use href="#i-star-fill"/></svg> Hall of Fame</span>
+      <div class="staff-row">
+        <div class="staff-row-main"><span class="staff-name">Tariq Farooq</span><span class="staff-role-label">Middle-order Batter &middot; 2005&ndash;2019</span></div>
+        <div class="staff-row-meta"><span class="pill first">Inducted 2020</span></div>
+      </div>
+      <div class="role-hint" style="margin-top:8px">A one-club servant for fourteen seasons, the club&rsquo;s leading run-scorer for a generation, and captain of the 2019 title-winning side &mdash; inducted into the Islamabad Icons Hall of Fame the year after he retired.</div>
     </div>
   </section>
 
