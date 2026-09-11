@@ -9783,9 +9783,11 @@ FM23 supplies UI *structure* (layout patterns, information density, widget namin
 the pixel *finish* (buttons, panel chrome, icons).
 
 **Screens built so far**: Portal, Squad, Tactics (fixture/analysis context, Full Squad + ordered
-Lineup tables, Roles, bowling/batting plan dropdowns, field placement), Transfers & Auction
-(incoming/outgoing activity, targets, auction countdown, season-filterable transfer history), Player
-Profile (Overview/Attributes/Bio/Career/Contract sub-tabs), Fixtures, Inbox, and Match Day (a full
+Lineup tables, Roles, bowling/batting plan dropdowns, field placement, pitch preparation), Transfers
+& Auction (incoming/outgoing activity, targets, auction countdown, season-filterable transfer
+history), Player Profile (Overview/Personal/Career/Contract sub-tabs - see the later rebuild note
+below), Fixtures, Inbox, International (ICC rankings with real flags, national selection panel,
+players away on duty, upcoming internationals, trophy watch), and Match Day (a full
 immersive match-mode takeover: Preview -> Toss -> XI reveal -> Live simulation with real
 CC2014-audio, per-bowler field placement, a live ball-by-ball over-ticker, and Scorecard/Analysis
 sub-tabs). A collapsible, full-height, single-scroll-region left-sidebar app-shell replaced an
@@ -9828,10 +9830,104 @@ the repo now (`docs/ui-mockup/`, moved from an out-of-repo scratchpad once the o
 a screen/feature is completed; a git commit happens only once the user has explicitly reviewed and
 accepted that round of work **and** said to move on - never proactively mid-review.
 
-**Not yet built**: Finances, Boardroom, National/International, Academy/Youth, Records & Hall of
-Fame, World/Rankings, Staff/Club - all named and asset-mapped in the session's plan file, not yet
-started. Franchise-specific transfer/auction screens (retention, trade, EOI meeting, live-bidding
-room) are explicitly deferred per the user's own call - confirmed needed eventually, not now.
+**International screen added, with real, verified flags.** A new sidebar tab - ICC-style rankings
+(Test/ODI/T20I dropdown, 9 real nations ranked, Pakistan highlighted), a National Selection Panel
+tile (chairman of selectors, panel quality, central-contract tier counts - grounded in this
+project's own real `NationalBoard`/central-contract domain fields), "players away on international
+duty" (reusing already-established Lahore Lions/Quetta Falcons names rather than inventing new ones,
+and deliberately NOT the mockup's own domestic-only Hamza Malik, whose Career Stats already show him
+as uncapped), upcoming internationals, and a "Trophy watch" tile with a self-authored trophy name
+(never a real one, per Principle 1). The flags are genuine CC2014 assets - the extraction had no
+name-to-file legend, so the mapping was *verified*, not assumed: a `countries_names_codes_demonyms.txt`
+found in the reference dump gave a plausible database order (Australia/England/India/NZ/Pakistan/...),
+confirmed by directly viewing three converted flags (Pakistan, Australia, India) before trusting the
+rest - the same "verify before trusting a labelled asset" discipline this project's own C# session
+history already established for extracted graphics. Two real bugs were found and fixed after the
+first pass: heavy transparent padding around each flag bitmap (fixed with an auto-crop to the real
+content's bounding box) and a string-replacement ordering bug where a shorter placeholder token
+(`FLAG_PAK`) was replaced before a longer one containing it as a substring (`FLAG_PAK_LG`), corrupting
+several flags into broken `<img>` tags followed by literal "_LG" text - fixed by using non-overlapping
+placeholder tokens instead of same-prefix ones.
+
+**Player Profile rebuilt to match FM's real information density, not just its layout** (the user
+supplied real FM26 screenshots as a direct reference and was explicit that DATA fields, not only
+layout shape, needed to be copied across - cricket-translated, never literal). The header now shows
+a flag+nationality, club crest+name, "Uncapped" caps line, compact CA/PA star pairs, an estimated
+market value, and wage+contract-end inline - all previously buried in sub-tabs. The Overview tab is
+now a real 3-column FM-style dashboard: **Position & role** (a batting-order ladder with his own
+slot highlighted, role-suitability star ratings drawn from this project's own `BattingTraits` model -
+Anchor/Aggressor/Against-the-new-ball/Finisher - the direct cricket translation of FM's own
+role-star list); **Attributes**, rebuilt as a real 2-up grid with all FIVE cricket categories
+(Batting/Bowling/Fielding/Mental/Physical - Bowling and Fielding were missing entirely before; a
+specialist batter's Bowling numbers are genuinely low, never "&mdash;", since attribute ability and
+match-output stats are honestly different things); **Info** (height, tiered Domestic/Continental/
+Worldwide reputation, Media persona, vs-pace/vs-spin/vs-left-arm-pace meters, and specific
+playing-style notes - FM's own "Shoots With Power" specificity, cricket-worded fresh). Below the
+3 columns, a glanceable **widget-card strip** (Fitness/Happiness/Form-mini-bars/Discipline/Season
+Stats/Fielding), matching FM's own bottom-row pattern. The old Bio tab is now "Personal": dressing-
+room standing + coach-trust/captain-trust meters (real project fields) + a dated notes log +
+Happiness positives/negatives. Contract now shows active clauses (reusing the SAME clause library the
+negotiation modal itself uses, so "what's actually on his current deal" and "what you can offer to
+change it" are visibly the same system) and a real Transfer Status panel.
+
+**Global UI/UX pass, per direct correction on the app-shell itself:** a stray `.calendar-control`
+background/border colour that read as an unintended light-blue box around the Play Match button,
+fixed to a translucent overlay that blends with whatever chrome sits behind it, on principle, rather
+than a second flat colour; the sidebar narrowed (220px &rarr; 186px); a real global Back/Forward
+navigation history (two buttons in the topbar, a genuine `navHistory`/`navIndex` stack driving
+`showPanel`, working from any screen to any screen, not just inside match mode); and the first real
+application of "a long list gets its own scroller, never the whole page" - the Squad screen's full
+player table and the Tactics Full Squad/Lineup tables now scroll in a bounded, sticky-header region
+of their own. Stated honestly: this is not yet applied to every screen (Portal/Fixtures/International
+have no list long enough to need it yet) - it lands screen-by-screen as genuinely long lists are
+found, not as one unverified blanket rewrite.
+
+**The match-day flow corrected twice, on direct back-to-back user correction - worth reading in
+full, since the first attempt was a genuine misreading, not a shallow tweak.** The user's original
+ask ("a lineup-confirmation screen before the toss") was first built by *moving* the existing
+post-toss XI reveal earlier in the sequence - wrong: the very next message clarified the XI reveal
+belongs exactly where it was (after the toss, both sides' announced XI), and the new screen was
+meant to be a genuinely ADDITIONAL step. Corrected to: Preview -> **new "Confirm your lineup" stage**
+(a condensed conditions summary + your own XI, editable) -> Toss -> Team news (both XIs, unchanged,
+after the toss) -> Live. The lineup-check stage was then asked to be genuinely inline, not a link out
+to the Tactics screen - rebuilt with the real 14-row Full Squad table right there, continuously
+numbered 1-14 (drag position IS status: top 11 = In XI, the rest = Reserve, a plain non-clickable
+readout - the user's own explicit correction that this must change by drag/swap only, never a click
+target).
+
+**Pitch preparation added to Tactics - genuinely researched, not invented.** A home-side pitch-prep
+control (Grassy/Dry &amp; Turning/Flat &amp; True presets, a "groundstaff capability" damping readout,
+live Pace/Seam/Turn meters, an honest over-reach risk note) built directly from this project's own
+already-researched real-world domain rules (`PitchDoctoringService`/`HomePitchInfluence`/
+`PitchInfrastructure` damping, and the real Pakistan-domestic-cricket precedent for how far a home
+pitch can genuinely be shaped within ICC limits, referenced only as *general* knowledge in the UI
+copy - never a specific real match/date, keeping the fictional game world fictional).
+
+**Batting-order realism**: the Scorecard sub-tab now lists "Yet to bat" (names only, the honest real
+convention, no fabricated stats); the live rail gained a "Next man in" picker - the batting order is
+the default, but any yet-to-bat player can be sent in out of turn.
+
+**Tactics: real drag-and-drop between Full Squad and Lineup, a right-click role menu, and a
+delegate/auto-pick layer - built, then corrected twice on direct feedback.** Right-click any player
+row (in Tactics Lineup or the lineup-check stage) for a shared context menu - Captain/Vice-Captain/
+Wicketkeeper/Opening Bowler 1/Opening Bowler 2/Clear role - enforced one-holder-per-role per table.
+Drag-and-drop is real (native HTML5 DnD), not a described-but-static affordance: within Lineup it
+reorders (renumbering live); dragging a Squad player onto a Lineup row was first built as an INSERT
+(a bug caught by direct correction - it was growing the XI past 11 instead of swapping) - fixed to a
+genuine REPLACE: the displaced player drops to Reserve, and if he held a role tag it transfers
+automatically to the player who replaced him, clearing from the one displaced - a real man-for-man
+swap, not an add. The lineup-check stage's positional model had the matching gap (a demoted player's
+role tag stayed on his row even after he fell out of the top 11) - fixed with the same transfer-then-
+clear logic, plus a safety net that guarantees no Reserve-position row ever keeps a visible role tag
+regardless of how a drag reshuffled multiple rows at once. **Delegate to Assistant** (draggable
+toggled off on both tables, framed via this project's own real `ManagerPreferences.DelegateSquadSelection`
+concept) and **Pick Best XI** (a one-click reset of both tables to the canonical ability/role-balanced
+default) round out the FM-parity ask.
+
+**Not yet built**: Finances, Boardroom, Academy/Youth, Records & Hall of Fame, World/Rankings,
+Staff/Club - all named and asset-mapped in the session's plan file, not yet started. Franchise-
+specific transfer/auction screens (retention, trade, EOI meeting, live-bidding room) are explicitly
+deferred per the user's own call - confirmed needed eventually, not now.
 
 ---
 

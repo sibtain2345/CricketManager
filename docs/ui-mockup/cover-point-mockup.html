@@ -147,7 +147,7 @@
   .topbar { flex-shrink: 0; }
   .app-body { display: flex; flex: 1 1 auto; min-height: 0; overflow: hidden; }
   .tabs {
-    flex-shrink: 0; width: 220px; padding: 12px 10px;
+    flex-shrink: 0; width: 186px; padding: 12px 8px;
     background: var(--surface); border-right: 1px solid var(--border);
     display: flex; flex-direction: column; overflow-y: auto;
     transition: width 0.15s ease, padding 0.15s ease;
@@ -593,7 +593,7 @@
   .search-result-row .sr-meta { color: var(--ink-faint); font-size: var(--fs-caption); margin-left: auto; }
 
   /* ---------- World calendar control: a step, never an autoplay ---------- */
-  .calendar-control { display: flex; align-items: center; gap: 0; border: 1px solid var(--border-soft); border-radius: 999px; overflow: hidden; background: var(--surface); }
+  .calendar-control { display: flex; align-items: center; gap: 0; border: 1px solid rgba(0,0,0,0.28); border-radius: 999px; overflow: hidden; background: rgba(0,0,0,0.2); }
   .calendar-date-btn { appearance: none; border: none; background: none; color: var(--ink-dim); font: inherit; font-family: var(--font-mono); font-size: var(--fs-small); padding: 7px 13px; cursor: pointer; display: flex; align-items: center; gap: 7px; }
   .calendar-date-btn:hover { color: var(--ink); }
   .calendar-date-btn svg { width: 13px; height: 13px; stroke: var(--ink-faint); }
@@ -757,6 +757,160 @@
 
   .career-table-label { display: flex; align-items: center; gap: 7px; font-family: var(--font-body); font-size: var(--fs-small); font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ink-faint); margin: 18px 0 8px; }
   .career-table-label:first-child { margin-top: 0; }
+
+  /* ---------- International ---------- */
+  .flag-icon { width: 24px; height: 11px; object-fit: cover; border-radius: 2px; border: 1px solid var(--border); flex-shrink: 0; display: inline-block; vertical-align: middle; }
+  .flag-icon.sm { width: 18px; height: 8px; }
+  .flag-icon.lg { width: 32px; height: 14px; }
+  .rank-row { display: flex; align-items: center; gap: 10px; padding: 7px 0; border-top: 1px solid var(--border-soft); }
+  .rank-row:first-of-type { border-top: none; padding-top: 0; }
+  .rank-row.highlight { background: var(--turf-dim); margin: 0 -10px; padding: 7px 10px; border-radius: 8px; }
+  .rank-num { font-family: var(--font-mono); font-weight: 700; color: var(--ink-faint); width: 16px; flex-shrink: 0; }
+  .rank-team { flex: 1; min-width: 0; font-weight: 600; color: var(--ink); font-size: var(--fs-small); display: flex; align-items: center; gap: 8px; }
+  .rank-row.highlight .rank-team, .rank-row.highlight .rank-num { color: var(--turf-strong); }
+  .rank-figs { font-family: var(--font-mono); font-size: var(--fs-small); color: var(--ink-dim); text-align: right; white-space: nowrap; }
+  .rank-figs b { color: var(--gold); font-weight: 700; }
+  .duty-row { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-top: 1px solid var(--border-soft); }
+  .duty-row:first-of-type { border-top: none; padding-top: 0; }
+  .duty-main { flex: 1; min-width: 0; }
+  .duty-player { font-weight: 700; color: var(--ink); font-size: var(--fs-small); }
+  .duty-detail { font-size: var(--fs-caption); color: var(--ink-dim); margin-top: 1px; }
+  .tier-badge { font-size: var(--fs-micro); font-weight: 700; padding: 3px 8px; border-radius: 6px; white-space: nowrap; flex-shrink: 0; }
+  .tier-badge.a { background: var(--gold-dim); color: var(--gold); }
+  .tier-badge.b { background: var(--chrome-deep); color: var(--chrome-strong); }
+  .tier-badge.c { background: var(--surface-3); color: var(--ink-dim); }
+  .trophy-row { display: flex; align-items: center; justify-content: center; gap: 20px; padding: 8px 0 4px; }
+  .trophy-side { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+  .trophy-side .flag-icon { width: 44px; height: 20px; }
+  .trophy-side span { font-size: var(--fs-caption); font-weight: 600; color: var(--ink-dim); }
+  .trophy-mid { text-align: center; }
+  .trophy-name { font-family: var(--font-display); font-weight: 700; font-size: var(--fs-body-lg); color: var(--gold); }
+  .trophy-holder { font-size: var(--fs-caption); color: var(--ink-faint); margin-top: 3px; }
+
+  /* ---------- Player Profile Overview: 3-column dashboard ---------- */
+  .profile-columns { display: grid; grid-template-columns: 0.68fr 1.7fr 0.68fr; gap: 16px; align-items: start; }
+  .profile-col-scroll { max-height: 460px; overflow-y: auto; padding-right: 6px; }
+  .batting-order-ladder { display: flex; flex-direction: column; gap: 3px; margin-bottom: 14px; }
+  .ladder-slot { display: flex; align-items: center; gap: 9px; padding: 5px 8px; border-radius: 7px; font-size: var(--fs-caption); color: var(--ink-faint); }
+  .ladder-slot .num { font-family: var(--font-mono); width: 14px; flex-shrink: 0; }
+  .ladder-slot.active { background: var(--turf-dim); color: var(--turf-strong); font-weight: 700; }
+  .role-star-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 7px 0; border-top: 1px solid var(--border-soft); }
+  .role-star-row:first-of-type { border-top: none; padding-top: 0; }
+  .role-star-row .role-name { font-size: var(--fs-small); font-weight: 600; color: var(--ink); }
+  .info-meter-row { margin-top: 10px; }
+  .info-meter-label { display: flex; justify-content: space-between; font-size: var(--fs-caption); color: var(--ink-dim); margin-bottom: 4px; }
+  .info-meter { height: 6px; border-radius: 3px; background: var(--surface-3); overflow: hidden; }
+  .info-meter span { display: block; height: 100%; background: var(--turf-strong); border-radius: 3px; }
+  .info-meter.weak span { background: var(--ball); }
+  .widget-strip { display: flex; gap: 12px; overflow-x: auto; padding: 2px 2px 8px; margin-top: 16px; }
+  .widget-card { flex: 0 0 152px; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 12px 14px; box-shadow: var(--shadow); }
+  .widget-card .w-eyebrow { display: flex; align-items: center; gap: 6px; font-size: var(--fs-micro); font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; color: var(--ink-faint); margin-bottom: 7px; }
+  .widget-card .w-value { font-size: var(--fs-body-lg); font-weight: 700; color: var(--ink); line-height: 1.2; }
+  .widget-card .w-sub { font-size: var(--fs-micro); color: var(--ink-faint); margin-top: 3px; line-height: 1.35; }
+  .widget-form-bars { display: flex; gap: 3px; align-items: flex-end; height: 26px; }
+  .widget-form-bars span { flex: 1; border-radius: 2px 2px 0 0; }
+  .widget-form-bars span.good { background: var(--turf-strong); }
+  .widget-form-bars span.mid { background: var(--gold); }
+  .widget-form-bars span.poor { background: var(--ball); }
+  .widget-mini-table { width: 100%; border-collapse: collapse; margin-top: 2px; }
+  .widget-mini-table td { font-size: var(--fs-micro); color: var(--ink-dim); padding: 1px 0; }
+  .widget-mini-table td:last-child { text-align: right; font-family: var(--font-mono); color: var(--ink); font-weight: 700; }
+
+  /* ---------- Player Profile: header vitals + Personal tab ---------- */
+  .player-header { flex-wrap: wrap; row-gap: 12px; }
+  .player-id-block { min-width: 200px; }
+  .player-header-meta { display: flex; align-items: center; gap: 7px; margin-top: 6px; font-size: var(--fs-caption); color: var(--ink-dim); }
+  .player-club-crest-sm { width: 16px; height: 16px; border-radius: 4px; background: radial-gradient(circle at 30% 25%, var(--turf-strong), var(--turf-dim) 75%); display: inline-block; vertical-align: -3px; }
+  .meta-divider { color: var(--ink-faint); }
+  .player-header-vitals { display: flex; gap: 22px; margin-left: auto; padding: 0 18px; }
+  .vitals-item { text-align: center; }
+  .vitals-label { font-size: var(--fs-micro); color: var(--ink-faint); text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 5px; }
+  .vitals-value { font-family: var(--font-mono); font-weight: 700; font-size: var(--fs-body-lg); color: var(--ink); white-space: nowrap; }
+  .vitals-value .vitals-sub { display: block; font-family: var(--font-body); font-size: var(--fs-micro); font-weight: 400; color: var(--ink-faint); margin-top: 2px; }
+  .star-row.mini .icon { width: 12px; height: 12px; }
+  .style-note-row { display: flex; gap: 8px; padding: 6px 0; font-size: var(--fs-caption); color: var(--ink-dim); align-items: flex-start; border-top: 1px solid var(--border-soft); }
+  .style-note-row:first-of-type { border-top: none; padding-top: 0; }
+  .style-note-row svg { width: 13px; height: 13px; color: var(--gold); flex-shrink: 0; margin-top: 2px; }
+  .standing-row { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 8px 0; border-top: 1px solid var(--border-soft); }
+  .standing-row:first-of-type { border-top: none; padding-top: 0; }
+  .trust-meter-wrap { width: 96px; flex-shrink: 0; }
+  .notes-log { display: flex; flex-direction: column; gap: 9px; margin-top: 2px; }
+  .notes-log-item { font-size: var(--fs-caption); color: var(--ink-dim); padding-left: 12px; border-left: 2px solid var(--border); }
+  .notes-log-item .note-date { display: block; font-size: var(--fs-micro); color: var(--ink-faint); margin-bottom: 1px; }
+  .happiness-lists { display: flex; gap: 16px; margin-top: 10px; }
+  .happiness-col { flex: 1; }
+  .happiness-col h4 { font-size: var(--fs-micro); text-transform: uppercase; letter-spacing: 0.04em; color: var(--ink-faint); margin: 0 0 6px; font-weight: 700; }
+  .happiness-col ul { margin: 0; padding: 0; }
+  .happiness-col li { font-size: var(--fs-caption); color: var(--ink-dim); margin-bottom: 5px; list-style: none; padding-left: 13px; position: relative; }
+  .happiness-col li::before { content: "+"; position: absolute; left: 0; color: var(--turf-strong); font-weight: 700; }
+  .happiness-col.negative li::before { content: "\2212"; color: var(--ball); }
+  .mini-clause-chip { display: inline-block; font-size: var(--fs-micro); font-weight: 600; background: var(--surface-3); color: var(--ink-dim); border: 1px solid var(--border); border-radius: 999px; padding: 4px 10px; margin: 0 6px 6px 0; }
+  .transfer-status-row { display: flex; justify-content: space-between; padding: 7px 0; border-top: 1px solid var(--border-soft); font-size: var(--fs-small); }
+  .transfer-status-row:first-of-type { border-top: none; padding-top: 0; }
+
+  /* ---------- Global back/forward navigation ---------- */
+  .nav-history-controls { display: flex; gap: 4px; margin-right: 6px; flex-shrink: 0; }
+  .nav-hist-btn { appearance: none; border: 1px solid rgba(255,255,255,0.14); background: rgba(0,0,0,0.18); color: var(--ink-dim); width: 30px; height: 30px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+  .nav-hist-btn svg { width: 15px; height: 15px; }
+  .nav-hist-btn:hover:not(:disabled) { background: rgba(0,0,0,0.3); color: var(--ink); }
+  .nav-hist-btn:disabled { opacity: 0.32; cursor: not-allowed; }
+
+  .attr-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0 22px; }
+  .attr-grid .attr-group { margin-bottom: 14px; }
+  .attr-caption { display: flex; align-items: flex-start; gap: 8px; font-size: var(--fs-caption); color: var(--ink-faint); background: var(--surface-2); border: 1px dashed var(--border); border-radius: 8px; padding: 9px 12px; margin-top: 4px; }
+  .attr-caption svg { width: var(--icon-size); height: var(--icon-size); flex-shrink: 0; }
+
+  /* ---------- Inline lineup editor (pre-match) ---------- */
+  button.pill { appearance: none; cursor: pointer; font: inherit; }
+  .lineup-count-badge { font-size: var(--fs-caption); font-weight: 700; padding: 4px 11px; border-radius: 999px; background: var(--turf-dim); color: var(--turf-strong); }
+  .lineup-count-badge.warn { background: var(--gold-dim); color: var(--gold); }
+  .lineup-editor-scroll { max-height: 380px; overflow-y: auto; padding-right: 4px; }
+
+  /* ---------- Pitch preparation (home advantage, Tactics) ---------- */
+  .pitch-preset-row { display: flex; gap: 8px; margin: 12px 0 14px; }
+  .pitch-preset-btn { flex: 1; appearance: none; background: var(--surface-3); border: 1px solid var(--border); color: var(--ink); font: inherit; text-align: center; padding: 10px 8px; border-radius: 10px; cursor: pointer; font-size: var(--fs-small); font-weight: 700; }
+  .pitch-preset-btn:hover { border-color: var(--chrome-strong); }
+  .pitch-preset-btn.active { border-color: var(--gold); background: var(--gold-dim); color: var(--gold); }
+  .pitch-preset-btn .preset-sub { display: block; font-size: var(--fs-micro); font-weight: 400; color: var(--ink-faint); margin-top: 2px; }
+  .pitch-preset-btn.active .preset-sub { color: var(--gold); opacity: 0.8; }
+  .pitch-capability-line { display: flex; justify-content: space-between; align-items: center; gap: 10px; font-size: var(--fs-caption); color: var(--ink-dim); background: var(--surface-2); border: 1px solid var(--border); border-radius: 8px; padding: 8px 12px; margin-bottom: 14px; }
+  .pitch-risk-note { display: flex; gap: 8px; font-size: var(--fs-caption); color: var(--ink-faint); background: var(--surface-2); border: 1px dashed var(--border); border-radius: 8px; padding: 9px 12px; margin-top: 14px; align-items: flex-start; }
+  .pitch-risk-note svg { width: var(--icon-size); height: var(--icon-size); flex-shrink: 0; color: var(--gold); margin-top: 1px; }
+
+  /* ---------- Yet-to-bat + next-man-in picker ---------- */
+  .yet-to-bat-strip { padding: 8px 16px 12px; font-size: var(--fs-small); color: var(--ink-faint); }
+  .yet-to-bat-strip strong { color: var(--ink-dim); font-weight: 600; }
+  .next-batsman-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+  .next-batsman-row .nb-name { font-weight: 700; color: var(--ink); font-size: var(--fs-body); }
+  .next-batsman-picker-wrap { position: relative; }
+  .next-batsman-menu { position: absolute; top: calc(100% + 6px); right: 0; z-index: 30; min-width: 180px; background: var(--surface-2); border: 1px solid var(--border); border-radius: 10px; box-shadow: var(--shadow); padding: 6px; display: none; }
+  .next-batsman-menu.open { display: block; }
+  .next-batsman-menu button { display: block; width: 100%; appearance: none; background: none; border: none; color: var(--ink-dim); font: inherit; font-size: var(--fs-small); text-align: left; padding: 8px 10px; border-radius: 7px; cursor: pointer; }
+  .next-batsman-menu button:hover { background: var(--surface-3); color: var(--ink); }
+
+  /* ---------- A long table gets its own scroller, not the page ---------- */
+  .table-scroll-inner { max-height: 62vh; overflow-y: auto; }
+  table.squad thead th { position: sticky; top: 0; z-index: 2; }
+
+  .table-scroll-inner.compact { max-height: 360px; }
+  table.xi-squad thead th, table.xi-lineup thead th { position: sticky; top: 0; z-index: 2; background: var(--surface); }
+
+  /* ---------- Drag-to-reorder + right-click role assignment ---------- */
+  tr[draggable="true"] { cursor: grab; }
+  tr[draggable="true"]:active { cursor: grabbing; }
+  tr.row-dragging { opacity: 0.4; }
+  tr.row-drop-target { box-shadow: inset 0 2px 0 var(--gold); }
+  .role-tags-slot { display: inline-flex; gap: 4px; margin-left: 6px; }
+  .role-context-menu { position: fixed; z-index: 100; min-width: 200px; background: var(--surface-2); border: 1px solid var(--border); border-radius: 10px; box-shadow: var(--shadow); padding: 6px; display: none; }
+  .role-context-menu.open { display: block; }
+  .role-context-menu .rcm-header { font-size: var(--fs-micro); color: var(--ink-faint); text-transform: uppercase; letter-spacing: 0.04em; padding: 6px 10px 8px; }
+  .role-context-menu button { display: block; width: 100%; appearance: none; background: none; border: none; color: var(--ink-dim); font: inherit; font-size: var(--fs-small); text-align: left; padding: 8px 10px; border-radius: 7px; cursor: pointer; }
+  .role-context-menu button:hover { background: var(--surface-3); color: var(--ink); }
+  .role-context-menu button.danger:hover { background: var(--ball-dim); color: var(--ball); }
+
+  /* ---------- Delegate squad selection + Pick Best XI ---------- */
+  .delegate-toggle-label { display: flex; align-items: center; gap: 7px; font-size: var(--fs-small); color: var(--ink-dim); cursor: pointer; user-select: none; }
+  .delegate-toggle-label input { width: 15px; height: 15px; accent-color: var(--turf-strong); cursor: pointer; }
 </style>
 
 <!--
@@ -800,6 +954,15 @@
       <span class="club">Islamabad Icons &middot; Pakistan T20 Cup 2027</span>
     </div>
 
+    <div class="nav-history-controls">
+      <button class="nav-hist-btn" id="nav-back-btn" onclick="navigateBack()" disabled title="Back" aria-label="Back">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+      </button>
+      <button class="nav-hist-btn" id="nav-forward-btn" onclick="navigateForward()" disabled title="Forward" aria-label="Forward">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+      </button>
+    </div>
+
     <div class="global-search">
       <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
       <input type="text" placeholder="Search any player, team, staff&hellip;" id="global-search-input" autocomplete="off">
@@ -836,6 +999,7 @@
     <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-transfers" data-tab="transfers" title="Transfers"><svg class="icon"><use href="#i-swap"/></svg><span class="tab-label">Transfers</span></button>
     <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-player" data-tab="player" title="Player"><svg class="icon"><use href="#i-user"/></svg><span class="tab-label">Player</span></button>
     <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-fixtures" data-tab="fixtures" title="Fixtures"><svg class="icon"><use href="#i-cal-list"/></svg><span class="tab-label">Fixtures</span></button>
+    <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-international" data-tab="international" title="International"><svg class="icon"><use href="#i-plane"/></svg><span class="tab-label">International</span></button>
     <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-inbox" data-tab="inbox" title="Inbox"><svg class="icon"><use href="#i-inbox"/></svg><span class="tab-label">Inbox</span></button>
   </div>
 </nav>
@@ -915,7 +1079,48 @@
           <div class="preview-line"><span class="preview-label">Key duel</span><span class="preview-value">Hamza Malik has struggled against Talha Iqbal in this fixture &mdash; dismissed 3 times in 6 innings</span></div>
         </div>
       </div>
-      <div class="stage-actions"><button class="stage-continue-btn" data-next="stage-toss">Continue to the toss <svg class="icon sm"><use href="#i-chevron-fwd"/></svg></button></div>
+      <div class="stage-actions"><button class="stage-continue-btn" data-next="stage-lineup-check">Continue <svg class="icon sm"><use href="#i-chevron-fwd"/></svg></button></div>
+    </div>
+
+    <!-- ============ PRE-MATCH: LINEUP CHECK (additional, conditions-aware) ============ -->
+    <div id="stage-lineup-check" class="match-stage" hidden>
+      <div class="panel-head"><h1>Confirm your lineup</h1><div class="sub">Last look before the toss &mdash; conditions repeated here so a late change is an informed one</div></div>
+      <div class="analysis-card" style="margin-bottom:16px">
+        <span class="eyebrow"><svg class="icon sm"><use href="#i-alert"/></svg> Conditions, at a glance</span>
+        <div class="tactics-grid" style="gap:10px">
+          <div class="analysis-preview-row" style="border:none;padding:0"><span>Weather</span><span>Evening, clear, 31&deg;C &middot; dew from over 15</span></div>
+          <div class="analysis-preview-row" style="border:none;padding:0"><span>Pitch</span><span>Firm, true &mdash; favours batting first</span></div>
+        </div>
+      </div>
+      <div class="analysis-card">
+        <div class="history-head-row">
+          <span class="eyebrow" style="margin-bottom:0">Your lineup &middot; Islamabad Icons</span>
+          <span class="lineup-count-badge" id="lineup-check-count">11 of 11 selected</span>
+        </div>
+        <div class="lineup-editor-scroll">
+          <table class="xi-squad">
+            <thead><tr><th>#</th><th>Player</th><th>Role</th><th>Form</th><th>Ability</th><th>Status</th></tr></thead>
+            <tbody id="lineup-check-body">
+              <tr draggable="true" oncontextmenu="showRoleContextMenu(event)"><td class="xi-order-num"></td><td class="xi-name">Umar Ansari</td><td>Opener <span class="role-tags-slot"></span></td><td><div class="pips"><div class="pip on good"></div><div class="pip on good"></div><div class="pip on mid"></div><div class="pip on good"></div><div class="pip"></div></div></td><td><div class="qbar-wrap"><div class="qbar ability"><span style="width:74%"></span></div></div></td><td><span class="pill first">In XI</span></td></tr>
+              <tr draggable="true" oncontextmenu="showRoleContextMenu(event)"><td class="xi-order-num"></td><td class="xi-name">Rizwan Sheikh</td><td>Opener <span class="role-tags-slot"></span></td><td><div class="pips"><div class="pip on good"></div><div class="pip on mid"></div><div class="pip on good"></div><div class="pip on good"></div><div class="pip on good"></div></div></td><td><div class="qbar-wrap"><div class="qbar ability"><span style="width:69%"></span></div></div></td><td><span class="pill first">In XI</span></td></tr>
+              <tr draggable="true" oncontextmenu="showRoleContextMenu(event)"><td class="xi-order-num"></td><td class="xi-name">Waqar Ansari</td><td>Top order <span class="role-tags-slot"></span></td><td><div class="pips"><div class="pip on mid"></div><div class="pip on good"></div><div class="pip on good"></div><div class="pip"></div><div class="pip on good"></div></div></td><td><div class="qbar-wrap"><div class="qbar ability"><span style="width:71%"></span></div></div></td><td><span class="pill first">In XI</span></td></tr>
+              <tr draggable="true" oncontextmenu="showRoleContextMenu(event)"><td class="xi-order-num"></td><td class="xi-name">Hamza Malik</td><td>Top order <span class="role-tags-slot"><span class="xi-role-tag" data-role="C" title="Captain">C</span></span></td><td><div class="pips"><div class="pip on good"></div><div class="pip on good"></div><div class="pip on good"></div><div class="pip on good"></div><div class="pip"></div></div></td><td><div class="qbar-wrap"><div class="qbar ability"><span style="width:92%"></span></div></div></td><td><span class="pill first">In XI</span></td></tr>
+              <tr draggable="true" oncontextmenu="showRoleContextMenu(event)"><td class="xi-order-num"></td><td class="xi-name">Zain Chaudhry</td><td>Middle order <span class="role-tags-slot"><span class="xi-role-tag" data-role="VC" title="Vice-captain">VC</span></span></td><td><div class="pips"><div class="pip on mid"></div><div class="pip"></div><div class="pip on good"></div><div class="pip on good"></div><div class="pip on mid"></div></div></td><td><div class="qbar-wrap"><div class="qbar ability"><span style="width:65%"></span></div></div></td><td><span class="pill first">In XI</span></td></tr>
+              <tr draggable="true" oncontextmenu="showRoleContextMenu(event)"><td class="xi-order-num"></td><td class="xi-name">Sarfraz Khan</td><td>Middle order <span class="role-tags-slot"></span></td><td><div class="pips"><div class="pip on good"></div><div class="pip on good"></div><div class="pip"></div><div class="pip on mid"></div><div class="pip on good"></div></div></td><td><div class="qbar-wrap"><div class="qbar ability"><span style="width:63%"></span></div></div></td><td><span class="pill first">In XI</span></td></tr>
+              <tr draggable="true" oncontextmenu="showRoleContextMenu(event)"><td class="xi-order-num"></td><td class="xi-name">Umar Baig</td><td>Keeper <span class="role-tags-slot"><span class="xi-role-tag" data-role="WK" title="Wicketkeeper">WK</span></span></td><td><div class="pips"><div class="pip on good"></div><div class="pip on mid"></div><div class="pip on good"></div><div class="pip on good"></div><div class="pip"></div></div></td><td><div class="qbar-wrap"><div class="qbar ability"><span style="width:58%"></span></div></div></td><td><span class="pill first">In XI</span></td></tr>
+              <tr draggable="true" oncontextmenu="showRoleContextMenu(event)"><td class="xi-order-num"></td><td class="xi-name">Danish Raza</td><td>Allrounder <span class="role-tags-slot"></span></td><td><div class="pips"><div class="pip"></div><div class="pip on mid"></div><div class="pip on good"></div><div class="pip on good"></div><div class="pip on mid"></div></div></td><td><div class="qbar-wrap"><div class="qbar ability"><span style="width:60%"></span></div></div></td><td><span class="pill first">In XI</span></td></tr>
+              <tr draggable="true" oncontextmenu="showRoleContextMenu(event)"><td class="xi-order-num"></td><td class="xi-name">Bilal Nadeem</td><td>Bowler <span class="role-tags-slot"></span></td><td><div class="pips"><div class="pip on good"></div><div class="pip on good"></div><div class="pip"></div><div class="pip on mid"></div><div class="pip on good"></div></div></td><td><div class="qbar-wrap"><div class="qbar ability"><span style="width:66%"></span></div></div></td><td><span class="pill first">In XI</span></td></tr>
+              <tr draggable="true" oncontextmenu="showRoleContextMenu(event)"><td class="xi-order-num"></td><td class="xi-name">Fahad Sultan</td><td>Bowler <span class="role-tags-slot"><span class="xi-role-tag" data-role="B1" title="Opening bowler 1">B1</span></span></td><td><div class="pips"><div class="pip on mid"></div><div class="pip on good"></div><div class="pip on good"></div><div class="pip on good"></div><div class="pip"></div></div></td><td><div class="qbar-wrap"><div class="qbar ability"><span style="width:70%"></span></div></div></td><td><span class="pill first">In XI</span></td></tr>
+              <tr draggable="true" oncontextmenu="showRoleContextMenu(event)"><td class="xi-order-num"></td><td class="xi-name">Kamran Aslam</td><td>Bowler <span class="role-tags-slot"><span class="xi-role-tag" data-role="B2" title="Opening bowler 2">B2</span></span></td><td><div class="pips"><div class="pip on good"></div><div class="pip"></div><div class="pip on mid"></div><div class="pip on good"></div><div class="pip on good"></div></div></td><td><div class="qbar-wrap"><div class="qbar ability"><span style="width:67%"></span></div></div></td><td><span class="pill first">In XI</span></td></tr>
+              <tr draggable="true" oncontextmenu="showRoleContextMenu(event)"><td class="xi-order-num"></td><td class="xi-name">Noman Riaz</td><td>Bowler <span class="role-tags-slot"></span></td><td><div class="pips"><div class="pip on mid"></div><div class="pip"></div><div class="pip"></div><div class="pip on mid"></div><div class="pip"></div></div></td><td><div class="qbar-wrap"><div class="qbar ability"><span style="width:54%"></span></div></div></td><td><span class="pill fringe">Reserve</span></td></tr>
+              <tr draggable="true" oncontextmenu="showRoleContextMenu(event)"><td class="xi-order-num"></td><td class="xi-name">Asad Farid</td><td>Allrounder <span class="role-tags-slot"></span></td><td><div class="pips"><div class="pip"></div><div class="pip on mid"></div><div class="pip"></div><div class="pip on mid"></div><div class="pip"></div></div></td><td><div class="qbar-wrap"><div class="qbar ability"><span style="width:51%"></span></div></div></td><td><span class="pill fringe">Reserve</span></td></tr>
+              <tr draggable="true" oncontextmenu="showRoleContextMenu(event)"><td class="xi-order-num"></td><td class="xi-name">Yasir Ali</td><td>Middle order <span class="role-tags-slot"></span></td><td><div class="pips"><div class="pip on mid"></div><div class="pip"></div><div class="pip on mid"></div><div class="pip"></div><div class="pip"></div></div></td><td><div class="qbar-wrap"><div class="qbar ability"><span style="width:49%"></span></div></div></td><td><span class="pill fringe">Reserve</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="role-hint">Click a player&rsquo;s status to swap him in or out of the XI &mdash; right here, not a separate screen. Reordering the batting order itself still happens on the Tactics screen.</div>
+      </div>
+      <div class="stage-actions"><button class="stage-continue-btn" data-next="stage-toss">Confirm lineup &middot; continue to the toss <svg class="icon sm"><use href="#i-chevron-fwd"/></svg></button></div>
     </div>
 
     <!-- ============ PRE-MATCH: TOSS ============ -->
@@ -945,7 +1150,7 @@
       <div class="stage-actions"><button class="stage-continue-btn" data-next="stage-xi" id="toss-continue-btn" disabled>Continue to the teams <svg class="icon sm"><use href="#i-chevron-fwd"/></svg></button></div>
     </div>
 
-    <!-- ============ PRE-MATCH: PLAYING XIs ============ -->
+    <!-- ============ PRE-MATCH: PLAYING XIs (revealed after the toss, as originally) ============ -->
     <div id="stage-xi" class="match-stage" hidden>
       <div class="panel-head"><h1>Today's teams</h1><div class="sub">Islamabad Icons won the toss and chose to bat</div></div>
       <div class="tactics-grid">
@@ -1124,6 +1329,23 @@
             <div class="crease-info-line">Last wkt: Waqar Ansari b Iqbal 24 (19) &middot; 96/2 (9.0 ov)</div>
             <div class="crease-info-line reviews"><svg class="icon xs"><use href="#i-shield"/></svg>Reviews remaining &middot; Icons 2 of 2 &middot; Lions 1 of 2</div>
           </div>
+          <div class="figures-card">
+            <span class="eyebrow"><svg class="icon sm"><use href="#i-user"/></svg> Next man in</span>
+            <div class="next-batsman-row">
+              <span class="nb-name" id="next-batsman-name">Sarfraz Khan</span>
+              <div class="next-batsman-picker-wrap">
+                <button class="view-more-btn" style="margin-top:0;width:auto;padding:6px 12px" onclick="toggleNextBatsmanPicker()">Send someone else</button>
+                <div class="next-batsman-menu" id="next-batsman-menu">
+                  <button onclick="pickNextBatsman('Umar Baig (wk)')">Umar Baig (wk)</button>
+                  <button onclick="pickNextBatsman('Danish Raza')">Danish Raza</button>
+                  <button onclick="pickNextBatsman('Bilal Nadeem')">Bilal Nadeem</button>
+                  <button onclick="pickNextBatsman('Fahad Sultan')">Fahad Sultan</button>
+                  <button onclick="pickNextBatsman('Kamran Aslam')">Kamran Aslam</button>
+                </div>
+              </div>
+            </div>
+            <div class="role-hint">The batting order is the default &mdash; overriding it here sends someone else in next, out of turn.</div>
+          </div>
           <div class="commentary-card">
             <span class="eyebrow"><svg class="icon sm"><use href="#i-megaphone"/></svg> Ball by ball</span>
             <div class="commentary-item"><img class="icon" src="data:image/png;base64,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" alt="Four"><span class="commentary-ball">14.2</span><span class="commentary-text boundary">Iqbal to Malik, short of a length and shaping away, FOUR! Cut hard through the cover gap.</span></div>
@@ -1150,6 +1372,7 @@
           <tfoot><tr class="extras-row"><td colspan="2">Extras (b 2, lb 1, w 3)</td><td class="num">6</td><td colspan="4"></td></tr></tfoot>
         </table>
         <div class="fow-strip">Fall of wickets: 1-34 (Sheikh, 4.1), 2-51 (Ansari, 6.4), 3-98 (Ansari, 10.2)</div>
+        <div class="yet-to-bat-strip"><strong>Yet to bat:</strong> Sarfraz Khan, Umar Baig, Danish Raza, Bilal Nadeem, Fahad Sultan, Kamran Aslam</div>
       </div>
 
       <div class="innings-block">
@@ -1264,6 +1487,7 @@
   <section class="panel" id="panel-squad" role="tabpanel" hidden>
     <div class="panel-head"><h1>First-team squad</h1><div class="sub">18 players &middot; 2 unavailable</div></div>
     <div class="table-card">
+      <div class="table-scroll-inner">
       <table class="squad">
         <thead><tr><th>Player</th><th>Role</th><th>Status</th><th>Form</th><th>Condition</th><th title="The coaching staff's own read of his current ability - a star estimate, never the raw hidden number">Ability</th></tr></thead>
         <tbody>
@@ -1317,6 +1541,7 @@
           </tr>
         </tbody>
       </table>
+      </div>
     </div>
   </section>
 
@@ -1345,12 +1570,24 @@
       </div>
     </div>
 
+    <div class="analysis-card" style="margin-bottom:16px">
+      <div class="history-head-row">
+        <span class="eyebrow" style="margin-bottom:0"><svg class="icon sm"><use href="#i-user"/></svg> Squad selection</span>
+        <div style="display:flex;gap:14px;align-items:center">
+          <label class="delegate-toggle-label"><input type="checkbox" id="delegate-xi-toggle" onchange="toggleDelegateXi(this)"> Delegate to assistant</label>
+          <button class="view-more-btn" style="margin-top:0;width:auto;padding:6px 12px" onclick="pickBestXi()">Pick best XI</button>
+        </div>
+      </div>
+      <div class="role-hint" id="delegate-xi-note">You&rsquo;re picking the XI yourself. Aamir Sohail, Assistant Manager, can take this off your hands if you&rsquo;d rather focus elsewhere.</div>
+    </div>
+
     <div class="tactics-tables">
       <div class="analysis-card">
         <span class="eyebrow"><svg class="icon sm"><use href="#i-users"/></svg> Full squad</span>
+        <div class="table-scroll-inner compact">
         <table class="xi-squad">
           <thead><tr><th>Player</th><th>Role</th><th>Form</th><th>Ability</th><th>Status</th></tr></thead>
-          <tbody>
+          <tbody id="tactics-squad-body">
             <tr><td class="xi-name">Umar Ansari</td><td>Opener</td><td><div class="pips"><div class="pip on good"></div><div class="pip on good"></div><div class="pip on mid"></div><div class="pip on good"></div><div class="pip"></div></div></td><td><div class="qbar-wrap"><div class="qbar ability"><span style="width:74%"></span></div></div></td><td><span class="pill first">In XI</span></td></tr>
             <tr><td class="xi-name">Rizwan Sheikh</td><td>Opener</td><td><div class="pips"><div class="pip on good"></div><div class="pip on mid"></div><div class="pip on good"></div><div class="pip on good"></div><div class="pip on good"></div></div></td><td><div class="qbar-wrap"><div class="qbar ability"><span style="width:69%"></span></div></div></td><td><span class="pill first">In XI</span></td></tr>
             <tr><td class="xi-name">Waqar Ansari</td><td>Top order</td><td><div class="pips"><div class="pip on mid"></div><div class="pip on good"></div><div class="pip on good"></div><div class="pip"></div><div class="pip on good"></div></div></td><td><div class="qbar-wrap"><div class="qbar ability"><span style="width:71%"></span></div></div></td><td><span class="pill first">In XI</span></td></tr>
@@ -1367,26 +1604,56 @@
             <tr><td class="xi-name">Yasir Ali</td><td>Middle order</td><td><div class="pips"><div class="pip on mid"></div><div class="pip"></div><div class="pip on mid"></div><div class="pip"></div><div class="pip"></div></div></td><td><div class="qbar-wrap"><div class="qbar ability"><span style="width:49%"></span></div></div></td><td><span class="pill fringe">Reserve</span></td></tr>
           </tbody>
         </table>
+        </div>
       </div>
       <div class="analysis-card">
         <span class="eyebrow"><svg class="icon sm"><use href="#i-check-circle"/></svg> Lineup &middot; 11 of 11 set</span>
+        <div class="table-scroll-inner compact">
         <table class="xi-lineup">
           <thead><tr><th>#</th><th>Player</th><th>Role</th></tr></thead>
-          <tbody>
-            <tr><td class="xi-order-num">1</td><td class="xi-name">Umar Ansari</td><td>Opener</td></tr>
-            <tr><td class="xi-order-num">2</td><td class="xi-name">Rizwan Sheikh</td><td>Opener</td></tr>
-            <tr><td class="xi-order-num">3</td><td class="xi-name">Waqar Ansari</td><td>Top order</td></tr>
-            <tr><td class="xi-order-num">4</td><td class="xi-name">Hamza Malik</td><td>Top order <span class="xi-role-tag">C</span></td></tr>
-            <tr><td class="xi-order-num">5</td><td class="xi-name">Zain Chaudhry</td><td>Middle order <span class="xi-role-tag">VC</span></td></tr>
-            <tr><td class="xi-order-num">6</td><td class="xi-name">Sarfraz Khan</td><td>Middle order</td></tr>
-            <tr><td class="xi-order-num">7</td><td class="xi-name">Umar Baig</td><td>Keeper <span class="xi-role-tag">WK</span></td></tr>
-            <tr><td class="xi-order-num">8</td><td class="xi-name">Danish Raza</td><td>Allrounder</td></tr>
-            <tr><td class="xi-order-num">9</td><td class="xi-name">Bilal Nadeem</td><td>Bowler</td></tr>
-            <tr><td class="xi-order-num">10</td><td class="xi-name">Fahad Sultan</td><td>Bowler <span class="xi-role-tag">Opens bowling</span></td></tr>
-            <tr><td class="xi-order-num">11</td><td class="xi-name">Kamran Aslam</td><td>Bowler <span class="xi-role-tag">Opens bowling</span></td></tr>
+          <tbody id="tactics-lineup-body">
+            <tr draggable="true" oncontextmenu="showRoleContextMenu(event)"><td class="xi-order-num">1</td><td class="xi-name">Umar Ansari</td><td>Opener <span class="role-tags-slot"></span></td></tr>
+            <tr draggable="true" oncontextmenu="showRoleContextMenu(event)"><td class="xi-order-num">2</td><td class="xi-name">Rizwan Sheikh</td><td>Opener <span class="role-tags-slot"></span></td></tr>
+            <tr draggable="true" oncontextmenu="showRoleContextMenu(event)"><td class="xi-order-num">3</td><td class="xi-name">Waqar Ansari</td><td>Top order <span class="role-tags-slot"></span></td></tr>
+            <tr draggable="true" oncontextmenu="showRoleContextMenu(event)"><td class="xi-order-num">4</td><td class="xi-name">Hamza Malik</td><td>Top order <span class="role-tags-slot"><span class="xi-role-tag" data-role="C" title="Captain">C</span></span></td></tr>
+            <tr draggable="true" oncontextmenu="showRoleContextMenu(event)"><td class="xi-order-num">5</td><td class="xi-name">Zain Chaudhry</td><td>Middle order <span class="role-tags-slot"><span class="xi-role-tag" data-role="VC" title="Vice-captain">VC</span></span></td></tr>
+            <tr draggable="true" oncontextmenu="showRoleContextMenu(event)"><td class="xi-order-num">6</td><td class="xi-name">Sarfraz Khan</td><td>Middle order <span class="role-tags-slot"></span></td></tr>
+            <tr draggable="true" oncontextmenu="showRoleContextMenu(event)"><td class="xi-order-num">7</td><td class="xi-name">Umar Baig</td><td>Keeper <span class="role-tags-slot"><span class="xi-role-tag" data-role="WK" title="Wicketkeeper">WK</span></span></td></tr>
+            <tr draggable="true" oncontextmenu="showRoleContextMenu(event)"><td class="xi-order-num">8</td><td class="xi-name">Danish Raza</td><td>Allrounder <span class="role-tags-slot"></span></td></tr>
+            <tr draggable="true" oncontextmenu="showRoleContextMenu(event)"><td class="xi-order-num">9</td><td class="xi-name">Bilal Nadeem</td><td>Bowler <span class="role-tags-slot"></span></td></tr>
+            <tr draggable="true" oncontextmenu="showRoleContextMenu(event)"><td class="xi-order-num">10</td><td class="xi-name">Fahad Sultan</td><td>Bowler <span class="role-tags-slot"><span class="xi-role-tag" data-role="B1" title="Opening bowler 1">B1</span></span></td></tr>
+            <tr draggable="true" oncontextmenu="showRoleContextMenu(event)"><td class="xi-order-num">11</td><td class="xi-name">Kamran Aslam</td><td>Bowler <span class="role-tags-slot"><span class="xi-role-tag" data-role="B2" title="Opening bowler 2">B2</span></span></td></tr>
           </tbody>
         </table>
+        </div>
         <div class="role-hint">Batting order is drag-to-reorder in the real app; picked here in the order the squad table lists them, for this mockup.</div>
+      </div>
+    </div>
+
+    <div class="analysis-card">
+      <span class="eyebrow"><svg class="icon sm"><use href="#i-alert"/></svg> Pitch preparation &middot; home advantage</span>
+      <div class="plan-desc">As the home side at Jinnah Stadium, you can ask the groundstaff to prepare the surface a certain way &mdash; within real limits. A request the ground genuinely can&rsquo;t deliver risks a below-standard rating from the match referee, not just a wasted ask.</div>
+      <div class="pitch-preset-row">
+        <button class="pitch-preset-btn" onclick="selectPitchPrep(this,'grassy')">Grassy<span class="preset-sub">Favours seam &amp; pace</span></button>
+        <button class="pitch-preset-btn" onclick="selectPitchPrep(this,'dry')">Dry &amp; turning<span class="preset-sub">Favours spin</span></button>
+        <button class="pitch-preset-btn active" onclick="selectPitchPrep(this,'flat')">Flat &amp; true<span class="preset-sub">Favours batting</span></button>
+      </div>
+      <div class="pitch-capability-line"><span>Groundstaff capability &middot; pitch infrastructure</span><strong style="color:var(--ink)">Good &mdash; expect roughly 70% of what you ask for</strong></div>
+      <div class="info-meter-row">
+        <div class="info-meter-label"><span>Pace &amp; bounce</span><span id="pitch-meter-pace-label">Even</span></div>
+        <div class="info-meter"><span id="pitch-meter-pace" style="width:52%"></span></div>
+      </div>
+      <div class="info-meter-row">
+        <div class="info-meter-label"><span>Seam movement</span><span id="pitch-meter-seam-label">Low</span></div>
+        <div class="info-meter"><span id="pitch-meter-seam" style="width:30%"></span></div>
+      </div>
+      <div class="info-meter-row">
+        <div class="info-meter-label"><span>Turn</span><span id="pitch-meter-turn-label">Low</span></div>
+        <div class="info-meter"><span id="pitch-meter-turn" style="width:28%"></span></div>
+      </div>
+      <div class="pitch-risk-note">
+        <svg><use href="#i-alert"/></svg>
+        <span>A well-resourced ground can genuinely turn a batting road into a raw turner between fixtures of the same series &mdash; it&rsquo;s real, and it&rsquo;s allowed. Pushed too far on a ground that can&rsquo;t back it up, the surface itself gets rated, not just the result on it.</span>
       </div>
     </div>
 
@@ -1592,9 +1859,30 @@
   <section class="panel" id="panel-player" role="tabpanel" hidden>
     <div class="player-header">
       <div class="player-photo"></div>
-      <div>
+      <div class="player-id-block">
         <h1>Hamza Malik</h1>
         <div class="role-line">Top-order batter &middot; Right-hand bat &middot; 27 years old</div>
+        <div class="player-header-meta">
+          <img class="flag-icon sm" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEwAAAAiCAYAAAD1aT8BAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAUZSURBVGhD7ZltaFZlGMfPp9JBGViBpmSrfKmQ4sEInUUNdbWRM4vlJDMlQVKyGiXVUIwSQ/pQsy9pNEFJjEg0EIQWiiaElWFJRgp+EL/EYtL6eHX9rvMcO5zuPTvnPvfBAv/wZ8+e3a//+7qvl3uRQq6yECPJYuWGdTKj6yGJltxdLR+5QVa+u0Z2HtwtTZ3NEj05zd0uS+1XW1WTsxfO1Vcc48z5M9Lz4evS8lK7THi2Jtd0zXD39+VIgh0YOCjj598p47pr7o4h+Pitcv3CKbbJF7etl2j+eHe7LB+bIJO67pLvf/lOLvx+0cT+5tRxW/fWPR9IVNNNaRtn37IcSTAwr6dTxrZNlGjpfe7OZTlnjLy5Y5PNNXftgniTeeZSoTs2rbC+05fPMoGmLrlHhob/lL2HvzDrc/YLwUaC/fjbKbm2pUmiRXpVQouGdbVPlNNqXYOX/og3rt8VmufBsbE4XGP93PvRBtl/9MtYeNbs6lOWjQQDbT0L44W5OpehbnRRb7cM/zUsZy+el+Zn7i0mGCJB2kP9jA+c++oT5reC+66Eown21YkBaVpwY7wZ1wC+1EPo27fd5kAwLwvLEgFDrzPL0QQDRLFo3k3uAXyom+I6Hjl5zMYfHBqUWS+05vdhV5J5BPvp3M8WlYL5BY2GWBSWlaBz47Kwh1IV8wgGtux+L95QCAtQ/0VUxLIS9PZvyZ9WBCJ+rnDalFcwNjdzVUuYa6OCkbKQBiT4+uSReGz8kKtPaOpcrZrctr/xdLE58woGLMfR3Mk5UBGqw29bv9giZAI+k50Hs+LRqIfW99m22D9zUK42LhYRDNiJkGaU2ZTjSgI7kCpSmDRZt1590hh8qO2nSsEoRy6nGb6iJU4/UwdiZVhe6QMZjbMj2b5/h815+3MPVCsYoLgtdTUzaUUaJ379QW7pmFTd1VSx8F0cDnNRyxaK/j6CYRnTlmpmXmZT+JB64prFzkOfxiVZaNHUclk3xT7Ah41prZdWrvYu+ggGMGk27R3VtG9SGrnA+Nc9PC4WzdW/KHU+xMKqEtj1Lzq+r2CXhof+qTN9rKB+LY+f/rY+4r9BIc0rhB2Mb8mDf9L+iEOhn4DnoJs7byuejPsKBqgzzaR9A4CKTVhvBK7PsneeN3HtcEhu0+Ixb5pJPYnI2p4KhaQ7a8mWTvgkymUEAzaxbwDQ0yXiJo9/jYC1LX9rhUx5amosXANyiERhnnt4osqCJNn7QaGsYOQykxffUSw0J8Qi1BIovNNZfyNQ1+46tMcidbfWn7gFoh5XDkvc+MlmEzddp6bB25sV+ojL/K51NWJZwcDbu7aWc85qoavf76mPlh9cMwRIOFIAScNuBE/YrnXkYQjBCAD3r9FT83XMUC0tea6uAohp+SOWhaP3sS4YQjCwd+Dz+P3fNUke4qzVSl/uey2XpRQBJRgWbIGAeXzFgqEEA/iU0smmWsCjr3RYCRYCpC2MZ2K55ivKkIIRkSz8+6YZCVU0xuGKpnOnIqAfAcDWE0osGFIwQCg3p1pGMPoSdTUYkEdxnSzyaUnW6Lryd9rR3l6ISXcYp8xasgwtGOHcFsuphlhoPVPnJ7kVzzEI0tu/+TL5ne/tHym4hHp753hlGVow8PGB/vh0fetMF4lsiRgjkb8nETCkVaVZhWCkGTxB2yaqWjiHkaarTRWsQjBAnRkkAPzXWJVgwLJqEkXXxP9XVikYLw3NXdPDR6oryUSwq8zLSP4Gj0I/0moAgEQAAAAASUVORK5CYII=" alt="PAK"> Pakistan <span class="meta-divider">&middot;</span> <span class="player-club-crest-sm"></span>Islamabad Icons <span class="meta-divider">&middot;</span> Uncapped
+        </div>
+      </div>
+      <div class="player-header-vitals">
+        <div class="vitals-item">
+          <div class="vitals-label">CA</div>
+          <div class="star-row mini" aria-label="4 of 5"><svg class="icon filled"><use href="#i-star-fill"/></svg><svg class="icon filled"><use href="#i-star-fill"/></svg><svg class="icon filled"><use href="#i-star-fill"/></svg><svg class="icon filled"><use href="#i-star-fill"/></svg><svg class="icon empty"><use href="#i-star-line"/></svg></div>
+        </div>
+        <div class="vitals-item">
+          <div class="vitals-label">PA</div>
+          <div class="star-row mini" aria-label="an estimated range, 3 and a half to 5"><svg class="icon filled"><use href="#i-star-fill"/></svg><svg class="icon filled"><use href="#i-star-fill"/></svg><svg class="icon filled"><use href="#i-star-fill"/></svg><svg class="icon range"><use href="#i-star-fill"/></svg><svg class="icon range"><use href="#i-star-fill"/></svg></div>
+        </div>
+        <div class="vitals-item">
+          <div class="vitals-label">Est. value</div>
+          <div class="vitals-value">$340K</div>
+        </div>
+        <div class="vitals-item">
+          <div class="vitals-label">Wage</div>
+          <div class="vitals-value">$4,200/wk<span class="vitals-sub">until May 2028</span></div>
+        </div>
       </div>
       <div class="player-header-status">
       <span class="pill first"><svg class="icon sm"><use href="#i-check-circle"/></svg>First choice</span>
@@ -1617,92 +1905,206 @@
 
     <nav class="subnav" role="tablist" aria-label="Player sections">
       <button class="subtab-btn" role="tab" aria-selected="true" aria-controls="psub-overview" data-subtab="overview">Overview</button>
-      <button class="subtab-btn" role="tab" aria-selected="false" aria-controls="psub-attributes" data-subtab="attributes">Attributes</button>
-      <button class="subtab-btn" role="tab" aria-selected="false" aria-controls="psub-bio" data-subtab="bio">Bio &amp; Personality</button>
+      <button class="subtab-btn" role="tab" aria-selected="false" aria-controls="psub-bio" data-subtab="bio">Personal</button>
       <button class="subtab-btn" role="tab" aria-selected="false" aria-controls="psub-career" data-subtab="career">Career Stats</button>
       <button class="subtab-btn" role="tab" aria-selected="false" aria-controls="psub-contract" data-subtab="contract">Contract</button>
     </nav>
 
     <div class="subpanel" id="psub-overview">
-      <div class="matchday-grid">
+      <div class="profile-columns">
         <div class="figures-card">
-          <span class="eyebrow"><svg class="icon sm"><use href="#i-trend-up"/></svg> Form, last 10 innings</span>
-          <svg viewBox="0 0 260 90" style="margin-top:8px" role="img" aria-label="Form trend over the last ten innings, rising toward the current match.">
-            <polyline points="10,58 36,44 62,50 88,30 114,38 140,20 166,26 192,14 218,18 244,8" fill="none" stroke="var(--turf-strong)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
-            <circle cx="244" cy="8" r="4" fill="var(--turf-strong)"/>
-          </svg>
-          <div class="ring-caption" style="text-align:left;margin-top:4px">Trending up &middot; 3 fifties in the last 5</div>
+          <span class="eyebrow"><svg class="icon sm"><use href="#i-bat-ball"/></svg> Position &amp; role fit</span>
+          <div class="batting-order-ladder">
+            <div class="ladder-slot"><span class="num">1</span>Opener</div>
+            <div class="ladder-slot"><span class="num">2</span>Opener</div>
+            <div class="ladder-slot"><span class="num">3</span>Top order</div>
+            <div class="ladder-slot active"><span class="num">4</span>Top order &middot; his slot</div>
+            <div class="ladder-slot"><span class="num">5</span>Middle order</div>
+            <div class="ladder-slot"><span class="num">6</span>Middle order</div>
+          </div>
+          <div class="role-star-row"><span class="role-name">Anchor</span><div class="star-row" aria-label="4 out of 5"><svg class="icon filled"><use href="#i-star-fill"/></svg><svg class="icon filled"><use href="#i-star-fill"/></svg><svg class="icon filled"><use href="#i-star-fill"/></svg><svg class="icon filled"><use href="#i-star-fill"/></svg><svg class="icon empty"><use href="#i-star-line"/></svg></div></div>
+          <div class="role-star-row"><span class="role-name">Top-order aggressor</span><div class="star-row" aria-label="4 out of 5"><svg class="icon filled"><use href="#i-star-fill"/></svg><svg class="icon filled"><use href="#i-star-fill"/></svg><svg class="icon filled"><use href="#i-star-fill"/></svg><svg class="icon filled"><use href="#i-star-fill"/></svg><svg class="icon empty"><use href="#i-star-line"/></svg></div></div>
+          <div class="role-star-row"><span class="role-name">Against the new ball</span><div class="star-row" aria-label="5 out of 5"><svg class="icon filled"><use href="#i-star-fill"/></svg><svg class="icon filled"><use href="#i-star-fill"/></svg><svg class="icon filled"><use href="#i-star-fill"/></svg><svg class="icon filled"><use href="#i-star-fill"/></svg><svg class="icon filled"><use href="#i-star-fill"/></svg></div></div>
+          <div class="role-star-row"><span class="role-name">Finisher</span><div class="star-row" aria-label="2 out of 5"><svg class="icon filled"><use href="#i-star-fill"/></svg><svg class="icon filled"><use href="#i-star-fill"/></svg><svg class="icon empty"><use href="#i-star-line"/></svg><svg class="icon empty"><use href="#i-star-line"/></svg><svg class="icon empty"><use href="#i-star-line"/></svg></div></div>
+          <div class="role-hint">Role ratings come from his own batting traits &mdash; weighted strengths derived from his attributes, not a separate opinion.</div>
         </div>
-        <div class="figures-card">
-          <span class="eyebrow"><svg class="icon sm"><use href="#i-bat-ball"/></svg> Role fit</span>
-          <div class="bio-line"><span class="k">Best suited to</span><span>Top order, all formats</span></div>
-          <div class="bio-line"><span class="k">Vs left-arm pace</span><span style="color:var(--ball)">Struggles</span></div>
-          <div class="bio-line"><span class="k">At Jinnah Stadium</span><span style="color:var(--turf-strong)">Thrives</span></div>
-        </div>
-      </div>
-    </div>
 
-    <div class="subpanel" id="psub-attributes" hidden>
-      <div class="figures-card">
-        <div class="attr-group">
-          <h3>Batting</h3>
-          <div class="attr-row"><span class="aname">Technique</span><span class="attr-num elite">18</span></div>
-          <div class="attr-row"><span class="aname">Power hitting</span><span class="attr-num strong">14</span></div>
-          <div class="attr-row"><span class="aname">Strike rotation</span><span class="attr-num strong">15</span></div>
-          <div class="attr-row"><span class="aname">Against spin</span><span class="attr-num elite">17</span></div>
-          <div class="attr-row"><span class="aname">Against pace</span><span class="attr-num solid">12</span></div>
-        </div>
-        <div class="attr-group">
-          <h3>Mental</h3>
-          <div class="attr-row"><span class="aname">Concentration</span><span class="attr-num elite">16</span></div>
-          <div class="attr-row"><span class="aname">Pressure handling</span><span class="attr-num strong">14</span></div>
-          <div class="attr-row"><span class="aname">Game awareness</span><span class="attr-num strong">15</span></div>
-        </div>
-        <div class="attr-group">
-          <h3>Physical</h3>
-          <div class="attr-row"><span class="aname">Fitness</span><span class="attr-num strong">14</span></div>
-          <div class="attr-row"><span class="aname">Running between wickets</span><span class="attr-num elite">16</span></div>
-        </div>
-        <div class="attr-group">
-          <h3>Coaching assessment</h3>
-          <!-- Current/Potential Ability are the hidden 1-200 composite ratings - never sent to this
-               screen as a raw number. Shown the way FM actually shows them: a star band standing in
-               for the scout's own read, honestly ranged when he isn't certain, and it CAN be wrong. -->
-          <div class="ability-assessment">
-            <div class="ability-row">
-              <div><div class="al-name">Current ability</div><div class="al-sub">How good he is right now, by the coaching staff's own read</div></div>
-              <div class="star-row" aria-label="4 out of 5 stars">
-                <svg class="icon filled"><use href="#i-star-fill"/></svg><svg class="icon filled"><use href="#i-star-fill"/></svg>
-                <svg class="icon filled"><use href="#i-star-fill"/></svg><svg class="icon filled"><use href="#i-star-fill"/></svg>
-                <svg class="icon empty"><use href="#i-star-line"/></svg>
-              </div>
+        <div class="figures-card">
+          <span class="eyebrow"><svg class="icon sm"><use href="#i-shield"/></svg> Attributes</span>
+          <div class="attr-grid">
+            <div class="attr-group">
+              <h3>Batting</h3>
+              <div class="attr-row"><span class="aname">Technique</span><span class="attr-num elite">18</span></div>
+              <div class="attr-row"><span class="aname">Power hitting</span><span class="attr-num strong">14</span></div>
+              <div class="attr-row"><span class="aname">Strike rotation</span><span class="attr-num strong">15</span></div>
+              <div class="attr-row"><span class="aname">Against spin</span><span class="attr-num elite">17</span></div>
+              <div class="attr-row"><span class="aname">Against pace</span><span class="attr-num solid">12</span></div>
             </div>
-            <div class="ability-row">
-              <div><div class="al-name">Potential ability</div><div class="al-sub">The scout's estimate of his ceiling &mdash; not a certainty</div></div>
-              <div class="star-row" aria-label="an estimated range, between 3 and a half and 5 stars">
-                <svg class="icon filled"><use href="#i-star-fill"/></svg><svg class="icon filled"><use href="#i-star-fill"/></svg>
-                <svg class="icon filled"><use href="#i-star-fill"/></svg><svg class="icon range"><use href="#i-star-fill"/></svg>
-                <svg class="icon range"><use href="#i-star-fill"/></svg>
-              </div>
+            <div class="attr-group">
+              <h3>Bowling</h3>
+              <div class="attr-row"><span class="aname">Pace</span><span class="attr-num weak">5</span></div>
+              <div class="attr-row"><span class="aname">Accuracy</span><span class="attr-num weak">6</span></div>
+              <div class="attr-row"><span class="aname">Variation</span><span class="attr-num weak">4</span></div>
+              <div class="attr-row"><span class="aname">Wicket-taking</span><span class="attr-num weak">5</span></div>
             </div>
-            <div class="scout-note">
-              <svg class="icon"><use href="#i-user"/></svg>
-              <span>Judged by Naveed Aslam, Chief Scout &middot; Knowledge of this player: <strong style="color:var(--ink)">Good</strong>. The dimmer stars are the uncertainty &mdash; a thinner scouting department reads a wider range here, and can simply guess wrong.</span>
+            <div class="attr-group">
+              <h3>Fielding</h3>
+              <div class="attr-row"><span class="aname">Catching</span><span class="attr-num strong">15</span></div>
+              <div class="attr-row"><span class="aname">Ground fielding</span><span class="attr-num strong">14</span></div>
+              <div class="attr-row"><span class="aname">Throwing</span><span class="attr-num solid">13</span></div>
+              <div class="attr-row"><span class="aname">Reflexes</span><span class="attr-num strong">14</span></div>
+            </div>
+            <div class="attr-group">
+              <h3>Mental</h3>
+              <div class="attr-row"><span class="aname">Concentration</span><span class="attr-num elite">16</span></div>
+              <div class="attr-row"><span class="aname">Pressure handling</span><span class="attr-num strong">14</span></div>
+              <div class="attr-row"><span class="aname">Game awareness</span><span class="attr-num strong">15</span></div>
+            </div>
+            <div class="attr-group">
+              <h3>Physical</h3>
+              <div class="attr-row"><span class="aname">Fitness</span><span class="attr-num strong">14</span></div>
+              <div class="attr-row"><span class="aname">Running between wickets</span><span class="attr-num elite">16</span></div>
+              <div class="attr-row"><span class="aname">Strength</span><span class="attr-num solid">12</span></div>
             </div>
           </div>
+          <!-- Current/Potential Ability are the hidden 1-200 composite ratings - never sent to this
+               screen as a raw number. The star band itself now lives in the header (CA/PA), so this
+               caption keeps only the scout's own reasoning for why it can be wrong. -->
+          <div class="attr-caption">
+            <svg class="icon"><use href="#i-user"/></svg>
+            <span>Every number above is Naveed Aslam, Chief Scout&rsquo;s own read &mdash; knowledge of this player: <strong style="color:var(--ink)">Good</strong>. A thinner scouting department reads these less reliably, and can simply be wrong.</span>
+          </div>
         </div>
+
+        <div class="figures-card">
+          <span class="eyebrow"><svg class="icon sm"><use href="#i-user"/></svg> Info</span>
+          <div class="bio-line"><span class="k">Height</span><span>181cm</span></div>
+          <div class="bio-line"><span class="k">Reputation</span><span>Domestic: well-known</span></div>
+          <div class="bio-line"><span class="k">&nbsp;</span><span style="color:var(--ink-faint);font-size:var(--fs-caption)">Continental: fringe recognition &middot; Worldwide: unknown</span></div>
+          <div class="bio-line"><span class="k">Media persona</span><span>Balanced</span></div>
+          <div class="bio-line"><span class="k">Personality</span><span>Professional</span></div>
+          <div class="info-meter-row">
+            <div class="info-meter-label"><span>Against pace</span><span>Strong</span></div>
+            <div class="info-meter"><span style="width:78%"></span></div>
+          </div>
+          <div class="info-meter-row">
+            <div class="info-meter-label"><span>Against spin</span><span>Elite</span></div>
+            <div class="info-meter"><span style="width:88%"></span></div>
+          </div>
+          <div class="info-meter-row weak">
+            <div class="info-meter-label"><span>Vs left-arm pace</span><span>Struggles</span></div>
+            <div class="info-meter weak"><span style="width:38%"></span></div>
+          </div>
+          <div style="margin-top:12px">
+            <span class="eyebrow" style="display:block;margin-bottom:4px;font-size:var(--fs-micro)">Playing style</span>
+            <div class="style-note-row"><svg class="icon"><use href="#i-chevron-fwd"/></svg><span>Targets the first ball after drinks &mdash; a proven starter of scoring bursts</span></div>
+            <div class="style-note-row"><svg class="icon"><use href="#i-chevron-fwd"/></svg><span>Works the ball through the leg side early, then opens up once set</span></div>
+            <div class="style-note-row"><svg class="icon"><use href="#i-chevron-fwd"/></svg><span>Farms the strike to protect a struggling partner</span></div>
+          </div>
+          <div style="margin-top:10px"><span class="trait-tag">Ambitious</span><span class="trait-tag">Team-oriented</span><span class="trait-tag">Consistent</span></div>
+        </div>
+      </div>
+
+      <div class="widget-strip">
+        <div class="widget-card">
+          <div class="w-eyebrow"><svg class="icon xs"><use href="#i-medical"/></svg>Fitness</div>
+          <div class="w-value" style="color:var(--turf-strong)">Peak</div>
+          <div class="w-sub">Match fit &middot; no knocks</div>
+        </div>
+        <div class="widget-card">
+          <div class="w-eyebrow"><svg class="icon xs"><use href="#i-star-fill"/></svg>Happiness</div>
+          <div class="w-value" style="color:var(--turf-strong)">Content</div>
+          <div class="w-sub">Settled &middot; backed by the dressing room</div>
+        </div>
+        <div class="widget-card">
+          <div class="w-eyebrow"><svg class="icon xs"><use href="#i-trend-up"/></svg>Form</div>
+          <div class="widget-form-bars">
+            <span class="mid" style="height:40%"></span><span class="good" style="height:65%"></span><span class="mid" style="height:45%"></span>
+            <span class="good" style="height:80%"></span><span class="good" style="height:70%"></span><span class="good" style="height:95%"></span>
+          </div>
+          <div class="w-sub">Trending up</div>
+        </div>
+        <div class="widget-card">
+          <div class="w-eyebrow"><svg class="icon xs"><use href="#i-alert"/></svg>Discipline</div>
+          <div class="w-value" style="color:var(--turf-strong)">Clean</div>
+          <div class="w-sub">0 demerit points</div>
+        </div>
+        <div class="widget-card">
+          <div class="w-eyebrow"><svg class="icon xs"><use href="#i-bat-ball"/></svg>Season stats</div>
+          <table class="widget-mini-table">
+            <tr><td>Mat</td><td>14</td></tr>
+            <tr><td>Runs</td><td>612</td></tr>
+            <tr><td>Avg</td><td>47.1</td></tr>
+          </table>
+        </div>
+        <div class="widget-card">
+          <div class="w-eyebrow"><svg class="icon xs"><use href="#i-glove"/></svg>Fielding</div>
+          <div class="w-value">9</div>
+          <div class="w-sub">catches this season</div>
+        </div>
+      </div>
+
+      <div class="figures-card" style="margin-top:16px">
+        <span class="eyebrow"><svg class="icon sm"><use href="#i-trend-up"/></svg> Form, last 10 innings</span>
+        <svg viewBox="0 0 260 90" style="margin-top:8px" role="img" aria-label="Form trend over the last ten innings, rising toward the current match.">
+          <polyline points="10,58 36,44 62,50 88,30 114,38 140,20 166,26 192,14 218,18 244,8" fill="none" stroke="var(--turf-strong)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="244" cy="8" r="4" fill="var(--turf-strong)"/>
+        </svg>
+        <div class="ring-caption" style="text-align:left;margin-top:4px">Trending up &middot; 3 fifties in the last 5</div>
       </div>
     </div>
 
     <div class="subpanel" id="psub-bio" hidden>
       <div class="matchday-grid">
         <div class="figures-card">
-          <span class="eyebrow" style="display:block;margin-bottom:6px">Biography</span>
+          <span class="eyebrow" style="display:block;margin-bottom:6px">Personal info</span>
+          <div class="bio-line"><span class="k">Full name</span><span>Hamza Bin Malik</span></div>
           <div class="bio-line"><span class="k">Born</span><span>14 Feb 2000, Islamabad</span></div>
           <div class="bio-line"><span class="k">Nationality</span><span>Pakistan</span></div>
           <div class="bio-line"><span class="k">Bats / Bowls</span><span>Right-hand bat</span></div>
           <div class="bio-line"><span class="k">Joined the club</span><span>2019 &middot; academy graduate</span></div>
           <div class="bio-line"><span class="k">Note</span><span>A one-club man, well liked in the dressing room.</span></div>
+        </div>
+        <div class="figures-card">
+          <span class="eyebrow" style="display:block;margin-bottom:8px">Standing in the squad</span>
+          <div class="standing-row">
+            <div>Dressing-room standing</div>
+            <span class="pill first">Established</span>
+          </div>
+          <div class="standing-row">
+            <div>Trust in the coach</div>
+            <div class="trust-meter-wrap"><div class="info-meter"><span style="width:82%"></span></div></div>
+          </div>
+          <div class="standing-row">
+            <div>Trust in the captain</div>
+            <div class="trust-meter-wrap"><div class="info-meter"><span style="width:75%"></span></div></div>
+          </div>
+          <div class="notes-log" style="margin-top:12px">
+            <div class="notes-log-item"><span class="note-date">2 weeks ago</span>Backed publicly after a lean run &mdash; responded with 3 fifties in his next 4 innings.</div>
+            <div class="notes-log-item"><span class="note-date">1 month ago</span>Named vice-captain for the away leg while Chaudhry recovers from injury.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="matchday-grid" style="margin-top:16px">
+        <div class="figures-card">
+          <span class="eyebrow" style="display:block;margin-bottom:6px">Happiness</span>
+          <div class="bio-line"><span class="k">Overall</span><span style="color:var(--turf-strong)">Content</span></div>
+          <div class="happiness-lists">
+            <div class="happiness-col">
+              <h4>Positives</h4>
+              <ul>
+                <li>Trusts the bowling attack ahead of the run-in</li>
+                <li>Happy with his role at the top of the order</li>
+              </ul>
+            </div>
+            <div class="happiness-col negative">
+              <h4>Negatives</h4>
+              <ul>
+                <li>Would like a longer contract on the table</li>
+              </ul>
+            </div>
+          </div>
         </div>
         <div class="figures-card">
           <span class="eyebrow" style="display:block;margin-bottom:8px">Personality</span>
@@ -1747,10 +2149,26 @@
     </div>
 
     <div class="subpanel" id="psub-contract" hidden>
-      <div class="figures-card">
-        <div class="bio-line"><span class="k">Wage</span><span>$4,200 / week</span></div>
-        <div class="bio-line"><span class="k">Contract until</span><span>May 2028 &middot; 14 months</span></div>
-        <div class="bio-line"><span class="k">Loyalty</span><span style="color:var(--turf-strong)">One-club man</span></div>
+      <div class="matchday-grid">
+        <div class="figures-card">
+          <span class="eyebrow" style="display:block;margin-bottom:6px">Contract</span>
+          <div class="bio-line"><span class="k">Wage</span><span>$4,200 / week</span></div>
+          <div class="bio-line"><span class="k">Contract until</span><span>May 2028 &middot; 14 months</span></div>
+          <div class="bio-line"><span class="k">Signed</span><span>3-year deal &middot; Jun 2025</span></div>
+          <div class="bio-line"><span class="k">Loyalty</span><span style="color:var(--turf-strong)">One-club man</span></div>
+          <div style="margin-top:10px">
+            <span class="eyebrow" style="display:block;margin-bottom:5px;font-size:var(--fs-micro)">Active clauses</span>
+            <span class="mini-clause-chip">First XI guarantee</span><span class="mini-clause-chip">Century &amp; MOTM bonus</span><span class="mini-clause-chip">Loyalty bonus</span>
+          </div>
+        </div>
+        <div class="figures-card">
+          <span class="eyebrow" style="display:block;margin-bottom:8px">Transfer status</span>
+          <div class="transfer-status-row"><span>Transfer listed</span><span style="color:var(--ink-faint)">No</span></div>
+          <div class="transfer-status-row"><span>Transfer requested</span><span style="color:var(--ink-faint)">No</span></div>
+          <div class="transfer-status-row"><span>Interested clubs</span><span style="color:var(--ink-faint)">None on record</span></div>
+          <div class="transfer-status-row"><span>Overseas registration</span><span>Domestic &middot; no restriction</span></div>
+          <div class="role-hint">Settled, loyal, and out of contract talk &mdash; exactly what "one-club man" means in practice.</div>
+        </div>
       </div>
     </div>
   </section>
@@ -1762,6 +2180,98 @@
       <div class="squad-alert-row" style="padding: 14px 20px;"><div><div class="squad-alert-name"><svg class="icon sm"><use href="#i-bat-ball"/></svg> vs Lahore Lions</div><div class="squad-alert-role">Sun 28 Mar &middot; 14:00 &middot; Jinnah Stadium (H)</div></div><span class="pill fringe"><svg class="icon sm"><use href="#i-cal-list"/></svg>Next</span></div>
       <div class="squad-alert-row" style="padding: 14px 20px;"><div><div class="squad-alert-name"><svg class="icon sm"><use href="#i-bat-ball"/></svg> vs Multan Monarchs</div><div class="squad-alert-role">Thu 1 Apr &middot; 19:00 &middot; Multan Cricket Stadium (A) &middot; <img class="icon xs" src="data:image/png;base64,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" alt="" style="vertical-align:-2px" title="Forecast: overcast"> Overcast, 27&deg;C</div></div><span class="pill fringe"><svg class="icon sm"><use href="#i-clock"/></svg>6 days</span></div>
       <div class="squad-alert-row" style="padding: 14px 20px; border-bottom:none;"><div><div class="squad-alert-name"><svg class="icon sm"><use href="#i-trophy"/></svg> beat Peshawar Panthers</div><div class="squad-alert-role">Won by 6 wickets &middot; Tue 23 Mar</div></div><span class="pill first">W</span></div>
+    </div>
+  </section>
+
+  <!-- ================= INTERNATIONAL ================= -->
+  <section class="panel" id="panel-international" role="tabpanel" hidden>
+    <div class="panel-head"><h1>International Cricket</h1><div class="sub">ICC World T20 Championship cycle &middot; next global event in 14 months</div></div>
+
+    <div class="tactics-grid">
+      <div class="analysis-card">
+        <div class="history-head-row">
+          <span class="eyebrow" style="margin-bottom:0"><svg class="icon sm"><use href="#i-trophy"/></svg> ICC rankings</span>
+          <div class="plan-select-wrap" style="width:110px">
+            <select class="plan-select" style="font-size:var(--fs-caption);padding:6px 30px 6px 10px">
+              <option>Test</option><option>ODI</option><option selected>T20I</option>
+            </select>
+          </div>
+        </div>
+        <div style="margin-top:10px">
+          <div class="rank-row"><span class="rank-num">1</span><span class="rank-team"><img class="flag-icon" src="data:image/png;base64,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" alt="AUS"> Australia</span><span class="rank-figs"><b>268</b> pts</span></div>
+          <div class="rank-row"><span class="rank-num">2</span><span class="rank-team"><img class="flag-icon" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEwAAAAiCAYAAAD1aT8BAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAASuSURBVGhD7ZlNSFVBFMefm2xTZG18tUg3kQWRmyBqVdGiCBchBUW0sCAiCNwEEbVIiCBaRFFQILgQoUUbV9GqL6tXzz7MTE37kFdppX1Y2Md0f8d7r08d37tz79zbpj/8Iey+mTn/OefMOTMpB+o/jZhStvC8dre66YzXvmBFYN4qma1e7NznjhAeX9uyqndHnYwHH8yrUu3paqH8WzN3UN5NlYld1gVj0ZmycnWvJD2+WM3kU5kpXahuz5qjRq5dd0cxw1gup14dOqoy6QoR6v7sCu08YchYjJmtrFK5U+fsCwZe1h+Z2GHNInTk+851m9Sf7z/cUYqDb99falIPl69SbSXzxjdJM3ZYsiY2s39/vRrt6JY5YxGMHceIO6ly7UJ0RFyMfn+h0R2lMPDGZxtq1N3SMmHUkMsnwrOWrprtMk/+JsYiGMBwJjUxBIER+kdPvzvKdLDTPXV7YxHKSw1PqteqoaYWrbfHJhiTEWIky6C5DBIGbw43uKNM4GduUA2cPK3ulS+Sb2zmKYSSFFJRqQaOn1S/Po24s05HbIIB3BkvEOMCikY4ZOYvVt/uP5QxEP5D82XZdU4pjPNOPpON0NFLA3fmlonXenmqEGIVDFAusHu6Bc9EhOnbc1BEyy8T5P9doaKGIkJB8uBw61V3tcURu2DkIzzGxMsQQwRxvkeofK+KKhQeLHVi1Ur19uxF9Xv4i7vSYIhdMPD6yAljL0MYjPOE031jQjZMQtqpEanZCh0shZCIYJQZ7ZXVEweABQFM6IU04U1hHQWJCAYoMFl01JAyoXf6PVq9Rn280qotE0yRmGBjQx8lwUpoxuxhbAoJnXaGUoS5bSExwYD0mc4B4CdxjbFRSJ4i7JmDdiZsniqERAXj+CaXSc9nUTCEwnOp+bq2bFOfb7S5M9pHIoKNPu702xmT8iIICT1OPwrbwcYWd8b4EKtgtBjkEFoOjLImljOGVybQKr051iCtUxKITTBOpY4168UovMAzFEY9KclTXpngtVBJwbpgGNBdu0vCD6N8r/KoEcCEHBg09eRDG2WCKawJNtY3IBeH2fRS8QARSmNwVLIJzPOvEFkwerF3Z85Lb0boxV2Y4mEwzpOwEEILRjgQFoQHu+7XVhZyVDEyX9fmrcaNsw2EEuzbo6eqt+6An6dEIAv5KSiZj3m5J0saRoLRRHMjyevMpDLBo8a4oDTKec5chD+1l822JwgCCUb4DTU2+7eecuugMyQEEQrjuc839VS8jKevJFFUMK6ZaTcwamo9Fdqr3N8xHkYT3nguLZPvtVN/oyF5k1OZEzopzCgYi6CB5cINo6yFn/NbxsJTeSHCc/FgSCLn79rfzUDWxjqTwjTBWDhunl2yTBYjp59moWHoJWs2gXaGnJgPSgXTV3PE5zdJlRm+YAg13s5slLc5hLJVHjAOOYpTVdoZ55SdCXgLoWoyNzmVtJEEfMEwZFKeskRPKK+dKQaeurgCklfzgF6GuMyR6G0FoSK7GiU/5REPFfEd43mdwYODgpTgr0czto54Gad43MWsL5gI5dBkkTqSUzCWaxd6vjAnGEZz08E4Jl7GgcELVZzwBfvPoEypv+3NSoCC3SSBAAAAAElFTkSuQmCC" alt="ENG"> England</span><span class="rank-figs"><b>261</b> pts</span></div>
+          <div class="rank-row"><span class="rank-num">3</span><span class="rank-team"><img class="flag-icon" src="data:image/png;base64,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" alt="IND"> India</span><span class="rank-figs"><b>258</b> pts</span></div>
+          <div class="rank-row highlight"><span class="rank-num">4</span><span class="rank-team"><img class="flag-icon" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEwAAAAiCAYAAAD1aT8BAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAUZSURBVGhD7ZltaFZlGMfPp9JBGViBpmSrfKmQ4sEInUUNdbWRM4vlJDMlQVKyGiXVUIwSQ/pQsy9pNEFJjEg0EIQWiiaElWFJRgp+EL/EYtL6eHX9rvMcO5zuPTvnPvfBAv/wZ8+e3a//+7qvl3uRQq6yECPJYuWGdTKj6yGJltxdLR+5QVa+u0Z2HtwtTZ3NEj05zd0uS+1XW1WTsxfO1Vcc48z5M9Lz4evS8lK7THi2Jtd0zXD39+VIgh0YOCjj598p47pr7o4h+Pitcv3CKbbJF7etl2j+eHe7LB+bIJO67pLvf/lOLvx+0cT+5tRxW/fWPR9IVNNNaRtn37IcSTAwr6dTxrZNlGjpfe7OZTlnjLy5Y5PNNXftgniTeeZSoTs2rbC+05fPMoGmLrlHhob/lL2HvzDrc/YLwUaC/fjbKbm2pUmiRXpVQouGdbVPlNNqXYOX/og3rt8VmufBsbE4XGP93PvRBtl/9MtYeNbs6lOWjQQDbT0L44W5OpehbnRRb7cM/zUsZy+el+Zn7i0mGCJB2kP9jA+c++oT5reC+66Eown21YkBaVpwY7wZ1wC+1EPo27fd5kAwLwvLEgFDrzPL0QQDRLFo3k3uAXyom+I6Hjl5zMYfHBqUWS+05vdhV5J5BPvp3M8WlYL5BY2GWBSWlaBz47Kwh1IV8wgGtux+L95QCAtQ/0VUxLIS9PZvyZ9WBCJ+rnDalFcwNjdzVUuYa6OCkbKQBiT4+uSReGz8kKtPaOpcrZrctr/xdLE58woGLMfR3Mk5UBGqw29bv9giZAI+k50Hs+LRqIfW99m22D9zUK42LhYRDNiJkGaU2ZTjSgI7kCpSmDRZt1590hh8qO2nSsEoRy6nGb6iJU4/UwdiZVhe6QMZjbMj2b5/h815+3MPVCsYoLgtdTUzaUUaJ379QW7pmFTd1VSx8F0cDnNRyxaK/j6CYRnTlmpmXmZT+JB64prFzkOfxiVZaNHUclk3xT7Ah41prZdWrvYu+ggGMGk27R3VtG9SGrnA+Nc9PC4WzdW/KHU+xMKqEtj1Lzq+r2CXhof+qTN9rKB+LY+f/rY+4r9BIc0rhB2Mb8mDf9L+iEOhn4DnoJs7byuejPsKBqgzzaR9A4CKTVhvBK7PsneeN3HtcEhu0+Ixb5pJPYnI2p4KhaQ7a8mWTvgkymUEAzaxbwDQ0yXiJo9/jYC1LX9rhUx5amosXANyiERhnnt4osqCJNn7QaGsYOQykxffUSw0J8Qi1BIovNNZfyNQ1+46tMcidbfWn7gFoh5XDkvc+MlmEzddp6bB25sV+ojL/K51NWJZwcDbu7aWc85qoavf76mPlh9cMwRIOFIAScNuBE/YrnXkYQjBCAD3r9FT83XMUC0tea6uAohp+SOWhaP3sS4YQjCwd+Dz+P3fNUke4qzVSl/uey2XpRQBJRgWbIGAeXzFgqEEA/iU0smmWsCjr3RYCRYCpC2MZ2K55ivKkIIRkSz8+6YZCVU0xuGKpnOnIqAfAcDWE0osGFIwQCg3p1pGMPoSdTUYkEdxnSzyaUnW6Lryd9rR3l6ISXcYp8xasgwtGOHcFsuphlhoPVPnJ7kVzzEI0tu/+TL5ne/tHym4hHp753hlGVow8PGB/vh0fetMF4lsiRgjkb8nETCkVaVZhWCkGTxB2yaqWjiHkaarTRWsQjBAnRkkAPzXWJVgwLJqEkXXxP9XVikYLw3NXdPDR6oryUSwq8zLSP4Gj0I/0moAgEQAAAAASUVORK5CYII=" alt="PAK"> Pakistan</span><span class="rank-figs"><b>251</b> pts</span></div>
+          <div class="rank-row"><span class="rank-num">5</span><span class="rank-team"><img class="flag-icon" src="data:image/png;base64,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" alt="RSA"> South Africa</span><span class="rank-figs"><b>244</b> pts</span></div>
+          <div class="rank-row"><span class="rank-num">6</span><span class="rank-team"><img class="flag-icon" src="data:image/png;base64,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" alt="NZL"> New Zealand</span><span class="rank-figs"><b>239</b> pts</span></div>
+          <div class="rank-row"><span class="rank-num">7</span><span class="rank-team"><img class="flag-icon" src="data:image/png;base64,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" alt="SRI"> Sri Lanka</span><span class="rank-figs"><b>219</b> pts</span></div>
+          <div class="rank-row"><span class="rank-num">8</span><span class="rank-team"><img class="flag-icon" src="data:image/png;base64,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" alt="WI"> West Indies</span><span class="rank-figs"><b>205</b> pts</span></div>
+          <div class="rank-row"><span class="rank-num">9</span><span class="rank-team"><img class="flag-icon" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEwAAAAiCAYAAAD1aT8BAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAO0SURBVGhD7ZnLb8xRFMd/nfd0pp3OTB/zfjWlaJBqaFLCwqMaESml7/dLpywEGwuxRCIs+g/QBbGwsJAgKVZEgo2IHSIhQroRYeP4npmMTOWW9je/32+upJN8ZjaTOef3mXvPPfdeBS9aYVngrTuiLekk1XWF6eoqN322mwlRFvDzH/z5/Y8OM82sK6Nwf5SUo0nEwGcGQWw9QS6aCzNNJKl3ZyW9dS8UJRKzFPJ/44XfSvvaakhBDKUXwhhBDrqBHDQV5hiK0dlNFfTdVFKwqMX4YjNRequPzKMJ46UhvmbCbHiA8xs8uonK54e5hE5t8VGJ0SMNsbURhpp1utlriKx8BnZUkjKdEuekB4hZuLDpWmrbW01fLdlpKHowvfhkN1FjeyjzhylHwuL8tAQxCxOGaRgYitNLr9VwWTnmAnbyjKOeDcdJ6RTkqCWIV5iw4ym6sNGYuvU3jrX4kUstcuJapmM9Qyz1wiaTVN8VoTduS1FlMc99VgoPxEgZw0hDTsJ8tQCx1AtD3TjXWFH00ZVjqsWXbWr1XDERR52wkRgFeyP0uNouhSzmdtRJFYMYZYwoZy1AHHXCUOz3YGWctxm/Mi7GB6eZmg4EUfxlFDYWpzPo6FmWLMKYkW0o/sOoYz2CnLUAMVQJswzGaTblkk7YxYZyMqPNUVAuRHkXDGIsXxhqhL8nSndDTqlkMbPJUnL1oejzqYYo90JBDFXCop1helIpT8HPwYXfy9NRKmEg2RGiZ/7idfeLcS/soKpubJFkG2GJw2F66rdJJ+xOxIlygRxlG2EBdNOPahzSCbuZcFJZH3KUTZirP0634qXSCZtZ4yY7b5G48AvyLhjEUCWMO/0ra8szwmSSdnKzN3tqIVVbwYwnaAhNoijpYrK7tQZ/poSNKwtraA/Ru9LsRYcoeaPhE4sIn1Rg9Atz1gLEUScM+zXrWIJupLJ1TAZpl9HlmyYwuvplFMakU9Sxq4q+mYu/AZ+3mWg7b7wnZT4PQ3F1jSbofijbXhRT2rU6F5n5Bgl7XHmFMVNJ2t/Kxzymogl7jzrazBchPLqkP9Nn0km6tL54LcYJPmlFecisjHqtjjkQr3BhWADKR+K/p6boofRits5NFj6W5kL/X1yz5cCKuRqfrz3GXYg8DDqomnsuBntbYV5ag7jaCGNQdJsOBumVJ3uKoae4B0E7xXj68X2kUbIYxNZOGIM+qP5QiObwQDlpWojL/63rKRcF+jAF+UqNp6ERUzEH4meFrbBEFPoFOUSCu6F3TMYAAAAASUVORK5CYII=" alt="BAN"> Bangladesh</span><span class="rank-figs"><b>187</b> pts</span></div>
+        </div>
+      </div>
+
+      <div class="analysis-card">
+        <span class="eyebrow"><svg class="icon sm"><use href="#i-user"/></svg> National selection panel</span>
+        <div class="bio-line"><span class="k">Chairman of selectors</span><span>Arif Nadeem</span></div>
+        <div class="bio-line"><span class="k">Panel quality</span><span style="color:var(--turf-strong)">Good &middot; low politicisation</span></div>
+        <div class="bio-line"><span class="k">Next pool review</span><span>Annual refresh &middot; in 5 months</span></div>
+        <div class="bio-line"><span class="k">Central contracts</span><span>6 Tier A &middot; 9 Tier B &middot; 14 Tier C</span></div>
+        <div class="role-hint">Central-contract tiers carry real NOC weight &mdash; a Tier A player's board is far more likely to hold him back from a clashing franchise window than release him.</div>
+      </div>
+    </div>
+
+    <div class="analysis-card">
+      <span class="eyebrow"><svg class="icon sm"><use href="#i-plane"/></svg> Players away on international duty</span>
+      <div class="duty-row">
+        <img class="flag-icon lg" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEwAAAAiCAYAAAD1aT8BAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAUZSURBVGhD7ZltaFZlGMfPp9JBGViBpmSrfKmQ4sEInUUNdbWRM4vlJDMlQVKyGiXVUIwSQ/pQsy9pNEFJjEg0EIQWiiaElWFJRgp+EL/EYtL6eHX9rvMcO5zuPTvnPvfBAv/wZ8+e3a//+7qvl3uRQq6yECPJYuWGdTKj6yGJltxdLR+5QVa+u0Z2HtwtTZ3NEj05zd0uS+1XW1WTsxfO1Vcc48z5M9Lz4evS8lK7THi2Jtd0zXD39+VIgh0YOCjj598p47pr7o4h+Pitcv3CKbbJF7etl2j+eHe7LB+bIJO67pLvf/lOLvx+0cT+5tRxW/fWPR9IVNNNaRtn37IcSTAwr6dTxrZNlGjpfe7OZTlnjLy5Y5PNNXftgniTeeZSoTs2rbC+05fPMoGmLrlHhob/lL2HvzDrc/YLwUaC/fjbKbm2pUmiRXpVQouGdbVPlNNqXYOX/og3rt8VmufBsbE4XGP93PvRBtl/9MtYeNbs6lOWjQQDbT0L44W5OpehbnRRb7cM/zUsZy+el+Zn7i0mGCJB2kP9jA+c++oT5reC+66Eown21YkBaVpwY7wZ1wC+1EPo27fd5kAwLwvLEgFDrzPL0QQDRLFo3k3uAXyom+I6Hjl5zMYfHBqUWS+05vdhV5J5BPvp3M8WlYL5BY2GWBSWlaBz47Kwh1IV8wgGtux+L95QCAtQ/0VUxLIS9PZvyZ9WBCJ+rnDalFcwNjdzVUuYa6OCkbKQBiT4+uSReGz8kKtPaOpcrZrctr/xdLE58woGLMfR3Mk5UBGqw29bv9giZAI+k50Hs+LRqIfW99m22D9zUK42LhYRDNiJkGaU2ZTjSgI7kCpSmDRZt1590hh8qO2nSsEoRy6nGb6iJU4/UwdiZVhe6QMZjbMj2b5/h815+3MPVCsYoLgtdTUzaUUaJ379QW7pmFTd1VSx8F0cDnNRyxaK/j6CYRnTlmpmXmZT+JB64prFzkOfxiVZaNHUclk3xT7Ah41prZdWrvYu+ggGMGk27R3VtG9SGrnA+Nc9PC4WzdW/KHU+xMKqEtj1Lzq+r2CXhof+qTN9rKB+LY+f/rY+4r9BIc0rhB2Mb8mDf9L+iEOhn4DnoJs7byuejPsKBqgzzaR9A4CKTVhvBK7PsneeN3HtcEhu0+Ixb5pJPYnI2p4KhaQ7a8mWTvgkymUEAzaxbwDQ0yXiJo9/jYC1LX9rhUx5amosXANyiERhnnt4osqCJNn7QaGsYOQykxffUSw0J8Qi1BIovNNZfyNQ1+46tMcidbfWn7gFoh5XDkvc+MlmEzddp6bB25sV+ojL/K51NWJZwcDbu7aWc85qoavf76mPlh9cMwRIOFIAScNuBE/YrnXkYQjBCAD3r9FT83XMUC0tea6uAohp+SOWhaP3sS4YQjCwd+Dz+P3fNUke4qzVSl/uey2XpRQBJRgWbIGAeXzFgqEEA/iU0smmWsCjr3RYCRYCpC2MZ2K55ivKkIIRkSz8+6YZCVU0xuGKpnOnIqAfAcDWE0osGFIwQCg3p1pGMPoSdTUYkEdxnSzyaUnW6Lryd9rR3l6ISXcYp8xasgwtGOHcFsuphlhoPVPnJ7kVzzEI0tu/+TL5ne/tHym4hHp753hlGVow8PGB/vh0fetMF4lsiRgjkb8nETCkVaVZhWCkGTxB2yaqWjiHkaarTRWsQjBAnRkkAPzXWJVgwLJqEkXXxP9XVikYLw3NXdPDR6oryUSwq8zLSP4Gj0I/0moAgEQAAAAASUVORK5CYII=" alt="PAK">
+        <div class="duty-main">
+          <div class="duty-player">Talha Iqbal <span class="position-chip">Bowler</span></div>
+          <div class="duty-detail">Pakistan T20I squad &middot; Lahore Lions &middot; returns in 9 days</div>
+        </div>
+        <span class="tier-badge a">Tier A</span>
+      </div>
+      <div class="duty-row">
+        <img class="flag-icon lg" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEwAAAAiCAYAAAD1aT8BAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAUZSURBVGhD7ZltaFZlGMfPp9JBGViBpmSrfKmQ4sEInUUNdbWRM4vlJDMlQVKyGiXVUIwSQ/pQsy9pNEFJjEg0EIQWiiaElWFJRgp+EL/EYtL6eHX9rvMcO5zuPTvnPvfBAv/wZ8+e3a//+7qvl3uRQq6yECPJYuWGdTKj6yGJltxdLR+5QVa+u0Z2HtwtTZ3NEj05zd0uS+1XW1WTsxfO1Vcc48z5M9Lz4evS8lK7THi2Jtd0zXD39+VIgh0YOCjj598p47pr7o4h+Pitcv3CKbbJF7etl2j+eHe7LB+bIJO67pLvf/lOLvx+0cT+5tRxW/fWPR9IVNNNaRtn37IcSTAwr6dTxrZNlGjpfe7OZTlnjLy5Y5PNNXftgniTeeZSoTs2rbC+05fPMoGmLrlHhob/lL2HvzDrc/YLwUaC/fjbKbm2pUmiRXpVQouGdbVPlNNqXYOX/og3rt8VmufBsbE4XGP93PvRBtl/9MtYeNbs6lOWjQQDbT0L44W5OpehbnRRb7cM/zUsZy+el+Zn7i0mGCJB2kP9jA+c++oT5reC+66Eown21YkBaVpwY7wZ1wC+1EPo27fd5kAwLwvLEgFDrzPL0QQDRLFo3k3uAXyom+I6Hjl5zMYfHBqUWS+05vdhV5J5BPvp3M8WlYL5BY2GWBSWlaBz47Kwh1IV8wgGtux+L95QCAtQ/0VUxLIS9PZvyZ9WBCJ+rnDalFcwNjdzVUuYa6OCkbKQBiT4+uSReGz8kKtPaOpcrZrctr/xdLE58woGLMfR3Mk5UBGqw29bv9giZAI+k50Hs+LRqIfW99m22D9zUK42LhYRDNiJkGaU2ZTjSgI7kCpSmDRZt1590hh8qO2nSsEoRy6nGb6iJU4/UwdiZVhe6QMZjbMj2b5/h815+3MPVCsYoLgtdTUzaUUaJ379QW7pmFTd1VSx8F0cDnNRyxaK/j6CYRnTlmpmXmZT+JB64prFzkOfxiVZaNHUclk3xT7Ah41prZdWrvYu+ggGMGk27R3VtG9SGrnA+Nc9PC4WzdW/KHU+xMKqEtj1Lzq+r2CXhof+qTN9rKB+LY+f/rY+4r9BIc0rhB2Mb8mDf9L+iEOhn4DnoJs7byuejPsKBqgzzaR9A4CKTVhvBK7PsneeN3HtcEhu0+Ixb5pJPYnI2p4KhaQ7a8mWTvgkymUEAzaxbwDQ0yXiJo9/jYC1LX9rhUx5amosXANyiERhnnt4osqCJNn7QaGsYOQykxffUSw0J8Qi1BIovNNZfyNQ1+46tMcidbfWn7gFoh5XDkvc+MlmEzddp6bB25sV+ojL/K51NWJZwcDbu7aWc85qoavf76mPlh9cMwRIOFIAScNuBE/YrnXkYQjBCAD3r9FT83XMUC0tea6uAohp+SOWhaP3sS4YQjCwd+Dz+P3fNUke4qzVSl/uey2XpRQBJRgWbIGAeXzFgqEEA/iU0smmWsCjr3RYCRYCpC2MZ2K55ivKkIIRkSz8+6YZCVU0xuGKpnOnIqAfAcDWE0osGFIwQCg3p1pGMPoSdTUYkEdxnSzyaUnW6Lryd9rR3l6ISXcYp8xasgwtGOHcFsuphlhoPVPnJ7kVzzEI0tu/+TL5ne/tHym4hHp753hlGVow8PGB/vh0fetMF4lsiRgjkb8nETCkVaVZhWCkGTxB2yaqWjiHkaarTRWsQjBAnRkkAPzXWJVgwLJqEkXXxP9XVikYLw3NXdPDR6oryUSwq8zLSP4Gj0I/0moAgEQAAAAASUVORK5CYII=" alt="PAK">
+        <div class="duty-main">
+          <div class="duty-player">Kamran Hussain <span class="position-chip">Captain</span></div>
+          <div class="duty-detail">Pakistan ODI squad &middot; Lahore Lions &middot; returns in 31 days</div>
+        </div>
+        <span class="tier-badge a">Tier A</span>
+      </div>
+      <div class="duty-row">
+        <img class="flag-icon lg" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEwAAAAiCAYAAAD1aT8BAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAUZSURBVGhD7ZltaFZlGMfPp9JBGViBpmSrfKmQ4sEInUUNdbWRM4vlJDMlQVKyGiXVUIwSQ/pQsy9pNEFJjEg0EIQWiiaElWFJRgp+EL/EYtL6eHX9rvMcO5zuPTvnPvfBAv/wZ8+e3a//+7qvl3uRQq6yECPJYuWGdTKj6yGJltxdLR+5QVa+u0Z2HtwtTZ3NEj05zd0uS+1XW1WTsxfO1Vcc48z5M9Lz4evS8lK7THi2Jtd0zXD39+VIgh0YOCjj598p47pr7o4h+Pitcv3CKbbJF7etl2j+eHe7LB+bIJO67pLvf/lOLvx+0cT+5tRxW/fWPR9IVNNNaRtn37IcSTAwr6dTxrZNlGjpfe7OZTlnjLy5Y5PNNXftgniTeeZSoTs2rbC+05fPMoGmLrlHhob/lL2HvzDrc/YLwUaC/fjbKbm2pUmiRXpVQouGdbVPlNNqXYOX/og3rt8VmufBsbE4XGP93PvRBtl/9MtYeNbs6lOWjQQDbT0L44W5OpehbnRRb7cM/zUsZy+el+Zn7i0mGCJB2kP9jA+c++oT5reC+66Eown21YkBaVpwY7wZ1wC+1EPo27fd5kAwLwvLEgFDrzPL0QQDRLFo3k3uAXyom+I6Hjl5zMYfHBqUWS+05vdhV5J5BPvp3M8WlYL5BY2GWBSWlaBz47Kwh1IV8wgGtux+L95QCAtQ/0VUxLIS9PZvyZ9WBCJ+rnDalFcwNjdzVUuYa6OCkbKQBiT4+uSReGz8kKtPaOpcrZrctr/xdLE58woGLMfR3Mk5UBGqw29bv9giZAI+k50Hs+LRqIfW99m22D9zUK42LhYRDNiJkGaU2ZTjSgI7kCpSmDRZt1590hh8qO2nSsEoRy6nGb6iJU4/UwdiZVhe6QMZjbMj2b5/h815+3MPVCsYoLgtdTUzaUUaJ379QW7pmFTd1VSx8F0cDnNRyxaK/j6CYRnTlmpmXmZT+JB64prFzkOfxiVZaNHUclk3xT7Ah41prZdWrvYu+ggGMGk27R3VtG9SGrnA+Nc9PC4WzdW/KHU+xMKqEtj1Lzq+r2CXhof+qTN9rKB+LY+f/rY+4r9BIc0rhB2Mb8mDf9L+iEOhn4DnoJs7byuejPsKBqgzzaR9A4CKTVhvBK7PsneeN3HtcEhu0+Ixb5pJPYnI2p4KhaQ7a8mWTvgkymUEAzaxbwDQ0yXiJo9/jYC1LX9rhUx5amosXANyiERhnnt4osqCJNn7QaGsYOQykxffUSw0J8Qi1BIovNNZfyNQ1+46tMcidbfWn7gFoh5XDkvc+MlmEzddp6bB25sV+ojL/K51NWJZwcDbu7aWc85qoavf76mPlh9cMwRIOFIAScNuBE/YrnXkYQjBCAD3r9FT83XMUC0tea6uAohp+SOWhaP3sS4YQjCwd+Dz+P3fNUke4qzVSl/uey2XpRQBJRgWbIGAeXzFgqEEA/iU0smmWsCjr3RYCRYCpC2MZ2K55ivKkIIRkSz8+6YZCVU0xuGKpnOnIqAfAcDWE0osGFIwQCg3p1pGMPoSdTUYkEdxnSzyaUnW6Lryd9rR3l6ISXcYp8xasgwtGOHcFsuphlhoPVPnJ7kVzzEI0tu/+TL5ne/tHym4hHp753hlGVow8PGB/vh0fetMF4lsiRgjkb8nETCkVaVZhWCkGTxB2yaqWjiHkaarTRWsQjBAnRkkAPzXWJVgwLJqEkXXxP9XVikYLw3NXdPDR6oryUSwq8zLSP4Gj0I/0moAgEQAAAAASUVORK5CYII=" alt="PAK">
+        <div class="duty-main">
+          <div class="duty-player">Adeel Hayat <span class="position-chip">Bowler</span></div>
+          <div class="duty-detail">Pakistan Test squad &middot; Quetta Falcons &middot; returns in 22 days</div>
+        </div>
+        <span class="tier-badge b">Tier B</span>
+      </div>
+    </div>
+
+    <div class="tactics-grid">
+      <div class="analysis-card">
+        <span class="eyebrow"><svg class="icon sm"><use href="#i-cal-list"/></svg> Upcoming internationals</span>
+        <div class="fixture-row">
+          <div class="fixture-teams"><img class="flag-icon lg" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEwAAAAiCAYAAAD1aT8BAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAUZSURBVGhD7ZltaFZlGMfPp9JBGViBpmSrfKmQ4sEInUUNdbWRM4vlJDMlQVKyGiXVUIwSQ/pQsy9pNEFJjEg0EIQWiiaElWFJRgp+EL/EYtL6eHX9rvMcO5zuPTvnPvfBAv/wZ8+e3a//+7qvl3uRQq6yECPJYuWGdTKj6yGJltxdLR+5QVa+u0Z2HtwtTZ3NEj05zd0uS+1XW1WTsxfO1Vcc48z5M9Lz4evS8lK7THi2Jtd0zXD39+VIgh0YOCjj598p47pr7o4h+Pitcv3CKbbJF7etl2j+eHe7LB+bIJO67pLvf/lOLvx+0cT+5tRxW/fWPR9IVNNNaRtn37IcSTAwr6dTxrZNlGjpfe7OZTlnjLy5Y5PNNXftgniTeeZSoTs2rbC+05fPMoGmLrlHhob/lL2HvzDrc/YLwUaC/fjbKbm2pUmiRXpVQouGdbVPlNNqXYOX/og3rt8VmufBsbE4XGP93PvRBtl/9MtYeNbs6lOWjQQDbT0L44W5OpehbnRRb7cM/zUsZy+el+Zn7i0mGCJB2kP9jA+c++oT5reC+66Eown21YkBaVpwY7wZ1wC+1EPo27fd5kAwLwvLEgFDrzPL0QQDRLFo3k3uAXyom+I6Hjl5zMYfHBqUWS+05vdhV5J5BPvp3M8WlYL5BY2GWBSWlaBz47Kwh1IV8wgGtux+L95QCAtQ/0VUxLIS9PZvyZ9WBCJ+rnDalFcwNjdzVUuYa6OCkbKQBiT4+uSReGz8kKtPaOpcrZrctr/xdLE58woGLMfR3Mk5UBGqw29bv9giZAI+k50Hs+LRqIfW99m22D9zUK42LhYRDNiJkGaU2ZTjSgI7kCpSmDRZt1590hh8qO2nSsEoRy6nGb6iJU4/UwdiZVhe6QMZjbMj2b5/h815+3MPVCsYoLgtdTUzaUUaJ379QW7pmFTd1VSx8F0cDnNRyxaK/j6CYRnTlmpmXmZT+JB64prFzkOfxiVZaNHUclk3xT7Ah41prZdWrvYu+ggGMGk27R3VtG9SGrnA+Nc9PC4WzdW/KHU+xMKqEtj1Lzq+r2CXhof+qTN9rKB+LY+f/rY+4r9BIc0rhB2Mb8mDf9L+iEOhn4DnoJs7byuejPsKBqgzzaR9A4CKTVhvBK7PsneeN3HtcEhu0+Ixb5pJPYnI2p4KhaQ7a8mWTvgkymUEAzaxbwDQ0yXiJo9/jYC1LX9rhUx5amosXANyiERhnnt4osqCJNn7QaGsYOQykxffUSw0J8Qi1BIovNNZfyNQ1+46tMcidbfWn7gFoh5XDkvc+MlmEzddp6bB25sV+ojL/K51NWJZwcDbu7aWc85qoavf76mPlh9cMwRIOFIAScNuBE/YrnXkYQjBCAD3r9FT83XMUC0tea6uAohp+SOWhaP3sS4YQjCwd+Dz+P3fNUke4qzVSl/uey2XpRQBJRgWbIGAeXzFgqEEA/iU0smmWsCjr3RYCRYCpC2MZ2K55ivKkIIRkSz8+6YZCVU0xuGKpnOnIqAfAcDWE0osGFIwQCg3p1pGMPoSdTUYkEdxnSzyaUnW6Lryd9rR3l6ISXcYp8xasgwtGOHcFsuphlhoPVPnJ7kVzzEI0tu/+TL5ne/tHym4hHp753hlGVow8PGB/vh0fetMF4lsiRgjkb8nETCkVaVZhWCkGTxB2yaqWjiHkaarTRWsQjBAnRkkAPzXWJVgwLJqEkXXxP9XVikYLw3NXdPDR6oryUSwq8zLSP4Gj0I/0moAgEQAAAAASUVORK5CYII=" alt="PAK"><div class="fixture-names">Pakistan vs Australia<small>ICC World T20 Championship &middot; Group A</small></div></div>
+          <div class="fixture-meta"><div class="when">Fri &middot; 19:00</div>Gaddafi Stadium</div>
+        </div>
+        <div class="fixture-row" style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border-soft)">
+          <div class="fixture-teams"><img class="flag-icon lg" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEwAAAAiCAYAAAD1aT8BAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAUZSURBVGhD7ZltaFZlGMfPp9JBGViBpmSrfKmQ4sEInUUNdbWRM4vlJDMlQVKyGiXVUIwSQ/pQsy9pNEFJjEg0EIQWiiaElWFJRgp+EL/EYtL6eHX9rvMcO5zuPTvnPvfBAv/wZ8+e3a//+7qvl3uRQq6yECPJYuWGdTKj6yGJltxdLR+5QVa+u0Z2HtwtTZ3NEj05zd0uS+1XW1WTsxfO1Vcc48z5M9Lz4evS8lK7THi2Jtd0zXD39+VIgh0YOCjj598p47pr7o4h+Pitcv3CKbbJF7etl2j+eHe7LB+bIJO67pLvf/lOLvx+0cT+5tRxW/fWPR9IVNNNaRtn37IcSTAwr6dTxrZNlGjpfe7OZTlnjLy5Y5PNNXftgniTeeZSoTs2rbC+05fPMoGmLrlHhob/lL2HvzDrc/YLwUaC/fjbKbm2pUmiRXpVQouGdbVPlNNqXYOX/og3rt8VmufBsbE4XGP93PvRBtl/9MtYeNbs6lOWjQQDbT0L44W5OpehbnRRb7cM/zUsZy+el+Zn7i0mGCJB2kP9jA+c++oT5reC+66Eown21YkBaVpwY7wZ1wC+1EPo27fd5kAwLwvLEgFDrzPL0QQDRLFo3k3uAXyom+I6Hjl5zMYfHBqUWS+05vdhV5J5BPvp3M8WlYL5BY2GWBSWlaBz47Kwh1IV8wgGtux+L95QCAtQ/0VUxLIS9PZvyZ9WBCJ+rnDalFcwNjdzVUuYa6OCkbKQBiT4+uSReGz8kKtPaOpcrZrctr/xdLE58woGLMfR3Mk5UBGqw29bv9giZAI+k50Hs+LRqIfW99m22D9zUK42LhYRDNiJkGaU2ZTjSgI7kCpSmDRZt1590hh8qO2nSsEoRy6nGb6iJU4/UwdiZVhe6QMZjbMj2b5/h815+3MPVCsYoLgtdTUzaUUaJ379QW7pmFTd1VSx8F0cDnNRyxaK/j6CYRnTlmpmXmZT+JB64prFzkOfxiVZaNHUclk3xT7Ah41prZdWrvYu+ggGMGk27R3VtG9SGrnA+Nc9PC4WzdW/KHU+xMKqEtj1Lzq+r2CXhof+qTN9rKB+LY+f/rY+4r9BIc0rhB2Mb8mDf9L+iEOhn4DnoJs7byuejPsKBqgzzaR9A4CKTVhvBK7PsneeN3HtcEhu0+Ixb5pJPYnI2p4KhaQ7a8mWTvgkymUEAzaxbwDQ0yXiJo9/jYC1LX9rhUx5amosXANyiERhnnt4osqCJNn7QaGsYOQykxffUSw0J8Qi1BIovNNZfyNQ1+46tMcidbfWn7gFoh5XDkvc+MlmEzddp6bB25sV+ojL/K51NWJZwcDbu7aWc85qoavf76mPlh9cMwRIOFIAScNuBE/YrnXkYQjBCAD3r9FT83XMUC0tea6uAohp+SOWhaP3sS4YQjCwd+Dz+P3fNUke4qzVSl/uey2XpRQBJRgWbIGAeXzFgqEEA/iU0smmWsCjr3RYCRYCpC2MZ2K55ivKkIIRkSz8+6YZCVU0xuGKpnOnIqAfAcDWE0osGFIwQCg3p1pGMPoSdTUYkEdxnSzyaUnW6Lryd9rR3l6ISXcYp8xasgwtGOHcFsuphlhoPVPnJ7kVzzEI0tu/+TL5ne/tHym4hHp753hlGVow8PGB/vh0fetMF4lsiRgjkb8nETCkVaVZhWCkGTxB2yaqWjiHkaarTRWsQjBAnRkkAPzXWJVgwLJqEkXXxP9XVikYLw3NXdPDR6oryUSwq8zLSP4Gj0I/0moAgEQAAAAASUVORK5CYII=" alt="PAK"><div class="fixture-names">Pakistan vs India<small>Bilateral ODI series &middot; 1st ODI</small></div></div>
+          <div class="fixture-meta"><div class="when">21 days</div>National Stadium</div>
+        </div>
+      </div>
+
+      <div class="analysis-card">
+        <span class="eyebrow"><svg class="icon sm"><use href="#i-trophy"/></svg> Trophy watch</span>
+        <div class="trophy-row">
+          <div class="trophy-side"><img class="flag-icon" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEwAAAAiCAYAAAD1aT8BAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAUZSURBVGhD7ZltaFZlGMfPp9JBGViBpmSrfKmQ4sEInUUNdbWRM4vlJDMlQVKyGiXVUIwSQ/pQsy9pNEFJjEg0EIQWiiaElWFJRgp+EL/EYtL6eHX9rvMcO5zuPTvnPvfBAv/wZ8+e3a//+7qvl3uRQq6yECPJYuWGdTKj6yGJltxdLR+5QVa+u0Z2HtwtTZ3NEj05zd0uS+1XW1WTsxfO1Vcc48z5M9Lz4evS8lK7THi2Jtd0zXD39+VIgh0YOCjj598p47pr7o4h+Pitcv3CKbbJF7etl2j+eHe7LB+bIJO67pLvf/lOLvx+0cT+5tRxW/fWPR9IVNNNaRtn37IcSTAwr6dTxrZNlGjpfe7OZTlnjLy5Y5PNNXftgniTeeZSoTs2rbC+05fPMoGmLrlHhob/lL2HvzDrc/YLwUaC/fjbKbm2pUmiRXpVQouGdbVPlNNqXYOX/og3rt8VmufBsbE4XGP93PvRBtl/9MtYeNbs6lOWjQQDbT0L44W5OpehbnRRb7cM/zUsZy+el+Zn7i0mGCJB2kP9jA+c++oT5reC+66Eown21YkBaVpwY7wZ1wC+1EPo27fd5kAwLwvLEgFDrzPL0QQDRLFo3k3uAXyom+I6Hjl5zMYfHBqUWS+05vdhV5J5BPvp3M8WlYL5BY2GWBSWlaBz47Kwh1IV8wgGtux+L95QCAtQ/0VUxLIS9PZvyZ9WBCJ+rnDalFcwNjdzVUuYa6OCkbKQBiT4+uSReGz8kKtPaOpcrZrctr/xdLE58woGLMfR3Mk5UBGqw29bv9giZAI+k50Hs+LRqIfW99m22D9zUK42LhYRDNiJkGaU2ZTjSgI7kCpSmDRZt1590hh8qO2nSsEoRy6nGb6iJU4/UwdiZVhe6QMZjbMj2b5/h815+3MPVCsYoLgtdTUzaUUaJ379QW7pmFTd1VSx8F0cDnNRyxaK/j6CYRnTlmpmXmZT+JB64prFzkOfxiVZaNHUclk3xT7Ah41prZdWrvYu+ggGMGk27R3VtG9SGrnA+Nc9PC4WzdW/KHU+xMKqEtj1Lzq+r2CXhof+qTN9rKB+LY+f/rY+4r9BIc0rhB2Mb8mDf9L+iEOhn4DnoJs7byuejPsKBqgzzaR9A4CKTVhvBK7PsneeN3HtcEhu0+Ixb5pJPYnI2p4KhaQ7a8mWTvgkymUEAzaxbwDQ0yXiJo9/jYC1LX9rhUx5amosXANyiERhnnt4osqCJNn7QaGsYOQykxffUSw0J8Qi1BIovNNZfyNQ1+46tMcidbfWn7gFoh5XDkvc+MlmEzddp6bB25sV+ojL/K51NWJZwcDbu7aWc85qoavf76mPlh9cMwRIOFIAScNuBE/YrnXkYQjBCAD3r9FT83XMUC0tea6uAohp+SOWhaP3sS4YQjCwd+Dz+P3fNUke4qzVSl/uey2XpRQBJRgWbIGAeXzFgqEEA/iU0smmWsCjr3RYCRYCpC2MZ2K55ivKkIIRkSz8+6YZCVU0xuGKpnOnIqAfAcDWE0osGFIwQCg3p1pGMPoSdTUYkEdxnSzyaUnW6Lryd9rR3l6ISXcYp8xasgwtGOHcFsuphlhoPVPnJ7kVzzEI0tu/+TL5ne/tHym4hHp753hlGVow8PGB/vh0fetMF4lsiRgjkb8nETCkVaVZhWCkGTxB2yaqWjiHkaarTRWsQjBAnRkkAPzXWJVgwLJqEkXXxP9XVikYLw3NXdPDR6oryUSwq8zLSP4Gj0I/0moAgEQAAAAASUVORK5CYII=" alt="PAK"><span>Pakistan</span></div>
+          <div class="trophy-mid">
+            <div class="trophy-name">The Crescent Trophy</div>
+            <div class="trophy-holder">Held by Pakistan &middot; won last series 2&ndash;1</div>
+          </div>
+          <div class="trophy-side"><img class="flag-icon" src="data:image/png;base64,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" alt="IND"><span>India</span></div>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -1868,6 +2378,17 @@
   </div>
 </div>
 
+<div class="role-context-menu" id="role-context-menu">
+  <div class="rcm-header">Assign role</div>
+  <button onclick="applyRoleFromMenu('C')">Make captain</button>
+  <button onclick="applyRoleFromMenu('VC')">Make vice-captain</button>
+  <button onclick="applyRoleFromMenu('WK')">Set as wicketkeeper</button>
+  <button onclick="applyRoleFromMenu('B1')">Opening bowler 1</button>
+  <button onclick="applyRoleFromMenu('B2')">Opening bowler 2</button>
+  <div class="menu-divider"></div>
+  <button class="danger" onclick="applyRoleFromMenu(null)">Clear this player&rsquo;s role</button>
+</div>
+
 <script>
   function wireTabs(selector, panelPrefix) {
     document.querySelectorAll(selector).forEach(function (btn) {
@@ -1881,10 +2402,34 @@
       });
     });
   }
-  function showPanel(name) {
+  var navHistory = ['portal'];
+  var navIndex = 0;
+  function showPanel(name, fromHistory) {
     document.querySelectorAll('.tabs > .tabnav-inner > .tab-btn').forEach(function (b) { b.setAttribute('aria-selected', b.dataset.tab === name ? 'true' : 'false'); });
     document.querySelectorAll('body > .app-body > .main-content > .shell > section.panel').forEach(function (p) { p.hidden = true; });
     document.getElementById('panel-' + name).hidden = false;
+    if (!fromHistory && navHistory[navIndex] !== name) {
+      navHistory = navHistory.slice(0, navIndex + 1);
+      navHistory.push(name);
+      navIndex = navHistory.length - 1;
+    }
+    updateNavHistButtons();
+  }
+  function navigateBack() {
+    if (navIndex <= 0) return;
+    navIndex--;
+    showPanel(navHistory[navIndex], true);
+  }
+  function navigateForward() {
+    if (navIndex >= navHistory.length - 1) return;
+    navIndex++;
+    showPanel(navHistory[navIndex], true);
+  }
+  function updateNavHistButtons() {
+    var backBtn = document.getElementById('nav-back-btn');
+    var fwdBtn = document.getElementById('nav-forward-btn');
+    if (backBtn) backBtn.disabled = navIndex <= 0;
+    if (fwdBtn) fwdBtn.disabled = navIndex >= navHistory.length - 1;
   }
   document.querySelectorAll('.tabs > .tabnav-inner > .tab-btn').forEach(function (btn) {
     btn.addEventListener('click', function () { showPanel(btn.dataset.tab); });
@@ -2037,6 +2582,11 @@
     var clauseWrap = document.querySelector('.add-clause-wrap');
     if (clauseWrap && !clauseWrap.contains(e.target)) {
       document.getElementById('add-clause-menu').classList.remove('open');
+    }
+  
+    var nbWrap = document.querySelector('.next-batsman-picker-wrap');
+    if (nbWrap && !nbWrap.contains(e.target)) {
+      document.getElementById('next-batsman-menu').classList.remove('open');
     }
   });
   function onWageInput(val) {
@@ -2231,6 +2781,292 @@
     document.querySelectorAll('body > .app-body > .main-content > .shell > section.panel').forEach(function (p) { p.hidden = true; });
     document.getElementById('panel-matchday').hidden = false;
     showMatchStage('stage-preview');
+  }
+  function selectPitchPrep(btn, kind) {
+    document.querySelectorAll('.pitch-preset-btn').forEach(function (b) { b.classList.remove('active'); });
+    btn.classList.add('active');
+    var presets = {
+      grassy: { pace: 78, paceLabel: 'High', seam: 72, seamLabel: 'Significant', turn: 15, turnLabel: 'Minimal' },
+      dry:    { pace: 40, paceLabel: 'Low',  seam: 20, seamLabel: 'Minimal',     turn: 75, turnLabel: 'Significant' },
+      flat:   { pace: 52, paceLabel: 'Even', seam: 30, seamLabel: 'Low',         turn: 28, turnLabel: 'Low' }
+    };
+    var p = presets[kind];
+    document.getElementById('pitch-meter-pace').style.width = p.pace + '%';
+    document.getElementById('pitch-meter-pace-label').textContent = p.paceLabel;
+    document.getElementById('pitch-meter-seam').style.width = p.seam + '%';
+    document.getElementById('pitch-meter-seam-label').textContent = p.seamLabel;
+    document.getElementById('pitch-meter-turn').style.width = p.turn + '%';
+    document.getElementById('pitch-meter-turn-label').textContent = p.turnLabel;
+  }
+  var roleMenuTargetRow = null;
+  function showRoleContextMenu(e) {
+    e.preventDefault();
+    roleMenuTargetRow = e.currentTarget;
+    var menu = document.getElementById('role-context-menu');
+    var x = e.pageX, y = e.pageY;
+    menu.style.left = x + 'px';
+    menu.style.top = y + 'px';
+    menu.classList.add('open');
+    // keep the menu on-screen if it would run off the right/bottom edge
+    var rect = menu.getBoundingClientRect();
+    if (rect.right > window.innerWidth) menu.style.left = (x - rect.width) + 'px';
+    if (rect.bottom > window.innerHeight) menu.style.top = (y - rect.height) + 'px';
+  }
+  function applyRoleFromMenu(role) {
+    if (roleMenuTargetRow) {
+      var table = roleMenuTargetRow.closest('table');
+      if (role) {
+        // only one player per table can hold a given role - clear it elsewhere first
+        table.querySelectorAll('.xi-role-tag[data-role="' + role + '"]').forEach(function (tag) {
+          tag.parentElement.innerHTML = '';
+        });
+      }
+      var slot = roleMenuTargetRow.querySelector('.role-tags-slot');
+      if (slot) {
+        slot.innerHTML = role ? ('<span class="xi-role-tag" data-role="' + role + '">' + role + '</span>') : '';
+      }
+    }
+    document.getElementById('role-context-menu').classList.remove('open');
+    roleMenuTargetRow = null;
+  }
+  document.addEventListener('click', function () {
+    document.getElementById('role-context-menu').classList.remove('open');
+  });
+  document.addEventListener('scroll', function () {
+    document.getElementById('role-context-menu').classList.remove('open');
+  }, true);
+
+  function makeRowsDraggable(tbodySelector, onReorder) {
+    var tbody = document.querySelector(tbodySelector);
+    if (!tbody) return;
+    var dragEl = null;
+    Array.prototype.forEach.call(tbody.querySelectorAll('tr'), function (row) {
+      row.addEventListener('dragstart', function () {
+        dragEl = row;
+        row.classList.add('row-dragging');
+      });
+      row.addEventListener('dragend', function () {
+        row.classList.remove('row-dragging');
+        tbody.querySelectorAll('tr').forEach(function (r) { r.classList.remove('row-drop-target'); });
+        if (onReorder) onReorder(tbody);
+      });
+      row.addEventListener('dragover', function (e) {
+        e.preventDefault();
+        if (!dragEl || dragEl === row) return;
+        tbody.querySelectorAll('tr').forEach(function (r) { r.classList.remove('row-drop-target'); });
+        row.classList.add('row-drop-target');
+        var bounding = row.getBoundingClientRect();
+        var offset = e.clientY - bounding.top;
+        if (offset > bounding.height / 2) {
+          row.parentNode.insertBefore(dragEl, row.nextSibling);
+        } else {
+          row.parentNode.insertBefore(dragEl, row);
+        }
+      });
+    });
+  }
+  function renumberXiLineup(tbody) {
+    Array.prototype.forEach.call(tbody.querySelectorAll('tr'), function (row, i) {
+      var numCell = row.querySelector('.xi-order-num');
+      if (numCell) numCell.textContent = String(i + 1);
+    });
+  }
+  function findRowByName(tbody, name) {
+    var found = null;
+    if (!tbody) return found;
+    tbody.querySelectorAll('tr').forEach(function (r) {
+      var nc = r.querySelector('.xi-name');
+      if (nc && nc.textContent.trim() === name) found = r;
+    });
+    return found;
+  }
+  function lineupHasPlayer(name) {
+    return !!findRowByName(document.querySelector('table.xi-lineup tbody'), name);
+  }
+  function setSquadStatus(name, isIn) {
+    var tbody = document.getElementById('tactics-squad-body');
+    var row = findRowByName(tbody, name);
+    if (!row) return;
+    var pill = row.querySelector('.pill');
+    if (!pill) return;
+    pill.classList.toggle('first', isIn);
+    pill.classList.toggle('fringe', !isIn);
+    pill.textContent = isIn ? 'In XI' : 'Reserve';
+  }
+  function replaceInLineup(name, role, targetRow) {
+    if (lineupHasPlayer(name)) return;
+    var tbody = document.querySelector('table.xi-lineup tbody');
+    var displacedName = targetRow.querySelector('.xi-name').textContent.trim();
+    var displacedSlot = targetRow.querySelector('.role-tags-slot');
+    var roleTagHtml = displacedSlot ? displacedSlot.innerHTML : '';
+    var tr = document.createElement('tr');
+    tr.setAttribute('draggable', 'true');
+    tr.setAttribute('oncontextmenu', 'showRoleContextMenu(event)');
+    tr.innerHTML = '<td class="xi-order-num"></td><td class="xi-name">' + name + '</td><td>' + role + ' <span class="role-tags-slot">' + roleTagHtml + '</span></td>';
+    tbody.insertBefore(tr, targetRow);
+    targetRow.remove();
+    wireTacticsLineupRow(tr);
+    renumberXiLineup(tbody);
+    setSquadStatus(name, true);
+    setSquadStatus(displacedName, false);
+  }
+  function demoteFromLineup(name) {
+    var tbody = document.querySelector('table.xi-lineup tbody');
+    var row = findRowByName(tbody, name);
+    if (row) row.remove();
+    renumberXiLineup(tbody);
+    setSquadStatus(name, false);
+  }
+  var tacticsDrag = { name: null, from: null, role: null };
+  function wireTacticsSquadRow(row) {
+    row.setAttribute('draggable', 'true');
+    row.addEventListener('dragstart', function () {
+      tacticsDrag.from = 'squad';
+      tacticsDrag.name = row.querySelector('.xi-name').textContent.trim();
+      tacticsDrag.role = row.children[1].textContent.trim();
+      row.classList.add('row-dragging');
+    });
+    row.addEventListener('dragend', function () { row.classList.remove('row-dragging'); });
+    row.addEventListener('dragover', function (e) {
+      e.preventDefault();
+      if (tacticsDrag.from === 'lineup') row.classList.add('row-drop-target');
+    });
+    row.addEventListener('dragleave', function () { row.classList.remove('row-drop-target'); });
+    row.addEventListener('drop', function (e) {
+      e.preventDefault();
+      document.querySelectorAll('#tactics-squad-body tr').forEach(function (r) { r.classList.remove('row-drop-target'); });
+      if (tacticsDrag.from === 'lineup' && tacticsDrag.name) demoteFromLineup(tacticsDrag.name);
+    });
+  }
+  function wireTacticsLineupRow(row) {
+    row.setAttribute('draggable', 'true');
+    row.addEventListener('dragstart', function () {
+      tacticsDrag.from = 'lineup';
+      tacticsDrag.name = row.querySelector('.xi-name').textContent.trim();
+      row.classList.add('row-dragging');
+    });
+    row.addEventListener('dragend', function () { row.classList.remove('row-dragging'); });
+    row.addEventListener('dragover', function (e) {
+      e.preventDefault();
+      if (tacticsDrag.from !== 'lineup') { row.classList.add('row-drop-target'); return; }
+      var dragEl = document.querySelector('table.xi-lineup tbody tr.row-dragging');
+      if (!dragEl || dragEl === row) return;
+      var bounding = row.getBoundingClientRect();
+      var offset = e.clientY - bounding.top;
+      if (offset > bounding.height / 2) { row.parentNode.insertBefore(dragEl, row.nextSibling); }
+      else { row.parentNode.insertBefore(dragEl, row); }
+    });
+    row.addEventListener('dragleave', function () { row.classList.remove('row-drop-target'); });
+    row.addEventListener('drop', function (e) {
+      e.preventDefault();
+      var tbody = document.querySelector('table.xi-lineup tbody');
+      tbody.querySelectorAll('tr').forEach(function (r) { r.classList.remove('row-drop-target'); });
+      if (tacticsDrag.from === 'squad' && tacticsDrag.name) {
+        replaceInLineup(tacticsDrag.name, tacticsDrag.role, row);
+      } else if (tacticsDrag.from === 'lineup') {
+        renumberXiLineup(tbody);
+      }
+    });
+  }
+  document.querySelectorAll('#tactics-squad-body tr').forEach(wireTacticsSquadRow);
+  document.querySelectorAll('table.xi-lineup tbody tr').forEach(wireTacticsLineupRow);
+  makeRowsDraggable('#lineup-check-body', recomputeLineupCheckStatus);
+
+  function toggleNextBatsmanPicker() {
+    document.getElementById('next-batsman-menu').classList.toggle('open');
+  }
+  function pickNextBatsman(name) {
+    document.getElementById('next-batsman-name').textContent = name;
+    document.getElementById('next-batsman-menu').classList.remove('open');
+  }
+  function toggleDelegateXi(cb) {
+    var note = document.getElementById('delegate-xi-note');
+    var rows = document.querySelectorAll('#tactics-squad-body tr, table.xi-lineup tbody tr');
+    if (cb.checked) {
+      note.textContent = 'Delegated to Aamir Sohail, Assistant Manager \u2014 he now picks the XI and roles before every fixture. Untick this at any time to take it back.';
+    } else {
+      note.textContent = "You\u2019re picking the XI yourself. Aamir Sohail, Assistant Manager, can take this off your hands if you\u2019d rather focus elsewhere.";
+    }
+    rows.forEach(function (r) { r.setAttribute('draggable', cb.checked ? 'false' : 'true'); });
+  }
+  function pickBestXi() {
+    var defaultXi = [
+      { name: 'Umar Ansari', role: 'Opener' }, { name: 'Rizwan Sheikh', role: 'Opener' },
+      { name: 'Waqar Ansari', role: 'Top order' }, { name: 'Hamza Malik', role: 'Top order', tag: 'C' },
+      { name: 'Zain Chaudhry', role: 'Middle order', tag: 'VC' }, { name: 'Sarfraz Khan', role: 'Middle order' },
+      { name: 'Umar Baig', role: 'Keeper', tag: 'WK' }, { name: 'Danish Raza', role: 'Allrounder' },
+      { name: 'Bilal Nadeem', role: 'Bowler' }, { name: 'Fahad Sultan', role: 'Bowler', tag: 'B1' },
+      { name: 'Kamran Aslam', role: 'Bowler', tag: 'B2' }
+    ];
+    var lineupBody = document.querySelector('table.xi-lineup tbody');
+    lineupBody.innerHTML = '';
+    defaultXi.forEach(function (p) {
+      var tr = document.createElement('tr');
+      tr.setAttribute('draggable', 'true');
+      tr.setAttribute('oncontextmenu', 'showRoleContextMenu(event)');
+      var tagHtml = p.tag ? ('<span class="xi-role-tag" data-role="' + p.tag + '">' + p.tag + '</span>') : '';
+      tr.innerHTML = '<td class="xi-order-num"></td><td class="xi-name">' + p.name + '</td><td>' + p.role + ' <span class="role-tags-slot">' + tagHtml + '</span></td>';
+      lineupBody.appendChild(tr);
+      wireTacticsLineupRow(tr);
+    });
+    renumberXiLineup(lineupBody);
+    var inNames = defaultXi.map(function (p) { return p.name; });
+    document.querySelectorAll('#tactics-squad-body tr').forEach(function (row) {
+      var name = row.querySelector('.xi-name').textContent.trim();
+      setSquadStatus(name, inNames.indexOf(name) !== -1);
+    });
+    var note = document.getElementById('delegate-xi-note');
+    if (!document.getElementById('delegate-xi-toggle').checked) {
+      note.textContent = 'Best XI re-picked by ability and role balance just now.';
+    }
+  }
+  function recomputeLineupCheckStatus(tbody) {
+    var rows = Array.prototype.slice.call(tbody.querySelectorAll('tr'));
+    // capture who was In XI BEFORE this reorder, so the one player who
+    // fell out and the one who moved in can have their role handed
+    // over - real cricket: the man who replaces a role inherits it,
+    // the man he replaced no longer holds it.
+    var wasIn = {};
+    rows.forEach(function (row) {
+      var pill = row.querySelector('.pill');
+      var name = row.querySelector('.xi-name').textContent.trim();
+      wasIn[name] = pill ? pill.classList.contains('first') : false;
+    });
+    var demotedRow = null, promotedRow = null;
+    rows.forEach(function (row, i) {
+      var name = row.querySelector('.xi-name').textContent.trim();
+      var isInNow = i < 11;
+      if (wasIn[name] && !isInNow) demotedRow = row;
+      if (!wasIn[name] && isInNow) promotedRow = row;
+    });
+    if (demotedRow && promotedRow) {
+      var demotedSlot = demotedRow.querySelector('.role-tags-slot');
+      var promotedSlot = promotedRow.querySelector('.role-tags-slot');
+      if (demotedSlot && promotedSlot && demotedSlot.innerHTML.trim()) {
+        promotedSlot.innerHTML = demotedSlot.innerHTML;
+        demotedSlot.innerHTML = '';
+      }
+    }
+    rows.forEach(function (row, i) {
+      var isIn = i < 11;
+      var pill = row.querySelector('.pill');
+      var numCell = row.querySelector('.xi-order-num');
+      if (pill) {
+        pill.classList.toggle('first', isIn);
+        pill.classList.toggle('fringe', !isIn);
+        pill.textContent = isIn ? 'In XI' : 'Reserve';
+      }
+      if (numCell) numCell.textContent = String(i + 1);
+      if (!isIn) {
+        // safety net: nobody in Reserve keeps a role tag, however the
+        // reorder happened (covers a multi-position shift, not just
+        // the single clean swap the block above already handles)
+        var slot = row.querySelector('.role-tags-slot');
+        if (slot) slot.innerHTML = '';
+      }
+    });
+    var el = document.getElementById('lineup-check-count');
+    if (el) { el.textContent = '11 of 11 selected'; el.classList.remove('warn'); }
   }
   function exitMatchMode() {
     document.body.classList.remove('match-immersive');
