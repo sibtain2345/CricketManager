@@ -9981,10 +9981,31 @@ Staff Budget" readout reads the SAME `boardBudget.staff` global the Boardroom sc
 sliders already own, so hiring here and adjusting the Staff Budget slider there are visibly the one
 system, not two disconnected numbers.
 
-**Not yet built**: Academy/Youth, Records & Hall of Fame, World/Rankings - all named and
-asset-mapped in the session's plan file, not yet started. Franchise-specific transfer/auction
-screens (retention, trade, EOI meeting, live-bidding room) are explicitly deferred per the user's
-own call - confirmed needed eventually, not now.
+**Academy screen built, researched against FM's real Youth Intake system first** (the user's
+direct instruction: research each remaining screen against the real game before building it, not
+just work from memory). Confirmed via web research: FM's intake arrives as a dated event grouping
+new prospects into star-rated potential TIERS (Elite/Top/Good, read by the Head of Youth
+Development), with a staff recommendation on who to sign and cohort quality driven by Youth
+Recruitment/Youth Facilities/Junior Coaching/the nation's own youth rating - all of which mapped
+directly onto ALREADY-BUILT C# domain concepts (`AcademyService.GenerateIntake`'s tiered cohort,
+`ScoutingAccuracyService`'s estimate-not-the-truth potential read, `TeamFacilities.
+YouthDevelopmentQuality`/`GroundFacilities.YouthFacilities`, `AcademyService.NationTalentProfile`'s
+pace/spin lean), so nothing here is invented - it is the direct cricket translation of a real,
+already-built pipeline. Sidebar tab sits right after Squad (the youth pipeline feeds the senior
+squad it sits beside). A Youth Setup card (Youth Facilities/Youth Recruitment tier badges, the
+nation-talent-lean note) and an Intake Summary card sit side by side; the full "Intake assessment"
+card groups this year's 6 prospects under real tier sub-headers (Elite Talent/Top Talent/Good
+Talent/Development Prospect), each row showing a starred **"Scouted PA"** reading explicitly
+labelled as an estimate (never the ground truth - the exact honest distinction
+`ScoutingAccuracyService` already makes) plus the staff's own Sign/Monitor/Release recommendation
+as a coloured pill, with real Sign/Release override buttons the coach can click (disabling once a
+decision is made, mirroring the Staff-recruit screen's directness - no negotiation for an academy
+kid either). A final "Academy squad" card shows returning prospects from prior intakes with a
+plain-language development-trend line each.
+
+**Records & Hall of Fame, and World/Rankings, are next** - not yet built. Franchise-specific
+transfer/auction screens (retention, trade, EOI meeting, live-bidding room) are explicitly
+deferred per the user's own call - confirmed needed eventually, not now.
 
 ---
 
