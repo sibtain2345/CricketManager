@@ -911,6 +911,45 @@
   /* ---------- Delegate squad selection + Pick Best XI ---------- */
   .delegate-toggle-label { display: flex; align-items: center; gap: 7px; font-size: var(--fs-small); color: var(--ink-dim); cursor: pointer; user-select: none; }
   .delegate-toggle-label input { width: 15px; height: 15px; accent-color: var(--turf-strong); cursor: pointer; }
+
+  /* ---------- Finances ---------- */
+  .finance-row { display: flex; justify-content: space-between; padding: 7px 0; border-top: 1px solid var(--border-soft); font-size: var(--fs-small); }
+  .finance-row:first-of-type { border-top: none; padding-top: 0; }
+  .finance-row .fin-label { color: var(--ink-dim); }
+  .finance-row .fin-value { font-family: var(--font-mono); font-weight: 700; }
+  .finance-row .fin-value.pos { color: var(--turf-strong); }
+  .finance-row .fin-value.neg { color: var(--ball); }
+  .finance-divider { height: 1px; background: var(--border); margin: 8px 0; }
+  .finance-total-row { display: flex; justify-content: space-between; padding-top: 4px; font-size: var(--fs-body); font-weight: 700; color: var(--ink); }
+  .finance-total-row .fin-value { font-family: var(--font-mono); font-size: var(--fs-body-lg); }
+  .ffp-banner { display: flex; align-items: center; gap: 10px; padding: 12px 16px; border-radius: 10px; background: var(--turf-dim); border: 1px solid var(--turf-strong); color: var(--turf-strong); font-weight: 700; font-size: var(--fs-body); margin-bottom: 10px; }
+  .ffp-banner svg { width: 20px; height: 20px; flex-shrink: 0; }
+  .facility-row { padding: 10px 0; border-top: 1px solid var(--border-soft); }
+  .facility-row:first-of-type { border-top: none; padding-top: 0; }
+  .facility-row-head { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 6px; }
+  .facility-row-head .fac-name { font-weight: 700; color: var(--ink); font-size: var(--fs-small); }
+  .facility-invest-btn { appearance: none; background: var(--surface-3); border: 1px solid var(--border); color: var(--ink-dim); font: inherit; font-size: var(--fs-micro); font-weight: 700; padding: 5px 11px; border-radius: 7px; cursor: pointer; flex-shrink: 0; }
+  .facility-invest-btn:hover { border-color: var(--chrome-strong); color: var(--ink); }
+
+  /* ---------- Club facilities: wording tiers, not bars ---------- */
+  .facility-tier-row { display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 10px 0; border-top: 1px solid var(--border-soft); }
+  .facility-tier-row:first-of-type { border-top: none; padding-top: 0; }
+  .facility-tier-main { flex: 1; min-width: 0; }
+  .facility-tier-name { font-weight: 700; color: var(--ink); font-size: var(--fs-small); }
+  .facility-tier-badge { display: block; font-size: var(--fs-caption); font-weight: 700; margin-top: 2px; }
+  .facility-tier-badge.tier-excellent { color: var(--turf-strong); }
+  .facility-tier-badge.tier-good { color: var(--gold); }
+  .facility-tier-badge.tier-average { color: var(--ink-dim); }
+  .facility-tier-badge.tier-poor { color: var(--ball); }
+  .facility-request-btn { appearance: none; background: var(--surface-3); border: 1px solid var(--border); color: var(--ink-dim); font: inherit; font-size: var(--fs-micro); font-weight: 700; padding: 7px 12px; border-radius: 7px; cursor: pointer; flex-shrink: 0; white-space: nowrap; }
+  .facility-request-btn:hover { border-color: var(--chrome-strong); color: var(--ink); }
+
+  /* ---------- Boardroom: budget-allocation rows ---------- */
+  .board-budget-row { margin-top: 16px; }
+  .board-budget-row:first-of-type { margin-top: 4px; }
+  .board-budget-label { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 2px; }
+  .board-budget-label > span:first-child { font-size: var(--fs-small); font-weight: 700; color: var(--ink); }
+  .board-budget-amt { font-family: var(--font-mono); font-size: var(--fs-body-lg); font-weight: 700; color: var(--gold); }
 </style>
 
 <!--
@@ -943,6 +982,8 @@
     <symbol id="i-swing" viewBox="0 0 24 24"><circle cx="18" cy="6" r="2.2" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M15.5 8.5L5 19" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M9 15l-4 4-1.4-1.4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
     <symbol id="i-trend-up" viewBox="0 0 24 24"><path d="M3.5 17L9 11.2l4 3.2L20.5 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M15.5 6h5v5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
     <symbol id="i-swap" viewBox="0 0 24 24"><path d="M4 8h14M14.5 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M20 16H6M9.5 12l-4 4 4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-cash" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 7.3v9.4M14.6 9.2c0-1-1.1-1.7-2.4-1.7-1.4 0-2.5.8-2.5 1.8 0 2.6 5 1.2 5 3.8 0 1-1.1 1.9-2.6 1.9-1.4 0-2.6-.8-2.6-1.8" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-briefcase" viewBox="0 0 24 24"><rect x="3.2" y="8" width="17.6" height="11.5" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M8.5 8V6.3a2 2 0 012-2h3a2 2 0 012 2V8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M3.2 13.2h17.6" stroke="currentColor" stroke-width="1.6"/><rect x="10.6" y="12.1" width="2.8" height="2.6" rx="0.5" fill="currentColor"/></symbol>
   </defs>
 </svg>
 
@@ -997,6 +1038,8 @@
     <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-squad" data-tab="squad" title="Squad"><svg class="icon"><use href="#i-users"/></svg><span class="tab-label">Squad</span></button>
     <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-tactics" data-tab="tactics" title="Tactics"><svg class="icon"><use href="#i-shield"/></svg><span class="tab-label">Tactics</span></button>
     <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-transfers" data-tab="transfers" title="Transfers"><svg class="icon"><use href="#i-swap"/></svg><span class="tab-label">Transfers</span></button>
+    <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-finances" data-tab="finances" title="Finances"><svg class="icon"><use href="#i-cash"/></svg><span class="tab-label">Finances</span></button>
+    <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-boardroom" data-tab="boardroom" title="Boardroom"><svg class="icon"><use href="#i-briefcase"/></svg><span class="tab-label">Boardroom</span></button>
     <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-player" data-tab="player" title="Player"><svg class="icon"><use href="#i-user"/></svg><span class="tab-label">Player</span></button>
     <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-fixtures" data-tab="fixtures" title="Fixtures"><svg class="icon"><use href="#i-cal-list"/></svg><span class="tab-label">Fixtures</span></button>
     <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-international" data-tab="international" title="International"><svg class="icon"><use href="#i-plane"/></svg><span class="tab-label">International</span></button>
@@ -1855,6 +1898,151 @@
     </div>
   </section>
 
+  <!-- ================= FINANCES ================= -->
+  <section class="panel" id="panel-finances" role="tabpanel" hidden>
+    <div class="panel-head"><h1>Finances</h1><div class="sub">Season 2026/27 &middot; Islamabad Icons &middot; current budget <strong style="color:var(--gold)">$2.4M</strong></div></div>
+
+    <div class="tactics-grid">
+      <div class="analysis-card">
+        <span class="eyebrow"><svg class="icon sm"><use href="#i-cash"/></svg> Season income &amp; expenditure</span>
+        <div class="finance-row"><span class="fin-label">Sponsorship</span><span class="fin-value pos">+$680K</span></div>
+        <div class="finance-row"><span class="fin-label">Matchday revenue</span><span class="fin-value pos">+$410K</span></div>
+        <div class="finance-row"><span class="fin-label">Competition prize money</span><span class="fin-value pos">+$250K</span></div>
+        <div class="finance-row"><span class="fin-label">Broadcast share</span><span class="fin-value pos">+$340K</span></div>
+        <div class="finance-divider"></div>
+        <div class="finance-row"><span class="fin-label">Wages (players &amp; staff)</span><span class="fin-value neg">&minus;$1.15M</span></div>
+        <div class="finance-row"><span class="fin-label">Facility upkeep</span><span class="fin-value neg">&minus;$180K</span></div>
+        <div class="finance-row"><span class="fin-label">Transfer spend, this season</span><span class="fin-value neg">&minus;$95K</span></div>
+        <div class="finance-divider"></div>
+        <div class="finance-total-row"><span>Net this season</span><span class="fin-value pos">+$255K</span></div>
+      </div>
+
+      <div class="analysis-card">
+        <span class="eyebrow"><svg class="icon sm"><use href="#i-shield"/></svg> Board &amp; ownership</span>
+        <div class="bio-line"><span class="k">Ownership</span><span>Private owner &middot; Benefactor</span></div>
+        <div class="bio-line"><span class="k">Season budget set</span><span style="color:var(--gold)">$2.4M</span></div>
+        <div class="bio-line"><span class="k">Board confidence</span><span style="color:var(--turf-strong)">Steady</span></div>
+        <button class="view-more-btn" onclick="showPanel('boardroom')">Open the Boardroom &mdash; ownership, objectives, budget split</button>
+      </div>
+    </div>
+
+    <div class="analysis-card">
+      <div class="ffp-banner"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12.5l2 2 4.5-5"/><circle cx="12" cy="12" r="9"/></svg>Financial Fair Play &middot; Healthy</div>
+      <div class="plan-desc">Comfortably within limits this season. A club running a sustained, severe deficit risks a real points deduction on the domestic table and a transfer-spending embargo until the books recover &mdash; Islamabad Icons are nowhere near that threshold.</div>
+    </div>
+
+    <div class="tactics-grid">
+      <div class="analysis-card">
+        <span class="eyebrow"><svg class="icon sm"><use href="#i-trophy"/></svg> Sponsorship</span>
+        <div class="bio-line"><span class="k">Main shirt sponsor</span><span>Zaraye Sports</span></div>
+        <div class="bio-line"><span class="k">Annual value</span><span style="color:var(--gold)">$680K</span></div>
+        <div class="bio-line"><span class="k">Contract until</span><span>May 2029</span></div>
+        <div class="bio-line"><span class="k">Performance clause</span><span style="color:var(--turf-strong)">+15% if top 4</span></div>
+      </div>
+
+      <div class="analysis-card">
+        <span class="eyebrow"><svg class="icon sm"><use href="#i-alert"/></svg> Club facilities</span>
+        <div class="facility-tier-row">
+          <div class="facility-tier-main"><span class="facility-tier-name">Training Facilities</span><span class="facility-tier-badge tier-good">Good</span></div>
+          <button class="facility-request-btn" onclick="openFacilityRequest('training')">Request improvement</button>
+        </div>
+        <div class="facility-tier-row">
+          <div class="facility-tier-main"><span class="facility-tier-name">Youth Facilities</span><span class="facility-tier-badge tier-average">Average</span></div>
+          <button class="facility-request-btn" onclick="openFacilityRequest('youth')">Request improvement</button>
+        </div>
+        <div class="facility-tier-row">
+          <div class="facility-tier-main"><span class="facility-tier-name">Youth Recruitment</span><span class="facility-tier-badge tier-poor">Below Average</span></div>
+          <button class="facility-request-btn" onclick="openFacilityRequest('scouting')">Request improvement</button>
+        </div>
+        <div class="facility-tier-row">
+          <div class="facility-tier-main"><span class="facility-tier-name">Data Analysis</span><span class="facility-tier-badge tier-good">Adequate</span></div>
+          <button class="facility-request-btn" onclick="openFacilityRequest('analysis')">Request improvement</button>
+        </div>
+        <div class="facility-tier-row">
+          <div class="facility-tier-main"><span class="facility-tier-name">Home Ground &middot; Jinnah Stadium, Rawalpindi<span style="display:block;font-weight:400;color:var(--ink-faint);font-size:var(--fs-micro);margin-top:1px">18,400 capacity</span></span><span class="facility-tier-badge tier-good">Good</span></div>
+          <button class="facility-request-btn" onclick="openFacilityRequest('ground')">Request improvement</button>
+        </div>
+        <div class="role-hint">Not a direct spend &mdash; a request to the board. They weigh it against the club&rsquo;s finances, current competition standing, your own reputation, and their own ambitions for the club.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= BOARDROOM ================= -->
+  <section class="panel" id="panel-boardroom" role="tabpanel" hidden>
+    <div class="panel-head"><h1>Boardroom</h1><div class="sub">Islamabad Icons &middot; owned by Zaraye Holdings &middot; season 2026/27</div></div>
+
+    <div class="tactics-grid">
+      <div class="analysis-card">
+        <span class="eyebrow"><svg class="icon sm"><use href="#i-shield"/></svg> Ownership</span>
+        <div class="bio-line"><span class="k">Ownership model</span><span>Private owner</span></div>
+        <div class="bio-line"><span class="k">Owner profile</span><span class="pill first">Benefactor</span></div>
+        <div class="role-hint">A benefactor owner is willing to fund real losses to chase results &mdash; the season budget can run richer than the club&rsquo;s own income would support on its own. It comes with a real cost: patience thins fast the moment results stop justifying it, far faster than a member-owned or corporate board would.</div>
+        <div class="bio-line" style="margin-top:12px"><span class="k">Ambition</span><span>Ambitious</span></div>
+        <div class="bio-line"><span class="k">Patience</span><span>Moderate</span></div>
+        <div class="bio-line"><span class="k">Wealth</span><span>Comfortable</span></div>
+        <div class="info-meter-row" style="margin-top:10px">
+          <div class="info-meter-label"><span>Fan sentiment</span><span>Positive</span></div>
+          <div class="info-meter"><span style="width:71%"></span></div>
+        </div>
+      </div>
+      <div class="analysis-card">
+        <span class="eyebrow"><svg class="icon sm"><use href="#i-check-circle"/></svg> Board confidence &amp; objectives</span>
+        <div class="standing-row">
+          <div>Confidence in you</div>
+          <div class="trust-meter-wrap"><div class="info-meter"><span style="width:78%"></span></div></div>
+        </div>
+        <div class="bio-line" style="margin-top:8px"><span class="k">Season objective</span><span>Finish top 4</span></div>
+        <div class="bio-line"><span class="k">Your contract</span><span>2 years remaining</span></div>
+        <div class="notes-log" style="margin-top:10px">
+          <div class="notes-log-item"><span class="note-date">Start of season</span>&ldquo;We back you to build on last year &mdash; a top-4 finish and real progress in the cup keeps us both happy.&rdquo;</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="analysis-card" style="margin-top:16px">
+      <span class="eyebrow"><svg class="icon sm"><use href="#i-cash"/></svg> Season budget allocation &middot; total $2.4M</span>
+      <div class="plan-desc">The board sets the total every season &mdash; but how it splits across transfers, wages, staff and scouting is entirely your call. Drag any slider and the rest rebalance automatically, no sign-off needed. Need more overall? Ask the board to increase a specific budget &mdash; once granted, the extra is yours to allocate as you see fit.</div>
+
+      <div class="board-budget-row" data-budget="transfer">
+        <div class="board-budget-label"><span>Transfer budget</span><span class="board-budget-amt" id="bb-transfer-amt">$640K</span></div>
+        <input type="range" class="term-slider" id="bb-transfer-slider" min="100" max="1700" step="10" value="640" oninput="onBoardBudgetInput('transfer', this.value)">
+        <div class="slider-scale"><span>Min $100K</span><span id="bb-transfer-pct">27%</span><span>Max</span></div>
+        <button class="facility-request-btn" style="margin-top:6px;width:100%" onclick="openBudgetRequest('transfer')">Request an increase from the board</button>
+      </div>
+      <div class="board-budget-row" data-budget="wage">
+        <div class="board-budget-label"><span>Wage budget</span><span class="board-budget-amt" id="bb-wage-amt">$1.15M</span></div>
+        <input type="range" class="term-slider" id="bb-wage-slider" min="700" max="2100" step="10" value="1150" oninput="onBoardBudgetInput('wage', this.value)">
+        <div class="slider-scale"><span>Min $700K</span><span id="bb-wage-pct">48%</span><span>Max</span></div>
+        <button class="facility-request-btn" style="margin-top:6px;width:100%" onclick="openBudgetRequest('wage')">Request an increase from the board</button>
+      </div>
+      <div class="board-budget-row" data-budget="staff">
+        <div class="board-budget-label"><span>Staff budget</span><span class="board-budget-amt" id="bb-staff-amt">$380K</span></div>
+        <input type="range" class="term-slider" id="bb-staff-slider" min="120" max="900" step="10" value="380" oninput="onBoardBudgetInput('staff', this.value)">
+        <div class="slider-scale"><span>Min $120K</span><span id="bb-staff-pct">16%</span><span>Max</span></div>
+        <button class="facility-request-btn" style="margin-top:6px;width:100%" onclick="openBudgetRequest('staff')">Request an increase from the board</button>
+      </div>
+      <div class="board-budget-row" data-budget="scouting">
+        <div class="board-budget-label"><span>Scouting budget</span><span class="board-budget-amt" id="bb-scouting-amt">$230K</span></div>
+        <input type="range" class="term-slider" id="bb-scouting-slider" min="60" max="600" step="10" value="230" oninput="onBoardBudgetInput('scouting', this.value)">
+        <div class="slider-scale"><span>Min $60K</span><span id="bb-scouting-pct">10%</span><span>Max</span></div>
+        <button class="facility-request-btn" style="margin-top:6px;width:100%" onclick="openBudgetRequest('scouting')">Request an increase from the board</button>
+      </div>
+      <div class="pitch-capability-line" style="margin-top:14px"><span>Current allocation</span><strong id="bb-total-check" style="color:var(--turf-strong)">$2.40M of $2.4M &mdash; balanced</strong></div>
+    </div>
+
+    <div class="analysis-card" style="margin-top:16px">
+      <span class="eyebrow"><svg class="icon sm"><use href="#i-plane"/></svg> Scouting domain</span>
+      <div class="plan-desc">Where your scouts actually look. A wider net finds more &mdash; and needs a real slice of the scouting budget to run properly.</div>
+      <div class="pitch-preset-row">
+        <button class="pitch-preset-btn" onclick="selectScoutingDomain(this,'local')">Local<span class="preset-sub">This region only</span></button>
+        <button class="pitch-preset-btn active" onclick="selectScoutingDomain(this,'domestic')">Domestic<span class="preset-sub">The whole country</span></button>
+        <button class="pitch-preset-btn" onclick="selectScoutingDomain(this,'continental')">Continental<span class="preset-sub">Neighbouring nations</span></button>
+        <button class="pitch-preset-btn" onclick="selectScoutingDomain(this,'worldwide')">Worldwide<span class="preset-sub">Every cricket nation</span></button>
+      </div>
+      <div class="pitch-capability-line" id="scouting-domain-note"><span>Domestic coverage</span><strong style="color:var(--turf-strong)">Comfortably funded at $230K/yr</strong></div>
+    </div>
+  </section>
+
   <!-- ================= PLAYER PROFILE ================= -->
   <section class="panel" id="panel-player" role="tabpanel" hidden>
     <div class="player-header">
@@ -2387,6 +2575,76 @@
   <button onclick="applyRoleFromMenu('B2')">Opening bowler 2</button>
   <div class="menu-divider"></div>
   <button class="danger" onclick="applyRoleFromMenu(null)">Clear this player&rsquo;s role</button>
+</div>
+
+<div class="modal-backdrop" id="facility-request-backdrop" onclick="if(event.target===this) closeFacilityRequest()">
+  <div class="negotiation-modal" role="dialog" aria-modal="true" aria-labelledby="facility-request-title">
+    <div class="negotiation-head">
+      <div class="player-club-crest-sm" style="width:46px;height:46px;border-radius:11px;flex-shrink:0"></div>
+      <div>
+        <h2 id="facility-request-title">Request: Improve Training Facilities</h2>
+        <div class="sub" id="facility-request-sub">Currently Good &middot; asking for Excellent</div>
+      </div>
+      <button class="negotiation-close" onclick="closeFacilityRequest()" aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px"><path d="M5 5l14 14M19 5L5 19"/></svg></button>
+    </div>
+    <div class="negotiation-body">
+      <div class="negotiation-section">
+        <span class="eyebrow"><svg class="icon sm"><use href="#i-alert"/></svg> What the board will weigh</span>
+        <div class="bio-line"><span class="k">Club finances</span><span>$2.4M budget &middot; Healthy FFP standing</span></div>
+        <div class="bio-line"><span class="k">Current standing</span><span>3rd &middot; Pakistan T20 Cup</span></div>
+        <div class="bio-line"><span class="k">Your reputation</span><span>Well-regarded domestically</span></div>
+        <div class="bio-line"><span class="k">Board&rsquo;s ambition</span><span>Ambitious &middot; wants top-4 finishes</span></div>
+      </div>
+      <div class="negotiation-section" id="fr-precommit">
+        <span class="eyebrow"><svg class="icon sm"><use href="#i-cash"/></svg> Estimated cost</span>
+        <div class="bio-line"><span class="k">Investment</span><span id="fr-cost" style="color:var(--gold)">&mdash;</span></div>
+      </div>
+      <div class="negotiation-section" id="fr-convo-section" hidden>
+        <span class="eyebrow"><svg class="icon sm"><use href="#i-inbox"/></svg> The conversation</span>
+        <div class="convo-log" id="fr-convo"></div>
+      </div>
+      <div class="negotiation-section" id="fr-followup-section" hidden>
+        <span class="eyebrow"><svg class="icon sm"><use href="#i-megaphone"/></svg> Make your case</span>
+        <div class="tone-row" id="fr-followup-options"></div>
+      </div>
+    </div>
+    <div class="negotiation-actions">
+      <button class="btn-ghost" id="fr-cancel-btn" onclick="closeFacilityRequest()">Cancel</button>
+      <button class="btn-primary" id="fr-primary-btn" onclick="submitFacilityRequest()">Submit request</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="budget-request-backdrop" onclick="if(event.target===this) closeBudgetRequest()">
+  <div class="negotiation-modal" role="dialog" aria-modal="true" aria-labelledby="budget-request-title">
+    <div class="negotiation-head">
+      <div class="player-club-crest-sm" style="width:46px;height:46px;border-radius:11px;flex-shrink:0"></div>
+      <div>
+        <h2 id="budget-request-title">Request: Increase Transfer Budget</h2>
+        <div class="sub" id="budget-request-sub">Currently $640K</div>
+      </div>
+      <button class="negotiation-close" onclick="closeBudgetRequest()" aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px"><path d="M5 5l14 14M19 5L5 19"/></svg></button>
+    </div>
+    <div class="negotiation-body">
+      <div class="negotiation-section" id="br-precommit">
+        <span class="eyebrow"><svg class="icon sm"><use href="#i-alert"/></svg> What the board will weigh</span>
+        <div class="bio-line"><span class="k">Requested increase</span><span id="br-amount" style="color:var(--gold)">&mdash;</span></div>
+        <div class="bio-line"><span class="k">Board profile</span><span>Ambitious &middot; Moderate patience</span></div>
+      </div>
+      <div class="negotiation-section" id="br-convo-section" hidden>
+        <span class="eyebrow"><svg class="icon sm"><use href="#i-inbox"/></svg> The conversation</span>
+        <div class="convo-log" id="br-convo"></div>
+      </div>
+      <div class="negotiation-section" id="br-followup-section" hidden>
+        <span class="eyebrow"><svg class="icon sm"><use href="#i-megaphone"/></svg> Make your case</span>
+        <div class="tone-row" id="br-followup-options"></div>
+      </div>
+    </div>
+    <div class="negotiation-actions">
+      <button class="btn-ghost" id="br-cancel-btn" onclick="closeBudgetRequest()">Cancel</button>
+      <button class="btn-primary" id="br-primary-btn" onclick="submitBudgetRequest()">Submit request</button>
+    </div>
+  </div>
 </div>
 
 <script>
@@ -2971,6 +3229,295 @@
   document.querySelectorAll('#tactics-squad-body tr').forEach(wireTacticsSquadRow);
   document.querySelectorAll('table.xi-lineup tbody tr').forEach(wireTacticsLineupRow);
   makeRowsDraggable('#lineup-check-body', recomputeLineupCheckStatus);
+
+  var FACILITY_REQUESTS = {
+    training: {
+      name: 'Training Facilities', tier: 'Good', askTier: 'Excellent', cost: '$1.2M, phased over 2 years',
+      initialVerdict: 'reject',
+      initialLine: '\u201cWe hear you, but that\u2019s a big number against this season\u2019s wage bill. Not right now.\u201d',
+      initialReason: 'Finances are the sticking point here, not your standing \u2014 the board rates you well, but the number doesn\u2019t work this season.',
+      followUps: [
+        { key: 'form', label: 'Point to recent form', you: 'We\u2019ve won 4 of our last 5 \u2014 this squad deserves the tools to kick on.', verdict: 'consider', line: '\u201cFair point. Let us look at the numbers again for next season.\u201d', reason: 'Recent form bought a genuine second look, not an approval \u2014 the board wants it sustained first.' },
+        { key: 'ambition', label: 'Appeal to their ambition', you: 'You\u2019ve said yourself you want this club competing at the top \u2014 this is how we get there.', verdict: 'reject', line: '\u201cWe want that too. We just can\u2019t spend our way there this year.\u201d', reason: 'Appealing to ambition alone didn\u2019t move the finances \u2014 a real number still needs a real number behind it.' },
+        { key: 'wait', label: 'Accept it, ask again next season', you: 'Understood \u2014 I\u2019ll bring it back next season once the budget\u2019s in a healthier place.', verdict: 'accept', line: '\u201cAppreciated. Come back to us in the new financial year and we\u2019ll take it seriously.\u201d', reason: 'Reading the room right earned real goodwill \u2014 the door is genuinely open for next season.' }
+      ]
+    },
+    youth: {
+      name: 'Youth Facilities', tier: 'Average', askTier: 'Good', cost: '$420K, one close-season',
+      initialVerdict: 'accept',
+      initialLine: '\u201cThis one\u2019s an easy yes \u2014 developing our own players fits exactly what we want this club to be.\u201d',
+      initialReason: 'A modest ask that lines up with the board\u2019s own stated long-term ambition \u2014 approved without a fight.',
+      followUps: []
+    },
+    scouting: {
+      name: 'Youth Recruitment', tier: 'Below Average', askTier: 'Adequate', cost: '$310K a year, ongoing',
+      initialVerdict: 'reject',
+      initialLine: '\u201cWe know it\u2019s a weak spot. We simply don\u2019t have it to spend this year.\u201d',
+      initialReason: 'A pure finances problem, not a judgement on the request itself \u2014 the board agrees it\u2019s needed.',
+      followUps: [
+        { key: 'form', label: 'Point to the academy pipeline', you: 'Our pipeline is genuinely falling behind our rivals \u2014 every season we wait costs us a player.', verdict: 'reject', line: '\u201cWe hear you. It still doesn\u2019t change what\u2019s in the account.\u201d', reason: 'A real argument, but it can\u2019t conjure money that isn\u2019t there \u2014 finances are the actual constraint.' },
+        { key: 'wait', label: 'Accept it, ask again next season', you: 'Understood \u2014 I\u2019ll raise it again once we\u2019re through this financial year.', verdict: 'accept', line: '\u201cThat\u2019s the right call. This is near the top of the list once funds allow.\u201d', reason: 'Patience was the honest answer here \u2014 and it was heard.' }
+      ]
+    },
+    analysis: {
+      name: 'Data Analysis', tier: 'Adequate', askTier: 'Good', cost: '$180K a year, ongoing',
+      initialVerdict: 'accept',
+      initialLine: '\u201cA sensible, affordable request \u2014 approved.\u201d',
+      initialReason: 'Small enough not to test the budget, and the board has no objection in principle.',
+      followUps: []
+    },
+    ground: {
+      name: 'Home Ground', tier: 'Good', askTier: 'Excellent', cost: '$3.8M, a multi-year stadium project',
+      initialVerdict: 'reject',
+      initialLine: '\u201cA project this size needs the ownership group\u2019s sign-off, not just mine \u2014 and the timing isn\u2019t right.\u201d',
+      initialReason: 'The biggest ask on this list, and treated that way \u2014 a rejection here says more about scale than about you.',
+      followUps: [
+        { key: 'wait', label: 'Accept it, revisit down the line', you: 'Understood. I\u2019ll bring a scaled-back version back when the numbers work.', verdict: 'accept', line: '\u201cThat\u2019s the sensible way to approach it. We\u2019re listening whenever you\u2019re ready.\u201d', reason: 'A stadium project was always going to need patience \u2014 that was read correctly.' }
+      ]
+    }
+  };
+  var currentFacilityKey = null;
+  function openFacilityRequest(key) {
+    currentFacilityKey = key;
+    var f = FACILITY_REQUESTS[key];
+    document.getElementById('facility-request-title').textContent = 'Request: Improve ' + f.name;
+    document.getElementById('facility-request-sub').textContent = 'Currently ' + f.tier + ' \u00b7 asking for ' + f.askTier;
+    document.getElementById('fr-cost').textContent = f.cost;
+    document.getElementById('fr-precommit').hidden = false;
+    document.getElementById('fr-convo-section').hidden = true;
+    document.getElementById('fr-convo').innerHTML = '';
+    document.getElementById('fr-followup-section').hidden = true;
+    document.getElementById('fr-cancel-btn').hidden = false;
+    var primaryBtn = document.getElementById('fr-primary-btn');
+    primaryBtn.hidden = false;
+    primaryBtn.textContent = 'Submit request';
+    primaryBtn.onclick = submitFacilityRequest;
+    document.getElementById('facility-request-backdrop').classList.add('open');
+  }
+  function closeFacilityRequest() {
+    document.getElementById('facility-request-backdrop').classList.remove('open');
+  }
+  function frWho(who) { return who === 'you' ? 'You' : 'Board'; }
+  function appendFrConvo(who, text, targetId) {
+    var log = document.getElementById(targetId || 'fr-convo');
+    log.innerHTML += '<div class="convo-line ' + who + '"><span class="who">' + frWho(who) + '</span><div class="convo-bubble">' + text + '</div></div>';
+  }
+  function submitFacilityRequest() {
+    var f = FACILITY_REQUESTS[currentFacilityKey];
+    document.getElementById('fr-precommit').hidden = true;
+    document.getElementById('fr-convo-section').hidden = false;
+    appendFrConvo('you', 'Requesting an upgrade to ' + f.name + '.');
+    appendFrConvo('him', f.initialLine);
+    appendFrVerdictWithReason(f.initialVerdict, f.initialReason);
+    if (f.initialVerdict === 'reject' && f.followUps.length) {
+      var opts = document.getElementById('fr-followup-options');
+      opts.innerHTML = f.followUps.map(function (o) {
+        return '<button class="tone-chip" onclick="chooseFacilityFollowUp(\'' + o.key + '\')">' + o.label + '</button>';
+      }).join('');
+      document.getElementById('fr-followup-section').hidden = false;
+      document.getElementById('fr-primary-btn').hidden = true;
+    } else {
+      document.getElementById('fr-primary-btn').textContent = 'Close';
+      document.getElementById('fr-primary-btn').onclick = closeFacilityRequest;
+    }
+  }
+  function chooseFacilityFollowUp(key) {
+    var f = FACILITY_REQUESTS[currentFacilityKey];
+    var opt = f.followUps.filter(function (o) { return o.key === key; })[0];
+    if (!opt) return;
+    document.getElementById('fr-followup-section').hidden = true;
+    appendFrConvo('you', opt.you);
+    appendFrConvo('him', opt.line);
+    appendFrVerdictWithReason(opt.verdict, opt.reason);
+    var primaryBtn = document.getElementById('fr-primary-btn');
+    primaryBtn.hidden = false;
+    primaryBtn.textContent = 'Close';
+    primaryBtn.onclick = closeFacilityRequest;
+  }
+  function appendFrVerdictWithReason(verdict, reason) {
+    var log = document.getElementById('fr-convo');
+    var label = verdict === 'accept' ? 'Approved' : (verdict === 'consider' ? 'Reconsidering' : 'Declined');
+    log.innerHTML += '<div class="convo-verdict-row"><span class="response-verdict ' + verdict + '">' + label + '</span></div><div class="convo-agent">' + reason + '</div>';
+  }
+
+  var BOARD_BUDGET_TOTAL = 2400;
+  var boardBudgetMin = { transfer: 100, wage: 700, staff: 120, scouting: 60 };
+  var boardBudget = { transfer: 640, wage: 1150, staff: 380, scouting: 230 };
+  function fmtBoardAmt(kVal) {
+    if (kVal >= 1000) {
+      var m = Math.round(kVal / 10) / 100;
+      return '$' + m + 'M';
+    }
+    return '$' + Math.round(kVal) + 'K';
+  }
+  function onBoardBudgetInput(key, rawVal) {
+    var keys = ['transfer', 'wage', 'staff', 'scouting'];
+    var val = parseInt(rawVal, 10);
+    var others = keys.filter(function (k) { return k !== key; });
+    var minOthersSum = others.reduce(function (s, k) { return s + boardBudgetMin[k]; }, 0);
+    val = Math.max(boardBudgetMin[key], Math.min(val, BOARD_BUDGET_TOTAL - minOthersSum));
+    var delta = val - boardBudget[key];
+    boardBudget[key] = val;
+    var remaining = -delta;
+    var pool = others.map(function (k) { return { k: k, room: Math.max(boardBudget[k] - boardBudgetMin[k], 1) }; });
+    var poolTotal = pool.reduce(function (s, p) { return s + p.room; }, 0);
+    var assigned = 0;
+    pool.forEach(function (p, idx) {
+      var share;
+      if (idx === pool.length - 1) { share = remaining - assigned; }
+      else { share = Math.round(remaining * (p.room / poolTotal)); assigned += share; }
+      boardBudget[p.k] = Math.max(boardBudgetMin[p.k], boardBudget[p.k] + share);
+    });
+    var sum = keys.reduce(function (s, k) { return s + boardBudget[k]; }, 0);
+    boardBudget[others[others.length - 1]] += (BOARD_BUDGET_TOTAL - sum);
+    renderBoardBudgets();
+  }
+  function renderBoardBudgets() {
+    ['transfer', 'wage', 'staff', 'scouting'].forEach(function (k) {
+      document.getElementById('bb-' + k + '-slider').value = boardBudget[k];
+      document.getElementById('bb-' + k + '-amt').textContent = fmtBoardAmt(boardBudget[k]);
+      document.getElementById('bb-' + k + '-pct').textContent = Math.round(boardBudget[k] / BOARD_BUDGET_TOTAL * 100) + '%';
+    });
+    var total = ['transfer', 'wage', 'staff', 'scouting'].reduce(function (s, k) { return s + boardBudget[k]; }, 0);
+    document.getElementById('bb-total-check').textContent = fmtBoardAmt(total) + ' of ' + fmtBoardAmt(BOARD_BUDGET_TOTAL) + ' \u2014 balanced';
+    updateScoutingDomainNote();
+  }
+  var SCOUTING_DOMAIN_THRESHOLDS = { local: 50, domestic: 120, continental: 220, worldwide: 400 };
+  var SCOUTING_DOMAIN_LABELS = { local: 'Local coverage', domestic: 'Domestic coverage', continental: 'Continental coverage', worldwide: 'Worldwide coverage' };
+  var currentScoutingDomain = 'domestic';
+  function selectScoutingDomain(btn, domain) {
+    currentScoutingDomain = domain;
+    var row = btn.parentElement;
+    Array.prototype.forEach.call(row.children, function (b) { b.classList.remove('active'); });
+    btn.classList.add('active');
+    updateScoutingDomainNote();
+  }
+  function updateScoutingDomainNote() {
+    var note = document.getElementById('scouting-domain-note');
+    if (!note) return;
+    var threshold = SCOUTING_DOMAIN_THRESHOLDS[currentScoutingDomain];
+    var label = SCOUTING_DOMAIN_LABELS[currentScoutingDomain];
+    var funded = boardBudget.scouting >= threshold;
+    note.innerHTML = '<span>' + label + '</span><strong style="color:' + (funded ? 'var(--turf-strong)' : 'var(--ball)') + '">' +
+      (funded ? 'Comfortably funded at ' + fmtBoardAmt(boardBudget.scouting) + '/yr' : 'Under-funded \u2014 needs roughly ' + fmtBoardAmt(threshold) + '/yr, currently ' + fmtBoardAmt(boardBudget.scouting)) + '</strong>';
+  }
+
+  /* ---------- Budget requests: increasing the TOTAL a category gets from the
+     board, never a "propose the split" negotiation \u2014 the split itself is
+     the coach's own call (onBoardBudgetInput above), no sign-off needed. ---------- */
+  var BUDGET_INCREASE_REQUESTS = {
+    transfer: {
+      label: 'Transfer Budget', amount: 300,
+      initialVerdict: 'consider',
+      initialLine: '\u201cA useful chunk more for the market \u2014 tell us it\u2019s earmarked for someone specific and it\u2019s yours.\u201d',
+      initialReason: 'The board backs transfer ambition readily, but a named target turns a vague ask into a real plan.',
+      followUps: [
+        { key: 'target', label: 'Name a specific target', you: 'It\u2019s earmarked for a genuine upgrade we\u2019ve identified \u2014 not a speculative war chest.', verdict: 'accept', line: '\u201cGood. Get it done.\u201d', reason: 'A named target was all the board needed to hear.' },
+        { key: 'ambition', label: 'Point to the club\u2019s own ambition', you: 'You\u2019ve said yourself this club should be competing at the top \u2014 this is what that costs.', verdict: 'accept', line: '\u201cCan\u2019t argue with our own words. Approved.\u201d', reason: 'The board\u2019s own stated ambition made this an easy yes.' }
+      ]
+    },
+    wage: {
+      label: 'Wage Budget', amount: 250,
+      initialVerdict: 'reject',
+      initialLine: '\u201cA bigger wage bill is a permanent commitment, not a one-off. We\u2019re not ready to carry that every season.\u201d',
+      initialReason: 'Wages are the club\u2019s biggest recurring cost \u2014 the board is far more cautious here than with a one-off transfer fee.',
+      followUps: [
+        { key: 'retain', label: 'Argue it protects a player you\u2019d otherwise lose', you: 'Without it we lose a first-team regular to a rival on a free \u2014 this keeps him.', verdict: 'accept', line: '\u201cRetention is a fair argument. Approved.\u201d', reason: 'Framed as protecting an asset rather than a general raise, the board found room to say yes.' },
+        { key: 'wait', label: 'Accept it, ask again next season', you: 'Understood \u2014 I\u2019ll raise it again once the books are in better shape.', verdict: 'accept', line: '\u201cAppreciated. We\u2019ll take it seriously next season.\u201d', reason: 'Patience was the honest answer here \u2014 and it was heard.' }
+      ]
+    },
+    staff: {
+      label: 'Staff Budget', amount: 120,
+      initialVerdict: 'accept',
+      initialLine: '\u201cA modest, sensible ask \u2014 approved.\u201d',
+      initialReason: 'Small enough not to test the budget, and the board has no objection in principle to strengthening the backroom.',
+      followUps: []
+    },
+    scouting: {
+      label: 'Scouting Budget', amount: 150,
+      initialVerdict: 'consider',
+      initialLine: '\u201cWidening the scouting net costs real money to run properly. Convince us it\u2019s worth it.\u201d',
+      initialReason: 'A genuine coverage gap is a real argument \u2014 but the board wants to hear it stated plainly, not just assumed.',
+      followUps: [
+        { key: 'domain', label: 'Point to the current scouting domain gap', you: 'Our current network can\u2019t properly cover the ground our scouting domain claims to \u2014 this closes that gap.', verdict: 'accept', line: '\u201cFair point, and an honest one. Approved.\u201d', reason: 'A concrete coverage gap, not a vague ask, is what moved the board.' }
+      ]
+    }
+  };
+  var currentBudgetRequestKey = null;
+  var _budgetRequestFollowUps = [];
+  function openBudgetRequest(key) {
+    currentBudgetRequestKey = key;
+    var r = BUDGET_INCREASE_REQUESTS[key];
+    document.getElementById('budget-request-title').textContent = 'Request: Increase ' + r.label;
+    document.getElementById('budget-request-sub').textContent = 'Currently ' + fmtBoardAmt(boardBudget[key]);
+    document.getElementById('br-amount').textContent = '+' + fmtBoardAmt(r.amount) + ' a year';
+    document.getElementById('br-precommit').hidden = false;
+    document.getElementById('br-convo-section').hidden = true;
+    document.getElementById('br-convo').innerHTML = '';
+    document.getElementById('br-followup-section').hidden = true;
+    document.getElementById('br-cancel-btn').hidden = false;
+    var primaryBtn = document.getElementById('br-primary-btn');
+    primaryBtn.hidden = false;
+    primaryBtn.textContent = 'Submit request';
+    primaryBtn.onclick = submitBudgetRequest;
+    document.getElementById('budget-request-backdrop').classList.add('open');
+  }
+  function closeBudgetRequest() {
+    document.getElementById('budget-request-backdrop').classList.remove('open');
+  }
+  function submitBudgetRequest() {
+    var r = BUDGET_INCREASE_REQUESTS[currentBudgetRequestKey];
+    document.getElementById('br-precommit').hidden = true;
+    document.getElementById('br-convo-section').hidden = false;
+    appendFrConvo('you', 'Requesting a ' + fmtBoardAmt(r.amount) + ' increase to the ' + r.label + '.', 'br-convo');
+    appendFrConvo('him', r.initialLine, 'br-convo');
+    appendBudgetVerdict(r.initialVerdict, r.initialReason);
+    if (r.initialVerdict === 'accept') {
+      grantBudgetIncrease(currentBudgetRequestKey, r.amount);
+    }
+    if (r.initialVerdict !== 'accept' && r.followUps.length) {
+      var opts = document.getElementById('br-followup-options');
+      opts.innerHTML = r.followUps.map(function (o) {
+        return '<button class="tone-chip" onclick="chooseBudgetRequestFollowUp(\'' + o.key + '\')">' + o.label + '</button>';
+      }).join('');
+      document.getElementById('br-followup-section').hidden = false;
+      document.getElementById('br-primary-btn').hidden = true;
+      _budgetRequestFollowUps = r.followUps;
+    } else {
+      document.getElementById('br-primary-btn').hidden = false;
+      document.getElementById('br-primary-btn').textContent = 'Close';
+      document.getElementById('br-primary-btn').onclick = closeBudgetRequest;
+    }
+  }
+  function chooseBudgetRequestFollowUp(key) {
+    var opt = _budgetRequestFollowUps.filter(function (o) { return o.key === key; })[0];
+    if (!opt) return;
+    document.getElementById('br-followup-section').hidden = true;
+    appendFrConvo('you', opt.you, 'br-convo');
+    appendFrConvo('him', opt.line, 'br-convo');
+    appendBudgetVerdict(opt.verdict, opt.reason);
+    if (opt.verdict === 'accept') {
+      grantBudgetIncrease(currentBudgetRequestKey, BUDGET_INCREASE_REQUESTS[currentBudgetRequestKey].amount);
+    }
+    var primaryBtn = document.getElementById('br-primary-btn');
+    primaryBtn.hidden = false;
+    primaryBtn.textContent = 'Close';
+    primaryBtn.onclick = closeBudgetRequest;
+  }
+  function appendBudgetVerdict(verdict, reason) {
+    var log = document.getElementById('br-convo');
+    var label = verdict === 'accept' ? 'Approved' : (verdict === 'consider' ? 'Reconsidering' : 'Declined');
+    log.innerHTML += '<div class="convo-verdict-row"><span class="response-verdict ' + verdict + '">' + label + '</span></div><div class="convo-agent">' + reason + '</div>';
+  }
+  function grantBudgetIncrease(key, amt) {
+    boardBudget[key] += amt;
+    BOARD_BUDGET_TOTAL += amt;
+    ['transfer', 'wage', 'staff', 'scouting'].forEach(function (k) {
+      var slider = document.getElementById('bb-' + k + '-slider');
+      slider.max = parseInt(slider.max, 10) + amt;
+    });
+    renderBoardBudgets();
+  }
 
   function toggleNextBatsmanPicker() {
     document.getElementById('next-batsman-menu').classList.toggle('open');

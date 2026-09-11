@@ -9924,10 +9924,53 @@ toggled off on both tables, framed via this project's own real `ManagerPreferenc
 concept) and **Pick Best XI** (a one-click reset of both tables to the canonical ability/role-balanced
 default) round out the FM-parity ask.
 
-**Not yet built**: Finances, Boardroom, Academy/Youth, Records & Hall of Fame, World/Rankings,
-Staff/Club - all named and asset-mapped in the session's plan file, not yet started. Franchise-
-specific transfer/auction screens (retention, trade, EOI meeting, live-bidding room) are explicitly
-deferred per the user's own call - confirmed needed eventually, not now.
+**Finances screen built, then corrected on facility-quality display and the investment model.**
+Income & expenditure (a real season profit/loss list), a Board & ownership card, an FFP banner,
+Sponsorship, and Club Facilities. The first Facilities draft used direct "Invest" buttons and
+horizontal percentage bars - both wrong, per direct correction: (a) **training** (coaching
+activity) and **training facilities** (physical infrastructure) are separate concepts, as are
+**youth facilities** vs generic investment; (b) a coach can never invest directly - he **requests**
+an improvement from the board, who weigh their own finances, current competition standing, and
+their own ambitions/profile for the club (both the coach's reputation AND his recent success
+matter, but low finances alone can still block a request regardless of merit); (c) a rejection is
+a real back-and-forth, not a dead end - the coach can make his case with different justifications
+and the board may or may not eventually concede. Rebuilt to match: each facility (Training
+Facilities/Youth Facilities/Youth Recruitment/Data Analysis/Home Ground) shows a real FM-style
+**wording tier** (Excellent/Good/Average/Below Average, colour-banded) instead of a bar - facility
+quality is a category, never a percentage, per direct research instruction - behind a "Request
+improvement" button that opens a real negotiation dialogue (reusing the SAME `.negotiation-modal`/
+`.convo-log`/`.tone-chip` pieces the player-coach negotiation modal already established, for visual
+and behavioural consistency): an initial board verdict with real reasoning, and - on a rejection -
+follow-up tone chips to argue the case, each with its own consequence.
+
+**Boardroom built as its own sidebar tab, not a card inside Finances** - a genuine screen with an
+Ownership card (ownership model + a "Benefactor" sugar-daddy-style trait, explained in real terms:
+a benefactor funds losses beyond the club's own income to chase results, at the cost of patience
+thinning fast the moment results stop justifying it - different ownership types are real and carry
+real impact, per direct instruction), a Board Confidence & Objectives card, a **Season Budget
+Allocation** section (four linked sliders - Transfer/Wage/Staff/Scouting - summing to the season's
+total), and a Scouting Domain selector (Local/Domestic/Continental/Worldwide) that checks itself
+against the scouting budget and reports funded/under-funded.
+
+**A real design correction on how the four budgets actually work, worth reading in full.** The
+first build had the coach drag the four sliders and then click "Propose this split to the board"
+for a sign-off - wrong, per direct correction: splitting the total across Transfer/Wage/Staff/
+Scouting is entirely the **coach's own discretion** - the board never needs to approve how an
+already-granted pool is divided. What the coach genuinely requests FROM the board is a real
+**increase to the total** of one specific category (mirroring the facility-improvement-request
+pattern exactly, board reasoning and tone-chip follow-ups included) - once granted, that amount is
+simply added to the category and to the season's overall pool, and the coach then re-splits the
+now-larger total freely, with no further sign-off. Rebuilt accordingly: the "Propose this split"
+button and its board-negotiation JS were removed entirely; each of the four budget rows now
+carries its own "Request an increase from the board" button, and `grantBudgetIncrease(key, amt)`
+is the one place an approved request actually grows both that category and `BOARD_BUDGET_TOTAL`
+(the linked-slider redistribution logic itself - dragging one up pulls the others down
+proportionally - was already correct from the first build and needed no change).
+
+**Not yet built**: Academy/Youth, Records & Hall of Fame, World/Rankings, Staff/Club - all named
+and asset-mapped in the session's plan file, not yet started. Franchise-specific transfer/auction
+screens (retention, trade, EOI meeting, live-bidding room) are explicitly deferred per the user's
+own call - confirmed needed eventually, not now.
 
 ---
 
