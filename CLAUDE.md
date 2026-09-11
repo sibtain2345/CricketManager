@@ -10020,9 +10020,27 @@ Leaderboards; a Hall of Fame card inducts one self-authored club legend with a r
 deliberately static, read-only reference screen (no JS beyond the shared page chrome) - matching
 FM's own Club History, which is itself a read-only reference, not an interactive one.
 
-**World/Rankings is next** - not yet built. Franchise-specific transfer/auction screens
-(retention, trade, EOI meeting, live-bidding room) are explicitly deferred per the user's own
-call - confirmed needed eventually, not now.
+**World screen built, again researched first - and this closes the originally-planned screen
+list.** Confirmed via web research: FM's real Competitions screen organises the whole game world
+by continent/nation, each competition's League Table using the standard Pld/W/D/L/GF/GA/GD/Pts
+columns (the cricket-domain equivalent this project's own `CompetitionStanding` already carries
+verbatim: Played/Won/Lost/NoResult/NetRunRate/Points), with a "Profile" view giving the
+competition's own information at a glance. Sidebar tab placed right after Records, before Inbox.
+A full standings table for the Pakistan T20 Cup (reusing the SAME `table.career` generic
+stats-table CSS the Career Stats sub-tab already established, rather than inventing a new table
+style) - six teams, all names already established elsewhere in the mockup (Lahore Lions/Karachi
+Kings/Islamabad Icons/Multan Sultans/Peshawar Zalmi/Quetta Falcons) for continuity, Islamabad
+Icons highlighted in 3rd - matching the exact position the Boardroom's facility-request dialogue
+already states elsewhere in the mockup, so the two screens agree with each other. A Competitions
+directory card lists every competition in the world (the domestic T20 Cup/First-Class
+Championship/List A Cup, the franchise Pakistan Premier League, and the already-established
+Crescent Trophy) each with a real wording-tier reputation badge, tying back to this project's own
+`Competition.Reputation`/`CompetitionReputationService` concept.
+
+This closes the originally-planned screen list from the session's own plan file. Franchise-specific
+transfer/auction screens (retention, trade, EOI meeting, live-bidding room) remain explicitly
+deferred per the user's own call - confirmed needed eventually, not now. A rectification/review
+pass across all screens is the user's next planned step.
 
 ---
 

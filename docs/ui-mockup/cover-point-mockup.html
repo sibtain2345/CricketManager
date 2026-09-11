@@ -996,6 +996,7 @@
     <symbol id="i-briefcase" viewBox="0 0 24 24"><rect x="3.2" y="8" width="17.6" height="11.5" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M8.5 8V6.3a2 2 0 012-2h3a2 2 0 012 2V8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M3.2 13.2h17.6" stroke="currentColor" stroke-width="1.6"/><rect x="10.6" y="12.1" width="2.8" height="2.6" rx="0.5" fill="currentColor"/></symbol>
     <symbol id="i-badge" viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="15" rx="2.5" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="10.8" r="2.4" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M8 17.3c0-1.8 1.8-3 4-3s4 1.2 4 3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" fill="none"/></symbol>
     <symbol id="i-cap" viewBox="0 0 24 24"><path d="M12 4.3L2.3 9l9.7 4.7L21.7 9 12 4.3z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M6.2 11.3v4c0 1.5 2.6 2.9 5.8 2.9s5.8-1.4 5.8-2.9v-4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M20.8 9.4v5.2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></symbol>
+    <symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M3 12h18M12 3c3 3.5 3 14.5 0 18M12 3c-3 3.5-3 14.5 0 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></symbol>
   </defs>
 </svg>
 
@@ -1058,6 +1059,7 @@
     <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-fixtures" data-tab="fixtures" title="Fixtures"><svg class="icon"><use href="#i-cal-list"/></svg><span class="tab-label">Fixtures</span></button>
     <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-international" data-tab="international" title="International"><svg class="icon"><use href="#i-plane"/></svg><span class="tab-label">International</span></button>
     <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-records" data-tab="records" title="Records"><svg class="icon"><use href="#i-trophy"/></svg><span class="tab-label">Records</span></button>
+    <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-world" data-tab="world" title="World"><svg class="icon"><use href="#i-globe"/></svg><span class="tab-label">World</span></button>
     <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-inbox" data-tab="inbox" title="Inbox"><svg class="icon"><use href="#i-inbox"/></svg><span class="tab-label">Inbox</span></button>
   </div>
 </nav>
@@ -2671,6 +2673,54 @@
         <div class="staff-row-meta"><span class="pill first">Inducted 2020</span></div>
       </div>
       <div class="role-hint" style="margin-top:8px">A one-club servant for fourteen seasons, the club&rsquo;s leading run-scorer for a generation, and captain of the 2019 title-winning side &mdash; inducted into the Islamabad Icons Hall of Fame the year after he retired.</div>
+    </div>
+  </section>
+
+  <!-- ================= WORLD ================= -->
+  <section class="panel" id="panel-world" role="tabpanel" hidden>
+    <div class="panel-head"><h1>World</h1><div class="sub">Pakistan T20 Cup &middot; standings &amp; the wider competition landscape</div></div>
+
+    <div class="analysis-card">
+      <span class="eyebrow"><svg class="icon sm"><use href="#i-trend-up"/></svg> Pakistan T20 Cup &middot; table</span>
+      <div class="table-card">
+        <table class="career">
+          <thead><tr><th>Pos</th><th>Team</th><th class="num">Pld</th><th class="num">W</th><th class="num">L</th><th class="num">NR</th><th class="num">NRR</th><th class="num">Pts</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td>Lahore Lions</td><td class="num">10</td><td class="num">8</td><td class="num">2</td><td class="num">0</td><td class="num">+0.842</td><td class="num">16</td></tr>
+            <tr><td>2</td><td>Karachi Kings</td><td class="num">10</td><td class="num">7</td><td class="num">3</td><td class="num">0</td><td class="num">+0.512</td><td class="num">14</td></tr>
+            <tr style="background:var(--turf-dim)"><td style="color:var(--turf-strong);font-weight:700">3</td><td style="color:var(--turf-strong);font-weight:700">Islamabad Icons</td><td class="num" style="color:var(--turf-strong);font-weight:700">10</td><td class="num" style="color:var(--turf-strong);font-weight:700">6</td><td class="num" style="color:var(--turf-strong);font-weight:700">4</td><td class="num" style="color:var(--turf-strong);font-weight:700">0</td><td class="num" style="color:var(--turf-strong);font-weight:700">+0.203</td><td class="num" style="color:var(--turf-strong);font-weight:700">12</td></tr>
+            <tr><td>4</td><td>Multan Sultans</td><td class="num">10</td><td class="num">5</td><td class="num">5</td><td class="num">0</td><td class="num">&minus;0.088</td><td class="num">10</td></tr>
+            <tr><td>5</td><td>Peshawar Zalmi</td><td class="num">10</td><td class="num">4</td><td class="num">5</td><td class="num">1</td><td class="num">&minus;0.310</td><td class="num">9</td></tr>
+            <tr><td>6</td><td>Quetta Falcons</td><td class="num">10</td><td class="num">2</td><td class="num">7</td><td class="num">1</td><td class="num">&minus;0.940</td><td class="num">5</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="role-hint" style="margin-top:10px">Top 4 qualify for the playoffs. Points, then net run rate, settle the order.</div>
+    </div>
+
+    <div class="analysis-card" style="margin-top:16px">
+      <span class="eyebrow"><svg class="icon sm"><use href="#i-globe"/></svg> Competitions</span>
+      <div class="staff-row">
+        <div class="staff-row-main"><span class="staff-name">Pakistan T20 Cup</span><span class="staff-role-label">Domestic &middot; T20 &middot; currently playing</span></div>
+        <div class="staff-row-meta"><span class="facility-tier-badge tier-good">Good</span></div>
+      </div>
+      <div class="staff-row">
+        <div class="staff-row-main"><span class="staff-name">Pakistan First-Class Championship</span><span class="staff-role-label">Domestic &middot; First-Class</span></div>
+        <div class="staff-row-meta"><span class="facility-tier-badge tier-average">Average</span></div>
+      </div>
+      <div class="staff-row">
+        <div class="staff-row-main"><span class="staff-name">Pakistan List A Cup</span><span class="staff-role-label">Domestic &middot; ODI</span></div>
+        <div class="staff-row-meta"><span class="facility-tier-badge tier-average">Average</span></div>
+      </div>
+      <div class="staff-row">
+        <div class="staff-row-main"><span class="staff-name">Pakistan Premier League</span><span class="staff-role-label">Franchise &middot; T20 &middot; auction-assembled squads</span></div>
+        <div class="staff-row-meta"><span class="facility-tier-badge tier-excellent">Excellent</span></div>
+      </div>
+      <div class="staff-row">
+        <div class="staff-row-main"><span class="staff-name">The Crescent Trophy</span><span class="staff-role-label">International &middot; T20 &middot; biennial</span></div>
+        <div class="staff-row-meta"><span class="facility-tier-badge tier-excellent">Excellent</span></div>
+      </div>
+      <div class="role-hint" style="margin-top:10px">A competition&rsquo;s own standing moves season by season on how full the grounds are, how close the title race was, and the calibre of the sides in it &mdash; a healthier league is worth more to every club inside it, not just the champions.</div>
     </div>
   </section>
 
