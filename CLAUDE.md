@@ -10625,6 +10625,119 @@ in this mockup's fictional world so far).
 unlike `exitMatchMode()`'s own discipline - caught by comparing the two functions directly, fixed
 before verifying again). Final state: file size ~2.58MB.
 
+### Phase C follow-up: the Auction Room becomes a genuine multi-tab interface, closing the deferred items
+
+The user's own detailed follow-up instruction (Roman Urdu/English), given immediately after the
+first Auction Room slice shipped: the "Live Bidding Room" stage needed to be a real multi-tab
+screen - a Full Player List tab, a Current Player tab (current bid + who holds it, a live
+commentary feed, Bid/Skip where Skip auto-resolves the lot without further clicks, the player's
+**domestic T20 career stats explicitly distinct from T20I**, stats for the specific league being
+auctioned, and the active **set** shown at the top), a Squads tab (the user's own squad-in-progress
+plus every other franchise's), a Purse tab (all six franchises, not just the sidebar list), and a
+Sets tab to navigate the different auction sets - plus "research what else could be relevant."
+Then, in the same turn, the user asked to also close out the items the first slice's own writeup
+had explicitly left open, then commit and update CLAUDE.md and the artifact.
+
+**The multi-tab rebuild.** `AUCTION_LOTS` grew from 3 illustrative players to 7, each carrying a
+real `set` key, a `playerType`, a domestic-T20 career line **explicitly labelled "(not T20I)"**,
+and a league-specific (Pakistan Premier League) stats line - the direct UI answer to the user's
+"domestic not international" distinction. `AUCTION_SETS` is a real 5-set structure (Marquee ->
+Capped Batters -> Uncapped All-rounders -> Capped Spin -> Accelerated Round), matching the real
+IPL-style role/tier ordering this project's own domain research already established
+(`FranchiseAuctionService.OrderedSets()`), not an arbitrary label list.
+
+The `#auction-live` stage was rebuilt around the same `<nav class="subnav">` + sibling
+`.subpanel` + `wireTabs(...)` pattern every other multi-tab screen in this file already uses
+(Squad, Club, Recruitment, World, ...) - no new tabbing mechanism invented:
+- **Current Player** (default) - the current lot's name/role/blurb, a live price plus **who
+  currently holds the bid** (`#lot-bidder`, new - the mockup previously showed a price with no
+  bidder at all), a "Set: <label> · player N of M in this set" indicator at the top (closes
+  "player type upar set konsa chal raha hai"), the career-record card (player type / domestic T20
+  "(not T20I)" / PPL-specific line), and a **Live commentary** feed (`.commentary-feed`, a
+  scrollable `.notes-log` variant) narrating each round.
+- **Full Player List** - every lot in the shortlist with role/set/base price and a live status
+  (Upcoming / Live now / Sold to X / Unsold), re-rendered on every lot resolution.
+- **Squads** - a franchise picker (`.pill` buttons, the same chip component the World screen's
+  Nation-profile domestic-club chips already established) defaulting to Islamabad Icons, showing
+  each squad's retained core plus anyone bought so far; the five other franchises were given real
+  retained cores of their own for the first time (`Karachi Kings`: Shahzaib Alam, Nouman Bhatti;
+  `Lahore Lions`: **Kamran Hussain** and **Talha Iqbal**, deliberately reusing the two names
+  already established as Lahore Lions players on the International screen's duty list, for
+  cross-screen continuity rather than inventing new ones; `Multan Sultans`: **Faisal Nadeem**
+  (already Multan Sultans' central-contract player per the Nation Profile work) plus Rayyan Sheikh;
+  `Peshawar Zalmi`: Umair Chaudhry, Shoaib Niazi; `Quetta Falcons`: Sohail Marwat, Danyal Qureshi -
+  deliberately NOT "Adeel Hayat", who the International screen already ties to Quetta Falcons
+  while the War Room ties him to Islamabad Icons, a pre-existing inconsistency in the file left
+  alone rather than compounded).
+- **Purse** - a real table for all six franchises (start / spent / remaining / players bought),
+  computed live as `finalizeLot` deducts each sale from the buying franchise's purse - promoted
+  out of the old compact sidebar-style `.purse-list` the first slice shipped.
+- **Sets** - a clickable list of the five sets (`.set-row`, new), each showing its player count and
+  how many are sold, with the currently-active set highlighted; clicking jumps `auctionLotIndex` to
+  that set's first lot and switches back to the Current Player tab - the direct answer to "ek tab
+  jis me ap different sets pe navigate kar sakte ho."
+
+**Skip is genuinely different from Pass, not a relabel.** `auctionSkip()` disables both buttons and
+runs a staggered (`setTimeout`-chained) auto-bidding sequence among the OTHER five franchises -
+2-3 rounds of rival-vs-rival escalation logged to the commentary feed - ending in a sale to
+whichever franchise's turn it lands on, entirely without the user's own involvement. `Pass` (the
+original mechanic) still sells immediately, in one step, to the single named rival. This is the
+literal "skip → auto-bidding → player gets sold" the user asked for, kept distinct from a plain
+decline.
+
+**A real RTM (Right-to-Match) interaction, closing that deferred item.** One lot (`Kashif Rauf`,
+`rtm: true, formerClub: "Islamabad Icons"`) is a former Islamabad Icons player now back in the
+pool. `auctionFinishLot` now checks for this: if the lot is RTM-flagged and the winning bidder is
+anyone other than Islamabad Icons, resolution pauses on a new inline `.rtm-prompt` box (styled
+like an emphasised `.role-hint`, not a separate modal - keeping the interaction inline with the
+Current Player tab rather than another overlay) naming the winning bid and the RTM cards remaining,
+with two real buttons: **Match & retain** (`rtmMatch` - consumes one of the two RTM cards stated in
+the War Room stage, logs the match, finalises the lot to Islamabad Icons at the matched price) or
+**Let him go** (`rtmDecline` - finalises to the actual winner). `rtmCardsRemaining` is tracked and
+reset on every `enterAuctionMode()`.
+
+**The pre-auction war-room meeting and EOI-conversion meeting, as distinct narrative moments,
+closing that deferred item.** Two new `.analysis-card`s were added to the War Room stage (before
+the existing retained-core/pre-auction-plan cards' continue button): a **Pre-auction war room
+meeting** card narrating a real three-way conversation (head coach / chief scout / ownership,
+reusing the existing `.notes-log` quoted-dialogue pattern) that names the exact same priorities the
+adjacent Pre-Auction Plan card already states in table form - the meeting and the plan agree with
+each other rather than reading as two disconnected pieces of content; and an **EOI conversion
+meeting** card with real funnel numbers (214 registered -> 96 with genuine multi-franchise
+interest -> +22 topped up -> 118 final shortlist), the UI counterpart of
+`FranchiseAuctionMediaService.NarrateEoiConversion`'s own registration-to-shortlist narration.
+
+**International coaching screen depth, closing the smaller half of that deferred item.** The
+National Selection Panel card on the International screen gained a "Coaching structure: Unified"
+line (the UI-facing acknowledgement of `CoachingStructure`/`CoachingStructureService` existing as a
+real concept in the domain, even though this pass does not build the fuller
+`RedBallWhiteBall`/format-split UI). A new **Central contracts & NOC status** card lists three
+already-established players (Kamran Hussain, Adeel Hayat, Zain Chaudhry) each with a tier and a
+real NOC pill (Denied / Pending / Granted), tied to a plain-language note stating the project's own
+corrected rule directly: **international duty always wins a genuine clash - NOC denial only ever
+decides whether a centrally-contracted player is *also* released for a franchise season, never
+whether the series itself goes ahead** (the Meeting-Driven Selection ticket's own Slice 10.4
+`CentralContractService.ReviewNoc` behaviour, now stated in the UI, not just the domain code). A
+full staff-hire flow for the selection panel itself, and `CentralContractService`'s own annual
+tier-review UI, remain unbuilt - see below.
+
+**Verification**: the same discipline as every prior pass in this sub-track - structural
+tag-count parity (`div` 1820/1820, `table` 22/22, `tr` 138/138, `span` 1079/1079, `svg` 298/298,
+`nav` 13/13, `section` 14/14, `button` 240/240) plus `node --check` on the extracted `<script>`
+block (`SYNTAX OK`, script braces 581/581, parens 1265/1265), re-run after the tabbed-HTML pass,
+the JS-rebuild pass, and the International-screen pass. A quick grep confirmed every new element id
+(`lot-bidder`, `rtm-prompt`, `auction-players-body`, `auction-squad-body`, `auction-purse-body`,
+`auction-sets-list`, `squads-franchise-picker`, the five `auction-*` subpanel ids) appears exactly
+once, since the multi-tab rebuild introduced far more ids than the single-flow version had. Final
+state: file size ~2.61MB.
+
+**Still open, deliberately, from the same Phase-C scope - the two items not attempted this pass:**
+a full staff-hire flow for the national selection panel (chairman of selectors / selectors as a
+real recruit-and-negotiate screen, mirroring the Staff screen's own `openStaffRecruit` pattern) and
+`CentralContractService`'s own annual tier-review surfaced as a UI moment (as opposed to the static
+illustrative NOC-status card just added); and applying the same real-redirect-screen treatment to
+other franchise leagues (PSL remains the only one modelled in this mockup's fictional world).
+
 ---
 
 ## CONSOLIDATED DEFERRED-ITEMS REGISTER (maintained - the single source of truth)

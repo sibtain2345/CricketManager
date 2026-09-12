@@ -520,6 +520,20 @@
   .sold-banner[hidden] { display: none; }
   .purse-list .rank-row.mine { background: var(--turf-dim); margin: 0 -10px; padding: 7px 10px; border-radius: 8px; }
   .purse-list .rank-row.mine .rank-team { color: var(--turf-strong); }
+  .auction-set-row { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; margin-bottom: 12px; }
+  .lot-price-block .auction-countdown-unit { display: flex; align-items: center; justify-content: center; gap: 4px; }
+  .commentary-feed { max-height: 230px; overflow-y: auto; }
+  .rtm-prompt[hidden] { display: none; }
+  .rtm-prompt { background: var(--turf-dim); border: 1px solid var(--turf-strong); border-radius: 10px; padding: 10px 12px; margin: 10px 0; font-size: var(--fs-body); line-height: 1.5; }
+  .franchise-pick-row { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
+  .franchise-pick-row .pill { cursor: pointer; }
+  .set-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 10px 4px; border-bottom: 1px solid var(--border-soft); cursor: pointer; }
+  .set-row:last-child { border-bottom: none; }
+  .set-row:hover { background: var(--surface-2); }
+  .set-row.active-set { background: var(--turf-dim); border-radius: 8px; }
+  .set-row-main { display: flex; flex-direction: column; gap: 2px; }
+  .set-row-main .set-name { font-weight: 700; font-size: var(--fs-body); }
+  .set-row-main .set-count { font-size: var(--fs-caption); color: var(--ink-dim); }
   .auction-countdown { font-family: var(--font-mono); font-size: var(--fs-hero); font-weight: 700; color: var(--gold); white-space: nowrap; }
   .auction-countdown-unit { font-size: var(--fs-micro); color: var(--ink-faint); text-transform: uppercase; letter-spacing: 0.05em; }
   .history-head-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px; }
@@ -1695,48 +1709,116 @@
           <div class="role-hint" style="margin-top:8px">The room&rsquo;s own read: the squad is batting-heavy after retention &mdash; bowling depth is where the purse should go first.</div>
         </div>
       </div>
+      <div class="tactics-grid" style="margin-top:16px">
+        <div class="analysis-card">
+          <span class="eyebrow"><svg class="icon sm"><use href="#i-briefcase"/></svg> Pre-auction war room meeting</span>
+          <div class="role-hint" style="margin-bottom:8px">Head coach, chief scout and the ownership group met three weeks out to lock in the room&rsquo;s own targets before a single lot goes under the hammer.</div>
+          <div class="notes-log">
+            <div class="notes-log-item"><span><b>Head coach:</b> &ldquo;We were batting-heavy and bowling-light all through the retention review &mdash; that gap gets first call on the purse.&rdquo;</span></div>
+            <div class="notes-log-item"><span><b>Chief scout:</b> &ldquo;Sarmad Yousuf is the standout at his bracket &mdash; real death-overs pedigree, and he&rsquo;s within reach even in the marquee set.&rdquo;</span></div>
+            <div class="notes-log-item"><span><b>Ownership:</b> &ldquo;Spend to win the pace slot. Everything else is a fallback.&rdquo;</span></div>
+          </div>
+        </div>
+        <div class="analysis-card">
+          <span class="eyebrow"><svg class="icon sm"><use href="#i-users"/></svg> EOI conversion meeting</span>
+          <div class="role-hint" style="margin-bottom:8px">Every franchise&rsquo;s own expression-of-interest list was cross-checked against the league&rsquo;s registration pool before the shortlist was finalised.</div>
+          <div class="bio-line"><span class="k">Players registered league-wide</span><span>214</span></div>
+          <div class="bio-line"><span class="k">Genuine interest (2+ franchises)</span><span>96</span></div>
+          <div class="bio-line"><span class="k">Topped up to fill the shortlist</span><span>+22</span></div>
+          <div class="bio-line"><span class="k">Final auction shortlist</span><span><b style="color:var(--gold)">118</b></span></div>
+          <div class="role-hint" style="margin-top:8px">A capped all-rounder with a strong recent List A season drew zero interest votes and dropped out of the room&rsquo;s own conversation entirely &mdash; the auction floor rarely agrees with a spreadsheet.</div>
+        </div>
+      </div>
       <div class="stage-actions"><button class="auction-continue-btn stage-continue-btn" data-next="auction-live">Continue to the bidding room <svg class="icon sm"><use href="#i-chevron-fwd"/></svg></button></div>
     </div>
 
     <!-- ============ LIVE BIDDING ROOM ============ -->
     <div id="auction-live" class="auction-stage" hidden>
-      <div class="panel-head"><h1>Live Bidding Room</h1><div class="sub" id="lot-num">Lot 1 of 3</div></div>
-      <div class="tactics-grid">
-        <div class="analysis-card">
-          <div class="lot-head-row">
-            <span class="eyebrow" style="margin-bottom:0"><svg class="icon sm"><use href="#i-bat-ball"/></svg> Current lot</span>
-            <span class="role-cell" id="lot-bracket">Capped &middot; 1.25cr base</span>
-          </div>
-          <h3 id="lot-name" style="margin:10px 0 2px">Sarmad Yousuf</h3>
-          <div class="role-hint" style="margin-bottom:0" id="lot-role">Fast bowler</div>
-          <p style="font-size:var(--fs-body);color:var(--ink-dim);line-height:1.5" id="lot-blurb">Genuine pace and a strong death-overs record for Multan Sultans last season.</p>
-          <div class="lot-price-block">
-            <div class="auction-countdown" id="lot-price">1.25cr</div>
-            <div class="auction-countdown-unit">current price</div>
-          </div>
-          <div class="bid-actions">
-            <button class="auction-continue-btn stage-continue-btn" id="auction-bid-btn" onclick="auctionBid()">Bid</button>
-            <button class="view-more-btn" style="margin-top:0" id="auction-pass-btn" onclick="auctionPass()">Pass</button>
-          </div>
-          <div class="sold-banner" id="lot-sold-banner" hidden></div>
+      <div class="panel-head"><h1>Live Bidding Room</h1><div class="sub" id="lot-num">Lot 1 of 7</div></div>
+      <nav class="subnav" role="tablist" aria-label="Auction room views">
+        <button class="subtab-btn" role="tab" aria-selected="true" data-subtab="current">Current Player</button>
+        <button class="subtab-btn" role="tab" aria-selected="false" data-subtab="players">Full Player List</button>
+        <button class="subtab-btn" role="tab" aria-selected="false" data-subtab="squads">Squads</button>
+        <button class="subtab-btn" role="tab" aria-selected="false" data-subtab="purse">Purse</button>
+        <button class="subtab-btn" role="tab" aria-selected="false" data-subtab="sets">Sets</button>
+      </nav>
+
+      <div class="subpanel" id="auction-current">
+        <div class="auction-set-row">
+          <span class="tier-badge a" id="current-set-badge">Set: Marquee Players</span>
+          <span class="role-cell" id="current-set-progress">Player 1 of 1 in this set</span>
         </div>
-        <div class="analysis-card">
-          <span class="eyebrow"><svg class="icon sm"><use href="#i-cash"/></svg> Franchise purses remaining</span>
-          <div class="purse-list">
-            <div class="rank-row mine"><span class="rank-team">Islamabad Icons (you)</span><span class="rank-figs"><b>67</b>cr</span></div>
-            <div class="rank-row"><span class="rank-team">Karachi Kings</span><span class="rank-figs"><b>71</b>cr</span></div>
-            <div class="rank-row"><span class="rank-team">Lahore Lions</span><span class="rank-figs"><b>58</b>cr</span></div>
-            <div class="rank-row"><span class="rank-team">Multan Sultans</span><span class="rank-figs"><b>63</b>cr</span></div>
-            <div class="rank-row"><span class="rank-team">Peshawar Zalmi</span><span class="rank-figs"><b>49</b>cr</span></div>
-            <div class="rank-row"><span class="rank-team">Quetta Falcons</span><span class="rank-figs"><b>77</b>cr</span></div>
+        <div class="tactics-grid">
+          <div class="analysis-card">
+            <div class="lot-head-row">
+              <span class="eyebrow" style="margin-bottom:0"><svg class="icon sm"><use href="#i-bat-ball"/></svg> Current lot</span>
+              <span class="role-cell" id="lot-bracket">Capped &middot; 1.25cr base</span>
+            </div>
+            <h3 id="lot-name" style="margin:10px 0 2px">Sarmad Yousuf</h3>
+            <div class="role-hint" style="margin-bottom:0" id="lot-role">Fast bowler</div>
+            <p style="font-size:var(--fs-body);color:var(--ink-dim);line-height:1.5" id="lot-blurb">Genuine pace and a strong death-overs record for Multan Sultans last season.</p>
+            <div class="lot-price-block">
+              <div class="auction-countdown" id="lot-price">1.25cr</div>
+              <div class="auction-countdown-unit">current bid &middot; held by <span id="lot-bidder">nobody yet</span></div>
+            </div>
+            <div class="bid-actions">
+              <button class="auction-continue-btn stage-continue-btn" id="auction-bid-btn" onclick="auctionBid()">Bid</button>
+              <button class="view-more-btn" style="margin-top:0" id="auction-pass-btn" onclick="auctionSkip()">Skip &middot; auto-bid to sold</button>
+            </div>
+            <div class="rtm-prompt" id="rtm-prompt" hidden></div>
+            <div class="sold-banner" id="lot-sold-banner" hidden></div>
+          </div>
+          <div class="analysis-card">
+            <span class="eyebrow"><svg class="icon sm"><use href="#i-trend-up"/></svg> Career record</span>
+            <div class="bio-line"><span class="k">Player type</span><span id="lot-playertype">&mdash;</span></div>
+            <div class="bio-line"><span class="k">Domestic T20 career <span style="color:var(--ink-faint);font-weight:500">(not T20I)</span></span><span id="lot-domestic">&mdash;</span></div>
+            <div class="bio-line"><span class="k">Pakistan Premier League</span><span id="lot-league">&mdash;</span></div>
+          </div>
+        </div>
+        <div class="analysis-card" style="margin-top:16px">
+          <span class="eyebrow"><svg class="icon sm"><use href="#i-clock"/></svg> Live commentary</span>
+          <div class="notes-log commentary-feed" id="auction-bid-log"><div class="notes-log-item"><span>Base price set at 1.25cr.</span></div></div>
+        </div>
+        <div class="stage-actions"><button class="stage-continue-btn" id="auction-next-lot-btn" disabled onclick="auctionNextLot()">Next lot <svg class="icon sm"><use href="#i-chevron-fwd"/></svg></button></div>
+      </div>
+
+      <div class="subpanel" id="auction-players" hidden>
+        <div class="table-card">
+          <div class="table-scroll-inner">
+            <table class="squad">
+              <thead><tr><th>Player</th><th>Role</th><th>Set</th><th class="num">Base</th><th>Status</th></tr></thead>
+              <tbody id="auction-players-body"></tbody>
+            </table>
           </div>
         </div>
       </div>
-      <div class="analysis-card" style="margin-top:16px">
-        <span class="eyebrow"><svg class="icon sm"><use href="#i-clock"/></svg> Bidding log</span>
-        <div class="notes-log" id="auction-bid-log"><div class="notes-log-item"><span>Base price set at 1.25cr.</span></div></div>
+
+      <div class="subpanel" id="auction-squads" hidden>
+        <div class="franchise-pick-row" id="squads-franchise-picker"></div>
+        <div class="table-card">
+          <div class="table-scroll-inner">
+            <table class="squad">
+              <thead><tr><th>Player</th><th>Role</th><th>Status</th></tr></thead>
+              <tbody id="auction-squad-body"></tbody>
+            </table>
+          </div>
+        </div>
       </div>
-      <div class="stage-actions"><button class="stage-continue-btn" id="auction-next-lot-btn" disabled onclick="auctionNextLot()">Next lot <svg class="icon sm"><use href="#i-chevron-fwd"/></svg></button></div>
+
+      <div class="subpanel" id="auction-purse" hidden>
+        <div class="table-card">
+          <div class="table-scroll-inner">
+            <table class="squad">
+              <thead><tr><th>Franchise</th><th class="num">Purse start</th><th class="num">Spent</th><th class="num">Remaining</th><th class="num">Bought</th></tr></thead>
+              <tbody id="auction-purse-body"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="subpanel" id="auction-sets" hidden>
+        <div class="analysis-card" id="auction-sets-list"></div>
+      </div>
     </div>
 
     <!-- ============ AUCTION REVIEW ============ -->
@@ -3132,8 +3214,17 @@
         <div class="bio-line"><span class="k">Panel quality</span><span style="color:var(--turf-strong)">Good &middot; low politicisation</span></div>
         <div class="bio-line"><span class="k">Next pool review</span><span>Annual refresh &middot; in 5 months</span></div>
         <div class="bio-line"><span class="k">Central contracts</span><span>6 Tier A &middot; 9 Tier B &middot; 14 Tier C</span></div>
+        <div class="bio-line"><span class="k">Coaching structure</span><span>Unified &middot; one head coach, all formats</span></div>
         <div class="role-hint">Central-contract tiers carry real NOC weight &mdash; a Tier A player's board is far more likely to hold him back from a clashing franchise window than release him.</div>
       </div>
+    </div>
+
+    <div class="analysis-card">
+      <span class="eyebrow"><svg class="icon sm"><use href="#i-shield"/></svg> Central contracts &amp; NOC status</span>
+      <div class="staff-row"><div class="staff-row-main"><span class="staff-name">Kamran Hussain</span><span class="staff-role-label">Tier A &middot; Lahore Lions &middot; PPL window clashes with the ODI series</span></div><span class="tier-badge c">NOC denied</span></div>
+      <div class="staff-row"><div class="staff-row-main"><span class="staff-name">Adeel Hayat</span><span class="staff-role-label">Tier B &middot; Quetta Falcons &middot; released once the Test squad is confirmed</span></div><span class="tier-badge b">NOC pending</span></div>
+      <div class="staff-row"><div class="staff-row-main"><span class="staff-name">Zain Chaudhry</span><span class="staff-role-label">Tier C &middot; Islamabad Icons &middot; no international clash this window</span></div><span class="tier-badge a">NOC granted</span></div>
+      <div class="role-hint" style="margin-top:8px">International duty always wins a genuine clash &mdash; NOC denial only ever decides whether a centrally-contracted player is <i>also</i> released for a franchise season, never whether the series itself goes ahead.</div>
     </div>
 
     <div class="analysis-card">
@@ -4641,6 +4732,7 @@
   wireTabs('#stage-teamtalk .subtab-btn', 'talk-');
   wireTabs('#panel-records nav[aria-label="Records views"] > .subtab-btn', 'records-');
   wireTabs('#panel-records nav[aria-label="Player of the Round detail"] .subtab-btn', 'potr-');
+  wireTabs('#auction-live .subtab-btn', 'auction-');
 
   // Global search: opens ANY player's profile from the whole database, not just this squad -
   // available from every screen, unlike Match Day which only appears while a match is live.
@@ -4667,16 +4759,60 @@
     document.getElementById('panel-matchday').hidden = false;
     showMatchStage('stage-preview');
   }
-  // ---- Auction Room: War Room -> Live Bidding -> Review ----
-  var AUCTION_LOTS = [
-    { name: "Sarmad Yousuf", role: "Fast bowler", bracket: "Capped &middot; 1.25cr base", base: 12500000, blurb: "Genuine pace and a strong death-overs record for Multan Sultans last season.", rival: "Quetta Falcons" },
-    { name: "Naveed Sultan", role: "Finisher", bracket: "Uncapped &middot; 40L base", base: 4000000, blurb: "A power-hitting middle-order option who forced his way into the conversation with a strong domestic T20 season.", rival: "Lahore Lions" },
-    { name: "Imran Sethi", role: "Off-spin all-rounder", bracket: "Capped &middot; 75L base", base: 7500000, blurb: "Genuine control with the ball and enough with the bat to bat at seven \u2014 exactly the role gap the room named.", rival: "Karachi Kings" }
+  // ---- Auction Room: War Room -> Live Bidding (multi-tab) -> Review ----
+  var AUCTION_SETS = [
+    { key: "marquee", label: "Marquee Players" },
+    { key: "capped-bat", label: "Capped Batters" },
+    { key: "uncapped-ar", label: "Uncapped All-rounders" },
+    { key: "capped-spin", label: "Capped Spin" },
+    { key: "accelerated", label: "Accelerated Round" }
   ];
+  var AUCTION_LOTS = [
+    { name: "Sarmad Yousuf", role: "Fast bowler", set: "marquee", bracket: "Capped &middot; 1.25cr base", base: 12500000, blurb: "Genuine pace and a strong death-overs record for Multan Sultans last season.", rival: "Quetta Falcons", playerType: "Fast bowler &middot; death-overs specialist", domestic: "38 M &middot; 71 Wkts &middot; Econ 7.8 &middot; SR 17.2", league: "PPL 2025: 11 M &middot; 19 Wkts &middot; Econ 7.4" },
+    { name: "Kashif Rauf", role: "Top-order bat", set: "capped-bat", bracket: "Capped &middot; 1.5cr base", base: 15000000, blurb: "A composed top-order anchor, and a former Islamabad Icons player let go before this mega auction.", rival: "Karachi Kings", playerType: "Top-order bat &middot; anchor", domestic: "52 M &middot; 1,780 Runs &middot; Avg 34.2 &middot; SR 141.6", league: "PPL 2025: 12 M &middot; 412 Runs &middot; Avg 37.5", rtm: true, formerClub: "Islamabad Icons" },
+    { name: "Danish Wali", role: "Middle-order bat", set: "capped-bat", bracket: "Capped &middot; 75L base", base: 7500000, blurb: "A genuine finisher's numbers over the back half of last season, mostly built in the last five overs.", rival: "Peshawar Zalmi", playerType: "Middle-order &middot; finisher", domestic: "44 M &middot; 1,120 Runs &middot; Avg 29.6 &middot; SR 148.9", league: "PPL 2025: 9 M &middot; 201 Runs &middot; SR 156.1" },
+    { name: "Naveed Sultan", role: "Finisher", set: "uncapped-ar", bracket: "Uncapped &middot; 40L base", base: 4000000, blurb: "A power-hitting middle-order option who forced his way into the conversation with a strong domestic T20 season.", rival: "Lahore Lions", playerType: "Middle-order &middot; power hitter", domestic: "21 M &middot; 588 Runs &middot; SR 162.4", league: "No PPL appearances yet" },
+    { name: "Imran Sethi", role: "Off-spin all-rounder", set: "uncapped-ar", bracket: "Capped &middot; 75L base", base: 7500000, blurb: "Genuine control with the ball and enough with the bat to bat at seven \u2014 exactly the role gap the room named.", rival: "Karachi Kings", playerType: "All-rounder &middot; off-spin", domestic: "33 M &middot; 41 Wkts &middot; Econ 6.9 &middot; Bat SR 118.2", league: "PPL 2025: 7 M &middot; 6 Wkts &middot; Econ 6.6" },
+    { name: "Bilal Nasir", role: "Leg-spinner", set: "capped-spin", bracket: "Capped &middot; 1cr base", base: 10000000, blurb: "A genuine wicket-taking leg-spinner who can also bowl the powerplay overs at a pinch.", rival: "Multan Sultans", playerType: "Leg-spinner &middot; wicket-taking", domestic: "46 M &middot; 58 Wkts &middot; Econ 7.1", league: "PPL 2025: 10 M &middot; 12 Wkts &middot; Econ 6.8" },
+    { name: "Farhan Dawood", role: "Fast-medium bowler", set: "accelerated", bracket: "Uncapped &middot; 30L base", base: 3000000, blurb: "Went unsold twice earlier in the auction \u2014 back for the accelerated round at a lower base price.", rival: "Peshawar Zalmi", playerType: "Fast-medium bowler", domestic: "17 M &middot; 22 Wkts &middot; Econ 8.1", league: "No PPL appearances yet" }
+  ];
+  var FRANCHISES = ["Islamabad Icons", "Karachi Kings", "Lahore Lions", "Multan Sultans", "Peshawar Zalmi", "Quetta Falcons"];
+  var franchisePurseStart = { "Islamabad Icons": 96, "Karachi Kings": 96, "Lahore Lions": 96, "Multan Sultans": 96, "Peshawar Zalmi": 96, "Quetta Falcons": 96 };
+  var franchisePurse = { "Islamabad Icons": 67, "Karachi Kings": 71, "Lahore Lions": 58, "Multan Sultans": 63, "Peshawar Zalmi": 49, "Quetta Falcons": 77 };
+  var franchiseSquad = {
+    "Islamabad Icons": [
+      { name: "Hamza Malik", role: "Top-order bat", status: "Retained &middot; 18cr" },
+      { name: "Adeel Hayat", role: "Fast bowler", status: "Retained &middot; 14cr" },
+      { name: "Zain Chaudhry", role: "Off-spin all-rounder", status: "Retained &middot; 11cr" },
+      { name: "Rizwan Sheikh", role: "Wicketkeeper", status: "Retained &middot; 4cr" }
+    ],
+    "Karachi Kings": [
+      { name: "Shahzaib Alam", role: "Top-order bat", status: "Retained" },
+      { name: "Nouman Bhatti", role: "Fast bowler", status: "Retained" }
+    ],
+    "Lahore Lions": [
+      { name: "Kamran Hussain", role: "Captain &middot; top-order bat", status: "Retained" },
+      { name: "Talha Iqbal", role: "Bowler", status: "Retained" }
+    ],
+    "Multan Sultans": [
+      { name: "Faisal Nadeem", role: "Bowler", status: "Retained" },
+      { name: "Rayyan Sheikh", role: "Middle-order bat", status: "Retained" }
+    ],
+    "Peshawar Zalmi": [
+      { name: "Umair Chaudhry", role: "Top-order bat", status: "Retained" },
+      { name: "Shoaib Niazi", role: "Bowler", status: "Retained" }
+    ],
+    "Quetta Falcons": [
+      { name: "Sohail Marwat", role: "Middle-order bat", status: "Retained" },
+      { name: "Danyal Qureshi", role: "Bowler", status: "Retained" }
+    ]
+  };
   var auctionLotIndex = 0;
   var auctionCurrentPrice = 0;
   var auctionRound = 0;
   var auctionSold = false;
+  var auctionSquadsPicked = "Islamabad Icons";
+  var rtmCardsRemaining = 2;
   function auctionMoneyFmt(v) {
     if (v >= 10000000) { var c = v / 10000000; return (c % 1 === 0 ? c.toFixed(0) : c.toFixed(2)) + "cr"; }
     var l = v / 100000; return (l % 1 === 0 ? l.toFixed(0) : l.toFixed(1)) + "L";
@@ -4695,6 +4831,15 @@
     log.appendChild(row);
     log.scrollTop = log.scrollHeight;
   }
+  function auctionSetLabel(key) {
+    for (var i = 0; i < AUCTION_SETS.length; i++) { if (AUCTION_SETS[i].key === key) return AUCTION_SETS[i].label; }
+    return key;
+  }
+  function auctionStatusForLot(index) {
+    if (index < auctionLotIndex) return AUCTION_LOTS[index]._soldTo ? ("Sold &middot; " + AUCTION_LOTS[index]._soldTo) : "Unsold";
+    if (index === auctionLotIndex) return auctionSold ? (AUCTION_LOTS[index]._soldTo ? ("Sold &middot; " + AUCTION_LOTS[index]._soldTo) : "Unsold") : "Live now";
+    return "Upcoming";
+  }
   function renderAuctionLot() {
     var lot = AUCTION_LOTS[auctionLotIndex];
     auctionCurrentPrice = lot.base;
@@ -4705,8 +4850,16 @@
     document.getElementById("lot-bracket").innerHTML = lot.bracket;
     document.getElementById("lot-blurb").textContent = lot.blurb;
     document.getElementById("lot-price").textContent = auctionMoneyFmt(auctionCurrentPrice);
+    document.getElementById("lot-bidder").textContent = "nobody yet";
+    document.getElementById("lot-playertype").textContent = lot.playerType;
+    document.getElementById("lot-domestic").textContent = lot.domestic;
+    document.getElementById("lot-league").textContent = lot.league;
     document.getElementById("lot-num").textContent = "Lot " + (auctionLotIndex + 1) + " of " + AUCTION_LOTS.length;
-    document.getElementById("auction-bid-log").innerHTML = "<div class=\"notes-log-item\"><span>Base price set at " + auctionMoneyFmt(auctionCurrentPrice) + ".</span></div>";
+    var setLots = AUCTION_LOTS.filter(function (l) { return l.set === lot.set; });
+    var posInSet = setLots.indexOf(lot) + 1;
+    document.getElementById("current-set-badge").textContent = "Set: " + auctionSetLabel(lot.set);
+    document.getElementById("current-set-progress").textContent = "Player " + posInSet + " of " + setLots.length + " in this set";
+    document.getElementById("auction-bid-log").innerHTML = "<div class=\"notes-log-item\"><span>Base price set at " + auctionMoneyFmt(auctionCurrentPrice) + " for the " + auctionSetLabel(lot.set).toLowerCase() + " set.</span></div>";
     document.getElementById("auction-bid-btn").disabled = false;
     document.getElementById("auction-pass-btn").disabled = false;
     var nextBtn = document.getElementById("auction-next-lot-btn");
@@ -4715,17 +4868,63 @@
     var banner = document.getElementById("lot-sold-banner");
     banner.hidden = true;
     banner.textContent = "";
+    var rtmBox = document.getElementById("rtm-prompt");
+    rtmBox.hidden = true;
+    rtmBox.innerHTML = "";
+    renderAuctionPlayers();
   }
-  function auctionFinishLot(winner, price) {
+  function finalizeLot(winner, price) {
+    var lot = AUCTION_LOTS[auctionLotIndex];
     auctionSold = true;
     document.getElementById("auction-bid-btn").disabled = true;
     document.getElementById("auction-pass-btn").disabled = true;
     document.getElementById("auction-next-lot-btn").disabled = false;
+    var teamName = winner === "you" ? "Islamabad Icons" : winner;
+    lot._soldTo = teamName;
+    franchiseSquad[teamName].push({ name: lot.name, role: lot.role, status: "Bought &middot; " + auctionMoneyFmt(price) });
+    var spentCr = price / 10000000;
+    franchisePurse[teamName] = Math.max(0, +(franchisePurse[teamName] - spentCr).toFixed(2));
     var banner = document.getElementById("lot-sold-banner");
     banner.hidden = false;
-    var text = winner === "you" ? "SOLD to Islamabad Icons for " + auctionMoneyFmt(price) + "." : "SOLD to " + winner + " for " + auctionMoneyFmt(price) + ".";
+    var text = "SOLD to " + teamName + " for " + auctionMoneyFmt(price) + ".";
     banner.textContent = text;
     auctionLog(text);
+    renderAuctionPlayers();
+    renderAuctionSquads();
+    renderAuctionPurse();
+  }
+  function auctionFinishLot(winner, price) {
+    var lot = AUCTION_LOTS[auctionLotIndex];
+    if (lot.rtm && winner !== "you" && !lot._rtmResolved) {
+      showRtmPrompt(winner, price);
+      return;
+    }
+    finalizeLot(winner, price);
+  }
+  function showRtmPrompt(winner, price) {
+    var lot = AUCTION_LOTS[auctionLotIndex];
+    auctionSold = true;
+    document.getElementById("auction-bid-btn").disabled = true;
+    document.getElementById("auction-pass-btn").disabled = true;
+    var box = document.getElementById("rtm-prompt");
+    box.hidden = false;
+    box.innerHTML = "<b>" + lot.name + "</b> &mdash; a former " + lot.formerClub + " player &mdash; has gone to " + winner + " for " + auctionMoneyFmt(price) + ". Islamabad Icons hold " + rtmCardsRemaining + " Right-to-Match card" + (rtmCardsRemaining === 1 ? "" : "s") + "." +
+      "<div class=\"bid-actions\" style=\"margin-top:8px\"><button class=\"auction-continue-btn stage-continue-btn\" onclick=\"rtmMatch(" + price + ")\">Match &amp; retain (use RTM card)</button><button class=\"view-more-btn\" style=\"margin-top:0\" onclick=\"rtmDecline('" + winner + "'," + price + ")\">Let him go</button></div>";
+  }
+  function rtmMatch(price) {
+    var lot = AUCTION_LOTS[auctionLotIndex];
+    lot._rtmResolved = true;
+    rtmCardsRemaining--;
+    document.getElementById("rtm-prompt").hidden = true;
+    auctionLog("Islamabad Icons exercise the Right to Match \u2014 " + lot.name + " stays for " + auctionMoneyFmt(price) + ".");
+    finalizeLot("you", price);
+  }
+  function rtmDecline(winner, price) {
+    var lot = AUCTION_LOTS[auctionLotIndex];
+    lot._rtmResolved = true;
+    document.getElementById("rtm-prompt").hidden = true;
+    auctionLog("Islamabad Icons decline to match \u2014 " + lot.name + " goes to " + winner + ".");
+    finalizeLot(winner, price);
   }
   function auctionBid() {
     if (auctionSold) return;
@@ -4733,23 +4932,108 @@
     auctionCurrentPrice += auctionIncrement(auctionCurrentPrice);
     auctionRound++;
     document.getElementById("lot-price").textContent = auctionMoneyFmt(auctionCurrentPrice);
+    document.getElementById("lot-bidder").textContent = "You";
     auctionLog("You bid " + auctionMoneyFmt(auctionCurrentPrice) + ".");
     if (auctionRound >= 3) { auctionFinishLot("you", auctionCurrentPrice); return; }
     auctionCurrentPrice += auctionIncrement(auctionCurrentPrice);
     document.getElementById("lot-price").textContent = auctionMoneyFmt(auctionCurrentPrice);
+    document.getElementById("lot-bidder").textContent = lot.rival;
     auctionLog(lot.rival + " come back in at " + auctionMoneyFmt(auctionCurrentPrice) + ".");
   }
-  function auctionPass() {
+  function auctionSkip() {
     if (auctionSold) return;
+    document.getElementById("auction-bid-btn").disabled = true;
+    document.getElementById("auction-pass-btn").disabled = true;
     var lot = AUCTION_LOTS[auctionLotIndex];
-    auctionLog("You pass.");
-    auctionCurrentPrice += auctionIncrement(auctionCurrentPrice);
-    auctionFinishLot(lot.rival, auctionCurrentPrice);
+    var bidders = FRANCHISES.filter(function (f) { return f !== "Islamabad Icons"; });
+    var rounds = 2 + (auctionLotIndex % 2);
+    auctionLog("You step back \u2014 auto-bidding takes over for this lot.");
+    var i = 0;
+    function step() {
+      if (auctionLotIndex === undefined) return;
+      if (i >= rounds) {
+        var winner = bidders[(auctionLotIndex + i) % bidders.length];
+        document.getElementById("lot-bidder").textContent = winner;
+        auctionFinishLot(winner, auctionCurrentPrice);
+        return;
+      }
+      auctionCurrentPrice += auctionIncrement(auctionCurrentPrice);
+      document.getElementById("lot-price").textContent = auctionMoneyFmt(auctionCurrentPrice);
+      var bidder = bidders[(i + auctionLotIndex) % bidders.length];
+      document.getElementById("lot-bidder").textContent = bidder;
+      auctionLog(bidder + " push to " + auctionMoneyFmt(auctionCurrentPrice) + ".");
+      i++;
+      setTimeout(step, 420);
+    }
+    step();
   }
   function auctionNextLot() {
-    if (auctionLotIndex >= AUCTION_LOTS.length - 1) { showAuctionStage("auction-review"); return; }
+    if (auctionLotIndex >= AUCTION_LOTS.length - 1) { renderAuctionSets(); showAuctionStage("auction-review"); return; }
     auctionLotIndex++;
     renderAuctionLot();
+  }
+  function jumpToSet(setKey) {
+    var idx = AUCTION_LOTS.findIndex(function (l) { return l.set === setKey; });
+    if (idx === -1) return;
+    auctionLotIndex = idx;
+    renderAuctionLot();
+    document.querySelectorAll("#auction-live .subtab-btn").forEach(function (b) { b.setAttribute("aria-selected", b.dataset.subtab === "current" ? "true" : "false"); });
+    document.querySelectorAll("#auction-live > .subpanel").forEach(function (p) { p.hidden = (p.id !== "auction-current"); });
+  }
+  function renderAuctionPlayers() {
+    var body = document.getElementById("auction-players-body");
+    if (!body) return;
+    body.innerHTML = AUCTION_LOTS.map(function (lot, i) {
+      var status = auctionStatusForLot(i);
+      var statusHtml = status === "Live now" ? "<span class=\"tier-badge a\">Live now</span>" : (status.indexOf("Sold") === 0 ? "<span class=\"tier-badge b\">" + status + "</span>" : "<span class=\"role-cell\">" + status + "</span>");
+      return "<tr><td><div class=\"player-cell\"><div class=\"player-avatar\">" + lot.name.split(" ").map(function (p) { return p[0]; }).join("") + "</div><div class=\"player-name\">" + lot.name + "</div></div></td><td><span class=\"role-cell\">" + lot.role + "</span></td><td>" + auctionSetLabel(lot.set) + "</td><td class=\"num\">" + auctionMoneyFmt(lot.base) + "</td><td>" + statusHtml + "</td></tr>";
+    }).join("");
+  }
+  function renderAuctionSquadPicker() {
+    var wrap = document.getElementById("squads-franchise-picker");
+    if (!wrap) return;
+    wrap.innerHTML = FRANCHISES.map(function (f) {
+      var cls = "pill" + (f === auctionSquadsPicked ? " first" : "");
+      var label = f === "Islamabad Icons" ? f + " (you)" : f;
+      return "<button type=\"button\" class=\"" + cls + "\" onclick=\"pickSquadFranchise('" + f + "')\">" + label + "</button>";
+    }).join("");
+  }
+  function pickSquadFranchise(name) {
+    auctionSquadsPicked = name;
+    renderAuctionSquads();
+  }
+  function renderAuctionSquads() {
+    renderAuctionSquadPicker();
+    var body = document.getElementById("auction-squad-body");
+    if (!body) return;
+    var squad = franchiseSquad[auctionSquadsPicked] || [];
+    body.innerHTML = squad.map(function (p) {
+      return "<tr><td><div class=\"player-cell\"><div class=\"player-avatar\">" + p.name.split(" ").map(function (x) { return x[0]; }).join("") + "</div><div class=\"player-name\">" + p.name + "</div></div></td><td><span class=\"role-cell\">" + p.role + "</span></td><td>" + p.status + "</td></tr>";
+    }).join("");
+  }
+  function renderAuctionPurse() {
+    var body = document.getElementById("auction-purse-body");
+    if (!body) return;
+    body.innerHTML = FRANCHISES.map(function (f) {
+      var start = franchisePurseStart[f];
+      var remaining = franchisePurse[f];
+      var spent = +(start - remaining).toFixed(2);
+      var bought = (franchiseSquad[f] || []).length;
+      var label = f === "Islamabad Icons" ? f + " (you)" : f;
+      return "<tr><td>" + label + "</td><td class=\"num\">" + start + "cr</td><td class=\"num\">" + spent + "cr</td><td class=\"num\"><b style=\"color:var(--gold)\">" + remaining + "cr</b></td><td class=\"num\">" + bought + "</td></tr>";
+    }).join("");
+  }
+  function renderAuctionSets() {
+    var wrap = document.getElementById("auction-sets-list");
+    if (!wrap) return;
+    var currentSet = AUCTION_LOTS[auctionLotIndex] ? AUCTION_LOTS[auctionLotIndex].set : null;
+    wrap.innerHTML = "<span class=\"eyebrow\"><svg class=\"icon sm\"><use href=\"#i-badge\"/></svg> Auction sets</span>" + AUCTION_SETS.map(function (s) {
+      var lots = AUCTION_LOTS.filter(function (l) { return l.set === s.key; });
+      var soldCount = lots.filter(function (l) { return l._soldTo; }).length;
+      var status = soldCount === lots.length ? "Complete" : (s.key === currentSet ? "In progress" : (soldCount > 0 ? "In progress" : "Upcoming"));
+      var cls = "set-row" + (s.key === currentSet ? " active-set" : "");
+      return "<div class=\"" + cls + "\" onclick=\"jumpToSet('" + s.key + "')\"><div class=\"set-row-main\"><span class=\"set-name\">" + s.label + "</span><span class=\"set-count\">" + lots.length + " player" + (lots.length === 1 ? "" : "s") + " &middot; " + soldCount + " sold</span></div><span class=\"tier-badge " + (status === "Complete" ? "a" : status === "In progress" ? "b" : "c") + "\">" + status + "</span></div>";
+    }).join("");
   }
   function showAuctionStage(id) {
     document.querySelectorAll(".auction-stage").forEach(function (s) { s.hidden = true; });
@@ -4760,7 +5044,15 @@
     document.querySelectorAll("body > .app-body > .main-content > .shell > section.panel").forEach(function (p) { p.hidden = true; });
     document.getElementById("panel-auction").hidden = false;
     auctionLotIndex = 0;
+    rtmCardsRemaining = 2;
+    AUCTION_LOTS.forEach(function (l) { delete l._soldTo; delete l._rtmResolved; });
+    franchiseSquad["Islamabad Icons"] = franchiseSquad["Islamabad Icons"].slice(0, 4);
+    FRANCHISES.forEach(function (f) { franchiseSquad[f] = franchiseSquad[f].filter(function (p) { return p.status.indexOf("Retained") === 0; }); });
+    franchisePurse = { "Islamabad Icons": 67, "Karachi Kings": 71, "Lahore Lions": 58, "Multan Sultans": 63, "Peshawar Zalmi": 49, "Quetta Falcons": 77 };
     renderAuctionLot();
+    renderAuctionSquads();
+    renderAuctionPurse();
+    renderAuctionSets();
     showAuctionStage("auction-retention");
   }
   function exitAuctionMode() {
