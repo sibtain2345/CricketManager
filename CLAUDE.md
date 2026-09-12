@@ -10042,6 +10042,147 @@ transfer/auction screens (retention, trade, EOI meeting, live-bidding room) rema
 deferred per the user's own call - confirmed needed eventually, not now. A rectification/review
 pass across all screens is the user's next planned step.
 
+### FM26 reference pass + Phase A/B rectification (this session, ongoing)
+
+The user issued a full "UI Redesign & Extension Directive": watch four real FM26 reference videos
+(one-off `/watch` invocations, never batched), re-audit the actual C# codebase, review the mockup
+as it stands, compare it against the FM26 findings, cross-reference the catalogued CC2014/FM23
+assets, find code-vs-UI gaps, then design - explicitly through Superpowers brainstorming and the
+frontend-design skill, never skipping straight to code. All four videos were watched in full
+(scene-aware frames + a hand-reconstructed VTT transcript for the two where native captions were
+rate-limited); the FM26 structural notes (breadcrumb trails, the Player Report layout, dual
+Combined/In-Possession/Out-of-Possession toggles, the National Shortlist/Pool funnel split, dense
+grid-dashboard club screens, etc.) fed directly into the audit below - no FM26 text or football
+content was ever borrowed, only structural patterns, per this project's own standing Principle 1.
+
+**Phase A (audit) findings**, from three parallel research agents (the C# auction/international
+systems, the mockup's own current Transfers/International screens, and a CC2014/FM23 cross-check):
+the Auction system's C# side (`FranchiseAuctionService`, `FranchiseRetentionService`,
+`FranchiseAuctionMediaService`) is already far ahead of its UI - real per-lot data, real
+pre-written narrative event text, real retention/RTM arithmetic - while the mockup's own Transfers
+screen was, until this pass, just a transfer-activity list plus one static auction countdown
+teaser tile with no bidding/retention/meeting UI at all. The International system's C# side
+(`NationalPool`, `CentralContractService`, `CoachingStructureService`, `CountryProfile`) is
+similarly real and ahead of the UI, though the mockup's International screen was already
+further along than expected (a real ICC table with live flags, a selection-panel tile, a duty
+list). CC2014/FM23 had no visual auction asset (confirmed - genuinely no football equivalent) but
+did have real IPL-style auction news wording and a real salary-cap concept worth adapting for
+tone; FM23's layout records had a real "National Team" menu-action vocabulary (call-up, national
+pool add/remove, "ask to reconsider international retirement") worth adapting structurally.
+
+**Phase B (general redesign) findings**, from four parallel per-screen-cluster audit agents
+covering all 14 sidebar screens plus Match Day against both general consistency and the FM26
+patterns above, triaged into four severity tiers with the user's explicit go-ahead on scope
+("proceed with tier 1 and 2 in this pass... write plan for all remaining tiers... commit... then
+complete those tiers in next pass, don't stop in between, only move to phase C when all of phase B
+is done" - plus a direct instruction to overhaul the colour palette for better visual appeal):
+
+- **Tier 1 (broken/stub screens) - DONE this pass.** **Inbox** was not a real screen - a 2-item
+  stub, one line copy-pasted verbatim from Portal's own widget - rebuilt as a real tab-stripped
+  (`For You / Club / World`) news-card grid using a genuine `.tile-grid` of individual `.tile`
+  cards (not one flat list), 5 distinct items per tab, wired through the existing `wireTabs()`
+  helper. **Fixtures** was 8 lines, 3 rows, no table context, no opposition-report teaser (that
+  content was instead duplicated onto Tactics) - rebuilt with a compact league-position mini-table,
+  a real 10-fixture double-round-robin season schedule using the established
+  `.fixture-row`/`.fixture-teams`/`.fixture-meta` component (replacing the wrong `.squad-alert-row`
+  it had been misusing), and an "Upcoming opposition report" card carrying genuinely NEW
+  information (head-to-head record, recent form) rather than duplicating Tactics' own
+  weather/pitch/boundary card - which also, as a side effect, makes Tactics' previously dead-end
+  "View full analysis & head to head" button (`onclick="showPanel('fixtures')"`) honestly true
+  now instead of pointing at content that didn't exist. **A real data bug found and fixed along the
+  way**: Fixtures' own three example rows named opponents ("Multan Monarchs", "Peshawar Panthers")
+  that don't exist in the Pakistan T20 Cup's own six-team table established on the World screen
+  (Lahore Lions/Karachi Kings/Islamabad Icons/Multan Sultans/Peshawar Zalmi/Quetta Falcons) -
+  corrected to the real team names. (Confirmed this is NOT the same class of error elsewhere:
+  "Multan Monarchs"/"Peshawar Panthers" also appear, correctly, in the Transfers screen as
+  entirely different outside clubs doing transfer business - not a duplicate bug, left alone.)
+
+- **Tier 2 (missing depth) - DONE this pass.** **Player**: added a breadcrumb trail
+  (`.breadcrumb`, "Squad › First-Team › Hamza Malik"), a hand-computed SVG radar/spider chart
+  (5 axes - Batting/Bowling/Fielding/Mental/Physical, plotted from the player's own visible
+  attribute averages, not invented numbers) with a Pros/Cons bullet list underneath it (reusing
+  the existing `.style-note-row` pattern, colour-coded turf-strong/ball), a "Wanted by N clubs"
+  interest chip promoted into the header status row (previously buried as "Interested clubs: None
+  on record" in the Contract sub-tab - now genuinely populated, since an always-empty promoted chip
+  would have been worse than the gap it replaced), a working `Compare` button opening a new,
+  genuinely functional (not a stub) comparison modal against a squad-mate, and a small SVG
+  fielding-position mini-map next to the role-fit ladder (a legitimate use of this project's own
+  Principle-1 fielding-position-marker exception, not a new borrowed asset). **Squad table**:
+  densified from 6 to 10 columns (Apps, season Runs/Wkts, Value, Wage added, matching FM26's
+  density and the numbers already established on the Player screen for Hamza Malik specifically).
+  **Academy**: its "already developing" list was rebuilt from a thin `.staff-row` list into the
+  SAME `table.squad` component the first-team Squad screen uses (same columns, Ability read as
+  Potential rather than Current, since that's honestly what a scout is estimating for a prospect) -
+  the two screens now read as filtered views of one system, not two different UI patterns. **A
+  real name collision found and fixed along the way**: the Academy's own "already developing" list
+  named a 17-year-old prospect "Umar Baig" - identical to an existing, unrelated first-team Fringe
+  player of the same name already used across a dozen other screens (Portal, Tactics XI, Match Day,
+  the Squad table itself). Renamed the academy prospect to "Bilal Nasir" to resolve it. **Portal**:
+  its single flat news list gained a compact in-card `Club`/`World` filter (a new, smaller
+  `.press-filter`/`.press-filter-btn` pair, distinct from the heavier `.subtab-btn` used for
+  full-screen sub-navigation) and lead-story sizing on the first item per tab
+  (`font-size:var(--fs-subhead)`), giving Portal the tab-strip + hierarchy pattern FM26 uses
+  without duplicating Inbox's now much deeper equivalent.
+
+- **Minor polish, done alongside**: a duplicated `eyebrow` span on Tactics (copy-paste artifact,
+  line ~1874) removed; Academy's Sign/Release buttons - which already carried a second,
+  unused `academy-action-btn` class alongside the borrowed `facility-request-btn` one, evidently
+  anticipating exactly this fix - given their own real CSS rule and detached from the
+  facility-request class entirely.
+
+- **Colour palette overhaul, done alongside** (the user's explicit "well thought colour" ask).
+  The existing palette was not arbitrary - its own file comment states it was pulled directly
+  from CC2014's real shipped assets (`background.png`, `pitchmap.bmp`, its "royal-blue glossy
+  chrome" UI plastic) - so this was a **refinement**, not a discard: gold is promoted from
+  headline-only text to the single primary accent (trophy/honours-board brass, matching cricket's
+  own visual vocabulary, rather than button plastic), a deep teal (`#2f8f7a`/`#4bb89e`) replaces
+  the flat royal-blue "chrome" as the secondary interactive tone (sitting naturally between the
+  turf green and the ink rather than fighting both, and genuinely distinctive from the generic
+  navy-blue every sports-management UI defaults to), ball-red is warmed toward true leather maroon
+  (`#a53a2e`) instead of a generic alert red, and every surface token moves off navy onto the same
+  green-charcoal family as the ground so the whole app reads as one considered world instead of a
+  green photo behind blue plastic panels. Every colour reference in the file is a `var(--token)`
+  read (confirmed by grep - zero hardcoded duplicate hex/rgba anywhere), so the entire visual
+  overhaul is a single `:root` block edit with no risk to the ~4000 lines that consume it. The
+  file's own intro comment was rewritten alongside the values to record the "why," not just the
+  numbers, for the next session.
+
+- **Verification**: after every edit, a structural sanity pass confirmed `<div>`/`<table>`/`<tr>`/
+  `<span>`/`<svg>` tags are all exactly balanced across the whole 2.48MB file, and the single main
+  `<script>` block's braces/parens are exactly balanced (294/294, 782/782) - both checked via a
+  throwaway Python script (not committed) rather than assumed from the edits alone, per this
+  project's own "verify, don't assume" discipline established on the C# side.
+
+- **Tiers 3-4 - PLANNED, not yet built** (the user's own explicit two-pass structure: document +
+  commit Tier 1-2 now, complete Tier 3-4 in the very next pass with no context-switch to Phase C
+  in between). Tracked here as the concrete plan for that next pass:
+  - **Tier 3 (missing a screen-level feature)**: a New Ball/Middle/Death phase-scope toggle tying
+    Tactics' bowling-plan/batting-plan/field-placement cards together (they currently read as
+    three unrelated flat cards); a full-bleed DRS-review decision modal on Match Day (it already
+    shows "Reviews remaining" with nothing behind it - the cricket equivalent of FM26's VAR
+    moment, reusing the existing `.modal-backdrop` shell); a team-talk screen on Match Day grouped
+    Batting/Bowling/Fielding/Individual (reusing the existing `.tone-chip`/`.convo-log` pattern
+    already built for player conversations); World's other four competitions (First-Class
+    Championship, List A Cup, Premier League, Crescent Trophy) made clickable into a real
+    per-competition profile popup instead of dead directory rows (only the club's own competition
+    has a table today); deciding where FM26's "Player of the Round" rich single-match analysis
+    card pattern should live (no screen currently owns it - Records was checked and confirmed to
+    be the wrong home for it structurally, Fixtures/Match Day are the more natural candidates).
+  - **Tier 4 (consistency/polish)**: Transfers' "targets" rows get their own action row (a
+    "Make offer" button opening the existing negotiation-modal, matching the accept/reject
+    affordance "squad activity" rows already have) plus a wage/valuation line per row; Finances
+    and Boardroom get real chart variety (a sparkline or radial gauge - currently the entire file
+    has zero chart types beyond the linear `.info-meter` bar); Boardroom's single hardcoded
+    "Season objective" line expands into a short list, each with an importance label and an
+    on-track/at-risk/failing status pill; Staff's recruit flow gets a lightweight per-candidate
+    detail expand before the irreversible hire click, and a release/fire action (currently only
+    recruit-into-vacancy exists); Records' Career Leaderboards moves from manually-laid-out
+    `.bio-line` rows to the established `table.career` component for a longer, more scannable list.
+  - Several Tier-3/4 findings also flagged a cross-cutting pattern worth doing as ONE pass rather
+    than screen-by-screen when Tier 3-4 is picked up: multiple dead-end full-page navigations
+    where FM26's inline-popup pattern would fit better (World's competition/table rows, Records'
+    leaderboard/trophy rows) - these should be swept together, not fixed piecemeal per screen.
+
 ---
 
 ## CONSOLIDATED DEFERRED-ITEMS REGISTER (maintained - the single source of truth)

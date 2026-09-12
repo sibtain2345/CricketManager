@@ -11,41 +11,46 @@
   }
 
   /*
-    Palette pulled directly from Cricket Coach 2014's own shipped asset files (graphics/gui/std/
-    Panels/background.png, Dialog/*, Buttons/cont_normal.bmp "Continue", Header/*, pics/pitchmap.bmp) -
-    not an invented "boutique navy" scheme. The real game is GREEN-dominant, not blue-dominant: a
-    duotone floodlit-stadium photograph sits behind every screen, with royal-blue glossy chrome
-    (header banner, buttons, panels) layered on top, dark-navy dialog fills for content, and a
-    cream/gold for headline text - lifted from the title card's embossed lettering. Deliberately
-    single-theme for the same reason the source material is: broadcast cricket software commits to
-    one scheme, always, and never drops to a light "parchment" mode.
+    Palette rooted in Cricket Coach 2014's own real asset files (graphics/gui/std/Panels/
+    background.png, pics/pitchmap.bmp) - the GREEN-dominant floodlit-stadium photography and the
+    cream/gold lifted from the title card's embossed lettering both carry over unchanged. Refined
+    from the original pass (which also copied CC2014's own flat "royal-blue glossy chrome" plastic
+    UI accent wholesale) after a direct design review: gold is promoted from headline-only to the
+    single primary accent - trophy/honours-board brass, not button plastic - and a deep teal
+    replaces the blue chrome as the secondary interactive tone, since it sits naturally between the
+    turf green and the ink, rather than fighting both. Ball red is warmed toward true leather
+    maroon rather than a generic alert red. Surfaces move off navy onto the same green-charcoal
+    family as the ground, so the whole app reads as one considered world instead of a green photo
+    behind blue plastic panels. Deliberately single-theme for the same reason the source material
+    is: broadcast cricket software commits to one scheme, always, and never drops to a light
+    "parchment" mode.
   */
   :root {
-    --ground-a: #050f08;
-    --ground-b: #0c2412;
-    --ground-c: #123018;
-    --surface: #0e1a30;
-    --surface-2: #16274a;
-    --surface-3: #213a64;
-    --ink: #f1f5fb;
-    --ink-dim: #a8b8d8;
-    --ink-faint: #76869f;
-    --turf: #3f8f52;
-    --turf-strong: #57b56a;
-    --turf-dim: #0f2a18;
-    --gold: #eecf7e;
-    --gold-dim: #3b3018;
-    --ball: #cf4a3b;
-    --ball-dim: #3a1a16;
-    --chrome: #2f66b0;
-    --chrome-strong: #4d8cdf;
-    --chrome-deep: #142e54;
-    --band-short: #8d78ab;
+    --ground-a: #060f09;
+    --ground-b: #0d2013;
+    --ground-c: #16311d;
+    --surface: #131f1a;
+    --surface-2: #1b2c26;
+    --surface-3: #263e35;
+    --ink: #f4efe0;
+    --ink-dim: #b6ad98;
+    --ink-faint: #7c7768;
+    --turf: #4a9a56;
+    --turf-strong: #64c26e;
+    --turf-dim: #12281a;
+    --gold: #e0b25e;
+    --gold-dim: #3c2c12;
+    --ball: #a53a2e;
+    --ball-dim: #34140f;
+    --chrome: #2f8f7a;
+    --chrome-strong: #4bb89e;
+    --chrome-deep: #123830;
+    --band-short: #9478b8;
     --band-good: #b7c052;
-    --band-full: #5f93c9;
-    --band-yorker: #4f9e5f;
-    --border: #2a4066;
-    --border-soft: #1a2c4c;
+    --band-full: #4a8fa8;
+    --band-yorker: #3f8a52;
+    --border: #2e4a3d;
+    --border-soft: #1a2e26;
     --shadow: 0 12px 32px -12px rgba(0,3,10,0.75);
     --ground: var(--ground-a);
 
@@ -190,11 +195,27 @@
   .subnav { display: flex; gap: 6px; margin-bottom: 18px; border-bottom: 1px solid var(--border-soft); padding-bottom: 0; }
   .subtab-btn { appearance: none; border: none; background: var(--surface); color: var(--ink-dim); font: inherit; font-size: var(--fs-small); font-weight: 600; padding: 8px 16px; border-radius: 9px 9px 0 0; cursor: pointer; border: 1px solid var(--border-soft); border-bottom: none; margin-bottom: -1px; }
   .subtab-btn[aria-selected="true"] { color: var(--ink); background: var(--surface-2); border-color: var(--border); }
+  .press-filter { display: flex; gap: 4px; }
+  .press-filter-btn { appearance: none; border: 1px solid var(--border-soft); background: transparent; color: var(--ink-faint); font: inherit; font-size: var(--fs-micro); font-weight: 700; letter-spacing: 0.03em; padding: 3px 9px; border-radius: 999px; cursor: pointer; }
+  .press-filter-btn[aria-selected="true"] { color: var(--gold); border-color: var(--gold-dim); background: var(--gold-dim); }
+  .radar-wrap { display: flex; justify-content: center; margin: 4px 0 8px; }
+  .radar-chart { width: 100%; max-width: 190px; height: auto; }
+  .radar-ring-outer, .radar-ring-mid { fill: none; stroke: var(--border-soft); stroke-width: 1; }
+  .radar-data { fill: color-mix(in srgb, var(--gold) 32%, transparent); stroke: var(--gold); stroke-width: 1.6; stroke-linejoin: round; }
+  .radar-label { font-family: var(--font-body); font-size: 8px; fill: var(--ink-faint); font-weight: 600; }
+  .mini-field-wrap { margin-top: 12px; text-align: center; }
+  .mini-field { width: 100%; max-width: 130px; height: auto; }
+  .mini-field-label { font-size: var(--fs-caption); color: var(--ink-faint); margin-top: 4px; }
   .subpanel[hidden] { display: none; }
 
   section.panel { padding-top: 26px; }
   section.panel[hidden] { display: none; }
   .panel-head { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; margin-bottom: 18px; flex-wrap: wrap; }
+  .breadcrumb { font-size: var(--fs-caption); color: var(--ink-faint); margin-bottom: 10px; }
+  .breadcrumb a { color: var(--ink-dim); text-decoration: none; cursor: pointer; }
+  .breadcrumb a:hover { color: var(--gold); }
+  .breadcrumb .sep { margin: 0 6px; color: var(--border); }
+  .breadcrumb .here { color: var(--ink); font-weight: 600; }
   .panel-head h1 { font-size: var(--fs-heading); font-weight: 700; }
   .panel-head .sub { color: var(--ink-dim); font-size: var(--fs-body-lg); }
 
@@ -943,6 +964,8 @@
   .facility-tier-badge.tier-poor { color: var(--ball); }
   .facility-request-btn { appearance: none; background: var(--surface-3); border: 1px solid var(--border); color: var(--ink-dim); font: inherit; font-size: var(--fs-micro); font-weight: 700; padding: 7px 12px; border-radius: 7px; cursor: pointer; flex-shrink: 0; white-space: nowrap; }
   .facility-request-btn:hover { border-color: var(--chrome-strong); color: var(--ink); }
+  .academy-action-btn { appearance: none; background: var(--surface-3); border: 1px solid var(--border); color: var(--ink-dim); font: inherit; font-size: var(--fs-micro); font-weight: 700; padding: 7px 12px; border-radius: 7px; cursor: pointer; flex-shrink: 0; white-space: nowrap; }
+  .academy-action-btn:hover { border-color: var(--chrome-strong); color: var(--ink); }
 
   /* ---------- Boardroom: budget-allocation rows ---------- */
   .board-budget-row { margin-top: 16px; }
@@ -1102,9 +1125,20 @@
         <div class="task-item"><span class="task-dot normal"></span><div><div class="task-title">Confirm squad for Lions fixture</div><div class="task-sub">Selection meeting recommends 2 changes</div></div></div>
       </div>
       <div class="tile news">
-        <span class="eyebrow">From the press</span>
-        <div class="news-item"><div class="news-kicker">Breakout Star</div><div class="news-headline">Chaudhry's rise has the dressing room talking</div><div class="news-dek">Three fifties in four innings &mdash; the 21-year-old is forcing his way past a settled top order.</div></div>
-        <div class="news-item"><div class="news-kicker">Board</div><div class="news-headline">Icons ownership backs a "youth-first" rebuild</div><div class="news-dek">A quiet trajectory shift after two seasons short of the knockouts.</div></div>
+        <div class="tile-eyebrow"><span class="eyebrow">From the press</span>
+          <div class="press-filter" role="tablist" aria-label="Press filter">
+            <button class="press-filter-btn" role="tab" aria-selected="true" aria-controls="press-club" data-pfilter="club" onclick="filterPress(this)">Club</button>
+            <button class="press-filter-btn" role="tab" aria-selected="false" aria-controls="press-world" data-pfilter="world" onclick="filterPress(this)">World</button>
+          </div>
+        </div>
+        <div id="press-club">
+          <div class="news-item" style="border-top:none;padding-top:0"><div class="news-kicker">Breakout Star</div><div class="news-headline" style="font-size:var(--fs-subhead)">Chaudhry's rise has the dressing room talking</div><div class="news-dek">Three fifties in four innings &mdash; the 21-year-old is forcing his way past a settled top order.</div></div>
+          <div class="news-item"><div class="news-kicker">Board</div><div class="news-headline">Icons ownership backs a "youth-first" rebuild</div><div class="news-dek">A quiet trajectory shift after two seasons short of the knockouts.</div></div>
+        </div>
+        <div id="press-world" hidden>
+          <div class="news-item" style="border-top:none;padding-top:0"><div class="news-kicker">Pakistan T20 Cup</div><div class="news-headline" style="font-size:var(--fs-subhead)">Title race tightens after Karachi Kings&rsquo; win</div><div class="news-dek">Three points now separate the top four with a third of the season left.</div></div>
+          <div class="news-item"><div class="news-kicker">Transfer</div><div class="news-headline">Lahore Lions confirm overseas signing ahead of PPL auction</div><div class="news-dek">A statement of intent from the group stage&rsquo;s form side.</div></div>
+        </div>
       </div>
       <div class="tile squad-alert">
         <span class="eyebrow">Squad status</span>
@@ -1424,10 +1458,10 @@
           <thead><tr><th>Batter</th><th></th><th class="num">R</th><th class="num">B</th><th class="num">4s</th><th class="num">6s</th><th class="num">SR</th></tr></thead>
           <tbody>
             <tr><td class="player-name">Umar Ansari</td><td class="dismissal">b Iqbal</td><td class="num">28</td><td class="num">19</td><td class="num">4</td><td class="num">0</td><td class="num">147.3</td></tr>
-            <tr><td class="player-name">Rizwan Sheikh</td><td class="dismissal">c Malik b Awan</td><td class="num">17</td><td class="num">14</td><td class="num">2</td><td class="num">0</td><td class="num">121.4</td></tr>
+            <tr><td class="player-name">Rizwan Sheikh</td><td class="dismissal">c Malik b Awan</td><td class="num">17</td><td class="num">14</td><td class="num">2</td><td class="num">0</td><td class="num">121.4</td><td class="num">6</td><td class="num">245</td><td class="num">$185K</td><td class="num">$2,400/wk</td></tr>
             <tr><td class="player-name">Waqar Ansari</td><td class="dismissal">run out (Farooq)</td><td class="num">31</td><td class="num">22</td><td class="num">3</td><td class="num">1</td><td class="num">140.9</td></tr>
-            <tr><td class="player-name">Hamza Malik*</td><td class="not-out">not out</td><td class="num">58</td><td class="num">41</td><td class="num">5</td><td class="num">2</td><td class="num">141.5</td></tr>
-            <tr><td class="player-name">Zain Chaudhry</td><td class="not-out">not out</td><td class="num">12</td><td class="num">9</td><td class="num">1</td><td class="num">0</td><td class="num">133.3</td></tr>
+            <tr><td class="player-name">Hamza Malik*</td><td class="not-out">not out</td><td class="num">58</td><td class="num">41</td><td class="num">5</td><td class="num">2</td><td class="num">141.5</td><td class="num">6</td><td class="num">312</td><td class="num">$340K</td><td class="num">$4,200/wk</td></tr>
+            <tr><td class="player-name">Zain Chaudhry</td><td class="not-out">not out</td><td class="num">12</td><td class="num">9</td><td class="num">1</td><td class="num">0</td><td class="num">133.3</td><td class="num">6</td><td class="num">298</td><td class="num">$210K</td><td class="num">$2,800/wk</td></tr>
           </tbody>
           <tfoot><tr class="extras-row"><td colspan="2">Extras (b 2, lb 1, w 3)</td><td class="num">6</td><td colspan="4"></td></tr></tfoot>
         </table>
@@ -1549,7 +1583,7 @@
     <div class="table-card">
       <div class="table-scroll-inner">
       <table class="squad">
-        <thead><tr><th>Player</th><th>Role</th><th>Status</th><th>Form</th><th>Condition</th><th title="The coaching staff's own read of his current ability - a star estimate, never the raw hidden number">Ability</th></tr></thead>
+        <thead><tr><th>Player</th><th>Role</th><th>Status</th><th>Form</th><th>Condition</th><th title="The coaching staff's own read of his current ability - a star estimate, never the raw hidden number">Ability</th><th class="num">Apps</th><th class="num">Runs&nbsp;/&nbsp;Wkts</th><th class="num">Value</th><th class="num">Wage</th></tr></thead>
         <tbody>
           <tr>
             <td><div class="player-cell"><div class="player-avatar">HM</div><div><div class="player-name">Hamza Malik</div><div class="player-hand">RHB</div></div></div></td>
@@ -1582,7 +1616,7 @@
             <td><div class="pips"><div class="pip on bad"></div><div class="pip on mid"></div><div class="pip"></div><div class="pip"></div><div class="pip"></div></div></td>
             <td><div class="qbar-wrap"><div class="qbar form"><span style="width:80%"></span></div><span class="qtier">Fresh</span></div></td>
             <td><div class="star-row compact" title="Current ability: good, per the scout's estimate"><svg class="icon filled"><use href="#i-star-fill"/></svg><svg class="icon filled"><use href="#i-star-fill"/></svg><svg class="icon filled"><use href="#i-star-fill"/></svg><svg class="icon empty"><use href="#i-star-line"/></svg><svg class="icon empty"><use href="#i-star-line"/></svg></div></td>
-          </tr>
+          <td class="num">6</td><td class="num">9w</td><td class="num">$165K</td><td class="num">$2,100/wk</td></tr>
           <tr>
             <td><div class="player-cell"><div class="player-avatar">UB</div><div><div class="player-name">Umar Baig</div><div class="player-hand">RHB</div></div></div></td>
             <td><span class="role-cell"><img class="icon sm" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHQAAAB0CAYAAABUmhYnAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAABktSURBVHhe7Z3pV1RXusb7T7gf+va96XTntji0Q2Jwjkk60SgqKlMAaTUyI1MJyFDFPFPFKDPFUKLgLOLYMbYZHQEVGWUyoImaRLtNjANgvjx3v+fUoaqgpLRTlZC19rPWXpis5Fjr/Oqdnr3P4Xdcvy3d/OYmhp8OQ/uPXL9V/fDwB+w8tROe2Z74sOlDPB58zKH+VnXvwT1sP7kdK6NXYvrm6ViTuganWk5h+Cceqb853fvhHqpPVcNGYYOpflMxOXAypoZNhX2+PU53nOZAf0u6//A+dn28CytjVmKy72RYBVrBKpStSCtMiZ0CuxI7HG87jsGfBjnYia6Hgw9x8MxB2MbZijCDdDAnxUzCpAS2EidhdelqHG49jEfDjzjUiSpqeI5dPIaVsWMjc1KsFmYyWynisim2QX1LPYc6EfVk6AkOnz+MJVFLDCMzSg8mgUzVLatkK6wuXo1rd65xoBNJj4ceo/5sPeYHzTcemSzFjsBM0y7259nK2dhcuxl9d/s40ImioadD2PvpXkzxmAIrXwZRG5mTohi0Z8Fk69WMVxGwJwAD/xrgMCeSak/XwjrQGlN8GFD9yKQGiGBSzRwFc0baDATvD8bdH+9ymBNJBPOdiHcwxW+KMGeOSbPPgBleF477j+9zmBNFjwYfjcyZUzdPxeQgLUypATICc3LaZAGm4rACX9//msOcKPr3j/8WvNlVsaswzX+a8cgcVTOt0qwEmPLDcnR/281hThSRnac5qYFNtI0IUy8yrWIZ0GfAnJs5F4ojCrTfbucwJ4ooMmtO12CZYtmY0USAqT9namFSml2YsxBxx+LQcbuDw5woevjkIfZ9tk/nAOmbBsa6WfaTIpNgxp+IR9e3XRzmRNHg8KDgAK2KW4XJflqYYWJkPqsBskq1wvzs+UKa7bzTyWFOFA0ND+Ho+aNYJmdp1mdUZBJMyZsdVTOtM62xtW4r2m61cZgTRWS015+rx+LQxbo0S5EppVkjNZPWbNVsbN6zmTdAE0mPnjzC3k/2YrrPdFj5MIijI9NImqVFdp7/bn/0ftfLYU4UUZqt/bgW1gHWujTLInOMN6sHkhbNmeTNfvPgGw7TUurpbMZAXweePP7xuW9yzT9r8Gbom4I3a9Q0SGJLPzLZn2emzUTogVA8efqEw7SU2q5cQH66DPX7s9F84QTufnMdg4+/f+YNp8gkO48aIOEMkL6dJ9VMSrN60Sk4QKkzhG722x+/5TAtpa7WSyjMCEFavAM0lX6o26fAoRoFms4cxM3+Djx89AAPHj7ADw9+ECB8/+h70Ztlc+a0zVo7T2qAnjWaaO08xVEFrt+7zmFaQk9ZlBHMEmUY0mIcUFq6ETW1fjhUF4IDuwOxb0coiisU2P/RTuw+tQt1pw/hUtdlVJyswIr4FZgWMMrOi2FApZqpB5McoNdVr/M505L66ekwOpovoDA1CElyO6SkuiAp3RWJbG0r8kDNrkAcPBACTW0AfFPtsNDvdayVr4F3rjfeUryFKcFTYLWFQdRG5rPsPIrMBdkLEHs0Fm23+ZxpMXU0X0RuvA/iwlYhJs4OPrIVcPFYChf35djgtwIbA5Zji3wtCkq9kKX+AOtj38Nc31msXrLmh6JS6/5YKZ6RZtlPcoAEO+94PI9MS6qrpRE5cb6ICVmBiKhV+MD3b7B1mQvb9xfCN8gJQWFuWLPuXSxaPhuLbGYhMGIVwtPssWrLIsz2n4GpElCCGacHU78BYjApMmOOxvBDXZZUT9sVbIv3Q3KULdJSXbHJm8G0mwxHx7/Ax8MaKXFOUCWvQ5jsPTi7zcXbtpOx2PavWOk4B47ui7DEzxqvBUzHZNlkTIpk8AgojSYSTG2Ezsmag4j6CO4AWVI9bZeRF+eHNLktyst8kJvriwD/d7DR+Y/w3/hHpEUthiZ/I3bkb4AmexUqM+YhT/F7bHD6PebP+j3eW2AFZxbJb7tbY/rmv8IqhEWonAGk2qkFSZFJp/Nk+2Xcm7WUng4P4xqrmfkJm5ERY4/tGk/s2RMEdakvImVvwGvd/0Lm8WdkJ6zALnUgdrG6ub/cC8c067A3ZxGCHP6A+S/9F957+Q/YuGAmXNcswBsbGVR/BpV1uJMUWqgsSl/LeE3wZru+4VtgFtHToSG0NZ5BjsIbmSydbq/0xMG6YBw7HoGDewKRk7gIfhv+Gx5/fwURIUtQnOeHQpUbSjNWYm/2XNQUbEAUS8srX30FDn9+GVtmzUDo2/Ph4rgYi73nYGbgNEwKZTCjJ2FW6iz47/HHV/e/4jAtIRpN2prOMpg+UMY4QlPhibpDMpz8KAqffx6Hzz8KwY7cNxET8D/YtH4aNgeuQHbuFqRneCMlZR2yGNiEOGfkpa6Hv8tSvD9tEqKsZyNp/hz4LV8Au42L8LbfbMwKYvNo6GSsyFqB9gFeMy2mzisXUJQsQ0a0HaoqPFhkijDPnE1C0yUlGi9koLZoPYvAV+CzcQpCI1yRkROB3CI5VLnsZ7ECUQk+SEgJQFZGCDxXvAXZ4nmIWDAb6xbOwNLls+DgsQjvBs7Bq0F/xZK4Jei8wccTi6i79TLUGaFQxYmRSWlWhJmIy1dUaGvPY6sUx+qVCPNdjI1Of4av50IEhryP4KgPkJYTjpLyVAQq3BEsd0eI3APRCj9scXeE27L5eHvBVMxaZIWljnMRGL0StlsX4vWgGSg+XowHjx9wqObUl12tUKvCkBXvxGCyyDxIMCMFmJcuq9DesQ3dPYXou16MCxfVSE/zwjqnaXBc9TLWOc9gs6gd0nK3Ir8sHrEpwYhN34LIJH8WrQGISwyCi4ct5i97DTPfnQZrm5nY4P8uFBlrsSZ8EYoObsOdu7c5UHOpu/USytJlyEogmO5CZH54UozMS5eVDGYeenqLGMwSXP+yFL19ahyoS8cmj3ewbMnLcFz9JwT4LmAgvZGglCFJGYK8ojgoCxTYmuCHsGgfyKI88b73arxhP1+A+s7aeQiPcUB6/t+RVRaNS80NGBzkW2M/W11XG9ho4gdVrD005Qwmi0yC+cUZEWZbey66ugsZyBL0D5Rh4Iaa/axk/34PsvJCYetgDRubP8Hd7f8Q4DcPsnBnxKUHo1CdwOppHItUGUJivIVIlScFwtXXHtbvvYrXl86El8wGhSWbUFUZgiNHqnHr1k0O9Oeou7URudGeyFCsFmDWGaRZMTLFNKuDKQJVs3+nwWdfFCE+3Q+2jnOwfNlLcLH7E7w95yE6YRNyiqORmS9n0RrKQAawn2FIVYWzuuqF9X6OWO7yNvu5jDVS61FV7okDtQnobDmDoUH+BpP/SN2tTciP82Uw14o1U2iARJiXr4iRSTApMr/sLx2BOXCjXABKgLu6K3Hq41LEJgfDhqXQd5f8Ea72r8DfZwGCwxwRovCAgsFMZjALy5KQlh2BMDbbxiQGwlu2jgG1RVrWBuys8UPtdl98WJ+NO1/zs0IvrN62yyhODoCSjSaiaSCNJlKa1UUmwZSi88bNcmERVHFVsf9uN06drmaRGoEVTguwnKVfN/uX4OY8BX7Ba5FTIEdxeRIbbSIRnRIEv7D18NnihvU+DnDzWcMi150B3Ywjh7fi5PEUXGn4Bx79yDve5xKZBtdYzSxlNzaLjSbVGi+WZkWYX5xJGEmzVDOfBdMQagVb1QzqHnzyxQ4o86Px3lprLF3yEpzWvAw/r3mIitvIRphNWO/vgI0BTlizcRnedXyDjS5v4e9+dlDl+aJ2lx/qD4fiSL0C/zhchK9v8NMJJjU8NIj2pnMoZiNETsL72F7liboxkSk2QCLMsmfClJYUqf0DVez/q8a5hiqU71BizbolcHSahXUOf4Gr83Qss38Ni9ZY4w2WlufazMZrS2dg0ep58JQ5slQciJpaX+yqCUBBpjuKVVH4hjdH44tgtjWcQUGsP7LjnbFdsPN0pgHNmfow9RsgYyClpQNazr4AajbaVKCz6wBOnKpi9TIOQZtt4O/+KgI2T8E7DrMwe9ksLLCdh7/Zvwn34PXIK1GgkqV8TZU3MhPXI3GLF3rar3KYptR56TxLszJksrlP8GZZA/TRKf05kxqgIm0D9HwwpaWDqhZm1L7ranR0FuFiE+uCP9uH+upA7FKvQUqGMzYFuyIgygsRif6o2VeCi4312LkjEKkKV6SE+WOgr4fDNKWe1kuoUG4VYWobIAkm2XnSaEIw9CPzeYFKS4JKXwi6FhkR3T070MTS8KWzSnz+aS721WXi4OF87N6XiOMnlDhUF420GFfkxIXi9lc3OExTGuhuZzDDRTtPuwWm82YN58zxGqDnXcagtrSWoflKARobs/HJZ0qc+mcayxDh2LMrGMo4V5RlxuDet3c4TFPq72pDeUYYcqhmsgZItPP0vVmCKdp55oApLQkqXberuwCtbbnCLg05T//4MAL79wehQu2BFLkjKnJjceM6T7MmRXNmSTJ1sy4jm9OGdp6UZp+/AXreRdej63b3FAiNFv199PfSl+nAgWCUl7gjPswOpapo9HS0cJimRDBzozyhitY1QGNhipFpOZiFRmCyyCzdhDS5E4MpR+fVJtAxF+3H5jImsvMKYnyQGW0HTbm0OU1pNkFbM0U7T0qz5oJJ1yCYtLVGow/BbLqUoYUZJcIs24QsljEqc6LRcbURw0NDHOZ46mEwy+iUQKz9SJo1ZudJ3qwUncYAvciSYEqRSV8aqpmff5HAaqYYmZXqTchJdEX1thjQkdCn/L3w46u7pZE1QFvYTXPCDo2XNjL1YYqmQW+f5WDS9aUGiGBKkVlZ5o5siswsOWjfVfuRuYzp6dAgrl05j0pVGPKSWQOkGWvnGY4mpu28512jI1OqmSLMSGFftVLtDlWsE0pSQ9HV0sRhjqfhwSdobzyD8jQZtiW7it6s9nSeDqZUM4tHQJoTJn1JJJhizZRgBgkHzOigWXaEJ0uzlznM8USP9HVcOgt1ajCbM52wnd086mZHp1ldZJqnAZKuMRom/X0jMNloQvurafI1SA12Q38XP6JpUl0tDahQhSMzhrpZsQEiO+/sOd3pPP1dE3PApEUg6csh1kxxztR1s6wBYmlWwzJFasQqKMM34puv+zlMU+rvaoUmK4LVJumopS7NEsyOzm0scshoN1/zIy26nq5m5rHIzBipmQdYmtVUejCYtihODcK/vuN2nknd7u9BlTKUpVnaz6Ru1jDNmtub1V90HcMGSFczxW52kwCzKicSt2/y14Gb1ACrRWUpQchLeB/VY7xZHUy66eaGKUWmlGbFmimaBgcJZukmpISvEmB+2d3KYZpSX2cL8mJ9kZWgb7Tr7DxpP9Pc3Swt/TRLc6YOpphmCaZSboeqrEhhzqRjLtqPzWVMnS2NULLWX8nmOWk/k+w8CSZFjK4BMp+dR0sfJtVMgwaIdbOUZmk3R5MjR1dzA+hkhPZjcxkT2WSF8YHC85n6MMmbFWFapmbSNQxh6s+ZUUI3W6X2QF7SOuzYFovuFjLauTc7rvrar6Aig40mUjcrHIKWGiBxP1M/Ms2VavVh0vWlmjnSzbKaqVG7Iy/ZDTvyyJvlpoFJ0RbY9mw5chNdBaOdIoIiwxRMY4BeZBlGpv6cqTUNaM4s92Bp1gVVqij0tHKY44pqUNfVRmzPUQjpTDrRTjeTahcZ37o0W8xgmt+bpS+JlGb150zBzmMwVTFOKIoP5jBNiWB2Xr6A8oytyE1wZTfP8MEhihS6yfo1kyCYPzLHzpk0mhBMpdweStkHuH6NnzQYV9TqU2NRpQoXblpVmX5k0ua04blZc9p5hjClNDvKm2VpXyV3QFa4J24N8GdPTKqffeN35MrZTVvLukcxMvW7WZ1pUGp2mBTpxk8a0JwZLDhSGZF2KImX4f49/p5ak7o90MdgRiFTYSfWTCHNjnaALOPN0rUMRxPDbpbSbHoE+5KpInHvDv9NRSZ19/ZXqEgPRWa0vegAaWFSuqMaZphmzQtUik6dnUcNkL5p4M4icy0bTaJxs5e/1MKkqBaVJQYim15QUUmRGTQC07ABsqydJ8LUebMEs4rBVEauwY4cOa6zeVj7kbmepYGuNuRGeiAr1kHYnBbnTP3RRAfTnN0sLYJJ1zWcM3U1kyJTOJydHYXuqw3cATKlXvaNz1d4QalgtYnVKB1MsQEiA9zypoF+A6Stmexz0OfJT3ZDTX4M67obQWeWtB+by5h62TBelh4mHJyqqpAcIB1MuskiTDEyzZVqJZhju9kEwU4UNqcJZso67CqME9IsjVLaj81lTFIDJDlAIkzxyWkpzVo6MvX3M/VP5xHM3EQXVOdE8Zr5PBrbAIkwaTQxhGkYmcYAvcjSh2kszdLnoNN59Hi+Oi0EvW383KxJmWqA9I9aWhqm2M0aRqZSYY8cuTf6Opo5TFN63gZIOtFOEMwNs6eXYNKBLnE0IQeKvFlK+9nRDshjX7abffw9tSb1og2QuWDS0o9Mcpro76P0Tg0QRSaZGJkMZlmiP+7e4S+oMCnanK7Olf9qDRB9SXRpNkMPpkx4lQ2dAarMisT39/hvKhpXNITTU2A1+dEoYCMAvW3kl2qAaNF16Jr6kSmZBkLNZJ9HxWpmpSqS75qYEu1nXmtuQHVeNLaluGE7q5kiTMs3QLToWhJMXQMk2nkjDZDcHppsOfraeQM0rujh1c6rDahgN4seatVtTosw9WumuRsgWgRzdM384kzSCEw60KVSOKBSGSF86bidZ0J9nc2ozI1GKt00dvN0MMUnpw1rphiVloApRSaldxGmDBr2eehsEp2EaGs8iyH+Ttrxdau/C7voZb8xjgYwDY9aGu5nmgMmXcMQphSZop1Hn4MOmNHpPEqzHZfPgx5B1H5sLmO6f/c2avPlyE1wFHb29U0Durn6Jw0kmMbgvOiSYFLEj37biDBn1mlhJrlCkxmFruZGDtKU7t35CtuVW7At0UkYBQz3M6XIpJr5SzlAWphCZHohO84J6tQQ4US79iNzPUu3B7pRluyLgiRn8cEhITIjBJhimrWMaTA+TKmb9URmjD0K4vw4zOfRje6rKIv3xrYkFpksEqjxkCLTksdGng+mh/BKG5XMFX38RLtp9V+7gpqccBSmuow80kc3c2xkGsL8uUDHwhzlzWprJu3m5Ed74UYPfwzepG50t+BgWTzKMjdoXx1jeNTS0jClBmi0N0sv/qe3n+TEOgrPj97q5+/OMymCeWR7Oipy3RlMb23NlE60j62ZEkxjgF5kjY1M3ZwpwKyTCQ2Qit4cpgrj7zR4Ht0Z6MURjQoVOV7YWaWDqe/N0s3+pWAa1MwKDwbTHtuzI0DvXtB+ZK7x1H31PNRKT2jUnsKrQQ1Hk1+zmxUboKqsCHS38G72uXXjejPU29ajpsYXR46G4dPP4hhM6mbFOVOsmeapl9IyhGm6AeJPTr+A7n7Xj6oyL+E3Fxw7vhXnziejpTWb3ewCdtPN/6wJwaSIJ5i8AbKAHj38NzRFvsKNPHI0BGfPJaO1LQe9fUV6MI0DepElwaTIpNN5Y2DyBsh8+rAuD4U5Lti7zx+ffBqLqy1ZwlkdilApOn8uVLoG1WEy8sWaqRLSrLBrwtIsb4DMqP7uZuyslLOb6sWidCsuNqShozNf69PSU9Qi0P8U6rMaIH2YSgaTN0Bm0sMff8BeTR4Ksjyxe7c/Tn8cjearWQIAqY5KUI0BG2/pw6QTDWKa1W5OUwPEutm8RGeUZ4Si49I53gCZS+1XGpCXHoqCXHfUHdoi3HSKJopSw71O4+BGLylVj41MaT+TaiY9nuAKTdZWESbfzzSfaKf/0sXPUZQdhpJCDxw7Fo4LF1OF5kXaIpMgGQOov+i/MUyz0mhCMLWjSZUn8lLWoTonEt1XL/JjI5YQ/Urhq02foapYjko2ypDJ0NCYLrwBk+ZRXZQ+G6oEU/RmpcgUH+kTIpNgaryQleyCiuxI9PBnTSyr4eFBdFw9h53lMdhR6YeTJ+VobMpA5zWCqovU8WCOjUytaSDYeZ7CcZaCZBmutfBnTX4x9V67gt2VsdhZ5c9gyAX3SIQq7raMhmoIU/e2EWnOJJjkAOUkOGFbrC+6+Av3f3ld77qCmjI5dlZQpEYJkXqtK39U+hWBGkam1M3q0mx1lRfyk51RlrwZA91tHOavoadPh9Dd3oDKPDou6S2kXzFSDaHSSEMwxQeHxJopwowU7Dw6k1SU6orqrFB81dfBYf6aol8q09V6AepcetmEFz5i6bexSdcoUfqlLliy8+icrs7OCxY2y+kERG1+FO7wN0FPHHW2nEdZDv2yNo+RmtresU0ASWmY/F+xZiaJMA/JBJgFKc7YXaTArS/5I30TTu3NZ1GYHYyKUm+cOE77pklCtFK9bGhM0z4GL9ZMKTL3FkeDzippL8E10dRy+QyKcsNQku+LPbuCcOJEBE5/HCPYhcdPhDOYYmSWZrhhD4vMvrZG/oKKia4rjWdw9IAGu6sTUKX2F/zf/QeCsGdPgHDCXp29CXuL5OhrpQeHuDc74UVPo317+xb6ulpwdG8JNGVh0FT6Cs++lGW640BpIr7suIyfuJ332xLtjHx352tcPPNP7N2lgiYvGPXqdNzs5udmf3n97nf/D0cCXEBU6k+SAAAAAElFTkSuQmCC" alt="">Middle order</span></td>
@@ -1590,7 +1624,7 @@
             <td><div class="pips"><div class="pip on bad"></div><div class="pip on bad"></div><div class="pip"></div><div class="pip"></div><div class="pip"></div></div></td>
             <td><div class="qbar-wrap"><div class="qbar form"><span style="width:95%"></span></div><span class="qtier">Fresh</span></div></td>
             <td><div class="star-row compact" title="Current ability: average, per the scout's estimate"><svg class="icon filled"><use href="#i-star-fill"/></svg><svg class="icon filled"><use href="#i-star-fill"/></svg><svg class="icon empty"><use href="#i-star-line"/></svg><svg class="icon empty"><use href="#i-star-line"/></svg><svg class="icon empty"><use href="#i-star-line"/></svg></div></td>
-          </tr>
+          <td class="num">3</td><td class="num">78</td><td class="num">$95K</td><td class="num">$1,400/wk</td></tr>
           <tr>
             <td><div class="player-cell"><div class="player-avatar">DR</div><div><div class="player-name">Danish Raza</div><div class="player-hand">RAF</div></div></div></td>
             <td><span class="role-cell"><img class="icon sm" src="data:image/png;base64,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" alt="">Opening bowler</span></td>
@@ -1598,7 +1632,7 @@
             <td><div class="pips"></div></td>
             <td><div class="qbar-wrap"><div class="qbar form"><span style="width:35%;background:var(--ball)"></span></div><span class="qtier">Injured</span></div></td>
             <td><div class="star-row compact" title="Current ability: very good, per the scout's estimate"><svg class="icon filled"><use href="#i-star-fill"/></svg><svg class="icon filled"><use href="#i-star-fill"/></svg><svg class="icon filled"><use href="#i-star-fill"/></svg><svg class="icon filled"><use href="#i-star-fill"/></svg><svg class="icon empty"><use href="#i-star-line"/></svg></div></td>
-          </tr>
+          <td class="num">4</td><td class="num">11w</td><td class="num">$220K</td><td class="num">$2,600/wk</td></tr>
         </tbody>
       </table>
       </div>
@@ -1633,8 +1667,8 @@
         <div class="staff-row-main"><span class="staff-name">Zohaib Tariq</span><span class="staff-role-label">16 &middot; Fast Bowler &middot; Scouted PA &#9733;&#9733;&#9733;&#9733;&#189;</span></div>
         <div class="staff-row-meta">
           <span class="pill first academy-status-pill">Recommended: Sign</span>
-          <button class="facility-request-btn academy-action-btn" onclick="decideAcademyProspect('zohaib','sign')">Sign</button>
-          <button class="facility-request-btn academy-action-btn" onclick="decideAcademyProspect('zohaib','release')">Release</button>
+          <button class="academy-action-btn" onclick="decideAcademyProspect('zohaib','sign')">Sign</button>
+          <button class="academy-action-btn" onclick="decideAcademyProspect('zohaib','release')">Release</button>
         </div>
       </div>
       <div style="font-size:var(--fs-micro);text-transform:uppercase;letter-spacing:.04em;color:var(--ink-faint);font-weight:700;margin:14px 0 4px">Top Talent</div>
@@ -1642,8 +1676,8 @@
         <div class="staff-row-main"><span class="staff-name">Rayyan Farooq</span><span class="staff-role-label">17 &middot; Top-order Batter &middot; Scouted PA &#9733;&#9733;&#9733;&#9733;</span></div>
         <div class="staff-row-meta">
           <span class="pill first academy-status-pill">Recommended: Sign</span>
-          <button class="facility-request-btn academy-action-btn" onclick="decideAcademyProspect('rayyan','sign')">Sign</button>
-          <button class="facility-request-btn academy-action-btn" onclick="decideAcademyProspect('rayyan','release')">Release</button>
+          <button class="academy-action-btn" onclick="decideAcademyProspect('rayyan','sign')">Sign</button>
+          <button class="academy-action-btn" onclick="decideAcademyProspect('rayyan','release')">Release</button>
         </div>
       </div>
       <div style="font-size:var(--fs-micro);text-transform:uppercase;letter-spacing:.04em;color:var(--ink-faint);font-weight:700;margin:14px 0 4px">Good Talent</div>
@@ -1651,16 +1685,16 @@
         <div class="staff-row-main"><span class="staff-name">Huzaifa Nadeem</span><span class="staff-role-label">16 &middot; Wicketkeeper &middot; Scouted PA &#9733;&#9733;&#9733;</span></div>
         <div class="staff-row-meta">
           <span class="pill second academy-status-pill">Recommended: Monitor</span>
-          <button class="facility-request-btn academy-action-btn" onclick="decideAcademyProspect('huzaifa','sign')">Sign</button>
-          <button class="facility-request-btn academy-action-btn" onclick="decideAcademyProspect('huzaifa','release')">Release</button>
+          <button class="academy-action-btn" onclick="decideAcademyProspect('huzaifa','sign')">Sign</button>
+          <button class="academy-action-btn" onclick="decideAcademyProspect('huzaifa','release')">Release</button>
         </div>
       </div>
       <div class="staff-row academy-row" data-prospect="ibrahim">
         <div class="staff-row-main"><span class="staff-name">Ibrahim Yousuf</span><span class="staff-role-label">17 &middot; Allrounder &middot; Scouted PA &#9733;&#9733;&#9733;</span></div>
         <div class="staff-row-meta">
           <span class="pill second academy-status-pill">Recommended: Monitor</span>
-          <button class="facility-request-btn academy-action-btn" onclick="decideAcademyProspect('ibrahim','sign')">Sign</button>
-          <button class="facility-request-btn academy-action-btn" onclick="decideAcademyProspect('ibrahim','release')">Release</button>
+          <button class="academy-action-btn" onclick="decideAcademyProspect('ibrahim','sign')">Sign</button>
+          <button class="academy-action-btn" onclick="decideAcademyProspect('ibrahim','release')">Release</button>
         </div>
       </div>
       <div style="font-size:var(--fs-micro);text-transform:uppercase;letter-spacing:.04em;color:var(--ink-faint);font-weight:700;margin:14px 0 4px">Development Prospect</div>
@@ -1668,33 +1702,58 @@
         <div class="staff-row-main"><span class="staff-name">Saad Mehmood</span><span class="staff-role-label">15 &middot; Spin Bowler &middot; Scouted PA &#9733;&#9733;</span></div>
         <div class="staff-row-meta">
           <span class="pill fringe academy-status-pill">Recommended: Monitor</span>
-          <button class="facility-request-btn academy-action-btn" onclick="decideAcademyProspect('saad','sign')">Sign</button>
-          <button class="facility-request-btn academy-action-btn" onclick="decideAcademyProspect('saad','release')">Release</button>
+          <button class="academy-action-btn" onclick="decideAcademyProspect('saad','sign')">Sign</button>
+          <button class="academy-action-btn" onclick="decideAcademyProspect('saad','release')">Release</button>
         </div>
       </div>
       <div class="staff-row academy-row" data-prospect="kashif">
         <div class="staff-row-main"><span class="staff-name">Kashif Ali</span><span class="staff-role-label">16 &middot; Middle-order Batter &middot; Scouted PA &#9733;&#9733;</span></div>
         <div class="staff-row-meta">
           <span class="pill injury academy-status-pill">Recommended: Release</span>
-          <button class="facility-request-btn academy-action-btn" onclick="decideAcademyProspect('kashif','sign')">Sign</button>
-          <button class="facility-request-btn academy-action-btn" onclick="decideAcademyProspect('kashif','release')">Release</button>
+          <button class="academy-action-btn" onclick="decideAcademyProspect('kashif','sign')">Sign</button>
+          <button class="academy-action-btn" onclick="decideAcademyProspect('kashif','release')">Release</button>
         </div>
       </div>
     </div>
 
     <div class="analysis-card" style="margin-top:16px">
       <span class="eyebrow"><svg class="icon sm"><use href="#i-trend-up"/></svg> Academy squad &middot; already developing</span>
-      <div class="staff-row">
-        <div class="staff-row-main"><span class="staff-name">Danish Iqbal</span><span class="staff-role-label">18 &middot; Fast Bowler</span></div>
-        <div class="staff-row-meta"><span style="font-size:var(--fs-micro);color:var(--turf-strong)">&#9650; Progressing well &mdash; closing in on a squad recall</span></div>
-      </div>
-      <div class="staff-row">
-        <div class="staff-row-main"><span class="staff-name">Umar Baig</span><span class="staff-role-label">17 &middot; Top-order Batter</span></div>
-        <div class="staff-row-meta"><span style="font-size:var(--fs-micro);color:var(--gold)">&#9679; Needs more first-team minutes to keep developing</span></div>
-      </div>
-      <div class="staff-row">
-        <div class="staff-row-main"><span class="staff-name">Hamza Sultan</span><span class="staff-role-label">18 &middot; Off-spinner</span></div>
-        <div class="staff-row-meta"><span style="font-size:var(--fs-micro);color:var(--ink-faint)">&#9660; Plateaued this year &mdash; under review</span></div>
+      <div class="role-hint" style="margin-bottom:10px">Same table as the first-team squad, filtered to the academy &mdash; Ability here reads Potential, not Current, since that is what a scout is actually estimating for a prospect.</div>
+      <div class="table-card">
+        <div class="table-scroll-inner">
+        <table class="squad">
+          <thead><tr><th>Player</th><th>Role</th><th>Status</th><th>Form</th><th>Condition</th><th title="The coaching staff's own estimate of his ceiling - a star estimate, never the raw hidden number">Potential</th><th class="num">Apps</th><th class="num">Runs&nbsp;/&nbsp;Wkts</th><th class="num">Value</th><th class="num">Wage</th></tr></thead>
+          <tbody>
+          <tr>
+            <td><div class="player-cell"><div class="player-avatar">DI</div><div><div class="player-name">Danish Iqbal</div><div class="player-hand">Fast Bowler</div></div></div></td>
+            <td><span class="role-cell">Fast Bowler</span></td>
+            <td><span style="color:var(--turf-strong);font-size:var(--fs-caption);font-weight:600">Progressing</span></td>
+            <td><div class="pips"><div class="pip on good"></div><div class="pip on good"></div><div class="pip on good"></div><div class="pip on good"></div><div class="pip"></div></div></td>
+            <td><div class="qbar-wrap"><div class="qbar form"><span style="width:85%"></span></div><span class="qtier">Fresh</span></div></td>
+            <td><div class="star-row compact" title="Potential ability: very good, per the scout's estimate"><svg class="icon filled"><use href="#i-star-fill"/></svg><svg class="icon filled"><use href="#i-star-fill"/></svg><svg class="icon filled"><use href="#i-star-fill"/></svg><svg class="icon filled"><use href="#i-star-fill"/></svg><svg class="icon empty"><use href="#i-star-line"/></svg></div></td>
+            <td class="num">8</td><td class="num">14w</td><td class="num">$45K</td><td class="num">$600/wk</td>
+          </tr>
+          <tr>
+            <td><div class="player-cell"><div class="player-avatar">BN</div><div><div class="player-name">Bilal Nasir</div><div class="player-hand">Top-order Batter</div></div></div></td>
+            <td><span class="role-cell">Top-order Batter</span></td>
+            <td><span style="color:var(--gold);font-size:var(--fs-caption);font-weight:600">Needs minutes</span></td>
+            <td><div class="pips"><div class="pip on mid"></div><div class="pip on mid"></div><div class="pip on mid"></div><div class="pip"></div><div class="pip"></div></div></td>
+            <td><div class="qbar-wrap"><div class="qbar form"><span style="width:90%"></span></div><span class="qtier">Fresh</span></div></td>
+            <td><div class="star-row compact" title="Potential ability: good, per the scout's estimate"><svg class="icon filled"><use href="#i-star-fill"/></svg><svg class="icon filled"><use href="#i-star-fill"/></svg><svg class="icon filled"><use href="#i-star-fill"/></svg><svg class="icon empty"><use href="#i-star-line"/></svg><svg class="icon empty"><use href="#i-star-line"/></svg></div></td>
+            <td class="num">4</td><td class="num">156</td><td class="num">$28K</td><td class="num">$450/wk</td>
+          </tr>
+          <tr>
+            <td><div class="player-cell"><div class="player-avatar">HS</div><div><div class="player-name">Hamza Sultan</div><div class="player-hand">Off-spinner</div></div></div></td>
+            <td><span class="role-cell">Off-spinner</span></td>
+            <td><span style="color:var(--ink-faint);font-size:var(--fs-caption);font-weight:600">Under review</span></td>
+            <td><div class="pips"><div class="pip on mid"></div><div class="pip on mid"></div><div class="pip"></div><div class="pip"></div><div class="pip"></div></div></td>
+            <td><div class="qbar-wrap"><div class="qbar form"><span style="width:75%"></span></div><span class="qtier">Sharp</span></div></td>
+            <td><div class="star-row compact" title="Potential ability: average, per the scout's estimate"><svg class="icon filled"><use href="#i-star-fill"/></svg><svg class="icon filled"><use href="#i-star-fill"/></svg><svg class="icon empty"><use href="#i-star-line"/></svg><svg class="icon empty"><use href="#i-star-line"/></svg><svg class="icon empty"><use href="#i-star-line"/></svg></div></td>
+            <td class="num">6</td><td class="num">5w</td><td class="num">$18K</td><td class="num">$400/wk</td>
+          </tr>
+          </tbody>
+        </table>
+        </div>
       </div>
     </div>
   </section>
@@ -1812,7 +1871,7 @@
     </div>
 
     <div class="analysis-card">
-        <span class="eyebrow"><svg class="icon sm"><use href="#i-shield"/></svg> Roles</span><span class="eyebrow"><svg class="icon sm"><use href="#i-shield"/></svg> Roles</span>
+        <span class="eyebrow"><svg class="icon sm"><use href="#i-shield"/></svg> Roles</span>
         <div class="role-row"><span class="preview-label">Captain</span><select class="plan-select"><option selected>Hamza Malik</option><option>Zain Chaudhry</option><option>Danish Raza</option></select></div>
         <div class="role-row"><span class="preview-label">Vice-captain</span><select class="plan-select"><option>Hamza Malik</option><option selected>Zain Chaudhry</option><option>Danish Raza</option></select></div>
         <div class="role-row"><span class="preview-label">Wicketkeeper</span><select class="plan-select"><option selected>Umar Baig</option></select></div>
@@ -2216,6 +2275,7 @@
 
   <!-- ================= PLAYER PROFILE ================= -->
   <section class="panel" id="panel-player" role="tabpanel" hidden>
+    <div class="breadcrumb"><a onclick="showPanel('squad')">Squad</a><span class="sep">&rsaquo;</span><a onclick="showPanel('squad')">First-Team</a><span class="sep">&rsaquo;</span><span class="here">Hamza Malik</span></div>
     <div class="player-header">
       <div class="player-photo"></div>
       <div class="player-id-block">
@@ -2245,7 +2305,9 @@
       </div>
       <div class="player-header-status">
       <span class="pill first"><svg class="icon sm"><use href="#i-check-circle"/></svg>First choice</span>
+      <span class="pill second"><svg class="icon sm"><use href="#i-star-line"/></svg>Wanted by 2 clubs</span>
       <div class="player-actions-wrap">
+        <button class="view-more-btn" style="margin-top:0;width:auto;padding:6px 12px;margin-right:8px" onclick="openCompare()">Compare</button>
         <button class="player-actions-btn" id="player-actions-btn" aria-expanded="false" onclick="togglePlayerActions()">
           Actions
           <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8l7 8 7-8"/></svg>
@@ -2286,6 +2348,15 @@
           <div class="role-star-row"><span class="role-name">Against the new ball</span><div class="star-row" aria-label="5 out of 5"><svg class="icon filled"><use href="#i-star-fill"/></svg><svg class="icon filled"><use href="#i-star-fill"/></svg><svg class="icon filled"><use href="#i-star-fill"/></svg><svg class="icon filled"><use href="#i-star-fill"/></svg><svg class="icon filled"><use href="#i-star-fill"/></svg></div></div>
           <div class="role-star-row"><span class="role-name">Finisher</span><div class="star-row" aria-label="2 out of 5"><svg class="icon filled"><use href="#i-star-fill"/></svg><svg class="icon filled"><use href="#i-star-fill"/></svg><svg class="icon empty"><use href="#i-star-line"/></svg><svg class="icon empty"><use href="#i-star-line"/></svg><svg class="icon empty"><use href="#i-star-line"/></svg></div></div>
           <div class="role-hint">Role ratings come from his own batting traits &mdash; weighted strengths derived from his attributes, not a separate opinion.</div>
+          <div class="mini-field-wrap">
+            <svg viewBox="0 0 200 200" class="mini-field" role="img" aria-label="Usual fielding position: cover">
+              <ellipse cx="100" cy="100" rx="92" ry="92" fill="var(--turf-dim)" stroke="var(--turf)" stroke-width="1.5"/>
+              <ellipse cx="100" cy="100" rx="50" ry="50" fill="none" stroke="var(--border)" stroke-width="1" stroke-dasharray="4 4"/>
+              <rect x="94" y="70" width="12" height="60" rx="1.5" fill="var(--surface-3)"/>
+              <circle cx="150" cy="72" r="7" fill="var(--gold)" stroke="var(--gold-dim)" stroke-width="1.5"/>
+            </svg>
+            <div class="mini-field-label">Usual fielding position: <strong style="color:var(--ink)">Cover</strong></div>
+          </div>
         </div>
 
         <div class="figures-card">
@@ -2337,6 +2408,26 @@
 
         <div class="figures-card">
           <span class="eyebrow"><svg class="icon sm"><use href="#i-user"/></svg> Info</span>
+          <div class="radar-wrap">
+            <svg viewBox="0 0 140 130" class="radar-chart" aria-label="Batting 76%, bowling 25%, fielding 70%, mental 75%, physical 70%">
+              <polygon points="70.0,20.0 115.7,53.2 98.2,106.8 41.8,106.8 24.3,53.2" class="radar-ring-outer"/>
+              <polygon points="70.0,44.0 92.8,60.6 84.1,87.4 55.9,87.4 47.2,60.6" class="radar-ring-mid"/>
+              <polygon points="70.0,31.5 81.4,64.3 89.7,95.2 48.8,97.1 38.0,57.6" class="radar-data"/>
+              <text x="70.0" y="10" text-anchor="middle" class="radar-label">Batting</text>
+              <text x="132.0" y="51.8" text-anchor="start" class="radar-label">Bowling</text>
+              <text x="106.4" y="126.2" text-anchor="middle" class="radar-label">Fielding</text>
+              <text x="33.6" y="126.2" text-anchor="middle" class="radar-label">Mental</text>
+              <text x="8.0" y="51.8" text-anchor="end" class="radar-label">Physical</text>
+            </svg>
+          </div>
+          <div style="margin-bottom:12px">
+            <span class="eyebrow" style="display:block;margin-bottom:4px;font-size:var(--fs-micro)">Pros &amp; cons</span>
+            <div class="style-note-row" style="color:var(--turf-strong)"><svg class="icon"><use href="#i-check-circle"/></svg><span>Elite technique against spin bowling</span></div>
+            <div class="style-note-row" style="color:var(--turf-strong)"><svg class="icon"><use href="#i-check-circle"/></svg><span>Outstanding between the wickets</span></div>
+            <div class="style-note-row" style="color:var(--turf-strong)"><svg class="icon"><use href="#i-check-circle"/></svg><span>Trusted under pressure &mdash; a calm head in a crisis</span></div>
+            <div class="style-note-row" style="color:var(--ball)"><svg class="icon"><use href="#i-alert"/></svg><span>Struggles against left-arm pace</span></div>
+            <div class="style-note-row" style="color:var(--ball)"><svg class="icon"><use href="#i-alert"/></svg><span>Not a finisher &mdash; look elsewhere for the death overs</span></div>
+          </div>
           <div class="bio-line"><span class="k">Height</span><span>181cm</span></div>
           <div class="bio-line"><span class="k">Reputation</span><span>Domestic: well-known</span></div>
           <div class="bio-line"><span class="k">&nbsp;</span><span style="color:var(--ink-faint);font-size:var(--fs-caption)">Continental: fringe recognition &middot; Worldwide: unknown</span></div>
@@ -2524,7 +2615,7 @@
           <span class="eyebrow" style="display:block;margin-bottom:8px">Transfer status</span>
           <div class="transfer-status-row"><span>Transfer listed</span><span style="color:var(--ink-faint)">No</span></div>
           <div class="transfer-status-row"><span>Transfer requested</span><span style="color:var(--ink-faint)">No</span></div>
-          <div class="transfer-status-row"><span>Interested clubs</span><span style="color:var(--ink-faint)">None on record</span></div>
+          <div class="transfer-status-row"><span>Interested clubs</span><span style="color:var(--gold)">Karachi Kings, Multan Sultans</span></div>
           <div class="transfer-status-row"><span>Overseas registration</span><span>Domestic &middot; no restriction</span></div>
           <div class="role-hint">Settled, loyal, and out of contract talk &mdash; exactly what "one-club man" means in practice.</div>
         </div>
@@ -2535,10 +2626,46 @@
   <!-- ================= FIXTURES ================= -->
   <section class="panel" id="panel-fixtures" role="tabpanel" hidden>
     <div class="panel-head"><h1>Fixtures</h1><div class="sub">Pakistan T20 Cup &middot; Group stage</div></div>
-    <div class="table-card" style="padding: 4px 0;">
-      <div class="squad-alert-row" style="padding: 14px 20px;"><div><div class="squad-alert-name"><svg class="icon sm"><use href="#i-bat-ball"/></svg> vs Lahore Lions</div><div class="squad-alert-role">Sun 28 Mar &middot; 14:00 &middot; Jinnah Stadium (H)</div></div><span class="pill fringe"><svg class="icon sm"><use href="#i-cal-list"/></svg>Next</span></div>
-      <div class="squad-alert-row" style="padding: 14px 20px;"><div><div class="squad-alert-name"><svg class="icon sm"><use href="#i-bat-ball"/></svg> vs Multan Monarchs</div><div class="squad-alert-role">Thu 1 Apr &middot; 19:00 &middot; Multan Cricket Stadium (A) &middot; <img class="icon xs" src="data:image/png;base64,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" alt="" style="vertical-align:-2px" title="Forecast: overcast"> Overcast, 27&deg;C</div></div><span class="pill fringe"><svg class="icon sm"><use href="#i-clock"/></svg>6 days</span></div>
-      <div class="squad-alert-row" style="padding: 14px 20px; border-bottom:none;"><div><div class="squad-alert-name"><svg class="icon sm"><use href="#i-trophy"/></svg> beat Peshawar Panthers</div><div class="squad-alert-role">Won by 6 wickets &middot; Tue 23 Mar</div></div><span class="pill first">W</span></div>
+
+    <div class="tactics-grid">
+      <div class="analysis-card">
+        <span class="eyebrow"><svg class="icon sm"><use href="#i-trend-up"/></svg> League position</span>
+        <div class="table-card">
+          <table class="career">
+            <thead><tr><th>Pos</th><th>Team</th><th class="num">Pld</th><th class="num">W</th><th class="num">L</th><th class="num">Pts</th></tr></thead>
+            <tbody>
+              <tr><td>2</td><td>Karachi Kings</td><td class="num">6</td><td class="num">4</td><td class="num">2</td><td class="num">8</td></tr>
+              <tr style="background:var(--turf-dim)"><td style="color:var(--turf-strong);font-weight:700">3</td><td style="color:var(--turf-strong);font-weight:700">Islamabad Icons</td><td class="num" style="color:var(--turf-strong);font-weight:700">6</td><td class="num" style="color:var(--turf-strong);font-weight:700">4</td><td class="num" style="color:var(--turf-strong);font-weight:700">2</td><td class="num" style="color:var(--turf-strong);font-weight:700">8</td></tr>
+              <tr><td>4</td><td>Multan Sultans</td><td class="num">6</td><td class="num">3</td><td class="num">3</td><td class="num">6</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="role-hint" style="margin-top:10px">Top 4 qualify for the playoffs. <a href="#" onclick="showPanel('world');return false" style="color:var(--chrome-strong)">Full table on World &rsaquo;</a></div>
+      </div>
+      <div class="analysis-card">
+        <span class="eyebrow"><svg class="icon sm"><use href="#i-alert"/></svg> Upcoming opposition report</span>
+        <div class="fixture-row" style="padding-top:2px">
+          <div class="vs-crest them"></div><div class="fixture-names">Lahore Lions<small>Away side &middot; Sun 28 Mar</small></div>
+        </div>
+        <div class="analysis-preview-row"><span>Head to head</span><span>Won 3 of the last 5 meetings</span></div>
+        <div class="analysis-preview-row"><span>Their form</span><span>W&nbsp;W&nbsp;L&nbsp;W&nbsp;L over the last 5</span></div>
+        <div class="analysis-preview-row"><span>Key duel</span><span>Talha Iqbal has dismissed Hamza Malik 3 times in this fixture</span></div>
+        <button class="view-more-btn" onclick="showPanel('tactics')">Full tactical prep &amp; team news &rsaquo;</button>
+      </div>
+    </div>
+
+    <div class="analysis-card" style="margin-top:16px">
+      <span class="eyebrow"><svg class="icon sm"><use href="#i-cal-list"/></svg> Season schedule</span>
+      <div class="fixture-row"><div class="vs-crest them"></div><div class="fixture-names">Karachi Kings<small>Home &middot; Tue 2 Mar</small></div><div class="fixture-meta"><span class="pill first">W</span> by 18 runs</div></div>
+      <div class="fixture-row" style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border-soft)"><div class="vs-crest them"></div><div class="fixture-names">Multan Sultans<small>Away &middot; Sat 6 Mar</small></div><div class="fixture-meta"><span class="pill first">W</span> by 4 wickets</div></div>
+      <div class="fixture-row" style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border-soft)"><div class="vs-crest them"></div><div class="fixture-names">Quetta Falcons<small>Home &middot; Wed 10 Mar</small></div><div class="fixture-meta"><span class="pill injury">L</span> by 22 runs</div></div>
+      <div class="fixture-row" style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border-soft)"><div class="vs-crest them"></div><div class="fixture-names">Peshawar Zalmi<small>Away &middot; Sun 14 Mar</small></div><div class="fixture-meta"><span class="pill first">W</span> by 7 wickets</div></div>
+      <div class="fixture-row" style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border-soft)"><div class="vs-crest them"></div><div class="fixture-names">Lahore Lions<small>Home &middot; Thu 18 Mar</small></div><div class="fixture-meta"><span class="pill injury">L</span> by 9 runs</div></div>
+      <div class="fixture-row" style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border-soft)"><div class="vs-crest them"></div><div class="fixture-names">Peshawar Zalmi<small>Home &middot; Tue 23 Mar</small></div><div class="fixture-meta"><span class="pill first">W</span> by 6 wickets</div></div>
+      <div class="fixture-row" style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border-soft);background:var(--turf-dim);margin-left:-14px;margin-right:-14px;padding-left:14px;padding-right:14px"><div class="vs-crest them"></div><div class="fixture-names">Lahore Lions<small>Away &middot; Sun 28 Mar &middot; 14:00 &middot; Jinnah Stadium</small></div><div class="fixture-meta"><span class="pill fringe"><svg class="icon sm"><use href="#i-clock"/></svg>Next</span></div></div>
+      <div class="fixture-row" style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border-soft)"><div class="vs-crest them"></div><div class="fixture-names">Multan Sultans<small>Away &middot; Thu 1 Apr &middot; 19:00 &middot; Multan Cricket Stadium</small></div><div class="fixture-meta">6 days</div></div>
+      <div class="fixture-row" style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border-soft)"><div class="vs-crest them"></div><div class="fixture-names">Karachi Kings<small>Away &middot; Mon 5 Apr</small></div><div class="fixture-meta">10 days</div></div>
+      <div class="fixture-row" style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border-soft)"><div class="vs-crest them"></div><div class="fixture-names">Quetta Falcons<small>Away &middot; Fri 9 Apr</small></div><div class="fixture-meta">14 days</div></div>
     </div>
   </section>
 
@@ -2726,15 +2853,69 @@
 
   <!-- ================= INBOX ================= -->
   <section class="panel" id="panel-inbox" role="tabpanel" hidden>
-    <div class="panel-head"><h1>Inbox</h1><div class="sub">This week's digest</div></div>
-    <div class="tile news" style="grid-column: unset;">
-      <div class="news-item"><div class="news-kicker">Board</div><div class="news-headline">Icons ownership backs a "youth-first" rebuild</div><div class="news-dek">Expect academy graduates to get more of the shop window.</div></div>
-      <div class="news-item"><div class="news-kicker">Contract</div><div class="news-headline">Sarfraz Khan open to a new deal, agent says</div><div class="news-dek">Current terms run out in April.</div></div>
+    <div class="panel-head"><h1>Inbox</h1><div class="sub">This week&rsquo;s digest</div></div>
+
+    <nav class="subnav" role="tablist" aria-label="Inbox sections">
+      <button class="subtab-btn" role="tab" aria-selected="true" aria-controls="inbox-foryou" data-subtab="foryou">For You</button>
+      <button class="subtab-btn" role="tab" aria-selected="false" aria-controls="inbox-club" data-subtab="club">Club</button>
+      <button class="subtab-btn" role="tab" aria-selected="false" aria-controls="inbox-world" data-subtab="world">World</button>
+    </nav>
+
+    <div class="subpanel" id="inbox-foryou">
+      <div class="tile-grid">
+      <div class="tile" style="grid-column: span 7"><div class="news-item" style="border-top:none;padding-top:0"><div class="news-kicker">Board</div><div class="news-headline">Icons ownership backs a &ldquo;youth-first&rdquo; rebuild</div><div class="news-dek">Expect academy graduates to get more of the shop window.</div></div></div>
+      <div class="tile" style="grid-column: span 5"><div class="news-item" style="border-top:none;padding-top:0"><div class="news-kicker">Contract</div><div class="news-headline">Sarfraz Khan open to a new deal, agent says</div><div class="news-dek">Current terms run out in April.</div></div></div>
+      <div class="tile" style="grid-column: span 4"><div class="news-item" style="border-top:none;padding-top:0"><div class="news-kicker">Milestone</div><div class="news-headline">Hamza Malik named Player of the Round</div><div class="news-dek">A run of low-30s scores at a strike rate that pulled every chase back into range.</div></div></div>
+      <div class="tile" style="grid-column: span 4"><div class="news-item" style="border-top:none;padding-top:0"><div class="news-kicker">Discipline</div><div class="news-headline">Board files a &ldquo;no distractions&rdquo; note ahead of derby week</div><div class="news-dek">A quiet word before Sunday&rsquo;s trip to Lahore.</div></div></div>
+      <div class="tile" style="grid-column: span 4"><div class="news-item" style="border-top:none;padding-top:0"><div class="news-kicker">Squad</div><div class="news-headline">Medical centre clears Adeel Hayat for full training</div><div class="news-dek">Back in full training this week, available for selection from Sunday.</div></div></div>
+      </div>
+    </div>
+    <div class="subpanel" id="inbox-club" hidden>
+      <div class="tile-grid">
+      <div class="tile" style="grid-column: span 6"><div class="news-item" style="border-top:none;padding-top:0"><div class="news-kicker">Academy</div><div class="news-headline">Academy graduate included in senior squad for the first time</div><div class="news-dek">A first involvement with the senior set-up after a strong intake year.</div></div></div>
+      <div class="tile" style="grid-column: span 6"><div class="news-item" style="border-top:none;padding-top:0"><div class="news-kicker">Staff</div><div class="news-headline">Aamir Sohail praises squad depth ahead of the run-in</div><div class="news-dek">&ldquo;We can rotate without losing anything &mdash; that&rsquo;s new for this club.&rdquo;</div></div></div>
+      <div class="tile" style="grid-column: span 4"><div class="news-item" style="border-top:none;padding-top:0"><div class="news-kicker">Facilities</div><div class="news-headline">Training-ground resurfacing signed off by the board</div><div class="news-dek">Work begins in the close season, funded from this year&rsquo;s surplus.</div></div></div>
+      <div class="tile" style="grid-column: span 4"><div class="news-item" style="border-top:none;padding-top:0"><div class="news-kicker">Supporters</div><div class="news-headline">Season-ticket renewals open next week</div><div class="news-dek">Early-bird pricing runs for the first ten days.</div></div></div>
+      <div class="tile" style="grid-column: span 4"><div class="news-item" style="border-top:none;padding-top:0"><div class="news-kicker">Youth</div><div class="news-headline">Under-19s through to the regional final</div><div class="news-dek">A third final in four seasons for the youth setup.</div></div></div>
+      </div>
+    </div>
+    <div class="subpanel" id="inbox-world" hidden>
+      <div class="tile-grid">
+      <div class="tile" style="grid-column: span 6"><div class="news-item" style="border-top:none;padding-top:0"><div class="news-kicker">Transfer</div><div class="news-headline">Lahore Lions confirm new overseas signing ahead of PPL auction</div><div class="news-dek">A statement of intent from the group stage&rsquo;s form side.</div></div></div>
+      <div class="tile" style="grid-column: span 6"><div class="news-item" style="border-top:none;padding-top:0"><div class="news-kicker">Pakistan T20 Cup</div><div class="news-headline">Title race tightens after Karachi Kings&rsquo; win</div><div class="news-dek">Three points now separate the top four with a third of the season left.</div></div></div>
+      <div class="tile" style="grid-column: span 4"><div class="news-item" style="border-top:none;padding-top:0"><div class="news-kicker">Franchise cricket</div><div class="news-headline">Crescent Trophy hosting rights confirmed for next cycle</div><div class="news-dek">The tournament returns on its usual biennial slot.</div></div></div>
+      <div class="tile" style="grid-column: span 4"><div class="news-item" style="border-top:none;padding-top:0"><div class="news-kicker">International</div><div class="news-headline">World T20 Championship qualifying places decided this month</div><div class="news-dek">Two associate berths still up for grabs.</div></div></div>
+      <div class="tile" style="grid-column: span 4"><div class="news-item" style="border-top:none;padding-top:0"><div class="news-kicker">Rankings</div><div class="news-headline">Pakistan climb to third in the T20I table</div><div class="news-dek">A string of bilateral wins moves the board&rsquo;s central-contract calculus.</div></div></div>
+      </div>
     </div>
   </section>
 
+
 </div>
 </div>
+</div>
+
+<div class="modal-backdrop" id="compare-backdrop" onclick="if(event.target===this) closeCompare()">
+  <div class="negotiation-modal" role="dialog" aria-modal="true" aria-labelledby="compare-title" style="max-width:520px">
+    <div class="negotiation-head">
+      <h2 id="compare-title" style="margin:0">Compare players</h2>
+      <button class="modal-close" onclick="closeCompare()" aria-label="Close">&times;</button>
+    </div>
+    <div class="table-card" style="margin-top:12px">
+      <table class="career">
+        <thead><tr><th>Attribute</th><th class="num">Hamza Malik</th><th class="num">Umar Baig</th></tr></thead>
+        <tbody>
+          <tr><td>Technique</td><td class="num">18</td><td class="num">13</td></tr>
+          <tr><td>Power hitting</td><td class="num">14</td><td class="num">16</td></tr>
+          <tr><td>Against pace</td><td class="num">12</td><td class="num">15</td></tr>
+          <tr><td>Against spin</td><td class="num">17</td><td class="num">11</td></tr>
+          <tr><td>Concentration</td><td class="num">16</td><td class="num">12</td></tr>
+          <tr><td>Fielding</td><td class="num">15</td><td class="num">14</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="role-hint" style="margin-top:10px">Comparing against the squad&rsquo;s other middle-order option. Pick a different player from Squad to compare against instead.</div>
+  </div>
 </div>
 
 <div class="modal-backdrop" id="negotiation-backdrop" onclick="if(event.target===this) closeNegotiation()">
@@ -2931,6 +3112,14 @@
 </div>
 
 <script>
+  function filterPress(btn) {
+    var group = btn.closest('.press-filter');
+    group.querySelectorAll('.press-filter-btn').forEach(function (b) { b.setAttribute('aria-selected', 'false'); });
+    btn.setAttribute('aria-selected', 'true');
+    var tile = btn.closest('.tile');
+    tile.querySelectorAll(':scope > div[id^="press-"]').forEach(function (p) { p.hidden = true; });
+    document.getElementById('press-' + btn.dataset.pfilter).hidden = false;
+  }
   function wireTabs(selector, panelPrefix) {
     document.querySelectorAll(selector).forEach(function (btn) {
       btn.addEventListener('click', function () {
@@ -3282,6 +3471,8 @@
     }
     document.getElementById('negotiation-backdrop').classList.add('open');
   }
+  function openCompare() { document.getElementById('compare-backdrop').classList.add('open'); }
+  function closeCompare() { document.getElementById('compare-backdrop').classList.remove('open'); }
   function closeNegotiation() {
     document.getElementById('negotiation-backdrop').classList.remove('open');
   }
@@ -3297,6 +3488,7 @@
   }
   wireTabs('#panel-matchday .subtab-btn', 'sub-');
   wireTabs('#panel-player .subtab-btn', 'psub-');
+  wireTabs('#panel-inbox .subtab-btn', 'inbox-');
 
   // Global search: opens ANY player's profile from the whole database, not just this squad -
   // available from every screen, unlike Match Day which only appears while a match is live.
