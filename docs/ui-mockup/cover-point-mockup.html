@@ -1679,7 +1679,7 @@
 
     <!-- ============ WAR ROOM: retention + pre-auction plan ============ -->
     <div id="auction-retention" class="auction-stage">
-      <div class="panel-head"><h1>Islamabad Icons &middot; War Room</h1><div class="sub">Retained core &amp; pre-auction plan &middot; auction window opens today</div></div>
+      <div class="panel-head"><h1>Islamabad Icons &middot; War Room</h1><div class="sub">Retained core &amp; pre-auction plan &middot; retention deadline closed 6 days ago, every franchise&rsquo;s list is now public &middot; auction window opens today</div></div>
       <div class="tactics-grid">
         <div class="analysis-card">
           <span class="eyebrow"><svg class="icon sm"><use href="#i-badge"/></svg> Retained core</span>
@@ -1725,6 +1725,23 @@
           <div class="staff-row"><div class="staff-row-main"><span class="staff-name">A second front-line spinner</span><span class="staff-role-label">Spin bowling &middot; 11cr budget</span></div><span class="tier-badge c">Fallback</span></div>
           <div class="role-hint" style="margin-top:8px">The room&rsquo;s own read: the squad is batting-heavy after retention &mdash; bowling depth is where the purse should go first.</div>
         </div>
+      </div>
+      <div class="analysis-card" style="margin-top:16px">
+        <span class="eyebrow"><svg class="icon sm"><use href="#i-badge"/></svg> League-wide retention roundup</span>
+        <div class="role-hint" style="margin-bottom:8px">The deadline passed for every franchise at once &mdash; the news covers the whole league&rsquo;s lists, not just your own.</div>
+        <div class="table-card"><div class="table-scroll-inner" style="max-height:none">
+          <table class="squad">
+            <thead><tr><th>Franchise</th><th>Retained core</th><th class="num">RTM cards live</th></tr></thead>
+            <tbody>
+              <tr><td>Islamabad Icons</td><td>Hamza Malik, Adeel Hayat, Zain Chaudhry, Rizwan Sheikh</td><td class="num">2</td></tr>
+              <tr><td>Karachi Kings</td><td>Shahzaib Alam, Nouman Bhatti</td><td class="num">4</td></tr>
+              <tr><td>Lahore Lions</td><td>Kamran Hussain (c), Talha Iqbal</td><td class="num">4</td></tr>
+              <tr><td>Multan Sultans</td><td>Faisal Nadeem, Rayyan Sheikh</td><td class="num">4</td></tr>
+              <tr><td>Peshawar Zalmi</td><td>Umair Chaudhry, Shoaib Niazi</td><td class="num">4</td></tr>
+              <tr><td>Quetta Falcons</td><td>Sohail Marwat, Danyal Qureshi</td><td class="num">4</td></tr>
+            </tbody>
+          </table>
+        </div></div>
       </div>
       <div class="stage-actions"><button class="auction-continue-btn stage-continue-btn" data-next="auction-eoi">Continue to the EOI meeting <svg class="icon sm"><use href="#i-chevron-fwd"/></svg></button></div>
     </div>
@@ -1926,6 +1943,60 @@
       <div class="stage-actions"><button class="stage-continue-btn" onclick="exitAuctionMode()">Return to Recruitment <svg class="icon sm"><use href="#i-chevron-fwd"/></svg></button></div>
     </div>
 
+  </section>
+
+  <!-- ================= TRADE CENTRE (reached from Recruitment > Transfer Activity) ================= -->
+  <section class="panel" id="panel-trade" role="tabpanel" hidden>
+    <div class="match-back-bar">
+      <button class="match-back-btn" onclick="exitTradeMode()" title="Back to Recruitment"><svg class="icon"><use href="#i-chevron-fwd"/></svg></button>
+      <span class="match-back-title">Pakistan Premier League &middot; Trade Centre</span>
+    </div>
+    <div class="panel-head"><h1>Trade Centre</h1><div class="sub">The quarterly trade window &mdash; outside the auction, and not right before a mega auction resets every squad anyway</div></div>
+
+    <div class="analysis-card">
+      <span class="eyebrow"><svg class="icon sm"><use href="#i-badge"/></svg> League needs board</span>
+      <div class="table-card"><div class="table-scroll-inner" style="max-height:none">
+        <table class="squad">
+          <thead><tr><th>Franchise</th><th>Biggest surplus</th><th>Biggest need</th></tr></thead>
+          <tbody>
+            <tr><td>Islamabad Icons</td><td>Top-order batting</td><td>Fast bowling</td></tr>
+            <tr><td>Peshawar Zalmi</td><td>Fast bowling</td><td>Top-order batting</td></tr>
+            <tr><td>Karachi Kings</td><td>Middle-order batting</td><td>Front-line spin</td></tr>
+            <tr><td>Lahore Lions</td><td>Off-spin</td><td>Death-overs bowling</td></tr>
+            <tr><td>Multan Sultans</td><td>Wicketkeeping depth</td><td>Middle-order power</td></tr>
+            <tr><td>Quetta Falcons</td><td>Death-overs bowling</td><td>Off-spin</td></tr>
+          </tbody>
+        </table>
+      </div></div>
+      <div class="role-hint" style="margin-top:8px">A trade needs both sides&rsquo; surplus to match the other&rsquo;s need, and the value gap to stay workable once a cash sweetener is added &mdash; most quarters nothing lines up cleanly. This quarter, Islamabad Icons and Peshawar Zalmi are a genuine mirror of each other.</div>
+    </div>
+
+    <div class="analysis-card" style="margin-top:16px" id="trade-match-card">
+      <span class="eyebrow"><svg class="icon sm"><use href="#i-swap"/></svg> This quarter&rsquo;s matched trade</span>
+      <div class="tactics-grid" style="margin-top:8px">
+        <div>
+          <div class="role-hint" style="margin-bottom:6px">Islamabad Icons give up</div>
+          <div class="player-cell"><div class="player-avatar">JS</div><div class="player-name">Junaid Sarwar</div></div>
+          <div class="role-hint" style="margin-top:4px">Top-order bat &middot; genuine surplus behind the retained core</div>
+          <div class="bio-line" style="margin-top:8px"><span class="k">Valuation</span><span>1.20cr</span></div>
+        </div>
+        <div>
+          <div class="role-hint" style="margin-bottom:6px">Peshawar Zalmi give up</div>
+          <div class="player-cell"><div class="player-avatar">RT</div><div class="player-name">Rameez Toru</div></div>
+          <div class="role-hint" style="margin-top:4px">Fast bowler &middot; genuine surplus behind their own new-ball pair</div>
+          <div class="bio-line" style="margin-top:8px"><span class="k">Valuation</span><span>1.90cr</span></div>
+        </div>
+      </div>
+      <div class="bio-line" style="margin-top:12px"><span class="k">Value gap</span><span>0.70cr &middot; 36.8% of the larger valuation &mdash; within the workable range</span></div>
+      <div class="bio-line"><span class="k">Cash sweetener</span><span>0.42cr, Islamabad Icons &rarr; Peshawar Zalmi &mdash; the side receiving the cheaper player balances the books</span></div>
+      <div class="stage-actions" id="trade-confirm-actions"><button class="stage-continue-btn" onclick="confirmTrade()">Confirm the trade</button></div>
+      <div class="sold-banner" id="trade-done-banner" hidden></div>
+    </div>
+
+    <div class="analysis-card" style="margin-top:16px">
+      <span class="eyebrow"><svg class="icon sm"><use href="#i-clock"/></svg> Trade news</span>
+      <div class="notes-log" id="trade-news-log"><div class="notes-log-item"><span>No trade has been agreed yet this quarter.</span></div></div>
+    </div>
   </section>
 
   <!-- ================= SQUAD ================= -->
@@ -2420,6 +2491,18 @@
       <div style="margin-left:auto;text-align:center">
         <div class="auction-countdown" style="font-size:var(--fs-subhead)">Today</div>
         <div class="auction-countdown-unit">auction opens</div>
+      </div>
+    </div>
+
+    <div class="analysis-card auction-tile">
+      <div>
+        <span class="eyebrow"><svg class="icon sm"><use href="#i-swap"/></svg> Pakistan Premier League trades</span>
+        <div class="plan-desc" style="margin-top:6px">Quarterly trade window &mdash; squads carry over between mega auctions, so a trade is the only way to reshape one mid-cycle. One genuinely complementary pair has emerged this quarter.</div>
+        <button class="view-more-btn" style="margin-top:10px;width:auto;padding:6px 12px" onclick="enterTradeMode()">Enter trade centre</button>
+      </div>
+      <div style="margin-left:auto;text-align:center">
+        <div class="auction-countdown" style="font-size:var(--fs-subhead)">1</div>
+        <div class="auction-countdown-unit">match found</div>
       </div>
     </div>
 
@@ -5401,6 +5484,29 @@
     document.querySelectorAll(".tab-btn").forEach(function (b) { b.setAttribute("aria-selected", b.dataset.tab === "recruitment" ? "true" : "false"); });
     document.querySelectorAll("body > .app-body > .main-content > .shell > section.panel").forEach(function (p) { p.hidden = true; });
     document.getElementById("panel-recruitment").hidden = false;
+  }
+  // ---- Trade Centre: a real complementary-need match, a value-gap check, a cash sweetener ----
+  function enterTradeMode() {
+    document.body.classList.add("match-immersive");
+    document.querySelectorAll("body > .app-body > .main-content > .shell > section.panel").forEach(function (p) { p.hidden = true; });
+    document.getElementById("panel-trade").hidden = false;
+    document.getElementById("trade-confirm-actions").hidden = false;
+    document.getElementById("trade-done-banner").hidden = true;
+    document.getElementById("trade-news-log").innerHTML = "<div class=\"notes-log-item\"><span>No trade has been agreed yet this quarter.</span></div>";
+  }
+  function exitTradeMode() {
+    document.body.classList.remove("match-immersive");
+    document.querySelectorAll(".tab-btn").forEach(function (b) { b.setAttribute("aria-selected", b.dataset.tab === "recruitment" ? "true" : "false"); });
+    document.querySelectorAll("body > .app-body > .main-content > .shell > section.panel").forEach(function (p) { p.hidden = true; });
+    document.getElementById("panel-recruitment").hidden = false;
+  }
+  function confirmTrade() {
+    document.getElementById("trade-confirm-actions").hidden = true;
+    var banner = document.getElementById("trade-done-banner");
+    banner.hidden = false;
+    banner.textContent = "Trade agreed.";
+    document.getElementById("trade-news-log").innerHTML =
+      "<div class=\"notes-log-item\"><span>Islamabad Icons and Peshawar Zalmi agree a trade: Junaid Sarwar for Rameez Toru plus 0.42cr to Peshawar Zalmi.</span></div>";
   }
   function selectPitchPrep(btn, kind) {
     document.querySelectorAll('.pitch-preset-btn').forEach(function (b) { b.classList.remove('active'); });

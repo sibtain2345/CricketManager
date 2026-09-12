@@ -10964,6 +10964,50 @@ extracted `<script>` block (`SYNTAX OK`, script braces 663/663, parens 1411/1411
 the full `data-next` chain resolves (War Room → `auction-eoi` → `auction-preauction` →
 `auction-live`). Final state: file size ~2.626MB.
 
+### Phase C, 11-point directive: slice 4 — retention deadline + league-wide roundup, and a Trade Centre screen (points 10/11)
+
+Step 3 of the approved 6-step build plan.
+
+**Retention deadline + league-wide roundup (point 10).** The War Room's panel-head sub-line now
+states the deadline explicitly ("retention deadline closed 6 days ago, every franchise's list is
+now public") instead of implying retention is simply a fait accompli with no process behind it.
+A new **League-wide retention roundup** card sits right after the existing retained-core/
+pre-auction-plan grid: a real 6-row table naming EVERY franchise's own retained core and its
+resulting RTM-card count — Islamabad Icons (4 retained → 2 RTM cards, matching the pre-existing
+"2 Right-to-Match cards remain" line elsewhere on the same stage) plus all five other franchises,
+reusing the exact same names already established in `franchiseSquad` for the Live Bidding Room's
+Squads tab, so a name never means two different things on two different screens. This is the
+direct answer to "news should cover EVERY team's retention list, not just the player's own team's."
+
+**Trade Centre (point 11), wired to the real `FranchiseTradeService` shape.** A second entry tile
+on Recruitment > Transfer Activity, alongside the existing auction tile, opens a new full-screen
+`#panel-trade` (the same `.match-immersive` takeover pattern Match Day and the Auction Room already
+use — `enterTradeMode()`/`exitTradeMode()`, a `.match-back-bar` back button). Deliberately modelled
+on the actual mechanism in `FranchiseTradeService.RunQuarterly`, not a generic "offer/accept" UI:
+
+- A **"League needs board"** card names every franchise's biggest surplus and biggest need (the
+  same `SquadNeeds.RoleGroup` read the service itself computes), making the point that most
+  quarters nothing lines up — this quarter, Islamabad Icons and Peshawar Zalmi are a genuine
+  mirror of each other (top-order-batting surplus / fast-bowling need, and the reverse).
+- The **matched trade** card shows the real mechanics in order: each side's surplus player and his
+  valuation, the **value-gap-vs-45%-of-the-larger-valuation lopsidedness check** (0.70cr / 1.90cr =
+  36.8%, within the workable range — the exact `Math.Abs(va - vb) > Math.Max(va, vb) * 0.45` guard
+  the service runs), and the **cash sweetener** (60% of the gap, paid by the side that gave up the
+  cheaper player to the side that gave up the pricier one — the real `poor.Budget -= cash;
+  rich.Budget += cash` direction, not an arbitrary flow).
+- Confirming the trade reveals a real trade-news line in the **exact interpolated format**
+  `RunQuarterly` itself produces: "Islamabad Icons and Peshawar Zalmi agree a trade: Junaid Sarwar
+  for Rameez Toru plus 0.42cr to Peshawar Zalmi." — traced character-for-character against the
+  service's own `$"{a.Name} and {b.Name} agree a trade: {...} for {...} plus {cash:N0} to
+  {rich.Name}."` string before writing it, not approximated.
+
+**Verification**: `div`/`table`/`tr`/`span`/`svg`/`nav`/`section`/`button` tag-count parity
+(1907/1907, 27/27, 158/158, 1116/1116, 311/311, 13/13, 15/15, 248/248 — the section count rising
+14→15 for the new `panel-trade` top-level screen) plus `node --check` on the extracted `<script>`
+block (`SYNTAX OK`, script braces 669/669, parens 1434/1434); a direct duplicate-id scan confirmed
+every new element id (`panel-trade`, `trade-match-card`, `trade-confirm-actions`,
+`trade-done-banner`, `trade-news-log`) appears exactly once. Final state: file size ~2.634MB.
+
 ---
 
 ## CONSOLIDATED DEFERRED-ITEMS REGISTER (maintained - the single source of truth)
