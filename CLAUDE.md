@@ -10782,6 +10782,83 @@ the two JS-bearing scripts (`SYNTAX OK`, script braces 604/604, parens 1284/1284
 calendar-copy edit touched HTML/CSS only, re-verified structurally with no JS re-check needed.
 Final state: file size ~2.61MB.
 
+### Phase C, 11-point directive: slice 1 — RTM corrected to the real three-step mechanism
+
+The user's large follow-up directive ("CricketManager — Auction Flow, Universal Navigation &
+International Coaching Screen") landed with 11 points, several explicitly requiring research
+before implementation (FM26 navigation structure, current real-world RTM rules, EOI/voting
+mechanics, real trade structure, franchise-menu differentiation). Before doing any new external
+research, the C# domain side was checked first — and turned out to already have most of this
+**genuinely researched and built**, just not yet reflected correctly in the HTML mockup:
+
+- **RTM** (point 9) — `FranchiseAuctionService.RunLot` already implements the exact corrected
+  mechanism the user described (researched and shipped in the "Meeting-Driven Selection Ticket -
+  CORRECTIONS PASS"): bidding peaks with a winner → the player's previous club can invoke RTM →
+  the winning bidder gets **one further, uncapped chance to raise** → the previous club must then
+  match that final price to retain him, or he goes to the bidder at that price. The mockup's own
+  RTM flow (built in the multi-tab Auction Room rebuild, above) had collapsed this into a single
+  step — "match the winning price, or don't" — which is precisely the oversimplified mechanism
+  the user flagged as wrong. **Fixed this slice**: `showRtmPrompt` now only offers "Invoke
+  Right-to-Match" vs. "Do not invoke"; a new `rtmInvoke(price, winner)` simulates the winning
+  bidder's one further raise (a `Math.random() < 0.55` chance, rounded to a real bid increment,
+  with a short `setTimeout` "waiting on their response" beat before the outcome logs), and only
+  then does the previous club (Islamabad Icons) get the match-or-let-go choice, now visibly priced
+  at whatever the bidder's final figure came out to. `rtmMatch` still consumes an RTM card only
+  when actually exercised, unchanged.
+- **EOI meeting** (point 7) — `FranchiseAuctionMediaService.NarrateEoiConversion` already models
+  registration → interest-vote → a progressively-built shortlist as a real meeting, and the
+  mockup's War Room stage already has an "EOI conversion meeting" card narrating exactly this
+  funnel (built in the multi-tab rebuild). Point 7's remaining gap is a **dedicated meeting UI**
+  distinct from the War Room card, not the underlying mechanism.
+- **Retention** (point 10) — `FranchiseRetentionService` already models the real slab-based
+  retention + reserve-list system; the War Room stage already shows it. What point 10 actually
+  asks for (submission-before-a-deadline + a league-wide retention news roundup) isn't built yet.
+- **Trade system** (point 11) — `FranchiseTradeService` already models real inter-franchise trades
+  (a complementary-need match, a cash sweetener, `GameEventType.FranchiseTrade` news) on the C#
+  side; there is no UI for it anywhere in the mockup yet.
+- **Franchise team menu** (point 8) — already genuinely distinct from both the club and
+  international menus per the "Corrections Pass" (Section H): franchise coaching is a campaign-
+  bound, year-round-but-differently-governed appointment with no permanent staff structure
+  (`AiClubManagementService`/`JobMarketService`/`BoardRelationshipService` all skip franchise
+  teams). The mockup itself has no distinct franchise-team menu screen yet — Islamabad Icons is
+  presented through the same generic screens as every other team.
+- **International coaching** (point 5) — `NationalBoard`, `CentralContractService`,
+  `CoachingStructureService` (the real England-style format-split precedent) are all real, but
+  the mockup's International screen is a single flat page, not its own menu structure.
+
+**Still needing genuinely new work, not just wiring up an already-researched mechanism**: point 1
+(auction attendance rules), point 2 (universal click-through navigation — the FM26 structural
+notes gathered earlier this session for the general redesign pass are the right starting research,
+but the *entity-tile-list* pattern specifically on nation/club screens needs a closer look), point
+3 (attribute-tile click-through), point 4 (the full timer-based call-1/call-2/call-3 bidding flow
+with a live per-team bidding-status list — a bigger rebuild of the Current Player tab than this
+slice's RTM fix), and the dedicated Pre-Auction Meeting / EOI Meeting screens (points 6/7).
+
+**Plan for the rest of the directive**, in the order it will be built (reported to the user before
+continuing past slice 1, since each remaining slice is a substantial new screen or a navigation-
+wide refactor, not a small fix):
+
+1. Timer-based auction bidding flow (point 4) — replaces Bid/Skip with a first-call/second-call/
+   third-call clock, a clear SOLD/UNSOLD state, a live per-team bidding-status list, and a
+   set-overview list before each set begins. Builds directly on the multi-tab room already shipped.
+2. Dedicated Pre-Auction Meeting and EOI Meeting screens (points 6/7) — promoting the existing
+   War Room narrative cards into their own real meeting UIs, per the user's "same real-meeting
+   treatment" instruction.
+3. Retention deadline + league-wide retention news roundup (point 10), and a Trade screen (point
+   11) wired to the real `FranchiseTradeService` shape.
+4. Franchise team menu, distinct from club/international (point 8), and the International Coaching
+   screen's own distinct menu (point 5) — both reuse only what genuinely overlaps (tactics), per
+   the user's explicit instruction not to assume parity.
+5. Universal click-through navigation for every entity (point 2) and attribute-tile click-through
+   (point 3) — the largest, most cross-cutting piece, done last since it touches every screen
+   already built rather than adding a new one.
+6. Auction attendance rules (point 1) — the auto-attend/spectator-invite framing, layered onto
+   however the calendar-gated entry point (already built) is reached.
+
+**Verification**: `div`/`table`/`tr`/`span`/`svg`/`nav`/`section`/`button` tag-count parity plus
+`node --check` on the extracted `<script>` block (`SYNTAX OK`, script braces 608/608, parens
+1301/1301). Final state: file size ~2.612MB.
+
 ---
 
 ## CONSOLIDATED DEFERRED-ITEMS REGISTER (maintained - the single source of truth)

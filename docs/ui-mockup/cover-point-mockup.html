@@ -4990,15 +4990,32 @@
     document.getElementById("auction-pass-btn").disabled = true;
     var box = document.getElementById("rtm-prompt");
     box.hidden = false;
-    box.innerHTML = "<b>" + lot.name + "</b> &mdash; a former " + lot.formerClub + " player &mdash; has gone to " + winner + " for " + auctionMoneyFmt(price) + ". Islamabad Icons hold " + rtmCardsRemaining + " Right-to-Match card" + (rtmCardsRemaining === 1 ? "" : "s") + "." +
-      "<div class=\"bid-actions\" style=\"margin-top:8px\"><button class=\"auction-continue-btn stage-continue-btn\" onclick=\"rtmMatch(" + price + ")\">Match &amp; retain (use RTM card)</button><button class=\"view-more-btn\" style=\"margin-top:0\" onclick=\"rtmDecline('" + winner + "'," + price + ")\">Let him go</button></div>";
+    box.innerHTML = "<b>" + lot.name + "</b> &mdash; a former " + lot.formerClub + " player &mdash; the bidding has peaked with " + winner + " at " + auctionMoneyFmt(price) + ". Islamabad Icons, his previous club, hold " + rtmCardsRemaining + " Right-to-Match card" + (rtmCardsRemaining === 1 ? "" : "s") + " and may invoke one now." +
+      "<div class=\"bid-actions\" style=\"margin-top:8px\"><button class=\"auction-continue-btn stage-continue-btn\" onclick=\"rtmInvoke(" + price + ",'" + winner + "')\">Invoke Right-to-Match</button><button class=\"view-more-btn\" style=\"margin-top:0\" onclick=\"rtmDecline('" + winner + "'," + price + ")\">Do not invoke &mdash; bid stands</button></div>";
+  }
+  function rtmInvoke(price, winner) {
+    var lot = AUCTION_LOTS[auctionLotIndex];
+    var box = document.getElementById("rtm-prompt");
+    auctionLog("Islamabad Icons invoke the Right to Match on " + lot.name + " \u2014 " + winner + " get one further, uncapped chance to raise the bid.");
+    box.innerHTML = "<span class=\"role-hint\">Waiting on " + winner + "\u2019s response&hellip;</span>";
+    window.setTimeout(function () {
+      var raises = Math.random() < 0.55;
+      var finalPrice = raises ? Math.round(price * (1.08 + Math.random() * 0.22) / 25000) * 25000 : price;
+      if (raises) {
+        auctionLog(winner + " use their one further chance and raise to " + auctionMoneyFmt(finalPrice) + ".");
+      } else {
+        auctionLog(winner + " decline to raise further \u2014 the bid stands at " + auctionMoneyFmt(price) + ".");
+      }
+      box.innerHTML = "Islamabad Icons must now match <b>" + auctionMoneyFmt(finalPrice) + "</b> to retain " + lot.name + ", or " + winner + " take him at that price." +
+        "<div class=\"bid-actions\" style=\"margin-top:8px\"><button class=\"auction-continue-btn stage-continue-btn\" onclick=\"rtmMatch(" + finalPrice + ")\">Match &amp; retain (use RTM card)</button><button class=\"view-more-btn\" style=\"margin-top:0\" onclick=\"rtmDecline('" + winner + "'," + finalPrice + ")\">Let him go</button></div>";
+    }, 900);
   }
   function rtmMatch(price) {
     var lot = AUCTION_LOTS[auctionLotIndex];
     lot._rtmResolved = true;
     rtmCardsRemaining--;
     document.getElementById("rtm-prompt").hidden = true;
-    auctionLog("Islamabad Icons exercise the Right to Match \u2014 " + lot.name + " stays for " + auctionMoneyFmt(price) + ".");
+    auctionLog("Islamabad Icons match the final price \u2014 " + lot.name + " stays for " + auctionMoneyFmt(price) + ".");
     finalizeLot("you", price);
   }
   function rtmDecline(winner, price) {
