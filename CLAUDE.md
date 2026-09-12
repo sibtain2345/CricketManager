@@ -10914,6 +10914,56 @@ extracted `<script>` block (`SYNTAX OK`, script braces 641/641, parens 1374/1374
 zero dangling references to the removed `auction-pass-btn`/`auctionSkip`/`auctionSold`/
 `auctionRound` names. Final state: file size ~2.62MB.
 
+### Phase C, 11-point directive: slice 3 — dedicated Pre-Auction Meeting and EOI Meeting screens (points 6/7)
+
+Step 2 of the approved 6-step build plan. Both meetings previously lived as two cramped cards
+bolted onto the tail of the War Room stage; each is now its own genuine, full-screen stage in the
+auction-room flow, matching the user's own "same real-meeting treatment as the rest of this
+directive's meeting work — not folded into another screen" instruction.
+
+**The auction-room stage order is now**: War Room (retention + RTM) → **EOI Meeting** (new) →
+**Pre-Auction Meeting** (new) → Live Bidding Room → Review. `enterAuctionMode()` is unchanged
+(still opens on War Room first); War Room's own continue button now reads "Continue to the EOI
+meeting" and targets the new `#auction-eoi` stage instead of jumping straight to bidding.
+
+**EOI Meeting (point 7) — the auction list is built progressively DURING the meeting, not
+compiled after.** A new `#auction-eoi` stage shows the full league-wide registration picture
+(214 registered, 38 dropped before the room even sat down, 176 still live in the conversation) —
+this half is deliberately not per-player-modelled data, since simulating all 214 individually
+would be well beyond what a mockup needs to demonstrate the mechanism — alongside a genuinely
+**interactive** voting table (`#eoi-vote-body`, 9 registered players spanning all 5 sets, reusing
+the 7 real `AUCTION_LOTS` names plus 2 additional registered-but-thin-interest names for realism).
+Each row shows the player's role/set, a "Franchises interested" count (static, the rest of the
+league's read), and a **"Register interest" / "Withdraw" toggle** for Islamabad Icons' own vote
+(`toggleEoiVote`) — clicking it recomputes that player's own status pill live
+(`eoiStatus`: 2+ combined interest → Shortlisted/gold, 1 → Under review/chrome, 0 → Dropped/dim)
+**and** the headline "final auction shortlist" number at the top of the screen
+(`renderEoiTally`), which is a genuine sum of a tracked baseline (the 96 genuine-interest / 22
+topped-up figures the mockup already stated before this slice, netted against the 9 tracked rows'
+own baseline contribution so the two never double-count) plus whatever the user's own live votes
+on the 9 tracked rows currently add up to — the shortlist total visibly moves as a vote is cast,
+which is the whole point of "built progressively via live voting/consultation." The baseline
+reproduces the pre-existing 96/22/118 figures exactly when every tracked row sits at its default
+vote, verified by tracing the arithmetic by hand before shipping (89 untracked genuine + 7 tracked
+genuine = 96; 21 untracked topped-up + 1 tracked topped-up = 22; 96 + 22 = 118) rather than just
+eyeballing it, per this project's own "a plausible-looking number needs tracing" discipline.
+`enterAuctionMode()` resets every row's vote to its own baseline (`_base`) and re-renders the
+table each time the auction room is entered, so the meeting always starts from the same read.
+
+**Pre-Auction Meeting (point 6) — its own dedicated UI, board-triggered once the shortlist is
+ready.** A new `#auction-preauction` stage carries what was previously the trailing half of the
+War Room stage: the Pre-Auction Plan card (must-have/priority/fallback targets by role, with each
+role's own budget share) and the quoted three-way conversation (head coach / chief scout /
+ownership) — now explicitly framed as happening "three weeks out... with the retention review and
+the EOI shortlist both settled," so the meeting's own stated timing agrees with the flow it now
+sits after. Its continue button leads into the (unchanged) Live Bidding Room.
+
+**Verification**: `div`/`table`/`tr`/`span`/`svg`/`nav`/`section`/`button` tag-count parity
+(1865/1865, 25/25, 144/144, 1099/1099, 305/305, 13/13, 14/14, 245/245) plus `node --check` on the
+extracted `<script>` block (`SYNTAX OK`, script braces 663/663, parens 1411/1411); a grep confirmed
+the full `data-next` chain resolves (War Room → `auction-eoi` → `auction-preauction` →
+`auction-live`). Final state: file size ~2.626MB.
+
 ---
 
 ## CONSOLIDATED DEFERRED-ITEMS REGISTER (maintained - the single source of truth)

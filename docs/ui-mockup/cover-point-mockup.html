@@ -1726,24 +1726,64 @@
           <div class="role-hint" style="margin-top:8px">The room&rsquo;s own read: the squad is batting-heavy after retention &mdash; bowling depth is where the purse should go first.</div>
         </div>
       </div>
-      <div class="tactics-grid" style="margin-top:16px">
+      <div class="stage-actions"><button class="auction-continue-btn stage-continue-btn" data-next="auction-eoi">Continue to the EOI meeting <svg class="icon sm"><use href="#i-chevron-fwd"/></svg></button></div>
+    </div>
+
+    <!-- ============ EOI MEETING: registration -> live voting -> shortlist ============ -->
+    <div id="auction-eoi" class="auction-stage" hidden>
+      <div class="panel-head"><h1>EOI Meeting &middot; Pakistan Premier League</h1><div class="sub">Every franchise&rsquo;s expression of interest, cross-checked against the league&rsquo;s full registration pool &mdash; a real meeting, not a spreadsheet compiled after the fact</div></div>
+      <div class="tactics-grid">
         <div class="analysis-card">
-          <span class="eyebrow"><svg class="icon sm"><use href="#i-briefcase"/></svg> Pre-auction war room meeting</span>
-          <div class="role-hint" style="margin-bottom:8px">Head coach, chief scout and the ownership group met three weeks out to lock in the room&rsquo;s own targets before a single lot goes under the hammer.</div>
+          <span class="eyebrow"><svg class="icon sm"><use href="#i-users"/></svg> League-wide registration</span>
+          <div class="bio-line"><span class="k">Players registered league-wide</span><span>214</span></div>
+          <div class="bio-line"><span class="k">Dropped out before the room even sat down</span><span>38</span></div>
+          <div class="bio-line"><span class="k">Still live in the room&rsquo;s own conversation</span><span>176</span></div>
+          <div class="role-hint" style="margin-top:8px">A capped all-rounder with a strong recent List A season drew zero interest votes from any franchise and dropped out of the conversation entirely &mdash; the auction floor rarely agrees with a spreadsheet.</div>
+        </div>
+        <div class="analysis-card">
+          <span class="eyebrow"><svg class="icon sm"><use href="#i-badge"/></svg> Shortlist as it stands</span>
+          <div class="lot-price-block">
+            <div class="auction-countdown" id="eoi-shortlist-total">118</div>
+            <div class="auction-countdown-unit">final auction shortlist &middot; live as votes are cast</div>
+          </div>
+          <div class="bio-line"><span class="k">Genuine interest (2+ franchises)</span><span id="eoi-genuine-count">96</span></div>
+          <div class="bio-line"><span class="k">Topped up to fill the shortlist</span><span id="eoi-toppedup-count">+22</span></div>
+          <div class="role-hint" style="margin-top:8px">Toggle Islamabad Icons&rsquo; own interest below &mdash; the room&rsquo;s shortlist total moves as the vote changes.</div>
+        </div>
+      </div>
+      <div class="analysis-card" style="margin-top:16px">
+        <span class="eyebrow"><svg class="icon sm"><use href="#i-briefcase"/></svg> Cast Islamabad Icons&rsquo; own vote, player by player</span>
+        <div class="table-card">
+          <div class="table-scroll-inner" style="max-height:none">
+            <table class="squad">
+              <thead><tr><th>Player</th><th>Role</th><th>Set</th><th>Our interest</th><th class="num">Franchises interested</th><th>Status</th></tr></thead>
+              <tbody id="eoi-vote-body"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="stage-actions"><button class="auction-continue-btn stage-continue-btn" data-next="auction-preauction">Finalise shortlist &middot; continue to the pre-auction meeting <svg class="icon sm"><use href="#i-chevron-fwd"/></svg></button></div>
+    </div>
+
+    <!-- ============ PRE-AUCTION MEETING: the room locks in its own plan ============ -->
+    <div id="auction-preauction" class="auction-stage" hidden>
+      <div class="panel-head"><h1>Pre-Auction Meeting &middot; Islamabad Icons</h1><div class="sub">Head coach, chief scout and ownership lock in the room&rsquo;s own targets before a single lot goes under the hammer</div></div>
+      <div class="tactics-grid">
+        <div class="analysis-card">
+          <span class="eyebrow"><svg class="icon sm"><use href="#i-briefcase"/></svg> Pre-auction plan</span>
+          <div class="staff-row"><div class="staff-row-main"><span class="staff-name">A genuine strike bowler</span><span class="staff-role-label">Fast bowling &middot; 42cr budget</span></div><span class="tier-badge a">Must-have</span></div>
+          <div class="staff-row"><div class="staff-row-main"><span class="staff-name">Finishing depth at 6 or 7</span><span class="staff-role-label">Power hitting &middot; 14cr budget</span></div><span class="tier-badge b">Priority</span></div>
+          <div class="staff-row"><div class="staff-row-main"><span class="staff-name">A second front-line spinner</span><span class="staff-role-label">Spin bowling &middot; 11cr budget</span></div><span class="tier-badge c">Fallback</span></div>
+          <div class="role-hint" style="margin-top:8px">The room&rsquo;s own read: the squad is batting-heavy after retention &mdash; bowling depth is where the purse should go first.</div>
+        </div>
+        <div class="analysis-card">
+          <span class="eyebrow"><svg class="icon sm"><use href="#i-users"/></svg> Attendees &amp; the room&rsquo;s own words</span>
+          <div class="role-hint" style="margin-bottom:8px">Three weeks out from the window opening, with the retention review and the EOI shortlist both settled.</div>
           <div class="notes-log">
             <div class="notes-log-item"><span><b>Head coach:</b> &ldquo;We were batting-heavy and bowling-light all through the retention review &mdash; that gap gets first call on the purse.&rdquo;</span></div>
             <div class="notes-log-item"><span><b>Chief scout:</b> &ldquo;Sarmad Yousuf is the standout at his bracket &mdash; real death-overs pedigree, and he&rsquo;s within reach even in the marquee set.&rdquo;</span></div>
             <div class="notes-log-item"><span><b>Ownership:</b> &ldquo;Spend to win the pace slot. Everything else is a fallback.&rdquo;</span></div>
           </div>
-        </div>
-        <div class="analysis-card">
-          <span class="eyebrow"><svg class="icon sm"><use href="#i-users"/></svg> EOI conversion meeting</span>
-          <div class="role-hint" style="margin-bottom:8px">Every franchise&rsquo;s own expression-of-interest list was cross-checked against the league&rsquo;s registration pool before the shortlist was finalised.</div>
-          <div class="bio-line"><span class="k">Players registered league-wide</span><span>214</span></div>
-          <div class="bio-line"><span class="k">Genuine interest (2+ franchises)</span><span>96</span></div>
-          <div class="bio-line"><span class="k">Topped up to fill the shortlist</span><span>+22</span></div>
-          <div class="bio-line"><span class="k">Final auction shortlist</span><span><b style="color:var(--gold)">118</b></span></div>
-          <div class="role-hint" style="margin-top:8px">A capped all-rounder with a strong recent List A season drew zero interest votes and dropped out of the room&rsquo;s own conversation entirely &mdash; the auction floor rarely agrees with a spreadsheet.</div>
         </div>
       </div>
       <div class="stage-actions"><button class="auction-continue-btn stage-continue-btn" data-next="auction-live">Continue to the bidding room <svg class="icon sm"><use href="#i-chevron-fwd"/></svg></button></div>
@@ -4902,6 +4942,57 @@
   var auctionSetOverviewShown = {};
   var auctionSquadsPicked = "Islamabad Icons";
   var rtmCardsRemaining = 2;
+  var EOI_REGISTRATIONS = [
+    { name: "Sarmad Yousuf", role: "Fast bowler", set: "marquee", franchiseVotes: 4, ourInterest: true, _base: true },
+    { name: "Kashif Rauf", role: "Top-order bat", set: "capped-bat", franchiseVotes: 3, ourInterest: true, _base: true },
+    { name: "Danish Wali", role: "Middle-order bat", set: "capped-bat", franchiseVotes: 2, ourInterest: true, _base: true },
+    { name: "Naveed Sultan", role: "Finisher", set: "uncapped-ar", franchiseVotes: 2, ourInterest: true, _base: true },
+    { name: "Imran Sethi", role: "Off-spin all-rounder", set: "uncapped-ar", franchiseVotes: 3, ourInterest: true, _base: true },
+    { name: "Bilal Nasir", role: "Leg-spinner", set: "capped-spin", franchiseVotes: 2, ourInterest: true, _base: true },
+    { name: "Farhan Dawood", role: "Fast-medium bowler", set: "accelerated", franchiseVotes: 1, ourInterest: true, _base: true },
+    { name: "Kamal Yousafzai", role: "Middle-order bat", set: "capped-bat", franchiseVotes: 1, ourInterest: false, _base: false },
+    { name: "Zohaib Qureshi", role: "Fast-medium bowler", set: "accelerated", franchiseVotes: 0, ourInterest: false, _base: false }
+  ];
+  function eoiInitials(name) { return name.split(" ").map(function (p) { return p[0]; }).join(""); }
+  function eoiInterestCount(reg) { return reg.franchiseVotes + (reg.ourInterest ? 1 : 0); }
+  function eoiStatus(reg) {
+    var n = eoiInterestCount(reg);
+    if (n >= 2) return { label: "Shortlisted", cls: "a" };
+    if (n === 1) return { label: "Under review", cls: "b" };
+    return { label: "Dropped", cls: "c" };
+  }
+  function toggleEoiVote(i) {
+    EOI_REGISTRATIONS[i].ourInterest = !EOI_REGISTRATIONS[i].ourInterest;
+    renderEoiVoteTable();
+  }
+  function renderEoiTally() {
+    var genuine = 0, toppedUp = 0;
+    EOI_REGISTRATIONS.forEach(function (reg) {
+      var n = eoiInterestCount(reg);
+      if (n >= 2) genuine++; else if (n === 1) toppedUp++;
+    });
+    var baseGenuine = 96 - 7;
+    var baseToppedUp = 22 - 1;
+    var genuineTotal = baseGenuine + genuine;
+    var toppedUpTotal = baseToppedUp + toppedUp;
+    document.getElementById("eoi-genuine-count").textContent = genuineTotal;
+    document.getElementById("eoi-toppedup-count").textContent = "+" + toppedUpTotal;
+    document.getElementById("eoi-shortlist-total").textContent = genuineTotal + toppedUpTotal;
+  }
+  function renderEoiVoteTable() {
+    var body = document.getElementById("eoi-vote-body");
+    if (!body) return;
+    body.innerHTML = EOI_REGISTRATIONS.map(function (reg, i) {
+      var st = eoiStatus(reg);
+      return "<tr><td><div class=\"player-cell\"><div class=\"player-avatar\">" + eoiInitials(reg.name) + "</div><div class=\"player-name\">" + reg.name + "</div></div></td>" +
+        "<td><span class=\"role-cell\">" + reg.role + "</span></td>" +
+        "<td><span class=\"role-cell\">" + auctionSetLabel(reg.set) + "</span></td>" +
+        "<td><button class=\"view-more-btn\" style=\"margin-top:0;padding:4px 10px\" onclick=\"toggleEoiVote(" + i + ")\">" + (reg.ourInterest ? "Withdraw" : "Register interest") + "</button></td>" +
+        "<td class=\"num\">" + reg.franchiseVotes + "</td>" +
+        "<td><span class=\"tier-badge " + st.cls + "\">" + st.label + "</span></td></tr>";
+    }).join("");
+    renderEoiTally();
+  }
   function auctionMoneyFmt(v) {
     if (v >= 10000000) { var c = v / 10000000; return (c % 1 === 0 ? c.toFixed(0) : c.toFixed(2)) + "cr"; }
     var l = v / 100000; return (l % 1 === 0 ? l.toFixed(0) : l.toFixed(1)) + "L";
@@ -5291,6 +5382,8 @@
     auctionLotIndex = 0;
     rtmCardsRemaining = 2;
     auctionSetOverviewShown = {};
+    EOI_REGISTRATIONS.forEach(function (reg) { reg.ourInterest = reg._base; });
+    renderEoiVoteTable();
     clearAuctionTimer();
     AUCTION_LOTS.forEach(function (l) { delete l._soldTo; delete l._rtmResolved; });
     franchiseSquad["Islamabad Icons"] = franchiseSquad["Islamabad Icons"].slice(0, 4);
