@@ -10557,6 +10557,74 @@ scripts (Records CSS+HTML, Records modal+JS, Staff-DB relocation, Nation Profile
 counts matched after every pass, and `node --check` on the extracted `<script>` block reported
 `SYNTAX OK` after both JS-bearing passes. Final state: file size ~2.57MB.
 
+### Phase C, first slice: a real Auction Room screen
+
+The FM26-informed rectification pass (Phase A audit, Phase B general redesign) had explicitly
+named "a live bidding room, retention/RTM UI, the EOI-conversion meeting" as franchise-specific
+auction screens confirmed needed but deferred - the only piece of that pass's own scope left
+unbuilt. This is the first slice of that deferred work: a genuine, real (not modal) Auction Room
+screen for the Pakistan Premier League's mega auction, reached the same way Match Day is reached -
+an immersive full-screen takeover, off the persistent sidebar, entered by a real click-through
+rather than a popup.
+
+**Entry point.** The existing Recruitment > Transfer Activity auction teaser tile (previously just
+a static countdown) gained a real `Enter auction room` button, matching the "Make offer"/"View
+shortlist" click-through convention already established across the file.
+
+**Three real stages, reusing the Match Day immersive-mode pattern directly** (`.match-immersive`
+body class, a `.match-back-bar` with its own back button, a `showXStage()`/`enterXMode()`/
+`exitXMode()` triad) but with its own namespace throughout (`.auction-stage` elements, `.auction-
+continue-btn[data-next]` wiring, `showAuctionStage`/`enterAuctionMode`/`exitAuctionMode`) - kept
+deliberately separate from Match Day's own `.match-stage`/`showMatchStage` so the two immersive
+flows can never cross-wire each other's stage visibility:
+1. **War Room** - the retained core (the same slab-cost/tier-badge shape the domain's own
+   `FranchiseRetentionService` uses: 3 capped slots at descending slab cost plus one uncapped,
+   `table.squad` reused verbatim) with RTM cards remaining and the purse left after retention; a
+   pre-auction plan card (must-have/priority/fallback targets by role, each with its own budget
+   share, `.staff-row` + `.tier-badge` reused) - the UI counterpart of `FranchiseAuctionPlan`'s own
+   priority tiers and role-budget split.
+2. **Live Bidding Room** - a real, lightly-interactive lot-by-lot flow across 3 illustrative
+   players (base price, role, a one-line scouting note), a live price display (`.auction-countdown`
+   reused for the big number), a real bid-increment ladder matching the domain's own researched
+   staircase (`<1cr` &rarr; 5L, `1-2cr` &rarr; 10L, `2-5cr` &rarr; 20L, `>5cr` &rarr; 25L, from the
+   Meeting-Driven Selection ticket's Section F), a `.rank-row`/`.rank-team`/`.rank-figs`-based
+   purse leaderboard for all 6 franchises (the human's own highlighted), and a real `Bid`/`Pass`
+   interaction: clicking Bid escalates the price and logs a canned rival counter-bid
+   (`.notes-log` reused), three rounds of bidding wins the lot outright, and `Pass` immediately
+   sells it to the canned rival - a `SOLD` banner and a `Next lot` progression close each lot.
+3. **Auction Review** - a headline paragraph (the auction's biggest buy, its bargain), and a
+   per-franchise verdict list (`.staff-row` + `.tier-badge` reused as an A/B/C/C- grade) with each
+   side's unspent purse - the UI counterpart of `FranchiseAuctionMediaService.Report`'s own
+   biggest-buy/bargain/per-franchise-verdict shape.
+
+**Deliberately kept lightweight, not a full simulation.** The bid/pass state machine is a small,
+deterministic 3-round escalation per lot (no randomness, no attempt to model the domain's own
+`ApplyPursePressure`/purse-pressure-scaled ceiling logic) - enough to make the bidding room feel
+like a real, actionable moment rather than a static screenshot, without trying to reproduce
+`FranchiseAuctionService`'s genuinely complex bidding logic in client-side JS for a mockup. The
+Review stage's content is fixed narrative text, not derived from what actually happened in the
+Live Bidding stage (the same level of state-propagation fidelity Match Day's own scripted "live"
+simulation already uses elsewhere in this file).
+
+**Still open, deliberately, from the same Phase-C scope:** the EOI-conversion meeting and the
+pre-auction war-room meeting as their own distinct narrative moments (the domain's
+`FranchiseAuctionMediaService.NarratePreAuctionMeeting`/`NarrateEoiConversion` - this slice folded
+the war-room CONTENT into stage 1 but did not build a separate "meeting" narrative screen for it);
+a full RTM (Right-to-Match) interaction (the current War Room stage only STATES how many RTM cards
+remain, it does not let the user exercise one against a rival's winning bid live in the Bidding
+Room); the extended **International coaching screen** depth (national selection panel as a real
+staff-hire flow, `CoachingStructure`/format-split coaching, NOC actions, `CentralContractService`
+management) - the other half of the original Phase-C scope, not touched this pass; and applying
+the same real-redirect-screen treatment to other franchise leagues (PSL is the only one modelled
+in this mockup's fictional world so far).
+
+**Verification**: the same structural balance discipline (`<div>`/`<table>`/`<tr>`/`<span>`/
+`<svg>`/`<nav>`/`<section>`/`<button>` tag-count parity) plus `node --check` on the extracted
+`<script>` block, both re-run after the build script and again after a small follow-up fix
+(`exitAuctionMode()` initially forgot to update the sidebar's `aria-selected` state on the way out,
+unlike `exitMatchMode()`'s own discipline - caught by comparing the two functions directly, fixed
+before verifying again). Final state: file size ~2.58MB.
+
 ---
 
 ## CONSOLIDATED DEFERRED-ITEMS REGISTER (maintained - the single source of truth)
