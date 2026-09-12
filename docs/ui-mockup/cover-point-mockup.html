@@ -1134,6 +1134,7 @@
     <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-tactics" data-tab="tactics" title="Tactics"><svg class="icon"><use href="#i-shield"/></svg><span class="tab-label">Tactics</span></button>
     <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-recruitment" data-tab="recruitment" title="Recruitment"><svg class="icon"><use href="#i-swap"/></svg><span class="tab-label">Recruitment</span></button>
     <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-club" data-tab="club" title="Club"><svg class="icon"><use href="#i-briefcase"/></svg><span class="tab-label">Club</span></button>
+    <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-franchise" data-tab="franchise" title="Franchise"><svg class="icon"><use href="#i-badge"/></svg><span class="tab-label">Franchise</span></button>
     <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-fixtures" data-tab="fixtures" title="Fixtures"><svg class="icon"><use href="#i-cal-list"/></svg><span class="tab-label">Fixtures</span></button>
     <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-international" data-tab="international" title="International"><svg class="icon"><use href="#i-plane"/></svg><span class="tab-label">International</span></button>
     <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-records" data-tab="records" title="Records"><svg class="icon"><use href="#i-trophy"/></svg><span class="tab-label">Records</span></button>
@@ -1673,7 +1674,7 @@
   <section class="panel" id="panel-auction" role="tabpanel" hidden>
 
     <div class="match-back-bar">
-      <button class="match-back-btn" onclick="exitAuctionMode()" title="Back to Recruitment"><svg class="icon"><use href="#i-chevron-fwd"/></svg></button>
+      <button class="match-back-btn" onclick="exitAuctionMode()" title="Back to Franchise"><svg class="icon"><use href="#i-chevron-fwd"/></svg></button>
       <span class="match-back-title">Pakistan Premier League &middot; Mega Auction</span>
     </div>
 
@@ -1742,66 +1743,6 @@
             </tbody>
           </table>
         </div></div>
-      </div>
-      <div class="stage-actions"><button class="auction-continue-btn stage-continue-btn" data-next="auction-eoi">Continue to the EOI meeting <svg class="icon sm"><use href="#i-chevron-fwd"/></svg></button></div>
-    </div>
-
-    <!-- ============ EOI MEETING: registration -> live voting -> shortlist ============ -->
-    <div id="auction-eoi" class="auction-stage" hidden>
-      <div class="panel-head"><h1>EOI Meeting &middot; Pakistan Premier League</h1><div class="sub">Every franchise&rsquo;s expression of interest, cross-checked against the league&rsquo;s full registration pool &mdash; a real meeting, not a spreadsheet compiled after the fact</div></div>
-      <div class="tactics-grid">
-        <div class="analysis-card">
-          <span class="eyebrow"><svg class="icon sm"><use href="#i-users"/></svg> League-wide registration</span>
-          <div class="bio-line"><span class="k">Players registered league-wide</span><span>214</span></div>
-          <div class="bio-line"><span class="k">Dropped out before the room even sat down</span><span>38</span></div>
-          <div class="bio-line"><span class="k">Still live in the room&rsquo;s own conversation</span><span>176</span></div>
-          <div class="role-hint" style="margin-top:8px">A capped all-rounder with a strong recent List A season drew zero interest votes from any franchise and dropped out of the conversation entirely &mdash; the auction floor rarely agrees with a spreadsheet.</div>
-        </div>
-        <div class="analysis-card">
-          <span class="eyebrow"><svg class="icon sm"><use href="#i-badge"/></svg> Shortlist as it stands</span>
-          <div class="lot-price-block">
-            <div class="auction-countdown" id="eoi-shortlist-total">118</div>
-            <div class="auction-countdown-unit">final auction shortlist &middot; live as votes are cast</div>
-          </div>
-          <div class="bio-line"><span class="k">Genuine interest (2+ franchises)</span><span id="eoi-genuine-count">96</span></div>
-          <div class="bio-line"><span class="k">Topped up to fill the shortlist</span><span id="eoi-toppedup-count">+22</span></div>
-          <div class="role-hint" style="margin-top:8px">Toggle Islamabad Icons&rsquo; own interest below &mdash; the room&rsquo;s shortlist total moves as the vote changes.</div>
-        </div>
-      </div>
-      <div class="analysis-card" style="margin-top:16px">
-        <span class="eyebrow"><svg class="icon sm"><use href="#i-briefcase"/></svg> Cast Islamabad Icons&rsquo; own vote, player by player</span>
-        <div class="table-card">
-          <div class="table-scroll-inner" style="max-height:none">
-            <table class="squad">
-              <thead><tr><th>Player</th><th>Role</th><th>Set</th><th>Our interest</th><th class="num">Franchises interested</th><th>Status</th></tr></thead>
-              <tbody id="eoi-vote-body"></tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-      <div class="stage-actions"><button class="auction-continue-btn stage-continue-btn" data-next="auction-preauction">Finalise shortlist &middot; continue to the pre-auction meeting <svg class="icon sm"><use href="#i-chevron-fwd"/></svg></button></div>
-    </div>
-
-    <!-- ============ PRE-AUCTION MEETING: the room locks in its own plan ============ -->
-    <div id="auction-preauction" class="auction-stage" hidden>
-      <div class="panel-head"><h1>Pre-Auction Meeting &middot; Islamabad Icons</h1><div class="sub">Head coach, chief scout and ownership lock in the room&rsquo;s own targets before a single lot goes under the hammer</div></div>
-      <div class="tactics-grid">
-        <div class="analysis-card">
-          <span class="eyebrow"><svg class="icon sm"><use href="#i-briefcase"/></svg> Pre-auction plan</span>
-          <div class="staff-row"><div class="staff-row-main"><span class="staff-name">A genuine strike bowler</span><span class="staff-role-label">Fast bowling &middot; 42cr budget</span></div><span class="tier-badge a">Must-have</span></div>
-          <div class="staff-row"><div class="staff-row-main"><span class="staff-name">Finishing depth at 6 or 7</span><span class="staff-role-label">Power hitting &middot; 14cr budget</span></div><span class="tier-badge b">Priority</span></div>
-          <div class="staff-row"><div class="staff-row-main"><span class="staff-name">A second front-line spinner</span><span class="staff-role-label">Spin bowling &middot; 11cr budget</span></div><span class="tier-badge c">Fallback</span></div>
-          <div class="role-hint" style="margin-top:8px">The room&rsquo;s own read: the squad is batting-heavy after retention &mdash; bowling depth is where the purse should go first.</div>
-        </div>
-        <div class="analysis-card">
-          <span class="eyebrow"><svg class="icon sm"><use href="#i-users"/></svg> Attendees &amp; the room&rsquo;s own words</span>
-          <div class="role-hint" style="margin-bottom:8px">Three weeks out from the window opening, with the retention review and the EOI shortlist both settled.</div>
-          <div class="notes-log">
-            <div class="notes-log-item"><span><b>Head coach:</b> &ldquo;We were batting-heavy and bowling-light all through the retention review &mdash; that gap gets first call on the purse.&rdquo;</span></div>
-            <div class="notes-log-item"><span><b>Chief scout:</b> &ldquo;Sarmad Yousuf is the standout at his bracket &mdash; real death-overs pedigree, and he&rsquo;s within reach even in the marquee set.&rdquo;</span></div>
-            <div class="notes-log-item"><span><b>Ownership:</b> &ldquo;Spend to win the pace slot. Everything else is a fallback.&rdquo;</span></div>
-          </div>
-        </div>
       </div>
       <div class="stage-actions"><button class="auction-continue-btn stage-continue-btn" data-next="auction-live">Continue to the bidding room <svg class="icon sm"><use href="#i-chevron-fwd"/></svg></button></div>
     </div>
@@ -1948,7 +1889,7 @@
   <!-- ================= TRADE CENTRE (reached from Recruitment > Transfer Activity) ================= -->
   <section class="panel" id="panel-trade" role="tabpanel" hidden>
     <div class="match-back-bar">
-      <button class="match-back-btn" onclick="exitTradeMode()" title="Back to Recruitment"><svg class="icon"><use href="#i-chevron-fwd"/></svg></button>
+      <button class="match-back-btn" onclick="exitTradeMode()" title="Back to Franchise"><svg class="icon"><use href="#i-chevron-fwd"/></svg></button>
       <span class="match-back-title">Pakistan Premier League &middot; Trade Centre</span>
     </div>
     <div class="panel-head"><h1>Trade Centre</h1><div class="sub">The quarterly trade window &mdash; outside the auction, and not right before a mega auction resets every squad anyway</div></div>
@@ -1997,6 +1938,119 @@
       <span class="eyebrow"><svg class="icon sm"><use href="#i-clock"/></svg> Trade news</span>
       <div class="notes-log" id="trade-news-log"><div class="notes-log-item"><span>No trade has been agreed yet this quarter.</span></div></div>
     </div>
+  </section>
+
+  <!-- ================= FRANCHISE ================= -->
+  <section class="panel" id="panel-franchise" role="tabpanel" hidden>
+    <div class="panel-head"><h1>Islamabad Icons &middot; Pakistan Premier League</h1><div class="sub">A campaign-bound franchise, not a year-round club &mdash; real, distinct rules apply here</div></div>
+    <div class="tactics-grid">
+      <div class="analysis-card">
+        <span class="eyebrow"><svg class="icon sm"><use href="#i-badge"/></svg> Franchise identity</span>
+        <div class="bio-line"><span class="k">Archetype</span><span>Balanced</span></div>
+        <div class="bio-line"><span class="k">Cultural identity</span><span>Performance-focused</span></div>
+        <div class="bio-line"><span class="k">Dynasty rating</span><span>58 <span style="color:var(--ink-faint)">/ 100</span></span></div>
+        <div class="role-hint" style="margin-top:8px">A Balanced archetype fills every role at a sensible price at the auction rather than chasing value or star power. Dynasty rating rebuilds every auction from squad continuity and recent titles &mdash; cross 65 and it starts paying: a real fan-sentiment lift and a small on-field culture edge.</div>
+      </div>
+      <div class="analysis-card">
+        <span class="eyebrow"><svg class="icon sm"><use href="#i-briefcase"/></svg> Campaign coaching</span>
+        <div class="bio-line"><span class="k">Head coach</span><span>You</span></div>
+        <div class="bio-line"><span class="k">Circuit reputation</span><span>Building</span></div>
+        <div class="bio-line"><span class="k">Contract</span><span>Real, multi-year &middot; not a seasonal fee</span></div>
+        <div class="role-hint" style="margin-top:8px">A domestic-club coach is available for a franchise role in any country &mdash; the franchise is the senior relationship, so its campaign window takes priority the moment it opens, whatever else is on the calendar.</div>
+      </div>
+    </div>
+    <div class="tactics-grid" style="margin-top:16px">
+      <div class="analysis-card">
+        <span class="eyebrow"><svg class="icon sm"><use href="#i-trend-up"/></svg> Franchise finances</span>
+        <div class="bio-line"><span class="k">Central pool this campaign</span><span>18.4cr</span></div>
+        <div class="bio-line"><span class="k">Local revenue &middot; fan sentiment</span><span>4.1cr</span></div>
+        <div class="bio-line"><span class="k">Operating costs</span><span>-6.2cr</span></div>
+        <div class="role-hint" style="margin-top:8px">Every franchise draws an equal share of a central pool sized to comfortably cover a full auction purse, on top of its own local revenue. A hard reserve floor of 3.0cr applies whatever the season did &mdash; a franchise cannot go bankrupt, and it carries no financial fair play exposure the way the domestic club does.</div>
+      </div>
+      <div class="analysis-card">
+        <span class="eyebrow"><svg class="icon sm"><use href="#i-cal-list"/></svg> This campaign&rsquo;s own timeline</span>
+        <div class="plan-desc" style="margin-bottom:10px">Four genuinely separate, separately-dated events &mdash; not one sitting. Whichever players the EOI meeting finalises are what the auction actually bids on.</div>
+        <div class="staff-row"><div class="staff-row-main"><span class="staff-name">EOI Meeting</span><span class="staff-role-label">Registered-player list finalised into the auction shortlist &middot; held 52 days ago</span></div><div class="staff-row-meta"><button class="facility-request-btn" onclick="enterEoiMode()">Review</button></div></div>
+        <div class="staff-row"><div class="staff-row-main"><span class="staff-name">Pre-Auction Meeting</span><span class="staff-role-label">The room locks in its plan and targets &middot; held 12 days ago</span></div><div class="staff-row-meta"><button class="facility-request-btn" onclick="enterPreAuctionMode()">Review</button></div></div>
+        <div class="staff-row"><div class="staff-row-main"><span class="staff-name">War Room &amp; Auction</span><span class="staff-role-label">Retention, RTM cards and the live bidding room &middot; auction window opens today</span></div><div class="staff-row-meta"><button class="facility-request-btn" onclick="enterAuctionMode()" title="The auction window has opened today">Enter</button></div></div>
+        <div class="staff-row"><div class="staff-row-main"><span class="staff-name">Trade Centre</span><span class="staff-role-label">The quarterly trade window &middot; outside the auction cycle</span></div><div class="staff-row-meta"><button class="facility-request-btn" onclick="enterTradeMode()">Enter</button></div></div>
+      </div>
+    </div>
+    <div class="analysis-card" style="margin-top:16px">
+      <span class="eyebrow"><svg class="icon sm"><use href="#i-alert"/></svg> What this menu deliberately does NOT have</span>
+      <div class="role-hint">No permanent backroom staff structure (only the campaign-bound coaching above), no youth academy, no domestic overseas-quota rules, and no board-relationship negotiation of the kind the Club menu runs &mdash; a franchise really is built differently, not the club menu with a different badge on it.</div>
+    </div>
+  </section>
+
+  <!-- ================= EOI MEETING (its own, separately-dated event) ================= -->
+  <section class="panel" id="panel-eoi" role="tabpanel" hidden>
+    <div class="match-back-bar">
+      <button class="match-back-btn" onclick="exitEoiMode()" title="Back to Franchise"><svg class="icon"><use href="#i-chevron-fwd"/></svg></button>
+      <span class="match-back-title">Pakistan Premier League &middot; EOI Meeting</span>
+    </div>
+    <div class="panel-head"><h1>EOI Meeting</h1><div class="sub">Held 52 days before the auction window &middot; the registered-player list finalised into the shortlist &mdash; its own event, weeks ahead of the auction and the pre-auction meeting</div></div>
+    <div class="tactics-grid">
+      <div class="analysis-card">
+        <span class="eyebrow"><svg class="icon sm"><use href="#i-users"/></svg> League-wide registration</span>
+        <div class="bio-line"><span class="k">Players registered league-wide</span><span>214</span></div>
+        <div class="bio-line"><span class="k">Dropped out before the room even sat down</span><span>38</span></div>
+        <div class="bio-line"><span class="k">Still live in the room&rsquo;s own conversation</span><span>176</span></div>
+        <div class="role-hint" style="margin-top:8px">A capped all-rounder with a strong recent List A season drew zero interest votes from any franchise and dropped out of the conversation entirely &mdash; the auction floor rarely agrees with a spreadsheet.</div>
+      </div>
+      <div class="analysis-card">
+        <span class="eyebrow"><svg class="icon sm"><use href="#i-badge"/></svg> Shortlist as it stood</span>
+        <div class="lot-price-block">
+          <div class="auction-countdown" id="eoi-shortlist-total">118</div>
+          <div class="auction-countdown-unit">final auction shortlist &middot; set here, weeks before a single lot goes under the hammer</div>
+        </div>
+        <div class="bio-line"><span class="k">Genuine interest (2+ franchises)</span><span id="eoi-genuine-count">96</span></div>
+        <div class="bio-line"><span class="k">Topped up to fill the shortlist</span><span id="eoi-toppedup-count">+22</span></div>
+        <div class="role-hint" style="margin-top:8px">Reviewing Islamabad Icons&rsquo; own vote below still moves the tally &mdash; the shortlist it produced is exactly what the auction, held separately weeks later, actually bid on.</div>
+      </div>
+    </div>
+    <div class="analysis-card" style="margin-top:16px">
+      <span class="eyebrow"><svg class="icon sm"><use href="#i-briefcase"/></svg> Islamabad Icons&rsquo; own vote, player by player, cast live in real time on the day &mdash; set by set, the same way the auction itself bids</span>
+      <div class="table-card">
+        <div class="table-scroll-inner" style="max-height:none">
+          <table class="squad">
+            <thead><tr><th>Player</th><th>Role</th><th>Set</th><th>Our interest</th><th class="num">Franchises interested</th><th>Status</th></tr></thead>
+            <tbody id="eoi-vote-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="stage-actions"><button class="stage-continue-btn" onclick="exitEoiMode()">Return to Franchise <svg class="icon sm"><use href="#i-chevron-fwd"/></svg></button></div>
+  </section>
+
+  <!-- ================= PRE-AUCTION MEETING (its own, separately-dated event) ================= -->
+  <section class="panel" id="panel-preauction" role="tabpanel" hidden>
+    <div class="match-back-bar">
+      <button class="match-back-btn" onclick="exitPreAuctionMode()" title="Back to Franchise"><svg class="icon"><use href="#i-chevron-fwd"/></svg></button>
+      <span class="match-back-title">Pakistan Premier League &middot; Pre-Auction Meeting</span>
+    </div>
+    <div class="panel-head"><h1>Pre-Auction Meeting</h1><div class="sub">Held 12 days before the auction window &middot; head coach, chief scout and ownership lock in the room&rsquo;s own targets &mdash; well after the EOI meeting, well before a single lot goes under the hammer</div></div>
+    <div class="tactics-grid">
+      <div class="analysis-card">
+        <span class="eyebrow"><svg class="icon sm"><use href="#i-briefcase"/></svg> Pre-auction plan</span>
+        <div class="staff-row"><div class="staff-row-main"><span class="staff-name">A genuine strike bowler</span><span class="staff-role-label">Fast bowling &middot; 42cr budget</span></div><span class="tier-badge a">Must-have</span></div>
+        <div class="staff-row"><div class="staff-row-main"><span class="staff-name">Finishing depth at 6 or 7</span><span class="staff-role-label">Power hitting &middot; 14cr budget</span></div><span class="tier-badge b">Priority</span></div>
+        <div class="staff-row"><div class="staff-row-main"><span class="staff-name">A second front-line spinner</span><span class="staff-role-label">Spin bowling &middot; 11cr budget</span></div><span class="tier-badge c">Fallback</span></div>
+        <div class="role-hint" style="margin-top:8px">The room&rsquo;s own read: the squad is batting-heavy after retention &mdash; bowling depth is where the purse should go first.</div>
+      </div>
+      <div class="analysis-card">
+        <span class="eyebrow"><svg class="icon sm"><use href="#i-megaphone"/></svg> Which direction do we go?</span>
+        <div class="role-hint" style="margin-bottom:10px">Chief scout and ownership are in the room, waiting on your call &mdash; the retention review and the EOI shortlist are both already settled.</div>
+        <div class="convo-log" id="preauction-convo">
+          <div class="convo-line him"><span class="who">Scout</span><div class="convo-bubble">&ldquo;Sarmad Yousuf is the standout at his bracket, but he won&rsquo;t come cheap in the marquee set. Your call on how hard we push.&rdquo;</div></div>
+        </div>
+        <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">
+          <button class="tone-chip" data-key="marquee" onclick="pickPreAuctionTone('marquee')">Chase the marquee name<span class="tone-hint">Spend to win the pace slot</span></button>
+          <button class="tone-chip" data-key="steady" onclick="pickPreAuctionTone('steady')">Build steadily by role<span class="tone-hint">Fill every gap at a sensible price</span></button>
+          <button class="tone-chip" data-key="scouts" onclick="pickPreAuctionTone('scouts')">Back the scouts&rsquo; read<span class="tone-hint">Trust the shortlist as it stands</span></button>
+        </div>
+      </div>
+    </div>
+    <div class="stage-actions"><button class="stage-continue-btn" onclick="exitPreAuctionMode()">Return to Franchise <svg class="icon sm"><use href="#i-chevron-fwd"/></svg></button></div>
   </section>
 
   <!-- ================= SQUAD ================= -->
@@ -2482,28 +2536,9 @@
          days-to-go countdown with the button disabled; this mockup is frozen ON the auction's
          own opening day, so - exactly like "Play Match" only appearing on a scheduled fixture
          day - the button is genuinely live here, not a free-standing shortcut. -->
-    <div class="analysis-card auction-tile">
-      <div>
-        <span class="eyebrow"><svg class="icon sm"><use href="#i-clock"/></svg> Pakistan Premier League auction</span>
-        <div class="plan-desc" style="margin-top:6px">Mega auction &middot; auction window opens today &mdash; your retained core carries in, the rest of the squad is re-drafted from the pool.</div>
-        <button class="view-more-btn" style="margin-top:10px;width:auto;padding:6px 12px" onclick="enterAuctionMode()" title="The auction window has opened today">Enter auction room</button>
-      </div>
-      <div style="margin-left:auto;text-align:center">
-        <div class="auction-countdown" style="font-size:var(--fs-subhead)">Today</div>
-        <div class="auction-countdown-unit">auction opens</div>
-      </div>
-    </div>
-
-    <div class="analysis-card auction-tile">
-      <div>
-        <span class="eyebrow"><svg class="icon sm"><use href="#i-swap"/></svg> Pakistan Premier League trades</span>
-        <div class="plan-desc" style="margin-top:6px">Quarterly trade window &mdash; squads carry over between mega auctions, so a trade is the only way to reshape one mid-cycle. One genuinely complementary pair has emerged this quarter.</div>
-        <button class="view-more-btn" style="margin-top:10px;width:auto;padding:6px 12px" onclick="enterTradeMode()">Enter trade centre</button>
-      </div>
-      <div style="margin-left:auto;text-align:center">
-        <div class="auction-countdown" style="font-size:var(--fs-subhead)">1</div>
-        <div class="auction-countdown-unit">match found</div>
-      </div>
+    <div class="analysis-card">
+      <span class="eyebrow"><svg class="icon sm"><use href="#i-badge"/></svg> Franchise business</span>
+      <div class="plan-desc">The Pakistan Premier League auction, retention and trade activity moved to its own <a href="#" onclick="showPanel('franchise');return false" style="color:var(--chrome-strong)">Franchise</a> menu &mdash; a franchise is a genuinely different kind of organisation from this domestic club, not the same screens wearing a different badge.</div>
     </div>
 
     <div class="analysis-card">
@@ -3360,7 +3395,13 @@
   <!-- ================= INTERNATIONAL ================= -->
   <section class="panel" id="panel-international" role="tabpanel" hidden>
     <div class="panel-head"><h1>International Cricket</h1><div class="sub">ICC World T20 Championship cycle &middot; next global event in 14 months</div></div>
+    <nav class="subnav" role="tablist" aria-label="International views">
+      <button class="subtab-btn" role="tab" aria-selected="true" data-subtab="overview">Overview</button>
+      <button class="subtab-btn" role="tab" aria-selected="false" data-subtab="contracts">Central Contracts &amp; Duty</button>
+      <button class="subtab-btn" role="tab" aria-selected="false" data-subtab="fixtures">Fixtures &amp; Trophies</button>
+    </nav>
 
+    <div class="subpanel" id="intl-overview">
     <div class="tactics-grid">
       <div class="analysis-card">
         <div class="history-head-row">
@@ -3389,13 +3430,29 @@
         <div class="bio-line"><span class="k">Chairman of selectors</span><span>Arif Nadeem</span></div>
         <div class="bio-line"><span class="k">Panel quality</span><span style="color:var(--turf-strong)">Good &middot; low politicisation</span></div>
         <div class="bio-line"><span class="k">Next pool review</span><span>Annual refresh &middot; in 5 months</span></div>
-        <div class="bio-line"><span class="k">Central contracts</span><span>6 Tier A &middot; 9 Tier B &middot; 14 Tier C</span></div>
-        <div class="bio-line"><span class="k">Coaching structure</span><span>Unified &middot; one head coach, all formats</span></div>
-        <div class="role-hint">Central-contract tiers carry real NOC weight &mdash; a Tier A player's board is far more likely to hold him back from a clashing franchise window than release him.</div>
+        <div class="role-hint" style="margin-top:8px">A sharp, apolitical panel reads current form and conditions well; a weak, political one leans on reputation and old runs, and leaves real fingerprints on the pool review.</div>
+      </div>
+      <div class="analysis-card">
+        <span class="eyebrow"><svg class="icon sm"><use href="#i-shield"/></svg> Coaching structure</span>
+        <div class="bio-line"><span class="k">Structure</span><span>Unified &middot; one head coach, all formats</span></div>
+        <div class="bio-line"><span class="k">Coordination friction</span><span style="color:var(--turf-strong)">Low &middot; easing while unified</span></div>
+        <div class="bio-line"><span class="k">Board ambition this cycle</span><span>Reach the final</span></div>
+        <div class="bio-line"><span class="k">National-job scrutiny multiplier</span><span>1.40&times; a domestic job</span></div>
+        <div class="role-hint" style="margin-top:8px">A unified structure only splits under real pressure &mdash; a coach short on board trust, at a politicised or media-heavy board, with a genuine white-ball specialist available. A split then accrues its own coordination friction, and sustained friction, or a clear gap between the two coaches, eventually tips the board back to reunifying under one man.</div>
       </div>
     </div>
+    </div>
 
+    <div class="subpanel" id="intl-contracts" hidden>
     <div class="analysis-card">
+      <span class="eyebrow"><svg class="icon sm"><use href="#i-badge"/></svg> Central contracts</span>
+      <div class="bio-line"><span class="k">Tier A</span><span>6 players</span></div>
+      <div class="bio-line"><span class="k">Tier B</span><span>9 players</span></div>
+      <div class="bio-line"><span class="k">Tier C</span><span>14 players</span></div>
+      <div class="role-hint" style="margin-top:8px">Awarded annually from each player's best-format evaluator score &mdash; a real, checkable ranking, not a reputation list.</div>
+    </div>
+
+    <div class="analysis-card" style="margin-top:16px">
       <span class="eyebrow"><svg class="icon sm"><use href="#i-shield"/></svg> Central contracts &amp; NOC status</span>
       <div class="staff-row"><div class="staff-row-main"><span class="staff-name">Kamran Hussain</span><span class="staff-role-label">Tier A &middot; Lahore Lions &middot; PPL window clashes with the ODI series</span></div><span class="tier-badge c">NOC denied</span></div>
       <div class="staff-row"><div class="staff-row-main"><span class="staff-name">Adeel Hayat</span><span class="staff-role-label">Tier B &middot; Quetta Falcons &middot; released once the Test squad is confirmed</span></div><span class="tier-badge b">NOC pending</span></div>
@@ -3430,7 +3487,9 @@
         <span class="tier-badge b">Tier B</span>
       </div>
     </div>
+    </div>
 
+    <div class="subpanel" id="intl-fixtures" hidden>
     <div class="tactics-grid">
       <div class="analysis-card">
         <span class="eyebrow"><svg class="icon sm"><use href="#i-cal-list"/></svg> Upcoming internationals</span>
@@ -3455,6 +3514,7 @@
           <div class="trophy-side"><img class="flag-icon" src="data:image/png;base64,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" alt="IND"><span>India</span></div>
         </div>
       </div>
+    </div>
     </div>
   </section>
 
@@ -4905,6 +4965,7 @@
   wireTabs('#panel-matchday .subtab-btn', 'sub-');
   wireTabs('#panel-player .subtab-btn', 'psub-');
   wireTabs('#panel-inbox .subtab-btn', 'inbox-');
+  wireTabs('#panel-international .subtab-btn', 'intl-');
   wireTabs('#stage-teamtalk .subtab-btn', 'talk-');
   wireTabs('#panel-records nav[aria-label="Records views"] > .subtab-btn', 'records-');
   wireTabs('#panel-records nav[aria-label="Player of the Round detail"] .subtab-btn', 'potr-');
@@ -5465,8 +5526,6 @@
     auctionLotIndex = 0;
     rtmCardsRemaining = 2;
     auctionSetOverviewShown = {};
-    EOI_REGISTRATIONS.forEach(function (reg) { reg.ourInterest = reg._base; });
-    renderEoiVoteTable();
     clearAuctionTimer();
     AUCTION_LOTS.forEach(function (l) { delete l._soldTo; delete l._rtmResolved; });
     franchiseSquad["Islamabad Icons"] = franchiseSquad["Islamabad Icons"].slice(0, 4);
@@ -5481,9 +5540,9 @@
   function exitAuctionMode() {
     clearAuctionTimer();
     document.body.classList.remove("match-immersive");
-    document.querySelectorAll(".tab-btn").forEach(function (b) { b.setAttribute("aria-selected", b.dataset.tab === "recruitment" ? "true" : "false"); });
+    document.querySelectorAll(".tab-btn").forEach(function (b) { b.setAttribute("aria-selected", b.dataset.tab === "franchise" ? "true" : "false"); });
     document.querySelectorAll("body > .app-body > .main-content > .shell > section.panel").forEach(function (p) { p.hidden = true; });
-    document.getElementById("panel-recruitment").hidden = false;
+    document.getElementById("panel-franchise").hidden = false;
   }
   // ---- Trade Centre: a real complementary-need match, a value-gap check, a cash sweetener ----
   function enterTradeMode() {
@@ -5496,9 +5555,47 @@
   }
   function exitTradeMode() {
     document.body.classList.remove("match-immersive");
-    document.querySelectorAll(".tab-btn").forEach(function (b) { b.setAttribute("aria-selected", b.dataset.tab === "recruitment" ? "true" : "false"); });
+    document.querySelectorAll(".tab-btn").forEach(function (b) { b.setAttribute("aria-selected", b.dataset.tab === "franchise" ? "true" : "false"); });
     document.querySelectorAll("body > .app-body > .main-content > .shell > section.panel").forEach(function (p) { p.hidden = true; });
-    document.getElementById("panel-recruitment").hidden = false;
+    document.getElementById("panel-franchise").hidden = false;
+  }
+  // ---- EOI Meeting: its own, separately-dated event (weeks before the auction) ----
+  function enterEoiMode() {
+    document.body.classList.add("match-immersive");
+    document.querySelectorAll("body > .app-body > .main-content > .shell > section.panel").forEach(function (p) { p.hidden = true; });
+    document.getElementById("panel-eoi").hidden = false;
+    EOI_REGISTRATIONS.forEach(function (reg) { reg.ourInterest = reg._base; });
+    renderEoiVoteTable();
+  }
+  function exitEoiMode() {
+    document.body.classList.remove("match-immersive");
+    document.querySelectorAll(".tab-btn").forEach(function (b) { b.setAttribute("aria-selected", b.dataset.tab === "franchise" ? "true" : "false"); });
+    document.querySelectorAll("body > .app-body > .main-content > .shell > section.panel").forEach(function (p) { p.hidden = true; });
+    document.getElementById("panel-franchise").hidden = false;
+  }
+  // ---- Pre-Auction Meeting: its own, separately-dated event (days before the auction) ----
+  var preAuctionLines = {
+    marquee: { you: "Spend to win the pace slot — everything else is a fallback.", him: "Understood — we’ll build the plan around a strong opening bid the moment Sarmad Yousuf comes up." },
+    steady: { you: "No single name is worth breaking the plan for — fill every gap at a sensible price.", him: "Noted. We’ll walk away from a bidding war rather than blow the budget on one bracket." },
+    scouts: { you: "You’ve done the groundwork — I’ll trust the shortlist as it stands.", him: "Appreciated. We’ll flag anything that changes between now and the window opening." }
+  };
+  function pickPreAuctionTone(tone) {
+    document.querySelectorAll('#panel-preauction .tone-chip').forEach(function (c) { c.classList.toggle('active', c.dataset.key === tone); });
+    var log = document.getElementById('preauction-convo');
+    log.insertAdjacentHTML('beforeend',
+      '<div class="convo-line you"><span class="who">You</span><div class="convo-bubble">“' + preAuctionLines[tone].you + '”</div></div>' +
+      '<div class="convo-line him"><span class="who">Room</span><div class="convo-bubble">“' + preAuctionLines[tone].him + '”</div></div>');
+  }
+  function enterPreAuctionMode() {
+    document.body.classList.add("match-immersive");
+    document.querySelectorAll("body > .app-body > .main-content > .shell > section.panel").forEach(function (p) { p.hidden = true; });
+    document.getElementById("panel-preauction").hidden = false;
+  }
+  function exitPreAuctionMode() {
+    document.body.classList.remove("match-immersive");
+    document.querySelectorAll(".tab-btn").forEach(function (b) { b.setAttribute("aria-selected", b.dataset.tab === "franchise" ? "true" : "false"); });
+    document.querySelectorAll("body > .app-body > .main-content > .shell > section.panel").forEach(function (p) { p.hidden = true; });
+    document.getElementById("panel-franchise").hidden = false;
   }
   function confirmTrade() {
     document.getElementById("trade-confirm-actions").hidden = true;

@@ -11008,6 +11008,102 @@ block (`SYNTAX OK`, script braces 669/669, parens 1434/1434); a direct duplicate
 every new element id (`panel-trade`, `trade-match-card`, `trade-confirm-actions`,
 `trade-done-banner`, `trade-news-log`) appears exactly once. Final state: file size ~2.634MB.
 
+### Phase C, 11-point directive: slice 5 — a distinct Franchise menu, a real correction to the EOI/Pre-Auction timeline, and the International Coaching sub-menu (points 8, 5, plus a correction to slice 3)
+
+Step 4 of the approved 6-step build plan, plus a mid-session correction from the user to
+slice 3's own structure.
+
+**Correction to slice 3 — EOI Meeting, Pre-Auction Meeting and the auction are genuinely
+separate, separately-dated events, not one sitting.** The user's own direct correction: real
+auction cycles run a registered-player list months out, a retention update, an EOI meeting
+with real-time set-by-set voting (its own date), a pre-auction planning meeting with real
+coach dialogue (a later, still-earlier-than-the-auction date), and only then the auction
+itself — each a distinct calendar event, not three stages clicked through in one sitting on
+auction day. The `#auction-eoi`/`#auction-preauction` stages built in slice 3 were WRONG in
+exactly this way — chained inside the same `enterAuctionMode()` immersive flow, implying they
+all happened on the auction's own frozen "today." Fixed: War Room's continue button now goes
+straight to Live Bidding again (the pre-slice-3 chain); `#auction-eoi`/`#auction-preauction`
+are deleted from inside `#panel-auction` entirely and rebuilt as two genuinely standalone
+top-level screens (`#panel-eoi`, `#panel-preauction`), each with its own back-bar and its own
+explicit "held N days ago" dating (EOI: 52 days before the auction window; Pre-Auction: 12
+days before) — reached only from the new Franchise hub's own timeline card, never chained.
+The EOI screen keeps its real interactive vote-toggle table (still framed as "cast in real
+time, set by set, the same way the auction itself bids" per the user's own comparison) but as
+its own separately-dated meeting, not a step toward the live bidding room. The Pre-Auction
+screen's previously-static notes-log ("Attendees & the room's own words") is replaced with a
+genuine interactive coach dialogue — three tone-chip choices ("Chase the marquee name" /
+"Build steadily by role" / "Back the scouts' read"), each producing a real you/room
+`.convo-log` exchange (`pickPreAuctionTone`), reusing the exact tone-chip/convo-line
+components Team Talk and the player-negotiation modal already established, rather than
+inventing a new pattern.
+
+**A distinct Franchise menu (point 8).** A new sidebar tab, `#panel-franchise`, sits between
+Club and Fixtures — a genuinely different organisation from the domestic club, per the
+corrected Section H research already on record (year-round-but-senior-relationship campaign
+coaching, no permanent backroom staff, no youth academy, no domestic overseas-quota rules, no
+board-negotiation of the club-menu kind). Four cards: **Franchise identity** (Archetype,
+Cultural identity, Dynasty rating, with the real >65-pays threshold explained);
+**Campaign coaching** (the human doubles as the franchise's own coach — "a domestic-club
+coach is available for a franchise role in any country; the franchise is the senior
+relationship," the exact corrected Section H rule, stated plainly rather than assumed);
+**Franchise finances** (the real loss-proof central-pool model — an equal share sized to
+cover a full auction purse, plus local revenue, a hard 3.0cr reserve floor, no FFP exposure);
+and **"This campaign's own timeline"** — a real `staff-row`-based dated list (EOI Meeting →
+Pre-Auction Meeting → War Room & Auction → Trade Centre, in that chronological order) that is
+now the ONLY entry point into all four franchise-specific screens. The two auction/trade
+tiles that slice 3/4 had placed on the domestic Recruitment screen are removed from there
+entirely (replaced with a one-line pointer to the Franchise menu) — per the user's explicit
+reminder that franchise mechanics (auction, EOI, retention, trade) are not domestic-club
+mechanics and must not leak onto the domestic Recruitment/transfer screens, and the reverse:
+Recruitment's own transfer/free-agent machinery has no place on the Franchise menu either.
+`exitAuctionMode()`/`exitTradeMode()` now return to `panel-franchise`, not `panel-recruitment`.
+
+**International Coaching's own distinct sub-menu (point 5).** `#panel-international` gains a
+real 3-tab subnav — **Overview** (ICC rankings, Upcoming internationals, Trophy watch — the
+general dashboard view), **Central Contracts & Duty** (Central contracts by tier, the
+per-player NOC status table, the international-duty roster — unchanged content, just its own
+tab), and a genuinely NEW **Coaching structure** card folded into Overview, grounded directly
+in `CoachingStructureService`'s real mechanism rather than just restating the static "Unified"
+label the screen already had: coordination friction (low, easing while unified), the board's
+real `Ambition`-derived target this cycle ("reach the final," `NationalBoard.MajorTargetDescription`
+at Ambition >= 60), and the real `CoachScrutinyMultiplier()` reading (1.40x a domestic job at
+this board's politicisation) — plus a plain-English explanation of the real split/reunify
+trigger (a coach short on board trust at a politicised/media-heavy board with a genuine
+white-ball specialist available splits; sustained coordination friction, or a clear gap
+between the two coaches, tips it back). The National Selection Panel card is trimmed to drop
+the two summary bio-lines that duplicated what the Central Contracts and Coaching Structure
+cards now say properly. Per the user's explicit reminder mid-build: **no franchise auction/EOI
+machinery and no domestic transfer/free-agent widgets appear anywhere on this screen** — a
+national side has neither, and this rebuild is strictly limited to real international-domain
+services (`NationalBoard`, `CoachingStructureService`, `CentralContractService`, the national
+selection panel).
+
+**A real nesting bug caught and fixed before it shipped, not after — worth reading in full.**
+The first attempt at the International restructuring tried to reorder content across three
+subtabs whose natural document order didn't match the desired tab order, and its `must_replace`
+calls silently produced correctly-COUNTED but incorrectly-NESTED HTML (the Coaching &
+Selection and Central Contracts subpanels ended up as children of the Overview subpanel
+instead of siblings) — caught by design review before the file was even written that time
+(the 4th `must_replace` failed to find its anchor text and the script crashed before writing,
+leaving the file untouched), and confirmed by building a proper fix. The corrected approach
+matches subtab CONTENT to physical DOCUMENT ORDER instead of forcing a reorder (Overview =
+ICC rankings + selection panel + coaching structure, in that order; Contracts = central
+contracts + NOC + duty, already contiguous; Fixtures = upcoming internationals + trophy watch,
+already contiguous) — zero large base64-embedded blocks needed relocating. Verified with a
+purpose-built stack-based nesting validator (not just the usual tag-count check, which cannot
+distinguish "8 opens, 8 closes, correctly nested" from "8 opens, 8 closes, wrongly nested" —
+the exact failure mode the first attempt's silent bug would have produced had its `must_replace`
+happened to find a match): confirmed all three subpanels are sequential, non-overlapping, and
+independently well-formed before treating the file as safe to ship.
+
+**Verification**: `div`/`table`/`tr`/`span`/`svg`/`nav`/`section`/`button` tag-count parity
+(1948/1948, 27/27, 158/158, 1165/1165, 320/320, 14/14, 18/18, 259/259) plus `node --check` on
+the extracted `<script>` block (`SYNTAX OK`, script braces 685/685, parens 1476/1476); the
+custom stack-based nesting validator described above; a duplicate-id scan confirming every new
+id (`panel-franchise`, `panel-eoi`, `panel-preauction`, `intl-overview`, `intl-contracts`,
+`intl-fixtures`) appears exactly once; and a grep confirming zero remaining references to the
+deleted `auction-eoi`/`auction-preauction` stage ids. Final state: file size ~2.645MB.
+
 ---
 
 ## CONSOLIDATED DEFERRED-ITEMS REGISTER (maintained - the single source of truth)
