@@ -10392,6 +10392,91 @@ the single `<script>` block's brace/paren balance likewise; a direct nav-integri
 deliberately-orphaned `matchday`) confirmed clean at the end. Final state: 12 panel sections
 (down from 15 pre-this-pass), file size ~2.55MB.
 
+### Follow-up correction pass: real click-through profiles, honest squad stats, negotiated hiring
+
+The user's direct follow-up on the IA-redesign pass above, delivered as a rapid stream of Roman-
+Urdu/English corrections while the previous pass's work was still being reviewed. Each is a real,
+separate fix, not one bundled feature - recorded individually since a future session may need to
+extend any one of them on its own.
+
+**Player click-through was never actually wired - found and fixed.** A prior turn's `Write` of
+`wire_player_clicks.py` had never been *executed* (the referenced `openPlayerProfile` function did
+not exist anywhere in the shipped file, confirmed by grep before writing anything). Built from
+scratch instead, correctly this time: the sidebar's standalone `Player` tab is removed entirely -
+a player is reachable ONLY by clicking through from wherever he appears (Squad first-team, Academy,
+Recruitment's Player Database - 13 rows across three tables, each given `class="clickable"
+onclick="openPlayerFromRow(this)"`). `openPlayerFromRow(rowEl)` reads the row's own name/hand text
+directly (no parallel data object to disagree with it), updates the Player Profile's `<h1>`,
+breadcrumb "here" span, and a plain hand-derived role line via a small `PLAYER_HAND_DESC` lookup,
+then calls `showPanel('player')` - a real redirect, never an inline card, per the user's explicit
+correction ("wo redirect krta hai player profile screen pe"). Global search's click handler,
+which used to `.click()` the now-deleted sidebar button, now calls `showPanel('player')` directly.
+**Honest limitation, stated not hidden**: only name/breadcrumb/role-line update per player - CA/PA
+stars, career numbers and the rest of the profile stay the shared illustrative shape built for
+Hamza Malik. A full per-player data-driven rebuild is a separate, larger piece of work.
+
+**Staff Profile converted from a popup modal into a real screen, on the same "click → redirect"
+principle** ("staff ki profile bhi... jis trh player ki apni profile hoti hai isi trh staff ki
+hoti hai"). The `#staff-profile-backdrop` modal (Overview/Career/Contract stacked as one page,
+reusing `.player-header`/`.tactics-grid`/`.analysis-card` rather than the `.negotiation-modal`
+shell) is now a real `panel-staff-profile` section with its own breadcrumb
+(`Club › Staff › {name}`, `onclick="openClubTab('staff')"`). `openStaffProfile(rowEl)` populates
+it from the clicked row exactly as `openPlayerFromRow` does, then calls `showPanel('staff-profile')`.
+`closeStaffProfile`/the modal wrapper are gone entirely, not left as dead code.
+
+**Squad table stats were FM-shaped, not cricket-shaped - identified and fixed.** The user's point:
+`Apps` + a flat `Runs/Wkts` number is lifted wholesale from a football "apps/goals" convention and
+means nothing in cricket; the combined stat that actually matters is what `Career Stats` already
+computes (runs-or-wickets @ average, filterable by format). Fixed: the First-Team and Academy
+squad tables' `Apps`/`Runs & Wkts` columns collapsed into one **Record** column (First-Team) /
+**This Season** column (Academy - a prospect has no career yet) in real Cricinfo shorthand
+("1,842 runs @ 38.4", "96 wkts @ 22.6"), Value/Wage kept as legitimate management info. **A real,
+separate bug found along the way**: three of the six First-Team rows (Hamza Malik, Zain Chaudhry,
+Rizwan Sheikh) were silently missing their trailing stat cells altogether - the table had been
+rendering misaligned for those rows since an earlier pass. Fixed as part of the same edit, with
+newly-authored, role-appropriate figures for all six.
+
+**Staff hiring: real negotiation, and it doesn't have to go through a shortlist first.** Two
+separate corrections from the user: (a) hiring was still "click and done" - the candidate-shortlist
+`Hire` button skipped straight to `hireStaff(...)`, no back-and-forth at all; (b) even once
+negotiation exists, it must not be forced through a mandatory advertise→wait-for-applicants
+pipeline - a coach can negotiate directly with a specific, already-known candidate too
+("negotiations directly bhi ho sakti hain... zaroori nahi ke sirf applicants ko hi hire karna
+compulsory ho"). Fixed by generalising the existing `target-offer-backdrop` negotiation modal
+(built earlier for transfer targets - a wage slider, a real `.convo-log` back-and-forth, a
+three-lowball-walk-away streak) to also drive a staff hire: `openTargetOffer` gained `kind`/
+`hireInfo` params, and every shortlist candidate's `Hire` button now opens a real negotiation
+(`Negotiate`) instead of hiring instantly. On a genuine deal (offer >= 1.05x the candidate's own
+ask), `sendTargetOffer` calls the SAME `hireStaff(...)` the old one-click button called - but with
+the actually-negotiated wage, not the candidate's opening ask - so the negotiation has a real
+mechanical consequence, not just extra dialogue on top of an unchanged outcome. This directly
+answers point (b) too: the negotiation entry point is per-candidate (any row that names a specific
+person), not gated behind a vacancy-advert/applicant-pool flow - that fuller "post a vacancy,
+applicants arrive over time" system remains unbuilt and is the natural next piece if picked up.
+
+**Deliberately still open, from the same correction stream, not yet acted on:**
+- The advertise-a-role → applicants-arrive-over-time hiring flow itself (the shortlist candidates
+  are still a fixed, pre-populated list, not something that grows from a posted vacancy).
+- World's Nation/Club profiles still open via the shared `openWorldProfile` **modal** rather than a
+  real redirect screen - the user's "everything redirects, nothing pops up" principle was confirmed
+  to apply here too, but converting it is tied up with the larger Nation/Club/Records depth rebuild
+  (central contracts, top players-with-clubs, 3-format rankings, fixtures for Nation; a real
+  cricinfo-style two-level category→list structure for Records) requested earlier and not yet
+  started.
+- A verified false alarm, worth recording so it isn't re-investigated: an inline Python `-c` probe
+  for Unicode replacement characters in the shipped file initially appeared to find corruption in
+  `targetOfferLog`'s smart-quote characters - traced to the *probe script's own* shell-quoting
+  mangling the literal curly quotes in the `-c` argument, not a defect in the file. Confirmed clean
+  by re-running the identical check from a real `.py` file instead of an inline `-c` string. Worth
+  remembering: an inline Bash `-c` Python one-liner containing non-ASCII literals is not a reliable
+  way to probe a file for encoding corruption - write it to a file first.
+
+**Verification**: the same per-edit structural balance discipline as every prior pass in this
+sub-track (`<div>`/`<table>`/`<tr>`/`<span>`/`<svg>`/`<nav>`/`<section>` tag-count parity, plus the
+single `<script>` block's brace/paren balance), re-checked after each of the four fixes above.
+Final state: file size ~2.55MB, 13 `panel-*` sections (the new `panel-staff-profile`, replacing the
+deleted modal).
+
 ---
 
 ## CONSOLIDATED DEFERRED-ITEMS REGISTER (maintained - the single source of truth)
