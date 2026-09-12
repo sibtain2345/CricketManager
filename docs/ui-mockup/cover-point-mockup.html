@@ -518,7 +518,23 @@
   .lot-price-block { text-align: center; margin: 14px 0; }
   .bid-actions { display: flex; gap: 10px; margin-top: 14px; }
   .sold-banner { margin-top: 10px; font-weight: 700; color: var(--gold); font-size: var(--fs-body-lg); }
+  .sold-banner.unsold { color: var(--ball); }
   .sold-banner[hidden] { display: none; }
+  .call-stage-row { display: flex; align-items: center; justify-content: center; gap: 10px; margin: 4px 0 2px; }
+  .call-stage-badge { font-size: var(--fs-micro); font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; padding: 3px 10px; border-radius: 999px; background: var(--surface-3); color: var(--ink-dim); }
+  .call-stage-badge.first { background: var(--gold-dim); color: var(--gold); }
+  .call-stage-badge.second { background: rgba(165,58,46,0.16); color: var(--ball); }
+  .call-stage-badge.third { background: var(--ball); color: var(--surface-0, #fff); }
+  .call-timer { font-family: var(--font-mono); font-weight: 700; font-size: var(--fs-body-lg); color: var(--ink-dim); min-width: 2.4em; text-align: right; }
+  .team-status-list { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 12px; margin-top: 12px; }
+  .team-status-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 5px 9px; border-radius: 7px; background: var(--surface-2); font-size: var(--fs-caption); }
+  .team-status-row.is-you { border: 1px solid var(--gold-dim); }
+  .team-status-pill { font-size: var(--fs-micro); font-weight: 700; padding: 2px 8px; border-radius: 999px; white-space: nowrap; }
+  .team-status-pill.active { background: var(--surface-3); color: var(--ink-dim); }
+  .team-status-pill.bidding { background: var(--gold-dim); color: var(--gold); }
+  .team-status-pill.passed { background: rgba(165,58,46,0.14); color: var(--ball); }
+  .set-overview-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 8px 10px; border-radius: 8px; background: var(--surface-2); margin-bottom: 6px; }
+  .set-overview-row:last-child { margin-bottom: 0; }
   .purse-list .rank-row.mine { background: var(--turf-dim); margin: 0 -10px; padding: 7px 10px; border-radius: 8px; }
   .purse-list .rank-row.mine .rank-team { color: var(--turf-strong); }
   .auction-set-row { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; margin-bottom: 12px; }
@@ -1749,6 +1765,15 @@
           <span class="tier-badge a" id="current-set-badge">Set: Marquee Players</span>
           <span class="role-cell" id="current-set-progress">Player 1 of 1 in this set</span>
         </div>
+
+        <div class="analysis-card" id="set-overview-card" hidden>
+          <span class="eyebrow"><svg class="icon sm"><use href="#i-badge"/></svg> Set overview</span>
+          <p class="role-hint" style="margin-top:4px">Before the hammer falls on this set &mdash; who's in it, and what they'll likely cost.</p>
+          <div id="set-overview-list" style="margin-top:10px"></div>
+          <div class="stage-actions"><button class="stage-continue-btn" onclick="beginSetBidding()">Begin bidding on this set <svg class="icon sm"><use href="#i-chevron-fwd"/></svg></button></div>
+        </div>
+
+        <div id="lot-bidding-area">
         <div class="tactics-grid">
           <div class="analysis-card">
             <div class="lot-head-row">
@@ -1758,16 +1783,20 @@
             <h3 id="lot-name" style="margin:10px 0 2px">Sarmad Yousuf</h3>
             <div class="role-hint" style="margin-bottom:0" id="lot-role">Fast bowler</div>
             <p style="font-size:var(--fs-body);color:var(--ink-dim);line-height:1.5" id="lot-blurb">Genuine pace and a strong death-overs record for Multan Sultans last season.</p>
+            <div class="call-stage-row">
+              <span class="call-stage-badge" id="call-stage-badge">Open bidding</span>
+              <span class="call-timer" id="call-timer">10s</span>
+            </div>
             <div class="lot-price-block">
               <div class="auction-countdown" id="lot-price">1.25cr</div>
               <div class="auction-countdown-unit">current bid &middot; held by <span id="lot-bidder">nobody yet</span></div>
             </div>
             <div class="bid-actions">
               <button class="auction-continue-btn stage-continue-btn" id="auction-bid-btn" onclick="auctionBid()">Bid</button>
-              <button class="view-more-btn" style="margin-top:0" id="auction-pass-btn" onclick="auctionSkip()">Skip &middot; auto-bid to sold</button>
             </div>
             <div class="rtm-prompt" id="rtm-prompt" hidden></div>
             <div class="sold-banner" id="lot-sold-banner" hidden></div>
+            <div class="team-status-list" id="lot-team-status"></div>
           </div>
           <div class="analysis-card">
             <span class="eyebrow"><svg class="icon sm"><use href="#i-trend-up"/></svg> Career record</span>
@@ -1798,6 +1827,7 @@
           <div class="notes-log commentary-feed" id="auction-bid-log"><div class="notes-log-item"><span>Base price set at 1.25cr.</span></div></div>
         </div>
         <div class="stage-actions"><button class="stage-continue-btn" id="auction-next-lot-btn" disabled onclick="auctionNextLot()">Next lot <svg class="icon sm"><use href="#i-chevron-fwd"/></svg></button></div>
+        </div>
       </div>
 
       <div class="subpanel" id="auction-players" hidden>
@@ -4862,8 +4892,14 @@
   };
   var auctionLotIndex = 0;
   var auctionCurrentPrice = 0;
-  var auctionRound = 0;
-  var auctionSold = false;
+  var auctionCurrentBidder = null;
+  var auctionCallStage = 0;
+  var auctionTimerSeconds = 10;
+  var auctionTimerHandle = null;
+  var auctionLotResolved = false;
+  var auctionTeamStatus = {};
+  var auctionRivalCeiling = {};
+  var auctionSetOverviewShown = {};
   var auctionSquadsPicked = "Islamabad Icons";
   var rtmCardsRemaining = 2;
   function auctionMoneyFmt(v) {
@@ -4890,7 +4926,7 @@
   }
   function auctionStatusForLot(index) {
     if (index < auctionLotIndex) return AUCTION_LOTS[index]._soldTo ? ("Sold &middot; " + AUCTION_LOTS[index]._soldTo) : "Unsold";
-    if (index === auctionLotIndex) return auctionSold ? (AUCTION_LOTS[index]._soldTo ? ("Sold &middot; " + AUCTION_LOTS[index]._soldTo) : "Unsold") : "Live now";
+    if (index === auctionLotIndex) return auctionLotResolved ? (AUCTION_LOTS[index]._soldTo ? ("Sold &middot; " + AUCTION_LOTS[index]._soldTo) : "Unsold") : "Live now";
     return "Upcoming";
   }
   function auctionBattingRow(r) {
@@ -4923,11 +4959,123 @@
       pplNote.textContent = "";
     }
   }
+  function resetTeamStatusForLot(lot) {
+    auctionTeamStatus = {};
+    auctionRivalCeiling = {};
+    FRANCHISES.forEach(function (f) {
+      auctionTeamStatus[f] = "active";
+      if (f !== "Islamabad Icons") {
+        var mult = 1.25 + Math.random() * 2.2;
+        auctionRivalCeiling[f] = Math.round(lot.base * mult / 25000) * 25000;
+      }
+    });
+  }
+  function renderTeamStatusList() {
+    var box = document.getElementById("lot-team-status");
+    if (!box) return;
+    box.innerHTML = FRANCHISES.map(function (f) {
+      var pillClass = "active", label = "Considering";
+      if (auctionCurrentBidder === f) { pillClass = "bidding"; label = "Holding the bid"; }
+      else if (auctionTeamStatus[f] === "passed") { pillClass = "passed"; label = "Passed"; }
+      var youCls = f === "Islamabad Icons" ? " is-you" : "";
+      var name = f === "Islamabad Icons" ? f + " (you)" : f;
+      return "<div class=\"team-status-row" + youCls + "\"><span>" + name + "</span><span class=\"team-status-pill " + pillClass + "\">" + label + "</span></div>";
+    }).join("");
+  }
+  function updateCallUi() {
+    var badge = document.getElementById("call-stage-badge");
+    if (!badge) return;
+    var labels = ["Open bidding", "First call", "Second call"];
+    var classes = ["", "first", "second"];
+    badge.textContent = labels[auctionCallStage] || "Open bidding";
+    badge.className = "call-stage-badge" + (classes[auctionCallStage] ? " " + classes[auctionCallStage] : "");
+    document.getElementById("call-timer").textContent = auctionTimerSeconds + "s";
+    var bidBtn = document.getElementById("auction-bid-btn");
+    if (!auctionLotResolved) {
+      bidBtn.disabled = (auctionCurrentBidder === "Islamabad Icons");
+      bidBtn.textContent = auctionCurrentBidder === "Islamabad Icons" ? "You hold the bid" : "Bid";
+    }
+  }
+  function clearAuctionTimer() {
+    if (auctionTimerHandle) { clearInterval(auctionTimerHandle); auctionTimerHandle = null; }
+  }
+  function startAuctionRound(resetStage) {
+    if (resetStage) auctionCallStage = 0;
+    auctionTimerSeconds = 10;
+    updateCallUi();
+    clearAuctionTimer();
+    auctionTimerHandle = setInterval(auctionTimerTick, 1000);
+  }
+  function placeBid(who, price) {
+    auctionCurrentPrice = price;
+    auctionCurrentBidder = who;
+    document.getElementById("lot-price").textContent = auctionMoneyFmt(auctionCurrentPrice);
+    document.getElementById("lot-bidder").textContent = who === "Islamabad Icons" ? "You" : who;
+    auctionLog((who === "Islamabad Icons" ? "You" : who) + " bid " + auctionMoneyFmt(auctionCurrentPrice) + ".");
+    renderTeamStatusList();
+    startAuctionRound(true);
+  }
+  function maybeRivalBid() {
+    if (auctionLotResolved) return;
+    var candidates = FRANCHISES.filter(function (f) {
+      return f !== "Islamabad Icons" && auctionTeamStatus[f] === "active" && f !== auctionCurrentBidder;
+    });
+    if (!candidates.length) return;
+    if (Math.random() > 0.32) return;
+    var bidder = candidates[Math.floor(Math.random() * candidates.length)];
+    var next = auctionCurrentPrice + auctionIncrement(auctionCurrentPrice);
+    if (next > auctionRivalCeiling[bidder]) {
+      auctionTeamStatus[bidder] = "passed";
+      renderTeamStatusList();
+      return;
+    }
+    placeBid(bidder, next);
+  }
+  function auctionTimerTick() {
+    if (auctionLotResolved) { clearAuctionTimer(); return; }
+    maybeRivalBid();
+    if (auctionLotResolved) { clearAuctionTimer(); return; }
+    auctionTimerSeconds--;
+    if (auctionTimerSeconds <= 0) {
+      if (auctionCallStage >= 2) { resolveCurrentLot(); return; }
+      auctionCallStage++;
+      var labels = ["Open bidding", "First call", "Second call"];
+      auctionLog(labels[auctionCallStage] + (auctionCurrentBidder ? (" \u2014 " + (auctionCurrentBidder === "Islamabad Icons" ? "you" : auctionCurrentBidder) + " at " + auctionMoneyFmt(auctionCurrentPrice) + ".") : " \u2014 no bids yet."));
+      auctionTimerSeconds = 10;
+    }
+    updateCallUi();
+  }
+  function resolveCurrentLot() {
+    clearAuctionTimer();
+    auctionLotResolved = true;
+    var lot = AUCTION_LOTS[auctionLotIndex];
+    var badge = document.getElementById("call-stage-badge");
+    badge.textContent = "Third call";
+    badge.className = "call-stage-badge third";
+    document.getElementById("auction-bid-btn").disabled = true;
+    if (auctionCurrentBidder) {
+      var winnerName = auctionCurrentBidder === "Islamabad Icons" ? "you" : auctionCurrentBidder;
+      auctionLog("Third call \u2014 " + auctionMoneyFmt(auctionCurrentPrice) + ", " + auctionCurrentBidder + "\u2026 SOLD!");
+      auctionFinishLot(winnerName, auctionCurrentPrice);
+    } else {
+      auctionLog("Third call \u2014 no interest. UNSOLD.");
+      var banner = document.getElementById("lot-sold-banner");
+      banner.hidden = false;
+      banner.className = "sold-banner unsold";
+      banner.textContent = "UNSOLD \u2014 " + lot.name + " goes back into the pool for the accelerated round.";
+      document.getElementById("auction-next-lot-btn").disabled = false;
+      renderAuctionPlayers();
+    }
+    renderTeamStatusList();
+  }
   function renderAuctionLot() {
     var lot = AUCTION_LOTS[auctionLotIndex];
     auctionCurrentPrice = lot.base;
-    auctionRound = 0;
-    auctionSold = false;
+    auctionCurrentBidder = null;
+    auctionCallStage = 0;
+    auctionTimerSeconds = 10;
+    auctionLotResolved = false;
+    resetTeamStatusForLot(lot);
     document.getElementById("lot-name").textContent = lot.name;
     document.getElementById("lot-role").textContent = lot.role;
     document.getElementById("lot-bracket").innerHTML = lot.bracket;
@@ -4943,23 +5091,54 @@
     document.getElementById("current-set-progress").textContent = "Player " + posInSet + " of " + setLots.length + " in this set";
     document.getElementById("auction-bid-log").innerHTML = "<div class=\"notes-log-item\"><span>Base price set at " + auctionMoneyFmt(auctionCurrentPrice) + " for the " + auctionSetLabel(lot.set).toLowerCase() + " set.</span></div>";
     document.getElementById("auction-bid-btn").disabled = false;
-    document.getElementById("auction-pass-btn").disabled = false;
     var nextBtn = document.getElementById("auction-next-lot-btn");
     nextBtn.disabled = true;
     nextBtn.textContent = (auctionLotIndex === AUCTION_LOTS.length - 1) ? "See auction review" : "Next lot";
     var banner = document.getElementById("lot-sold-banner");
     banner.hidden = true;
+    banner.className = "sold-banner";
     banner.textContent = "";
     var rtmBox = document.getElementById("rtm-prompt");
     rtmBox.hidden = true;
     rtmBox.innerHTML = "";
+    updateCallUi();
+    renderTeamStatusList();
     renderAuctionPlayers();
+  }
+  function renderSetOverview(setKey) {
+    var lots = AUCTION_LOTS.filter(function (l) { return l.set === setKey; });
+    var wrap = document.getElementById("set-overview-list");
+    if (!wrap) return;
+    wrap.innerHTML = lots.map(function (l) {
+      return "<div class=\"set-overview-row\"><div><b>" + l.name + "</b> <span class=\"role-cell\">" + l.role + "</span></div><span class=\"role-cell\">" + auctionMoneyFmt(l.base) + " base</span></div>";
+    }).join("");
+  }
+  function presentLot() {
+    var lot = AUCTION_LOTS[auctionLotIndex];
+    renderAuctionLot();
+    var overviewCard = document.getElementById("set-overview-card");
+    var biddingArea = document.getElementById("lot-bidding-area");
+    if (!auctionSetOverviewShown[lot.set]) {
+      overviewCard.hidden = false;
+      biddingArea.style.display = "none";
+      renderSetOverview(lot.set);
+    } else {
+      overviewCard.hidden = true;
+      biddingArea.style.display = "";
+      startAuctionRound(true);
+    }
+  }
+  function beginSetBidding() {
+    var lot = AUCTION_LOTS[auctionLotIndex];
+    auctionSetOverviewShown[lot.set] = true;
+    document.getElementById("set-overview-card").hidden = true;
+    document.getElementById("lot-bidding-area").style.display = "";
+    startAuctionRound(true);
   }
   function finalizeLot(winner, price) {
     var lot = AUCTION_LOTS[auctionLotIndex];
-    auctionSold = true;
+    auctionLotResolved = true;
     document.getElementById("auction-bid-btn").disabled = true;
-    document.getElementById("auction-pass-btn").disabled = true;
     document.getElementById("auction-next-lot-btn").disabled = false;
     var teamName = winner === "you" ? "Islamabad Icons" : winner;
     lot._soldTo = teamName;
@@ -4968,12 +5147,14 @@
     franchisePurse[teamName] = Math.max(0, +(franchisePurse[teamName] - spentCr).toFixed(2));
     var banner = document.getElementById("lot-sold-banner");
     banner.hidden = false;
+    banner.className = "sold-banner";
     var text = "SOLD to " + teamName + " for " + auctionMoneyFmt(price) + ".";
     banner.textContent = text;
     auctionLog(text);
     renderAuctionPlayers();
     renderAuctionSquads();
     renderAuctionPurse();
+    renderTeamStatusList();
   }
   function auctionFinishLot(winner, price) {
     var lot = AUCTION_LOTS[auctionLotIndex];
@@ -4985,9 +5166,6 @@
   }
   function showRtmPrompt(winner, price) {
     var lot = AUCTION_LOTS[auctionLotIndex];
-    auctionSold = true;
-    document.getElementById("auction-bid-btn").disabled = true;
-    document.getElementById("auction-pass-btn").disabled = true;
     var box = document.getElementById("rtm-prompt");
     box.hidden = false;
     box.innerHTML = "<b>" + lot.name + "</b> &mdash; a former " + lot.formerClub + " player &mdash; the bidding has peaked with " + winner + " at " + auctionMoneyFmt(price) + ". Islamabad Icons, his previous club, hold " + rtmCardsRemaining + " Right-to-Match card" + (rtmCardsRemaining === 1 ? "" : "s") + " and may invoke one now." +
@@ -5026,56 +5204,24 @@
     finalizeLot(winner, price);
   }
   function auctionBid() {
-    if (auctionSold) return;
-    var lot = AUCTION_LOTS[auctionLotIndex];
-    auctionCurrentPrice += auctionIncrement(auctionCurrentPrice);
-    auctionRound++;
-    document.getElementById("lot-price").textContent = auctionMoneyFmt(auctionCurrentPrice);
-    document.getElementById("lot-bidder").textContent = "You";
-    auctionLog("You bid " + auctionMoneyFmt(auctionCurrentPrice) + ".");
-    if (auctionRound >= 3) { auctionFinishLot("you", auctionCurrentPrice); return; }
-    auctionCurrentPrice += auctionIncrement(auctionCurrentPrice);
-    document.getElementById("lot-price").textContent = auctionMoneyFmt(auctionCurrentPrice);
-    document.getElementById("lot-bidder").textContent = lot.rival;
-    auctionLog(lot.rival + " come back in at " + auctionMoneyFmt(auctionCurrentPrice) + ".");
-  }
-  function auctionSkip() {
-    if (auctionSold) return;
-    document.getElementById("auction-bid-btn").disabled = true;
-    document.getElementById("auction-pass-btn").disabled = true;
-    var lot = AUCTION_LOTS[auctionLotIndex];
-    var bidders = FRANCHISES.filter(function (f) { return f !== "Islamabad Icons"; });
-    var rounds = 2 + (auctionLotIndex % 2);
-    auctionLog("You step back \u2014 auto-bidding takes over for this lot.");
-    var i = 0;
-    function step() {
-      if (auctionLotIndex === undefined) return;
-      if (i >= rounds) {
-        var winner = bidders[(auctionLotIndex + i) % bidders.length];
-        document.getElementById("lot-bidder").textContent = winner;
-        auctionFinishLot(winner, auctionCurrentPrice);
-        return;
-      }
-      auctionCurrentPrice += auctionIncrement(auctionCurrentPrice);
-      document.getElementById("lot-price").textContent = auctionMoneyFmt(auctionCurrentPrice);
-      var bidder = bidders[(i + auctionLotIndex) % bidders.length];
-      document.getElementById("lot-bidder").textContent = bidder;
-      auctionLog(bidder + " push to " + auctionMoneyFmt(auctionCurrentPrice) + ".");
-      i++;
-      setTimeout(step, 420);
-    }
-    step();
+    if (auctionLotResolved || auctionCurrentBidder === "Islamabad Icons") return;
+    var next = auctionCurrentPrice + auctionIncrement(auctionCurrentPrice);
+    var purseLeft = franchisePurse["Islamabad Icons"] * 10000000;
+    if (next > purseLeft) { auctionLog("You do not have the purse left to go to " + auctionMoneyFmt(next) + "."); return; }
+    placeBid("Islamabad Icons", next);
   }
   function auctionNextLot() {
+    clearAuctionTimer();
     if (auctionLotIndex >= AUCTION_LOTS.length - 1) { renderAuctionSets(); showAuctionStage("auction-review"); return; }
     auctionLotIndex++;
-    renderAuctionLot();
+    presentLot();
   }
   function jumpToSet(setKey) {
     var idx = AUCTION_LOTS.findIndex(function (l) { return l.set === setKey; });
     if (idx === -1) return;
+    clearAuctionTimer();
     auctionLotIndex = idx;
-    renderAuctionLot();
+    presentLot();
     document.querySelectorAll("#auction-live .subtab-btn").forEach(function (b) { b.setAttribute("aria-selected", b.dataset.subtab === "current" ? "true" : "false"); });
     document.querySelectorAll("#auction-live > .subpanel").forEach(function (p) { p.hidden = (p.id !== "auction-current"); });
   }
@@ -5144,17 +5290,20 @@
     document.getElementById("panel-auction").hidden = false;
     auctionLotIndex = 0;
     rtmCardsRemaining = 2;
+    auctionSetOverviewShown = {};
+    clearAuctionTimer();
     AUCTION_LOTS.forEach(function (l) { delete l._soldTo; delete l._rtmResolved; });
     franchiseSquad["Islamabad Icons"] = franchiseSquad["Islamabad Icons"].slice(0, 4);
     FRANCHISES.forEach(function (f) { franchiseSquad[f] = franchiseSquad[f].filter(function (p) { return p.status.indexOf("Retained") === 0; }); });
     franchisePurse = { "Islamabad Icons": 67, "Karachi Kings": 71, "Lahore Lions": 58, "Multan Sultans": 63, "Peshawar Zalmi": 49, "Quetta Falcons": 77 };
-    renderAuctionLot();
+    presentLot();
     renderAuctionSquads();
     renderAuctionPurse();
     renderAuctionSets();
     showAuctionStage("auction-retention");
   }
   function exitAuctionMode() {
+    clearAuctionTimer();
     document.body.classList.remove("match-immersive");
     document.querySelectorAll(".tab-btn").forEach(function (b) { b.setAttribute("aria-selected", b.dataset.tab === "recruitment" ? "true" : "false"); });
     document.querySelectorAll("body > .app-body > .main-content > .shell > section.panel").forEach(function (p) { p.hidden = true; });

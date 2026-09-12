@@ -10859,6 +10859,61 @@ wide refactor, not a small fix):
 `node --check` on the extracted `<script>` block (`SYNTAX OK`, script braces 608/608, parens
 1301/1301). Final state: file size ~2.612MB.
 
+### Phase C, 11-point directive: slice 2 — the timer-based auction bidding flow (point 4)
+
+The Current Player tab's Bid/Skip pair is now a real timer-driven call sequence, matching the
+user's exact spec: "roughly a 10-second window per call; first call, second call, then on the
+third: sold or unsold; no bid within the window before a call = automatic pass for that round (so
+a dedicated pass button becomes unnecessary)."
+
+**The call-stage state machine.** A real `setInterval`-driven 1-second tick (`auctionTimerTick`)
+runs a visible countdown (`#call-timer`) against a call-stage badge (`#call-stage-badge`: Open
+bidding → First call → Second call → Third call). Any bid — human or a simulated rival's — resets
+the window back to Open bidding with a fresh 10 seconds (the standing-bidder-only pattern real
+auctioneers actually use: fresh interest restarts the countdown). If the window elapses three
+times in a row with no bid at all, the THIRD elapse resolves the lot immediately — `SOLD` to
+whoever is standing, or a genuinely `UNSOLD` banner (new `.sold-banner.unsold` CSS variant, ball-
+red rather than gold, so it reads with equal visual weight to a sale rather than as an
+afterthought) if nobody ever bid. The dedicated Skip/Pass button is gone entirely — not bidding
+during a window **is** the pass, exactly as asked.
+
+**Rivals bid for real, not on a scripted schedule.** `resetTeamStatusForLot` rolls a private
+ceiling for each of the five rival franchises before the lot opens (1.25×–3.45× the base price);
+each timer tick, `maybeRivalBid` gives an `active` rival with headroom left a real chance to jump
+in (raising the price by the correct increment and resetting the window), or marks them `passed`
+the moment the next increment would exceed their ceiling. This replaces the old
+`auctionSkip`'s fixed `setTimeout` chain, which always resolved in a scripted number of steps
+regardless of what the human did.
+
+**A live per-team bidding-status list** (`#lot-team-status`, six rows, one per franchise) shows in
+real time who is `Considering` (still active, hasn't bid yet), who is `Holding the bid` (the
+current standing bidder, gold pill), and who has `Passed` (ball-red pill) — the direct answer to
+"show a live per-team status list — who is actively bidding, who has passed."
+
+**A set-overview gate before each set's first lot.** A new `#set-overview-card` (a
+`.set-overview-row` per player: name, role, base price) shows automatically the first time a lot
+from a not-yet-seen set is reached (`auctionSetOverviewShown`, a per-set flag) — the countdown
+timer does **not** start until "Begin bidding on this set" is clicked, so the room never ticks
+away while the user is still reading the set's own line-up. Jumping to an already-in-progress or
+completed set via the Sets tab skips the overview and goes straight to the live lot, since its
+overview has already been shown once.
+
+**The human's own purse is a real constraint now**, not just a display number: `auctionBid` checks
+`auctionCurrentPrice + increment` against `franchisePurse["Islamabad Icons"]` before allowing the
+bid, and the Bid button disables itself (reading "You hold the bid") whenever Islamabad Icons is
+already the standing bidder, so the user can't bid against themselves.
+
+**Deliberately not attempted this slice**: the ~3-second-hover "short profile card with a view-more
+link" the user's own spec flagged as "also consider" (optional, not core) — left for the universal
+click-through slice (point 2/3) later in this directive's plan, where hover-preview and full
+click-through belong together rather than as one bolted-on affordance here.
+
+**Verification**: `div`/`table`/`tr`/`span`/`svg`/`nav`/`section`/`button` tag-count parity
+(1837/1837, 24/24, 142/142, 1082/1082, 300/300, 13/13, 14/14, 242/242) plus `node --check` on the
+extracted `<script>` block (`SYNTAX OK`, script braces 641/641, parens 1374/1374); a grep confirmed
+zero dangling references to the removed `auction-pass-btn`/`auctionSkip`/`auctionSold`/
+`auctionRound` names. Final state: file size ~2.62MB.
+
 ---
 
 ## CONSOLIDATED DEFERRED-ITEMS REGISTER (maintained - the single source of truth)
