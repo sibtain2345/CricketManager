@@ -10477,6 +10477,86 @@ single `<script>` block's brace/paren balance), re-checked after each of the fou
 Final state: file size ~2.55MB, 13 `panel-*` sections (the new `panel-staff-profile`, replacing the
 deleted modal).
 
+### Follow-up: Records two-level rebuild, Staff Database moved into Recruitment, Nation Profile depth
+
+Direct answer to the user's push ("records nation aur negotiation wala kb karoge") to actually
+finish, not just report on, the three items still open at the end of the previous correction pass.
+Built as four scripted passes over the same file, each individually structure-verified
+(`<div>`/`<table>`/`<tr>`/`<span>`/`<svg>`/`<nav>`/`<section>`/`<button>` tag-count parity) plus,
+for the two JS-heavy passes, a `node --check` on the extracted `<script>` block - the first use of
+real Node.js syntax validation in this sub-track (Node was confirmed present in this environment at
+`/c/Program Files/nodejs/node`, v24.11.1), kept alongside the existing brace/paren counting rather
+than replacing it.
+
+**Records rebuilt from a flat single-list-per-scope card into a genuine two-level cricinfo-style
+drill-down**, across all three scopes (Club/Ground/World) - directly closing the "Records...
+requested earlier and not yet started" gap named above. Each scope's old flat `bio-line` block
+(six hardcoded records in a column) is now a `.record-cat-row` of six `.record-cat-tile` buttons
+(Batting/Bowling/Fielding/Team/Partnership/All-round, using the `i-bat-ball`/`i-swing`/`i-glove`/
+`i-users`/`i-swap`/`i-star-fill` sprite icons - `i-ball`/`i-gloves` were tried first and don't exist
+in the sprite, caught and fixed before the script ran). A shared `#records-detail-backdrop` modal
+(new `.record-type-row` list CSS) + a `RECORDS_DATA` JS object (3 scopes × 6 categories × several
+named record types each, e.g. Batting's `['Player','Mat','Runs','Ave','HS']`, Team's `['Score',
+'Overs','Opposition','Ground','Date']`) drive `openRecordCategory(scope, catKey)` (shows that
+category's record TYPES as a clickable list) → `openRecordType(scope, catKey, idx)` (renders the
+actual ranked table, columns aligned left/text vs right/numeric via a `RECORD_TEXT_HEADERS`
+lookup) → `showRecordCategoryList()` (back) - real Cricinfo-shaped data using the established
+mockup names (Hamza Malik, Adeel Hayat, Zain Chaudhry, Tariq Farooq, Bilal Nadeem, Rizwan Sheikh,
+Faisal Nadeem, Umar Baig, Danish Raza, Sarfraz Khan), never anything from CC2014's real historical
+record files (Phase-18 exclusion list, per the earlier typography/asset-placement plan).
+
+**Staff Database moved out of Club > Staff and into Recruitment as its own subtab**, mirroring
+Player Database exactly, per the user's own direct inconsistency callout ("staff database
+recruitment me ku nae banata jaise player ki bnai"). The worldwide `analysis-card` (a
+`table.squad` of every backroom name the scouting network has a read on - Mudassar Iqbal, Sohail
+Raza, Fahad Anwar, plus two newly-invented staff, Nadeem Jatoi/Chief Scout and Haroon Wattoo/Head
+Physiotherapist) was cut whole out of `#panel-club`'s Staff subpanel (replaced there with a
+one-line `role-hint` pointing at Recruitment) and reinserted as a fifth Recruitment subtab
+(`data-subtab="staffdb"`, between Player Database and Shortlists) - picked up automatically by the
+pre-existing `wireTabs('#panel-recruitment .subtab-btn', 'recruit-')` call with no JS registration
+changes needed. Each row is dual-marked (a hidden `.staff-name` span alongside the visible
+`.player-name` div) so it satisfies both `openStaffProfile`'s own lookup convention and the visual
+`.player-cell` styling every other roster table in the file already uses, and each carries the
+same `View shortlist` action a vacant role's own Recruit button opens - the database presents
+itself as the wider pool that shortlist is drawn from, not a second, disconnected system.
+
+**Nation Profile deepened from a flat blurb+champions card into real international depth**, for
+all 6 seeded nations (Pakistan/India/Australia/England/New Zealand/Netherlands). Each nation's
+`nationProfiles` entry gained `rankings` (Test/ODI/T20I, rendered via three `.bio-line` rows in
+gold - `.info-meter` was checked and rejected first, since it's a 6px progress bar, not a place to
+show a rank NUMBER as text), `centralContracts` (an array of `{tier, players:[{name, club}]}` -
+who's contracted at what tier and which real domestic club they currently play for, rendered via
+the existing `.staff-row`/`.staff-row-main` pattern under an eyebrow per tier), `domesticClubs`
+(rendered as a row of `.pill.first` chips, the established turf-green pill variant, reused rather
+than styled fresh), and `fixtures` (a `.notes-log` of upcoming internationals). A new
+`renderNationProfile(c)` function assembles all of it; `openWorldProfile(kind, key)` now branches
+so `kind === 'nation'` routes through it while club rendering is untouched. Pakistan's contracts
+deliberately reuse the ALREADY-ESTABLISHED domestic mockup players tied to their real clubs (Hamza
+Malik/Islamabad Icons, Adeel Hayat/Islamabad Icons, Zain Chaudhry/Islamabad Icons, Faisal
+Nadeem/Multan Sultans, Rizwan Sheikh/Islamabad Icons, Umar Baig/Lahore Lions) for continuity with
+the rest of the mockup; the other five nations get entirely self-authored fictional player names
+(never a real cricketer, per the same CC2014-exclusion discipline named above) - e.g. India: Rohan
+Deshmukh/Mumbai Titans, Karan Bhosle/Delhi Chargers. Netherlands is deliberately given
+`rankings: {test: 0, odi: 14, t20i: 17}` and a fixtures line reading "No Test status yet - World
+Cup qualifiers only", an honest reflection of its existing "Associate Member" meta field rather
+than a fabricated Test ranking.
+
+**Still open, tracked deliberately, not an oversight:**
+- Nation/Club profiles still render inside the shared `#competition-profile-backdrop` **modal**
+  rather than a real redirect screen - the depth/DATA gap this pass closed is separate from the
+  navigation-PATTERN gap (modal vs. screen) named in the correction pass above, and that one is
+  still open.
+- Club Profile (distinct from Nation Profile) has not had the equivalent depth treatment - it
+  still renders the old flat blurb+champions view. `domesticClubs` on each Nation Profile now
+  names real clubs, but a click into one of those club names does not yet exist.
+- The advertise-a-role → applicants-arrive-over-time hiring pipeline (the direct-negotiation
+  shortcut from the prior correction pass is a genuine addition, not a replacement for this).
+
+**Verification**: the same per-script structural balance discipline, run after each of the four
+scripts (Records CSS+HTML, Records modal+JS, Staff-DB relocation, Nation Profile depth) - all tag
+counts matched after every pass, and `node --check` on the extracted `<script>` block reported
+`SYNTAX OK` after both JS-bearing passes. Final state: file size ~2.57MB.
+
 ---
 
 ## CONSOLIDATED DEFERRED-ITEMS REGISTER (maintained - the single source of truth)

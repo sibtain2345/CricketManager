@@ -907,6 +907,13 @@
   .pitch-preset-btn.active { border-color: var(--gold); background: var(--gold-dim); color: var(--gold); }
   .pitch-preset-btn .preset-sub { display: block; font-size: var(--fs-micro); font-weight: 400; color: var(--ink-faint); margin-top: 2px; }
   .pitch-preset-btn.active .preset-sub { color: var(--gold); opacity: 0.8; }
+  .record-cat-row { display: flex; flex-wrap: wrap; gap: 10px; margin: 12px 0 4px; }
+  .record-cat-tile { flex: 1 1 140px; display: flex; flex-direction: column; align-items: center; gap: 6px; background: var(--surface-3); border: 1px solid var(--border); border-radius: 12px; padding: 14px 10px; cursor: pointer; font: inherit; color: var(--ink); text-align: center; }
+  .record-cat-tile:hover { border-color: var(--gold); }
+  .record-cat-tile span { font-size: var(--fs-small); font-weight: 700; }
+  .record-type-row { display: flex; align-items: center; justify-content: space-between; padding: 10px 12px; border: 1px solid var(--border); border-radius: 10px; margin-bottom: 8px; cursor: pointer; }
+  .record-type-row:hover { border-color: var(--gold); }
+  .record-type-row .k { font-weight: 700; color: var(--ink); font-size: var(--fs-small); }
   .pitch-capability-line { display: flex; justify-content: space-between; align-items: center; gap: 10px; font-size: var(--fs-caption); color: var(--ink-dim); background: var(--surface-2); border: 1px solid var(--border); border-radius: 8px; padding: 8px 12px; margin-bottom: 14px; }
   .pitch-risk-note { display: flex; gap: 8px; font-size: var(--fs-caption); color: var(--ink-faint); background: var(--surface-2); border: 1px dashed var(--border); border-radius: 8px; padding: 9px 12px; margin-top: 14px; align-items: flex-start; }
   .pitch-risk-note svg { width: var(--icon-size); height: var(--icon-size); flex-shrink: 0; color: var(--gold); margin-top: 1px; }
@@ -2034,6 +2041,7 @@
     <nav class="subnav" role="tablist" aria-label="Recruitment views">
       <button class="subtab-btn" role="tab" aria-selected="true" data-subtab="activity">Transfer Activity</button>
       <button class="subtab-btn" role="tab" aria-selected="false" data-subtab="database">Player Database</button>
+      <button class="subtab-btn" role="tab" aria-selected="false" data-subtab="staffdb">Staff Database</button>
       <button class="subtab-btn" role="tab" aria-selected="false" data-subtab="shortlists">Shortlists</button>
       <button class="subtab-btn" role="tab" aria-selected="false" data-subtab="planner">Squad Planner</button>
     </nav>
@@ -2196,7 +2204,63 @@
         <div class="role-hint" style="margin-top:8px">A wider scouting domain (set in the Boardroom) widens this list and sharpens how close these estimates are to a player&rsquo;s real ability.</div>
       </div>
     </div>
-    <div class="subpanel" id="recruit-shortlists" hidden>
+        <div class="subpanel" id="recruit-staffdb" hidden>
+      <div class="analysis-card">
+        <span class="eyebrow"><svg class="icon sm"><use href="#i-users"/></svg> Staff database &middot; worldwide</span>
+        <div class="plan-desc">Every backroom name your network has a genuine read on &mdash; a real alternative to a vacancy&rsquo;s own shortlist, browsable rather than three candidates at a time.</div>
+        <div class="table-card">
+          <div class="table-scroll-inner">
+          <table class="squad">
+            <thead><tr><th>Name</th><th>Role</th><th>Current club</th><th>Quality</th><th class="num">Wage</th><th></th></tr></thead>
+            <tbody>
+              <tr>
+                <td><div class="player-cell clickable" onclick="openStaffProfile(this.closest('tr'))"><div class="player-avatar">MI</div><span class="staff-name" style="display:none">Mudassar Iqbal</span><div class="player-name">Mudassar Iqbal</div></div></td>
+                <td><span class="role-cell staff-role-label" style="display:inline-flex">Batting Coach</span></td>
+                <td>Free agent</td>
+                <td><span class="facility-tier-badge tier-good">Good</span></td>
+                <td class="num">$45,000</td>
+                <td><button class="academy-action-btn" onclick="event.stopPropagation();openStaffRecruit('batting-coach')">View shortlist</button></td>
+              </tr>
+              <tr>
+                <td><div class="player-cell clickable" onclick="openStaffProfile(this.closest('tr'))"><div class="player-avatar">SR</div><span class="staff-name" style="display:none">Sohail Raza</span><div class="player-name">Sohail Raza</div></div></td>
+                <td><span class="role-cell staff-role-label" style="display:inline-flex">Mental Performance Coach</span></td>
+                <td>Multan Sultans</td>
+                <td><span class="facility-tier-badge tier-excellent">Excellent</span></td>
+                <td class="num">$58,000</td>
+                <td><button class="academy-action-btn" onclick="event.stopPropagation();openStaffRecruit('mental')">View shortlist</button></td>
+              </tr>
+              <tr>
+                <td><div class="player-cell clickable" onclick="openStaffProfile(this.closest('tr'))"><div class="player-avatar">FA</div><span class="staff-name" style="display:none">Fahad Anwar</span><div class="player-name">Fahad Anwar</div></div></td>
+                <td><span class="role-cell staff-role-label" style="display:inline-flex">Data Analyst</span></td>
+                <td>Free agent</td>
+                <td><span class="facility-tier-badge tier-average">Average</span></td>
+                <td class="num">$28,000</td>
+                <td><button class="academy-action-btn" onclick="event.stopPropagation();openStaffRecruit('analyst')">View shortlist</button></td>
+              </tr>
+              <tr>
+                <td><div class="player-cell clickable" onclick="openStaffProfile(this.closest('tr'))"><div class="player-avatar">NJ</div><span class="staff-name" style="display:none">Nadeem Jatoi</span><div class="player-name">Nadeem Jatoi</div></div></td>
+                <td><span class="role-cell staff-role-label" style="display:inline-flex">Chief Scout</span></td>
+                <td>Lahore Lions</td>
+                <td><span class="facility-tier-badge tier-good">Good</span></td>
+                <td class="num">$62,000</td>
+                <td><button class="academy-action-btn" onclick="event.stopPropagation();openStaffRecruit('chief-scout')">View shortlist</button></td>
+              </tr>
+              <tr>
+                <td><div class="player-cell clickable" onclick="openStaffProfile(this.closest('tr'))"><div class="player-avatar">HW</div><span class="staff-name" style="display:none">Haroon Wattoo</span><div class="player-name">Haroon Wattoo</div></div></td>
+                <td><span class="role-cell staff-role-label" style="display:inline-flex">Head Physiotherapist</span></td>
+                <td>Free agent</td>
+                <td><span class="facility-tier-badge tier-average">Average</span></td>
+                <td class="num">$38,000</td>
+                <td><button class="academy-action-btn" onclick="event.stopPropagation();openStaffRecruit('physio')">View shortlist</button></td>
+              </tr>
+            </tbody>
+          </table>
+          </div>
+        </div>
+        <div class="role-hint" style="margin-top:8px">Clicking through opens the same recruitment shortlist a vacant role already uses &mdash; the database is the wider pool it&rsquo;s drawn from. Clicking a name opens their own profile.</div>
+      </div>
+    </div>
+<div class="subpanel" id="recruit-shortlists" hidden>
       <div class="analysis-card">
         <span class="eyebrow"><svg class="icon sm"><use href="#i-star-fill"/></svg> Death-overs bowler</span>
         <div class="staff-row" data-shortlist="ahsan">
@@ -2421,44 +2485,7 @@
         <div class="role-hint" style="margin-top:10px">A Mentor doesn&rsquo;t coach directly &mdash; he strengthens the mentoring bonds already forming in the dressing room between your senior pros and your promising kids.</div>
       </div>
     </div>
-    <div class="analysis-card" style="margin-top:16px">
-      <span class="eyebrow"><svg class="icon sm"><use href="#i-users"/></svg> Staff database &middot; worldwide</span>
-      <div class="plan-desc">Every backroom name your network has a genuine read on &mdash; a real alternative to the shortlist, browsable rather than three candidates at a time.</div>
-      <div class="table-card">
-        <div class="table-scroll-inner">
-        <table class="squad">
-          <thead><tr><th>Name</th><th>Role</th><th>Current club</th><th>Quality</th><th class="num">Wage</th><th></th></tr></thead>
-          <tbody>
-            <tr>
-              <td><div class="player-cell"><div class="player-avatar">MI</div><div class="player-name">Mudassar Iqbal</div></div></td>
-              <td><span class="role-cell">Batting Coach</span></td>
-              <td>Free agent</td>
-              <td><span class="facility-tier-badge tier-good">Good</span></td>
-              <td class="num">$45,000</td>
-              <td><button class="academy-action-btn" onclick="openStaffRecruit('batting-coach')">View shortlist</button></td>
-            </tr>
-            <tr>
-              <td><div class="player-cell"><div class="player-avatar">SR</div><div class="player-name">Sohail Raza</div></div></td>
-              <td><span class="role-cell">Mental Performance Coach</span></td>
-              <td>Multan Sultans</td>
-              <td><span class="facility-tier-badge tier-excellent">Excellent</span></td>
-              <td class="num">$58,000</td>
-              <td><button class="academy-action-btn" onclick="openStaffRecruit('mental')">View shortlist</button></td>
-            </tr>
-            <tr>
-              <td><div class="player-cell"><div class="player-avatar">FA</div><div class="player-name">Fahad Anwar</div></div></td>
-              <td><span class="role-cell">Data Analyst</span></td>
-              <td>Free agent</td>
-              <td><span class="facility-tier-badge tier-average">Average</span></td>
-              <td class="num">$28,000</td>
-              <td><button class="academy-action-btn" onclick="openStaffRecruit('analyst')">View shortlist</button></td>
-            </tr>
-          </tbody>
-        </table>
-        </div>
-      </div>
-      <div class="role-hint" style="margin-top:8px">Clicking through opens the same recruitment shortlist a vacant role already uses &mdash; the database is the wider pool it&rsquo;s drawn from.</div>
-    </div>
+    <div class="role-hint" style="margin-top:16px">Browsing the whole backroom market &mdash; not just your own vacant seats &mdash; now lives in the Recruitment hub, alongside the Player Database it mirrors.</div>
     </div>
     <div class="subpanel" id="club-boardroom" hidden>
 
@@ -3075,13 +3102,16 @@
 
     <div class="tactics-grid" style="margin-top:16px">
       <div class="analysis-card">
-        <span class="eyebrow"><svg class="icon sm"><use href="#i-bat-ball"/></svg> Match records</span>
-        <div class="bio-line"><span class="k">Highest team total</span><span>218/4 vs Lahore Lions, 2023</span></div>
-        <div class="bio-line"><span class="k">Lowest team total (all out)</span><span>71 all out vs Quetta Falcons, 2020</span></div>
-        <div class="bio-line"><span class="k">Highest successful chase</span><span>196/6 vs Karachi Kings, 2022</span></div>
-        <div class="bio-line"><span class="k">Highest individual score</span><span>142* &middot; Hamza Malik vs Multan Sultans, 2023</span></div>
-        <div class="bio-line"><span class="k">Best bowling, an innings</span><span>6/18 &middot; Adeel Hayat vs Peshawar Zalmi, 2021</span></div>
-        <div class="bio-line"><span class="k">Highest partnership</span><span>187 (3rd wkt) &middot; Malik &amp; Khan vs Lahore Lions, 2023</span></div>
+        <span class="eyebrow"><svg class="icon sm"><use href="#i-bat-ball"/></svg> Record categories</span>
+        <div class="plan-desc">Every record type has its own book &mdash; open one to see the full ranked list, the same way a real record archive is organised.</div>
+        <div class="record-cat-row">
+          <button class="record-cat-tile" onclick="openRecordCategory('club','batting')"><svg class="icon"><use href="#i-bat-ball"/></svg><span>Batting</span></button>
+          <button class="record-cat-tile" onclick="openRecordCategory('club','bowling')"><svg class="icon"><use href="#i-swing"/></svg><span>Bowling</span></button>
+          <button class="record-cat-tile" onclick="openRecordCategory('club','fielding')"><svg class="icon"><use href="#i-glove"/></svg><span>Fielding</span></button>
+          <button class="record-cat-tile" onclick="openRecordCategory('club','team')"><svg class="icon"><use href="#i-users"/></svg><span>Team</span></button>
+          <button class="record-cat-tile" onclick="openRecordCategory('club','partnership')"><svg class="icon"><use href="#i-swap"/></svg><span>Partnership</span></button>
+          <button class="record-cat-tile" onclick="openRecordCategory('club','allround')"><svg class="icon"><use href="#i-star-fill"/></svg><span>All-round</span></button>
+        </div>
       </div>
       <div class="analysis-card">
         <span class="eyebrow"><svg class="icon sm"><use href="#i-trend-up"/></svg> Career leaderboards</span>
@@ -3121,11 +3151,14 @@
             <option>First-Class only</option>
           </select>
         </div>
-        <div class="bio-line"><span class="k">Highest team total</span><span>224/5 &middot; Islamabad Icons vs Karachi Kings, 2024</span></div>
-        <div class="bio-line"><span class="k">Lowest team total (all out)</span><span>68 all out &middot; Quetta Falcons, 2020</span></div>
-        <div class="bio-line"><span class="k">Highest successful chase</span><span>202/6 &middot; Lahore Lions vs Islamabad Icons, 2022</span></div>
-        <div class="bio-line"><span class="k">Highest individual score</span><span>151 &middot; Hamza Malik vs Multan Sultans, 2023</span></div>
-        <div class="bio-line"><span class="k">Best bowling, an innings</span><span>7/22 &middot; Adeel Hayat vs Peshawar Zalmi, 2021</span></div>
+        <div class="record-cat-row">
+          <button class="record-cat-tile" onclick="openRecordCategory('ground','batting')"><svg class="icon"><use href="#i-bat-ball"/></svg><span>Batting</span></button>
+          <button class="record-cat-tile" onclick="openRecordCategory('ground','bowling')"><svg class="icon"><use href="#i-swing"/></svg><span>Bowling</span></button>
+          <button class="record-cat-tile" onclick="openRecordCategory('ground','fielding')"><svg class="icon"><use href="#i-glove"/></svg><span>Fielding</span></button>
+          <button class="record-cat-tile" onclick="openRecordCategory('ground','team')"><svg class="icon"><use href="#i-users"/></svg><span>Team</span></button>
+          <button class="record-cat-tile" onclick="openRecordCategory('ground','partnership')"><svg class="icon"><use href="#i-swap"/></svg><span>Partnership</span></button>
+          <button class="record-cat-tile" onclick="openRecordCategory('ground','allround')"><svg class="icon"><use href="#i-star-fill"/></svg><span>All-round</span></button>
+        </div>
         <div class="role-hint" style="margin-top:8px">A ground&rsquo;s own record book is separate from any one club&rsquo;s &mdash; every side that has ever played here contributes to it.</div>
       </div>
       <div class="analysis-card" style="margin-top:16px">
@@ -3149,11 +3182,14 @@
             <option>Franchise leagues only</option>
           </select>
         </div>
-        <div class="bio-line"><span class="k">Highest team total (T20)</span><span>261/3 &middot; Karachi Kings vs Quetta Falcons, 2025</span></div>
-        <div class="bio-line"><span class="k">Highest individual score (T20)</span><span>172* &middot; Faisal Nadeem (Multan Sultans), 2024</span></div>
-        <div class="bio-line"><span class="k">Best bowling, an innings</span><span>8/19 &middot; Umar Baig (Lahore Lions), 2022</span></div>
-        <div class="bio-line"><span class="k">Most career runs, all formats</span><span>Hamza Malik, 3,214 &middot; still active</span></div>
-        <div class="bio-line"><span class="k">Most career wickets, all formats</span><span>Adeel Hayat, 187 &middot; still active</span></div>
+        <div class="record-cat-row">
+          <button class="record-cat-tile" onclick="openRecordCategory('world','batting')"><svg class="icon"><use href="#i-bat-ball"/></svg><span>Batting</span></button>
+          <button class="record-cat-tile" onclick="openRecordCategory('world','bowling')"><svg class="icon"><use href="#i-swing"/></svg><span>Bowling</span></button>
+          <button class="record-cat-tile" onclick="openRecordCategory('world','fielding')"><svg class="icon"><use href="#i-glove"/></svg><span>Fielding</span></button>
+          <button class="record-cat-tile" onclick="openRecordCategory('world','team')"><svg class="icon"><use href="#i-users"/></svg><span>Team</span></button>
+          <button class="record-cat-tile" onclick="openRecordCategory('world','partnership')"><svg class="icon"><use href="#i-swap"/></svg><span>Partnership</span></button>
+          <button class="record-cat-tile" onclick="openRecordCategory('world','allround')"><svg class="icon"><use href="#i-star-fill"/></svg><span>All-round</span></button>
+        </div>
         <div class="role-hint" style="margin-top:8px">The genuine world record book &mdash; every club, every competition your scouting network has visibility on.</div>
       </div>
       <div class="analysis-card" style="margin-top:16px">
@@ -3370,6 +3406,21 @@
       <button class="modal-close" onclick="closeCompetitionProfile()" aria-label="Close">&times;</button>
     </div>
     <div id="cprofile-body"></div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="records-detail-backdrop" onclick="if(event.target===this) closeRecordsDetail()">
+  <div class="negotiation-modal" role="dialog" aria-modal="true" aria-labelledby="records-detail-title" style="max-width:640px">
+    <div class="negotiation-head">
+      <h2 id="records-detail-title" style="margin:0">Batting Records</h2>
+      <button class="modal-close" onclick="closeRecordsDetail()" aria-label="Close">&times;</button>
+    </div>
+    <div id="records-detail-sub" class="role-hint" style="margin-top:2px"></div>
+    <div id="records-detail-list" style="margin-top:12px"></div>
+    <div id="records-detail-table" style="margin-top:12px" hidden></div>
+    <div class="negotiation-actions" style="margin-top:14px" id="records-detail-back-row" hidden>
+      <button class="btn-ghost" onclick="showRecordCategoryList()">&larr; Back to categories</button>
+    </div>
   </div>
 </div>
 
@@ -4104,23 +4155,94 @@
   var nationProfiles = {
     pak: { name: "Pakistan", meta: "Full Member &middot; ICC Test rank 4 &middot; ODI rank 5 &middot; T20I rank 3",
       blurb: "A pace-and-wrist-spin production line and a genuinely deep domestic pyramid, though selection panels have a real reputation for volatility.",
-      champions: ["2025: Crescent Trophy winners", "2023: World T20 semi-finalists", "2022: Test series win away to England"] },
+      champions: ["2025: Crescent Trophy winners", "2023: World T20 semi-finalists", "2022: Test series win away to England"],
+      rankings: { test: 4, odi: 5, t20i: 3 },
+      centralContracts: [
+        { tier: "A", players: [ { name: "Hamza Malik", club: "Islamabad Icons" }, { name: "Adeel Hayat", club: "Islamabad Icons" } ] },
+        { tier: "B", players: [ { name: "Zain Chaudhry", club: "Islamabad Icons" }, { name: "Faisal Nadeem", club: "Multan Sultans" } ] },
+        { tier: "C", players: [ { name: "Rizwan Sheikh", club: "Islamabad Icons" }, { name: "Umar Baig", club: "Lahore Lions" } ] }
+      ],
+      domesticClubs: ["Lahore Lions", "Karachi Kings", "Islamabad Icons", "Multan Sultans", "Peshawar Zalmi", "Quetta Falcons"],
+      fixtures: ["Jun 2026: vs Australia (T20I) &middot; Gaddafi Stadium, Lahore", "Aug 2026: vs England (Test series, away)", "Oct 2026: vs New Zealand (ODI) &middot; National Stadium, Karachi"] },
     ind: { name: "India", meta: "Full Member &middot; ICC Test rank 1 &middot; ODI rank 1 &middot; T20I rank 2",
       blurb: "The deepest playing pool and the richest board in the sport &mdash; central contracts here carry real financial weight beyond just the honour.",
-      champions: ["2025: ODI Championship winners", "2024: World T20 champions", "2023: WTC finalists"] },
+      champions: ["2025: ODI Championship winners", "2024: World T20 champions", "2023: WTC finalists"],
+      rankings: { test: 1, odi: 1, t20i: 2 },
+      centralContracts: [
+        { tier: "A", players: [ { name: "Rohan Deshmukh", club: "Mumbai Titans" }, { name: "Karan Bhosle", club: "Delhi Chargers" } ] },
+        { tier: "B", players: [ { name: "Aryan Pillai", club: "Chennai Strikers" }, { name: "Vikram Solanki", club: "Bangalore Blasters" } ] },
+        { tier: "C", players: [ { name: "Nikhil Rane", club: "Kolkata Riders" } ] }
+      ],
+      domesticClubs: ["Mumbai Titans", "Delhi Chargers", "Chennai Strikers", "Bangalore Blasters", "Kolkata Riders"],
+      fixtures: ["Jun 2026: vs Pakistan (T20I) &middot; away", "Sep 2026: vs Australia (ODI Championship)"] },
     aus: { name: "Australia", meta: "Full Member &middot; ICC Test rank 2 &middot; ODI rank 3 &middot; T20I rank 4",
       blurb: "A pace-heavy production system built on genuinely fast home pitches, with a domestic first-class competition selectors still weigh heavily.",
-      champions: ["2025: WTC finalists", "2023: World Test Championship winners", "2022: World T20 semi-finalists"] },
+      champions: ["2025: WTC finalists", "2023: World Test Championship winners", "2022: World T20 semi-finalists"],
+      rankings: { test: 2, odi: 3, t20i: 4 },
+      centralContracts: [
+        { tier: "A", players: [ { name: "Callum Wharton", club: "Perth Scorchers II" }, { name: "Jed Fairleigh", club: "Sydney Sixers II" } ] },
+        { tier: "B", players: [ { name: "Nathan Presley", club: "Brisbane Heat II" } ] },
+        { tier: "C", players: [ { name: "Toby Meacham", club: "Adelaide Strikers II" } ] }
+      ],
+      domesticClubs: ["Perth Scorchers II", "Sydney Sixers II", "Brisbane Heat II", "Adelaide Strikers II"],
+      fixtures: ["Jun 2026: vs Pakistan (T20I) &middot; away", "Nov 2026: Ashes-style series vs England &middot; home"] },
     eng: { name: "England", meta: "Full Member &middot; ICC Test rank 3 &middot; ODI rank 2 &middot; T20I rank 5",
       blurb: "A genuinely format-split national coaching structure in recent years, reflecting how differently red- and white-ball cricket are now approached there.",
-      champions: ["2025: T20I series win vs Australia", "2023: Ashes drawn at home", "2022: World T20 champions"] },
+      champions: ["2025: T20I series win vs Australia", "2023: Ashes drawn at home", "2022: World T20 champions"],
+      rankings: { test: 3, odi: 2, t20i: 5 },
+      centralContracts: [
+        { tier: "A", players: [ { name: "Freddie Oxenham", club: "Surrey Lions" }, { name: "Aaron Beckwith", club: "Lancashire Reds" } ] },
+        { tier: "B", players: [ { name: "Charlie Stourton", club: "Yorkshire Whites" } ] },
+        { tier: "C", players: [ { name: "Ben Loxley", club: "Surrey Lions" } ] }
+      ],
+      domesticClubs: ["Surrey Lions", "Lancashire Reds", "Yorkshire Whites"],
+      fixtures: ["Aug 2026: vs Pakistan (Test series) &middot; home", "Nov 2026: Ashes-style series vs Australia &middot; away"] },
     nz: { name: "New Zealand", meta: "Full Member &middot; ICC Test rank 5 &middot; ODI rank 4 &middot; T20I rank 6",
       blurb: "A small playing pool that punches well above it &mdash; a settled coaching structure and genuine squad continuity are the real edge here.",
-      champions: ["2021: World Test Championship winners", "2019: World Cup finalists"] },
+      champions: ["2021: World Test Championship winners", "2019: World Cup finalists"],
+      rankings: { test: 5, odi: 4, t20i: 6 },
+      centralContracts: [
+        { tier: "A", players: [ { name: "Liam Rossiter", club: "Auckland Aces II" } ] },
+        { tier: "B", players: [ { name: "Cody Tremaine", club: "Wellington Firebirds II" } ] },
+        { tier: "C", players: [ { name: "Josh Kenrick", club: "Canterbury Kings II" } ] }
+      ],
+      domesticClubs: ["Auckland Aces II", "Wellington Firebirds II", "Canterbury Kings II"],
+      fixtures: ["Oct 2026: vs Pakistan (ODI) &middot; away"] },
     ned: { name: "Netherlands", meta: "Associate Member",
       blurb: "The strongest of the Associate nations with a real, growing domestic base &mdash; a genuine Full Membership candidate on current trajectory.",
-      champions: ["2023: World Cup qualification", "2022: T20 World Cup group-stage upset over South Africa"] }
+      champions: ["2023: World Cup qualification", "2022: T20 World Cup group-stage upset over South Africa"],
+      rankings: { test: 0, odi: 14, t20i: 17 },
+      centralContracts: [
+        { tier: "B", players: [ { name: "Daan Verbeek", club: "Amsterdam Amstel" } ] },
+        { tier: "C", players: [ { name: "Ruben Voskuijlen", club: "Amsterdam Amstel" } ] }
+      ],
+      domesticClubs: ["Amsterdam Amstel"],
+      fixtures: ["No Test status yet &mdash; World Cup qualifiers only"] }
   };
+  function renderNationProfile(c) {
+    var rankRow = '<div class="bio-line"><span class="k">Test ranking</span><span style="color:var(--gold);font-weight:700">' + (c.rankings.test ? '#' + c.rankings.test : '&mdash; (no Test status)') + '</span></div>' +
+      '<div class="bio-line"><span class="k">ODI ranking</span><span style="color:var(--gold);font-weight:700">#' + c.rankings.odi + '</span></div>' +
+      '<div class="bio-line"><span class="k">T20I ranking</span><span style="color:var(--gold);font-weight:700">#' + c.rankings.t20i + '</span></div>';
+    var contractsHtml = c.centralContracts.map(function (tier) {
+      return '<div class="eyebrow" style="display:block;margin:10px 0 4px">Tier ' + tier.tier + '</div>' +
+        tier.players.map(function (p) {
+          return '<div class="staff-row"><div class="staff-row-main"><span class="staff-name">' + p.name + '</span><span class="staff-role-label">' + p.club + '</span></div></div>';
+        }).join('');
+    }).join('');
+    var clubsHtml = '<div class="pitch-preset-row" style="flex-wrap:wrap">' + c.domesticClubs.map(function (cl) {
+      return '<span class="pill first">' + cl + '</span>';
+    }).join('') + '</div>';
+    var fixturesHtml = '<div class="notes-log">' + c.fixtures.map(function (f) {
+      return '<div class="notes-log-item"><span>' + f + '</span></div>';
+    }).join('') + '</div>';
+    return '<h3 style="margin:10px 0 2px">' + c.name + '</h3>' +
+      '<div class="role-hint" style="margin-bottom:0">' + c.meta + '</div>' +
+      '<p style="font-size:var(--fs-body);color:var(--ink-dim);line-height:1.5">' + c.blurb + '</p>' +
+      rankRow +
+      '<div class="eyebrow" style="display:block;margin:14px 0 6px">Central contracts &amp; who they play for</div>' + contractsHtml +
+      '<div class="eyebrow" style="display:block;margin:14px 0 6px">Domestic clubs</div>' + clubsHtml +
+      '<div class="eyebrow" style="display:block;margin:14px 0 6px">Upcoming fixtures</div>' + fixturesHtml;
+  }
   var clubProfiles = {
     lahore: { name: "Lahore Lions", meta: "Pakistan T20 Cup &middot; 1st &middot; est. 1948",
       blurb: "The most decorated club in the domestic pyramid, with a squad built for pace-friendly home conditions at Gaddafi Stadium.",
@@ -4142,16 +4264,20 @@
       champions: ["2025: List A 1st"] }
   };
   function openWorldProfile(kind, key) {
-    var c = (kind === 'nation' ? nationProfiles : clubProfiles)[key];
     document.getElementById('cprofile-title').textContent = kind === 'nation' ? 'Nation profile' : 'Club profile';
-    document.getElementById('cprofile-body').innerHTML =
-      '<h3 style="margin:10px 0 2px">' + c.name + '</h3>' +
-      '<div class="role-hint" style="margin-bottom:0">' + c.meta + '</div>' +
-      '<p style="font-size:var(--fs-body);color:var(--ink-dim);line-height:1.5">' + c.blurb + '</p>' +
-      '<div class="eyebrow" style="display:block;margin-bottom:6px">Recent history</div>' +
-      '<div class="notes-log">' + c.champions.map(function (line) {
-        return '<div class="notes-log-item"><span>' + line + '</span></div>';
-      }).join('') + '</div>';
+    if (kind === 'nation') {
+      document.getElementById('cprofile-body').innerHTML = renderNationProfile(nationProfiles[key]);
+    } else {
+      var c = clubProfiles[key];
+      document.getElementById('cprofile-body').innerHTML =
+        '<h3 style="margin:10px 0 2px">' + c.name + '</h3>' +
+        '<div class="role-hint" style="margin-bottom:0">' + c.meta + '</div>' +
+        '<p style="font-size:var(--fs-body);color:var(--ink-dim);line-height:1.5">' + c.blurb + '</p>' +
+        '<div class="eyebrow" style="display:block;margin-bottom:6px">Recent history</div>' +
+        '<div class="notes-log">' + c.champions.map(function (line) {
+          return '<div class="notes-log-item"><span>' + line + '</span></div>';
+        }).join('') + '</div>';
+    }
     document.getElementById('competition-profile-backdrop').classList.add('open');
   }
   var pendingOfferRow = null;
@@ -4160,6 +4286,133 @@
   var pendingOfferValuation = 0;
   var pendingOfferLowballStreak = 0;
   var pendingOfferSettled = false;
+
+  var RECORD_TEXT_HEADERS = {Player:1, Opposition:1, Ground:1, Date:1, Players:1, Wicket:1, Figures:1, Score:1};
+  var RECORDS_DATA = {
+    club: { scopeLabel: 'Islamabad Icons \u00b7 club records', batting: { label: 'Batting Records', types: [
+        { label: 'Most Runs', cols: ['Player','Mat','Runs','Ave','HS'], rows: [
+          ['Hamza Malik','96','3,214','38.7','142*'],
+          ['Zain Chaudhry','88','2,406','31.9','118'],
+          ['Tariq Farooq','241','5,180','27.6','136'] ] },
+        { label: 'Highest Individual Score', cols: ['Player','Score','Opposition','Ground','Date'], rows: [
+          ['Hamza Malik','142*','vs Multan Sultans','Jinnah Stadium','2023'],
+          ['Tariq Farooq','136','vs Karachi Kings','Jinnah Stadium','2016'],
+          ['Zain Chaudhry','121','vs Lahore Lions','National Stadium','2022'] ] },
+        { label: 'Most Centuries', cols: ['Player','100s','Mat'], rows: [
+          ['Hamza Malik','9','96'],
+          ['Tariq Farooq','6','241'] ] } ] },
+      bowling: { label: 'Bowling Records', types: [
+        { label: 'Most Wickets', cols: ['Player','Mat','Wkts','Ave','BBI'], rows: [
+          ['Adeel Hayat','112','187','21.3','6/18'],
+          ['Danish Raza','74','96','26.1','5/29'] ] },
+        { label: 'Best Bowling (Innings)', cols: ['Player','Figures','Opposition','Ground','Date'], rows: [
+          ['Adeel Hayat','6/18','vs Peshawar Zalmi','Jinnah Stadium','2021'],
+          ['Sarfraz Khan','5/22','vs Quetta Falcons','National Stadium','2020'] ] } ] },
+      fielding: { label: 'Fielding Records', types: [
+        { label: 'Most Catches', cols: ['Player','Mat','Ct'], rows: [
+          ['Bilal Nadeem','128','64'],
+          ['Rizwan Sheikh','61','38'] ] },
+        { label: 'Most Dismissals (Keeper)', cols: ['Player','Mat','Ct','St','Total'], rows: [
+          ['Rizwan Sheikh','61','31','7','38'] ] } ] },
+      team: { label: 'Team Records', types: [
+        { label: 'Highest Team Total', cols: ['Score','Overs','Opposition','Ground','Date'], rows: [
+          ['218/4','20','vs Lahore Lions','Jinnah Stadium','2023'],
+          ['204/6','20','vs Karachi Kings','National Stadium','2019'] ] },
+        { label: 'Lowest Team Total (all out)', cols: ['Score','Overs','Opposition','Ground','Date'], rows: [
+          ['71 all out','16.3','vs Quetta Falcons','Jinnah Stadium','2020'] ] },
+        { label: 'Highest Successful Chase', cols: ['Score','Overs','Opposition','Ground','Date'], rows: [
+          ['196/6','19.4','vs Karachi Kings','Jinnah Stadium','2022'] ] } ] },
+      partnership: { label: 'Partnership Records', types: [
+        { label: 'Highest Partnership (by wicket)', cols: ['Score','Wicket','Players','Opposition','Date'], rows: [
+          ['187','3rd','Malik &amp; Khan','vs Lahore Lions','2023'],
+          ['142','1st','Chaudhry &amp; Farooq','vs Multan Sultans','2018'] ] } ] },
+      allround: { label: 'All-round Records', types: [
+        { label: 'Best All-round Match (Runs + Wkts)', cols: ['Player','Runs','Wkts','Opposition','Date'], rows: [
+          ['Danish Raza','58','4','vs Quetta Falcons','2022'] ] } ] } },
+    ground: { scopeLabel: 'Jinnah Stadium, Rawalpindi \u00b7 ground records', batting: { label: 'Batting Records', types: [
+        { label: 'Highest Individual Score', cols: ['Player','Score','Team','Opposition','Date'], rows: [
+          ['Hamza Malik','151','Islamabad Icons','vs Multan Sultans','2023'],
+          ['Faisal Nadeem','128','Multan Sultans','vs Islamabad Icons','2021'] ] },
+        { label: 'Most Runs at this Ground', cols: ['Player','Inns','Runs','Ave'], rows: [
+          ['Hamza Malik','41','1,884','46.0'] ] } ] },
+      bowling: { label: 'Bowling Records', types: [
+        { label: 'Best Bowling (Innings)', cols: ['Player','Figures','Team','Opposition','Date'], rows: [
+          ['Adeel Hayat','7/22','Islamabad Icons','vs Peshawar Zalmi','2021'] ] } ] },
+      fielding: { label: 'Fielding Records', types: [
+        { label: 'Most Catches at this Ground', cols: ['Player','Ct'], rows: [
+          ['Bilal Nadeem','29'] ] } ] },
+      team: { label: 'Team Records', types: [
+        { label: 'Highest Team Total', cols: ['Score','Team','Opposition','Date'], rows: [
+          ['224/5','Islamabad Icons','vs Karachi Kings','2024'] ] },
+        { label: 'Lowest Team Total (all out)', cols: ['Score','Team','Opposition','Date'], rows: [
+          ['68 all out','Quetta Falcons','vs Islamabad Icons','2020'] ] },
+        { label: 'Highest Successful Chase', cols: ['Score','Team','Opposition','Date'], rows: [
+          ['202/6','Lahore Lions','vs Islamabad Icons','2022'] ] } ] },
+      partnership: { label: 'Partnership Records', types: [
+        { label: 'Highest Partnership (by wicket)', cols: ['Score','Wicket','Players','Team','Date'], rows: [
+          ['163','2nd','Malik &amp; Chaudhry','Islamabad Icons','2023'] ] } ] },
+      allround: { label: 'All-round Records', types: [
+        { label: 'Best All-round Match', cols: ['Player','Runs','Wkts','Team','Date'], rows: [
+          ['Danish Raza','44','3','Islamabad Icons','2022'] ] } ] } },
+    world: { scopeLabel: 'World \u00b7 every competition your network covers', batting: { label: 'Batting Records', types: [
+        { label: 'Highest Individual Score (T20)', cols: ['Player','Score','Team','Opposition','Date'], rows: [
+          ['Faisal Nadeem','172*','Multan Sultans','vs Lahore Lions','2024'],
+          ['Hamza Malik','142*','Islamabad Icons','vs Multan Sultans','2023'] ] },
+        { label: 'Most Career Runs, All Formats', cols: ['Player','Team','Runs','Status'], rows: [
+          ['Hamza Malik','Islamabad Icons','3,214','Still active'],
+          ['Faisal Nadeem','Multan Sultans','4,006','Retired 2023'] ] } ] },
+      bowling: { label: 'Bowling Records', types: [
+        { label: 'Best Bowling (Innings)', cols: ['Player','Figures','Team','Opposition','Date'], rows: [
+          ['Umar Baig','8/19','Lahore Lions','vs Peshawar Zalmi','2022'] ] },
+        { label: 'Most Career Wickets, All Formats', cols: ['Player','Team','Wkts','Status'], rows: [
+          ['Adeel Hayat','Islamabad Icons','187','Still active'] ] } ] },
+      fielding: { label: 'Fielding Records', types: [
+        { label: 'Most Career Catches', cols: ['Player','Team','Ct'], rows: [
+          ['Bilal Nadeem','Islamabad Icons','64'] ] } ] },
+      team: { label: 'Team Records', types: [
+        { label: 'Highest Team Total (T20)', cols: ['Score','Team','Opposition','Date'], rows: [
+          ['261/3','Karachi Kings','vs Quetta Falcons','2025'] ] },
+        { label: 'Lowest Team Total (all out)', cols: ['Score','Team','Opposition','Date'], rows: [
+          ['58 all out','Quetta Falcons','vs Karachi Kings','2021'] ] } ] },
+      partnership: { label: 'Partnership Records', types: [
+        { label: 'Highest Partnership (by wicket)', cols: ['Score','Wicket','Players','Teams','Date'], rows: [
+          ['211','2nd','Nadeem &amp; Rauf','Multan Sultans','2024'] ] } ] },
+      allround: { label: 'All-round Records', types: [
+        { label: 'Best All-round Match (Runs + Wkts)', cols: ['Player','Runs','Wkts','Team','Date'], rows: [
+          ['Danish Raza','58','4','Islamabad Icons','2022'] ] } ] } }
+  };
+  var currentRecordScope = null, currentRecordCat = null;
+  function openRecordCategory(scope, catKey) {
+    var cat = RECORDS_DATA[scope][catKey];
+    currentRecordScope = scope; currentRecordCat = catKey;
+    document.getElementById('records-detail-title').textContent = cat.label;
+    document.getElementById('records-detail-sub').textContent = RECORDS_DATA[scope].scopeLabel;
+    var list = document.getElementById('records-detail-list');
+    list.innerHTML = cat.types.map(function (t, idx) {
+      return '<div class="record-type-row" onclick="openRecordType(\'' + scope + '\',\'' + catKey + '\',' + idx + ')"><span class="k">' + t.label + '</span><svg class="icon sm"><use href="#i-chevron-fwd"/></svg></div>';
+    }).join('');
+    list.hidden = false;
+    document.getElementById('records-detail-table').hidden = true;
+    document.getElementById('records-detail-back-row').hidden = true;
+    document.getElementById('records-detail-backdrop').classList.add('open');
+  }
+  function openRecordType(scope, catKey, idx) {
+    var cat = RECORDS_DATA[scope][catKey];
+    var t = cat.types[idx];
+    document.getElementById('records-detail-title').textContent = t.label;
+    document.getElementById('records-detail-sub').textContent = RECORDS_DATA[scope].scopeLabel + ' \u00b7 ' + cat.label;
+    var head = '<tr>' + t.cols.map(function (c) { return '<th' + (RECORD_TEXT_HEADERS[c] ? '' : ' class="num"') + '>' + c + '</th>'; }).join('') + '</tr>';
+    var body = t.rows.map(function (r) {
+      return '<tr>' + r.map(function (v, i) { return '<td' + (RECORD_TEXT_HEADERS[t.cols[i]] ? '' : ' class="num"') + '>' + v + '</td>'; }).join('') + '</tr>';
+    }).join('');
+    document.getElementById('records-detail-table').innerHTML = '<div class="table-card"><div class="table-scroll-inner"><table class="career"><thead>' + head + '</thead><tbody>' + body + '</tbody></table></div></div>';
+    document.getElementById('records-detail-list').hidden = true;
+    document.getElementById('records-detail-table').hidden = false;
+    document.getElementById('records-detail-back-row').hidden = false;
+  }
+  function showRecordCategoryList() { openRecordCategory(currentRecordScope, currentRecordCat); }
+  function closeRecordsDetail() { document.getElementById('records-detail-backdrop').classList.remove('open'); }
+
   function targetOfferLog(who, text) {
     var log = document.getElementById('target-offer-log');
     log.innerHTML += '<div class="convo-line ' + who + '"><span class="who">' + (who === 'you' ? 'You' : 'Them') + '</span><div class="convo-bubble">“' + text + '”</div></div>';
