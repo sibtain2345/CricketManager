@@ -10738,6 +10738,50 @@ real recruit-and-negotiate screen, mirroring the Staff screen's own `openStaffRe
 illustrative NOC-status card just added); and applying the same real-redirect-screen treatment to
 other franchise leagues (PSL remains the only one modelled in this mockup's fictional world).
 
+### Phase C follow-up: career-record tables + calendar-gated auction entry
+
+Two quick direct corrections from the user, right after the multi-tab rebuild shipped.
+
+**Career record shown as real stats tables, not flat prose.** The Current Player tab's "Career
+record" card previously carried the domestic-T20/league lines as single-string prose
+(`"38 M · 71 Wkts · Econ 7.8 · SR 17.2"`) inside plain `.bio-line` rows - inconsistent with how
+Career Stats itself renders (`table.career`, real Mat/Inns/NO/Runs/HS/Avg/SR/50/100 and
+Mat/Balls/Runs/Wkts/BBI/Avg/Econ/SR columns). `AUCTION_LOTS` was rebuilt with structured
+`battingStats`/`bowlingStats` arrays (one row per competition - Domestic T20, then Pakistan
+Premier League), each carrying real per-column figures rather than a formatted string, authored
+to stay internally consistent (Avg = Runs/(Inns-NO), SR = Balls/Wkts for bowling, etc.) rather
+than copied verbatim from the old prose. The card now renders two real `table.career` tables
+(reusing the exact component Career Stats/Records already established, with
+`table-scroll-inner`'s max-height overridden to `none` since a 1-2-row table never needs its own
+scrollbar), shown/hidden per lot depending on whether the player has a batting record, a bowling
+record, or both (Imran Sethi, the all-rounder, gets both). The two players with no PPL
+appearances yet (Naveed Sultan, Farhan Dawood) show only the Domestic T20 row plus a plain
+`role-hint` note ("No Pakistan Premier League appearances yet.") rather than a fabricated zero
+row - the same "null means no data, not a bad measurement" discipline this project's C# side
+applies throughout.
+
+**The auction room is reached the same way Match Day is - calendar-gated, never on demand.** The
+user's direct point: "Enter auction room" was clickable at any time regardless of the 14-day
+countdown shown right next to it, which is inconsistent with how "Play Match" behaves (it exists
+as a real conditional - an ordinary day reads "Next Day," a day with a scheduled fixture reads
+"Play Match," and the mockup is deliberately frozen on a day where that condition is true, per
+the code comment already sitting above that button). The correct fix mirrors the SAME precedent
+rather than disabling the auction entry point outright (which would have made the just-built
+multi-tab room impossible to review in this static file): the Recruitment tile and the War Room's
+own sub-header were both changed from "auction opens in 14 days" / a "14 days" countdown to
+"auction window opens today" / "Today," with a new code comment stating the real mechanism
+explicitly - most days this tile would show a days-to-go countdown with the button disabled, and
+this mockup is frozen ON the auction's own opening day, exactly as Match Day is frozen on a
+scheduled-fixture day. A `.view-more-btn:disabled` CSS rule was added alongside (mirroring
+`.stage-continue-btn:disabled`'s existing opacity/cursor treatment) for the day this mockup is
+extended to actually demonstrate the "not yet due" state rather than only the "due today" one.
+
+**Verification**: the same structural-balance discipline (`div`/`table`/`tr`/`span`/`svg`/`nav`/
+`section`/`button` tag-count parity) plus `node --check` on the extracted `<script>` block after
+the two JS-bearing scripts (`SYNTAX OK`, script braces 604/604, parens 1284/1284); the final
+calendar-copy edit touched HTML/CSS only, re-verified structurally with no JS re-check needed.
+Final state: file size ~2.61MB.
+
 ---
 
 ## CONSOLIDATED DEFERRED-ITEMS REGISTER (maintained - the single source of truth)

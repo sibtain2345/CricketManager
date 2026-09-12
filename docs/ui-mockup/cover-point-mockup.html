@@ -449,6 +449,7 @@
   .stage-actions { display: flex; gap: 10px; margin-top: 18px; }
   .stage-continue-btn { appearance: none; border: 1px solid var(--chrome-strong); background: var(--chrome); color: #eef6ff; font: inherit; font-size: var(--fs-body); font-weight: 700; padding: 10px 18px; border-radius: 9px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; }
   .stage-continue-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+  .view-more-btn:disabled { opacity: 0.4; cursor: not-allowed; }
   .toss-card { max-width: 520px; }
   .xi-list { display: grid; grid-template-columns: 1fr; gap: 2px; }
   .xi-row { font-size: var(--fs-small); color: var(--ink-dim); padding: 5px 0; border-top: 1px solid var(--border-soft); }
@@ -1662,7 +1663,7 @@
 
     <!-- ============ WAR ROOM: retention + pre-auction plan ============ -->
     <div id="auction-retention" class="auction-stage">
-      <div class="panel-head"><h1>Islamabad Icons &middot; War Room</h1><div class="sub">Retained core &amp; pre-auction plan &middot; auction opens in 14 days</div></div>
+      <div class="panel-head"><h1>Islamabad Icons &middot; War Room</h1><div class="sub">Retained core &amp; pre-auction plan &middot; auction window opens today</div></div>
       <div class="tactics-grid">
         <div class="analysis-card">
           <span class="eyebrow"><svg class="icon sm"><use href="#i-badge"/></svg> Retained core</span>
@@ -1771,8 +1772,25 @@
           <div class="analysis-card">
             <span class="eyebrow"><svg class="icon sm"><use href="#i-trend-up"/></svg> Career record</span>
             <div class="bio-line"><span class="k">Player type</span><span id="lot-playertype">&mdash;</span></div>
-            <div class="bio-line"><span class="k">Domestic T20 career <span style="color:var(--ink-faint);font-weight:500">(not T20I)</span></span><span id="lot-domestic">&mdash;</span></div>
-            <div class="bio-line"><span class="k">Pakistan Premier League</span><span id="lot-league">&mdash;</span></div>
+            <div id="lot-batting-wrap" hidden>
+              <div class="role-hint" style="margin:10px 0 6px">Batting &mdash; domestic T20 career, <b>not T20I</b></div>
+              <div class="table-card"><div class="table-scroll-inner" style="max-height:none">
+                <table class="career">
+                  <thead><tr><th>Competition</th><th class="num">Mat</th><th class="num">Inns</th><th class="num">NO</th><th class="num">Runs</th><th class="num">HS</th><th class="num">Avg</th><th class="num">SR</th><th class="num">50</th><th class="num">100</th></tr></thead>
+                  <tbody id="lot-batting-body"></tbody>
+                </table>
+              </div></div>
+            </div>
+            <div id="lot-bowling-wrap" hidden>
+              <div class="role-hint" style="margin:10px 0 6px">Bowling &mdash; domestic T20 career, <b>not T20I</b></div>
+              <div class="table-card"><div class="table-scroll-inner" style="max-height:none">
+                <table class="career">
+                  <thead><tr><th>Competition</th><th class="num">Mat</th><th class="num">Balls</th><th class="num">Runs</th><th class="num">Wkts</th><th class="num">BBI</th><th class="num">Avg</th><th class="num">Econ</th><th class="num">SR</th></tr></thead>
+                  <tbody id="lot-bowling-body"></tbody>
+                </table>
+              </div></div>
+            </div>
+            <div class="role-hint" id="lot-ppl-note" style="margin-top:8px" hidden></div>
           </div>
         </div>
         <div class="analysis-card" style="margin-top:16px">
@@ -2318,15 +2336,20 @@
       </div>
     </div>
 
+    <!-- Reached the same way Match Day is (line ~1103): the room only opens once the calendar
+         genuinely reaches the auction window, never on demand. Most days this tile shows a
+         days-to-go countdown with the button disabled; this mockup is frozen ON the auction's
+         own opening day, so - exactly like "Play Match" only appearing on a scheduled fixture
+         day - the button is genuinely live here, not a free-standing shortcut. -->
     <div class="analysis-card auction-tile">
       <div>
         <span class="eyebrow"><svg class="icon sm"><use href="#i-clock"/></svg> Pakistan Premier League auction</span>
-        <div class="plan-desc" style="margin-top:6px">Mega auction &middot; your retained core carries into the auction; the rest of the squad is re-drafted from the pool.</div>
-        <button class="view-more-btn" style="margin-top:10px;width:auto;padding:6px 12px" onclick="enterAuctionMode()">Enter auction room</button>
+        <div class="plan-desc" style="margin-top:6px">Mega auction &middot; auction window opens today &mdash; your retained core carries in, the rest of the squad is re-drafted from the pool.</div>
+        <button class="view-more-btn" style="margin-top:10px;width:auto;padding:6px 12px" onclick="enterAuctionMode()" title="The auction window has opened today">Enter auction room</button>
       </div>
       <div style="margin-left:auto;text-align:center">
-        <div class="auction-countdown">14</div>
-        <div class="auction-countdown-unit">days</div>
+        <div class="auction-countdown" style="font-size:var(--fs-subhead)">Today</div>
+        <div class="auction-countdown-unit">auction opens</div>
       </div>
     </div>
 
@@ -4768,13 +4791,43 @@
     { key: "accelerated", label: "Accelerated Round" }
   ];
   var AUCTION_LOTS = [
-    { name: "Sarmad Yousuf", role: "Fast bowler", set: "marquee", bracket: "Capped &middot; 1.25cr base", base: 12500000, blurb: "Genuine pace and a strong death-overs record for Multan Sultans last season.", rival: "Quetta Falcons", playerType: "Fast bowler &middot; death-overs specialist", domestic: "38 M &middot; 71 Wkts &middot; Econ 7.8 &middot; SR 17.2", league: "PPL 2025: 11 M &middot; 19 Wkts &middot; Econ 7.4" },
-    { name: "Kashif Rauf", role: "Top-order bat", set: "capped-bat", bracket: "Capped &middot; 1.5cr base", base: 15000000, blurb: "A composed top-order anchor, and a former Islamabad Icons player let go before this mega auction.", rival: "Karachi Kings", playerType: "Top-order bat &middot; anchor", domestic: "52 M &middot; 1,780 Runs &middot; Avg 34.2 &middot; SR 141.6", league: "PPL 2025: 12 M &middot; 412 Runs &middot; Avg 37.5", rtm: true, formerClub: "Islamabad Icons" },
-    { name: "Danish Wali", role: "Middle-order bat", set: "capped-bat", bracket: "Capped &middot; 75L base", base: 7500000, blurb: "A genuine finisher's numbers over the back half of last season, mostly built in the last five overs.", rival: "Peshawar Zalmi", playerType: "Middle-order &middot; finisher", domestic: "44 M &middot; 1,120 Runs &middot; Avg 29.6 &middot; SR 148.9", league: "PPL 2025: 9 M &middot; 201 Runs &middot; SR 156.1" },
-    { name: "Naveed Sultan", role: "Finisher", set: "uncapped-ar", bracket: "Uncapped &middot; 40L base", base: 4000000, blurb: "A power-hitting middle-order option who forced his way into the conversation with a strong domestic T20 season.", rival: "Lahore Lions", playerType: "Middle-order &middot; power hitter", domestic: "21 M &middot; 588 Runs &middot; SR 162.4", league: "No PPL appearances yet" },
-    { name: "Imran Sethi", role: "Off-spin all-rounder", set: "uncapped-ar", bracket: "Capped &middot; 75L base", base: 7500000, blurb: "Genuine control with the ball and enough with the bat to bat at seven \u2014 exactly the role gap the room named.", rival: "Karachi Kings", playerType: "All-rounder &middot; off-spin", domestic: "33 M &middot; 41 Wkts &middot; Econ 6.9 &middot; Bat SR 118.2", league: "PPL 2025: 7 M &middot; 6 Wkts &middot; Econ 6.6" },
-    { name: "Bilal Nasir", role: "Leg-spinner", set: "capped-spin", bracket: "Capped &middot; 1cr base", base: 10000000, blurb: "A genuine wicket-taking leg-spinner who can also bowl the powerplay overs at a pinch.", rival: "Multan Sultans", playerType: "Leg-spinner &middot; wicket-taking", domestic: "46 M &middot; 58 Wkts &middot; Econ 7.1", league: "PPL 2025: 10 M &middot; 12 Wkts &middot; Econ 6.8" },
-    { name: "Farhan Dawood", role: "Fast-medium bowler", set: "accelerated", bracket: "Uncapped &middot; 30L base", base: 3000000, blurb: "Went unsold twice earlier in the auction \u2014 back for the accelerated round at a lower base price.", rival: "Peshawar Zalmi", playerType: "Fast-medium bowler", domestic: "17 M &middot; 22 Wkts &middot; Econ 8.1", league: "No PPL appearances yet" }
+    { name: "Sarmad Yousuf", role: "Fast bowler", set: "marquee", bracket: "Capped &middot; 1.25cr base", base: 12500000, blurb: "Genuine pace and a strong death-overs record for Multan Sultans last season.", rival: "Quetta Falcons", playerType: "Fast bowler &middot; death-overs specialist",
+      bowlingStats: [
+        { comp: "Domestic T20", mat: 38, balls: 1224, runs: 1591, wkts: 71, bbi: "4/19", avg: 22.4, econ: 7.8, sr: 17.2 },
+        { comp: "Pakistan Premier League", mat: 11, balls: 276, runs: 340, wkts: 19, bbi: "3/22", avg: 17.9, econ: 7.4, sr: 14.5 }
+      ] },
+    { name: "Kashif Rauf", role: "Top-order bat", set: "capped-bat", bracket: "Capped &middot; 1.5cr base", base: 15000000, blurb: "A composed top-order anchor, and a former Islamabad Icons player let go before this mega auction.", rival: "Karachi Kings", playerType: "Top-order bat &middot; anchor",
+      battingStats: [
+        { comp: "Domestic T20", mat: 52, inns: 50, no: 4, runs: 1780, hs: "96*", avg: 38.7, sr: 141.6, fifty: 13, hundred: 1 },
+        { comp: "Pakistan Premier League", mat: 12, inns: 12, no: 1, runs: 412, hs: 71, avg: 37.5, sr: 148.9, fifty: 3, hundred: 0 }
+      ], rtm: true, formerClub: "Islamabad Icons" },
+    { name: "Danish Wali", role: "Middle-order bat", set: "capped-bat", bracket: "Capped &middot; 75L base", base: 7500000, blurb: "A genuine finisher's numbers over the back half of last season, mostly built in the last five overs.", rival: "Peshawar Zalmi", playerType: "Middle-order &middot; finisher",
+      battingStats: [
+        { comp: "Domestic T20", mat: 44, inns: 41, no: 3, runs: 1120, hs: "68*", avg: 29.5, sr: 148.9, fifty: 6, hundred: 0 },
+        { comp: "Pakistan Premier League", mat: 9, inns: 8, no: 1, runs: 201, hs: 45, avg: 28.7, sr: 156.1, fifty: 1, hundred: 0 }
+      ] },
+    { name: "Naveed Sultan", role: "Finisher", set: "uncapped-ar", bracket: "Uncapped &middot; 40L base", base: 4000000, blurb: "A power-hitting middle-order option who forced his way into the conversation with a strong domestic T20 season.", rival: "Lahore Lions", playerType: "Middle-order &middot; power hitter",
+      battingStats: [
+        { comp: "Domestic T20", mat: 21, inns: 19, no: 5, runs: 588, hs: "58*", avg: 42.0, sr: 162.4, fifty: 3, hundred: 0 }
+      ], noPplNote: "No Pakistan Premier League appearances yet." },
+    { name: "Imran Sethi", role: "Off-spin all-rounder", set: "uncapped-ar", bracket: "Capped &middot; 75L base", base: 7500000, blurb: "Genuine control with the ball and enough with the bat to bat at seven \u2014 exactly the role gap the room named.", rival: "Karachi Kings", playerType: "All-rounder &middot; off-spin",
+      battingStats: [
+        { comp: "Domestic T20", mat: 33, inns: 24, no: 9, runs: 412, hs: "41*", avg: 27.5, sr: 118.2, fifty: 1, hundred: 0 },
+        { comp: "Pakistan Premier League", mat: 7, inns: 5, no: 2, runs: 68, hs: 24, avg: 22.7, sr: 121.4, fifty: 0, hundred: 0 }
+      ],
+      bowlingStats: [
+        { comp: "Domestic T20", mat: 33, balls: 615, runs: 707, wkts: 41, bbi: "3/18", avg: 17.2, econ: 6.9, sr: 15.0 },
+        { comp: "Pakistan Premier League", mat: 7, balls: 96, runs: 106, wkts: 6, bbi: "2/14", avg: 17.7, econ: 6.6, sr: 16.0 }
+      ] },
+    { name: "Bilal Nasir", role: "Leg-spinner", set: "capped-spin", bracket: "Capped &middot; 1cr base", base: 10000000, blurb: "A genuine wicket-taking leg-spinner who can also bowl the powerplay overs at a pinch.", rival: "Multan Sultans", playerType: "Leg-spinner &middot; wicket-taking",
+      bowlingStats: [
+        { comp: "Domestic T20", mat: 46, balls: 1102, runs: 1304, wkts: 58, bbi: "4/24", avg: 22.5, econ: 7.1, sr: 19.0 },
+        { comp: "Pakistan Premier League", mat: 10, balls: 204, runs: 231, wkts: 12, bbi: "3/19", avg: 19.3, econ: 6.8, sr: 17.0 }
+      ] },
+    { name: "Farhan Dawood", role: "Fast-medium bowler", set: "accelerated", bracket: "Uncapped &middot; 30L base", base: 3000000, blurb: "Went unsold twice earlier in the auction \u2014 back for the accelerated round at a lower base price.", rival: "Peshawar Zalmi", playerType: "Fast-medium bowler",
+      bowlingStats: [
+        { comp: "Domestic T20", mat: 17, balls: 407, runs: 549, wkts: 22, bbi: "3/28", avg: 25.0, econ: 8.1, sr: 18.5 }
+      ], noPplNote: "No Pakistan Premier League appearances yet." }
   ];
   var FRANCHISES = ["Islamabad Icons", "Karachi Kings", "Lahore Lions", "Multan Sultans", "Peshawar Zalmi", "Quetta Falcons"];
   var franchisePurseStart = { "Islamabad Icons": 96, "Karachi Kings": 96, "Lahore Lions": 96, "Multan Sultans": 96, "Peshawar Zalmi": 96, "Quetta Falcons": 96 };
@@ -4840,6 +4893,36 @@
     if (index === auctionLotIndex) return auctionSold ? (AUCTION_LOTS[index]._soldTo ? ("Sold &middot; " + AUCTION_LOTS[index]._soldTo) : "Unsold") : "Live now";
     return "Upcoming";
   }
+  function auctionBattingRow(r) {
+    return "<tr><td>" + r.comp + "</td><td class=\"num\">" + r.mat + "</td><td class=\"num\">" + r.inns + "</td><td class=\"num\">" + r.no + "</td><td class=\"num\">" + r.runs + "</td><td class=\"num\">" + r.hs + "</td><td class=\"num\">" + r.avg.toFixed(1) + "</td><td class=\"num\">" + r.sr.toFixed(1) + "</td><td class=\"num\">" + r.fifty + "</td><td class=\"num\">" + r.hundred + "</td></tr>";
+  }
+  function auctionBowlingRow(r) {
+    return "<tr><td>" + r.comp + "</td><td class=\"num\">" + r.mat + "</td><td class=\"num\">" + r.balls + "</td><td class=\"num\">" + r.runs + "</td><td class=\"num\">" + r.wkts + "</td><td class=\"num\">" + r.bbi + "</td><td class=\"num\">" + r.avg.toFixed(1) + "</td><td class=\"num\">" + r.econ.toFixed(1) + "</td><td class=\"num\">" + r.sr.toFixed(1) + "</td></tr>";
+  }
+  function renderAuctionCareerTables(lot) {
+    var battingWrap = document.getElementById("lot-batting-wrap");
+    var bowlingWrap = document.getElementById("lot-bowling-wrap");
+    var pplNote = document.getElementById("lot-ppl-note");
+    if (lot.battingStats && lot.battingStats.length) {
+      battingWrap.hidden = false;
+      document.getElementById("lot-batting-body").innerHTML = lot.battingStats.map(auctionBattingRow).join("");
+    } else {
+      battingWrap.hidden = true;
+    }
+    if (lot.bowlingStats && lot.bowlingStats.length) {
+      bowlingWrap.hidden = false;
+      document.getElementById("lot-bowling-body").innerHTML = lot.bowlingStats.map(auctionBowlingRow).join("");
+    } else {
+      bowlingWrap.hidden = true;
+    }
+    if (lot.noPplNote) {
+      pplNote.hidden = false;
+      pplNote.textContent = lot.noPplNote;
+    } else {
+      pplNote.hidden = true;
+      pplNote.textContent = "";
+    }
+  }
   function renderAuctionLot() {
     var lot = AUCTION_LOTS[auctionLotIndex];
     auctionCurrentPrice = lot.base;
@@ -4852,8 +4935,7 @@
     document.getElementById("lot-price").textContent = auctionMoneyFmt(auctionCurrentPrice);
     document.getElementById("lot-bidder").textContent = "nobody yet";
     document.getElementById("lot-playertype").textContent = lot.playerType;
-    document.getElementById("lot-domestic").textContent = lot.domestic;
-    document.getElementById("lot-league").textContent = lot.league;
+    renderAuctionCareerTables(lot);
     document.getElementById("lot-num").textContent = "Lot " + (auctionLotIndex + 1) + " of " + AUCTION_LOTS.length;
     var setLots = AUCTION_LOTS.filter(function (l) { return l.set === lot.set; });
     var posInSet = setLots.indexOf(lot) + 1;
