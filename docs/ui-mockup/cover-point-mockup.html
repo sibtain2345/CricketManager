@@ -198,6 +198,10 @@
   .press-filter { display: flex; gap: 4px; }
   .press-filter-btn { appearance: none; border: 1px solid var(--border-soft); background: transparent; color: var(--ink-faint); font: inherit; font-size: var(--fs-micro); font-weight: 700; letter-spacing: 0.03em; padding: 3px 9px; border-radius: 999px; cursor: pointer; }
   .press-filter-btn[aria-selected="true"] { color: var(--gold); border-color: var(--gold-dim); background: var(--gold-dim); }
+  .phase-toggle { display: flex; gap: 8px; margin-bottom: 10px; }
+  .phase-btn { appearance: none; flex: 1; border: 1px solid var(--border); background: var(--surface-2); color: var(--ink-dim); font: inherit; font-size: var(--fs-small); font-weight: 700; padding: 9px 14px; border-radius: 9px; cursor: pointer; }
+  .phase-btn[aria-selected="true"] { color: var(--ground-a); background: var(--gold); border-color: var(--gold); }
+  .drs-verdict { margin-top: 12px; padding: 12px 14px; border-radius: 10px; background: var(--gold-dim); color: var(--gold); font-weight: 700; font-size: var(--fs-body); display: flex; align-items: center; gap: 8px; }
   .radar-wrap { display: flex; justify-content: center; margin: 4px 0 8px; }
   .radar-chart { width: 100%; max-width: 190px; height: auto; }
   .radar-ring-outer, .radar-ring-mid { fill: none; stroke: var(--border-soft); stroke-width: 1; }
@@ -343,6 +347,15 @@
   .batter-line { display: flex; align-items: center; justify-content: space-between; padding: 6px 0; }
   .batter-line .who { display: flex; align-items: center; gap: 7px; font-size: var(--fs-body); font-weight: 600; }
   .who.clickable { cursor: pointer; text-decoration: underline; text-decoration-color: var(--border); text-underline-offset: 3px; }
+  .staff-row.clickable { cursor: pointer; }
+  .staff-row.clickable:hover { background: var(--surface-2); }
+  .sparkline-wrap { margin-top: 12px; }
+  .sparkline { width: 100%; height: 44px; display: block; }
+  .sparkline-line { fill: none; stroke: var(--turf-strong); stroke-width: 2.2; stroke-linejoin: round; stroke-linecap: round; }
+  .sparkline-dot { fill: var(--turf-strong); }
+  .sparkline-labels { display: flex; justify-content: space-between; font-size: var(--fs-micro); color: var(--ink-faint); margin-top: 2px; }
+  .staff-release-btn { appearance: none; border: none; background: transparent; color: var(--ink-faint); font-size: 16px; line-height: 1; cursor: pointer; padding: 2px 4px; border-radius: 5px; margin-left: 2px; }
+  .staff-release-btn:hover { color: var(--ball); background: var(--ball-dim); }
   .who.clickable:hover { color: var(--turf-strong); text-decoration-color: var(--turf-strong); }
   .strike-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--turf); }
   .batter-line .figs { font-family: var(--font-mono); font-size: var(--fs-body); color: var(--ink-dim); }
@@ -1267,7 +1280,43 @@
           </div>
         </div>
       </div>
-      <div class="stage-actions"><button class="stage-continue-btn" onclick="enterLiveMatch()">Play <svg class="icon sm"><use href="#i-chevron-fwd"/></svg></button></div>
+      <div class="stage-actions"><button class="stage-continue-btn" data-next="stage-teamtalk">Continue to the team talk <svg class="icon sm"><use href="#i-chevron-fwd"/></svg></button></div>
+    </div>
+
+    <!-- ============ TEAM TALK (before the innings starts) ============ -->
+    <div id="stage-teamtalk" class="match-stage" hidden>
+      <div class="panel-head"><h1>Team talk</h1><div class="sub">One last word before the toss-winner's XI take the field</div></div>
+      <nav class="subnav" role="tablist" aria-label="Team talk groups">
+        <button class="subtab-btn" role="tab" aria-selected="true" aria-controls="talk-batting" data-subtab="batting">Batting</button>
+        <button class="subtab-btn" role="tab" aria-selected="false" aria-controls="talk-bowling" data-subtab="bowling">Bowling</button>
+        <button class="subtab-btn" role="tab" aria-selected="false" aria-controls="talk-fielding" data-subtab="fielding">Fielding</button>
+        <button class="subtab-btn" role="tab" aria-selected="false" aria-controls="talk-individual" data-subtab="individual">Individual</button>
+      </nav>
+    <div class="subpanel" id="talk-batting">
+      <div class="convo-log" id="talk-log-batting">
+        <div class="convo-placeholder" id="talk-placeholder-batting">Choose how you want to address the batting group.</div>
+      </div>
+      <div style="display:flex;gap:8px;margin-top:12px"><button class="tone-chip" onclick="pickTeamTalkTone('batting', 'assured')">Assured</button><button class="tone-chip" onclick="pickTeamTalkTone('batting', 'demanding')">Demanding</button><button class="tone-chip" onclick="pickTeamTalkTone('batting', 'calm')">Calm</button></div>
+    </div>
+    <div class="subpanel" id="talk-bowling" hidden>
+      <div class="convo-log" id="talk-log-bowling">
+        <div class="convo-placeholder" id="talk-placeholder-bowling">Choose how you want to address the bowling attack.</div>
+      </div>
+      <div style="display:flex;gap:8px;margin-top:12px"><button class="tone-chip" onclick="pickTeamTalkTone('bowling', 'assured')">Assured</button><button class="tone-chip" onclick="pickTeamTalkTone('bowling', 'demanding')">Demanding</button><button class="tone-chip" onclick="pickTeamTalkTone('bowling', 'calm')">Calm</button></div>
+    </div>
+    <div class="subpanel" id="talk-fielding" hidden>
+      <div class="convo-log" id="talk-log-fielding">
+        <div class="convo-placeholder" id="talk-placeholder-fielding">Choose how you want to address the fielding unit.</div>
+      </div>
+      <div style="display:flex;gap:8px;margin-top:12px"><button class="tone-chip" onclick="pickTeamTalkTone('fielding', 'assured')">Assured</button><button class="tone-chip" onclick="pickTeamTalkTone('fielding', 'demanding')">Demanding</button><button class="tone-chip" onclick="pickTeamTalkTone('fielding', 'calm')">Calm</button></div>
+    </div>
+    <div class="subpanel" id="talk-individual" hidden>
+      <div class="convo-log" id="talk-log-individual">
+        <div class="convo-placeholder" id="talk-placeholder-individual">Choose how you want to address the one player, by name.</div>
+      </div>
+      <div style="display:flex;gap:8px;margin-top:12px"><button class="tone-chip" onclick="pickTeamTalkTone('individual', 'assured')">Assured</button><button class="tone-chip" onclick="pickTeamTalkTone('individual', 'demanding')">Demanding</button><button class="tone-chip" onclick="pickTeamTalkTone('individual', 'calm')">Calm</button></div>
+    </div>
+      <div class="stage-actions" style="margin-top:16px"><button class="stage-continue-btn" onclick="enterLiveMatch()">Play <svg class="icon sm"><use href="#i-chevron-fwd"/></svg></button></div>
     </div>
 
     <!-- ============ LIVE MATCH (the existing, already-built content) ============ -->
@@ -1422,6 +1471,7 @@
             <div class="crease-info-line">Partnership: 46 runs, 5.2 ov (RR 8.68)</div>
             <div class="crease-info-line">Last wkt: Waqar Ansari b Iqbal 24 (19) &middot; 96/2 (9.0 ov)</div>
             <div class="crease-info-line reviews"><svg class="icon xs"><use href="#i-shield"/></svg>Reviews remaining &middot; Icons 2 of 2 &middot; Lions 1 of 2</div>
+            <button class="view-more-btn" style="margin-top:6px" onclick="openDrsReview()">Call for a review</button>
           </div>
           <div class="figures-card">
             <span class="eyebrow"><svg class="icon sm"><use href="#i-user"/></svg> Next man in</span>
@@ -1880,12 +1930,19 @@
         <div class="role-hint">The captain is set automatically from whoever leads the side day to day &mdash; a human coach can always override it here. Both opening bowlers carry straight into the first over; still changeable once the match is under way.</div>
       </div>
 
+    <nav class="phase-toggle" role="tablist" aria-label="Match phase">
+      <button class="phase-btn" role="tab" aria-selected="true" data-phase="new-ball" onclick="setTacticsPhase(this)">New Ball</button>
+      <button class="phase-btn" role="tab" aria-selected="false" data-phase="middle" onclick="setTacticsPhase(this)">Middle Overs</button>
+      <button class="phase-btn" role="tab" aria-selected="false" data-phase="death" onclick="setTacticsPhase(this)">Death Overs</button>
+    </nav>
+    <div class="role-hint" style="margin-bottom:14px">The bowling plan, batting plan and field below are all for the phase selected above &mdash; each phase carries its own standing plan, not one flat setting for the whole innings.</div>
+
     <div class="tactics-grid">
       <div class="analysis-card">
         <span class="eyebrow"><svg class="icon sm"><use href="#i-swing"/></svg> Bowling plan</span>
         <div class="inner-contrast-box">
           <div class="plan-select-wrap">
-            <select class="plan-select">
+            <select class="plan-select" id="bowling-plan-select" onchange="describePlan('bowling')">
               <option>New Ball</option>
               <option selected>Corridor of Uncertainty</option>
               <option>Bounce Him</option>
@@ -1899,7 +1956,7 @@
               <option>Angle the Crease</option>
             </select>
           </div>
-          <div class="plan-desc"><strong>Corridor of Uncertainty</strong> &mdash; a relentless fourth-stump line, inviting a drive that isn't really there.</div>
+          <div class="plan-desc" id="bowling-plan-desc"><strong>Corridor of Uncertainty</strong> &mdash; a relentless fourth-stump line, inviting a drive that isn't really there.</div>
         </div>
         <div class="subsection-box">
           <span class="eyebrow">Delivery &middot; length &amp; movement</span><div class="plan-desc" style="margin-top:2px;margin-bottom:8px">Reading off the last ball actually bowled &mdash; <strong>14.2, Iqbal to Malik</strong>: short of a length, shaping away. The highlighted chips below track it live once a match is running; they don't move on their own between deliveries.</div>
@@ -1921,7 +1978,7 @@
         <span class="eyebrow"><svg class="icon sm"><use href="#i-bat-ball"/></svg> Batting plan</span>
         <div class="inner-contrast-box">
           <div class="plan-select-wrap">
-            <select class="plan-select">
+            <select class="plan-select" id="batting-plan-select" onchange="describePlan('batting')">
               <option>Counter-Attack</option>
               <option>Target the Gap</option>
               <option>Avoid the Trap</option>
@@ -1932,7 +1989,7 @@
               <option>Rotate and Rebuild</option>
             </select>
           </div>
-          <div class="plan-desc"><strong>Attack Spin</strong> &mdash; use the feet, don't let the spinner settle into a length.</div>
+          <div class="plan-desc" id="batting-plan-desc"><strong>Attack Spin</strong> &mdash; use the feet, don't let the spinner settle into a length.</div>
         </div>
         <div class="subsection-box">
           <span class="eyebrow">Per-player override</span>
@@ -1943,7 +2000,7 @@
     </div>
 
     <div class="analysis-card">
-      <span class="eyebrow"><svg class="icon sm"><use href="#i-shield"/></svg> Field placement &middot; standing plan</span>
+      <span class="eyebrow"><svg class="icon sm"><use href="#i-shield"/></svg> Field placement &middot; standing plan <span id="field-phase-suffix">&middot; New Ball</span></span>
       <div class="field-editor-wrap">
         <svg viewBox="0 0 640 620" role="img" aria-label="Overhead field-placement editor - each fielder is a token that can be dragged to a new real position, viewed from the bowler's end.">
           <defs><clipPath id="tacticsGroundClip"><ellipse cx="320" cy="320" rx="278" ry="258"/></clipPath></defs>
@@ -2014,21 +2071,23 @@
 
       <div class="analysis-card">
         <span class="eyebrow"><svg class="icon sm"><use href="#i-alert"/></svg> Transfer targets</span>
-        <div class="transfer-row">
+        <div class="transfer-row" id="target-row-ahsan">
           <div class="transfer-crest"></div>
           <div class="transfer-main">
             <div class="transfer-player">Ahsan Butt <span class="position-chip">Bowler</span></div>
             <div class="transfer-detail">Peshawar Panthers &middot; genuine pace, fills our weakest group</div>
+            <div class="transfer-detail" style="color:var(--ink-faint)">Valuation $220K &middot; wage ask $2,900/wk</div>
           </div>
-          <div class="transfer-fee">$220K</div>
+          <button class="view-more-btn" style="margin-top:0;width:auto;padding:6px 12px" onclick="openTargetOffer('Ahsan Butt', '$220K', 'target-row-ahsan')">Make offer</button>
         </div>
-        <div class="transfer-row">
+        <div class="transfer-row" id="target-row-hamid">
           <div class="transfer-crest"></div>
           <div class="transfer-main">
             <div class="transfer-player">Hamid Rauf <span class="position-chip">Keeper</span></div>
             <div class="transfer-detail">Karachi Kings &middot; back-up keeper, unsettled, transfer-listed</div>
+            <div class="transfer-detail" style="color:var(--ink-faint)">Valuation $95K &middot; wage ask $1,600/wk</div>
           </div>
-          <div class="transfer-fee">$95K</div>
+          <button class="view-more-btn" style="margin-top:0;width:auto;padding:6px 12px" onclick="openTargetOffer('Hamid Rauf', '$95K', 'target-row-hamid')">Make offer</button>
         </div>
         <button class="view-more-btn" onclick="showPanel('squad')">View full squad depth</button>
       </div>
@@ -2085,6 +2144,13 @@
         <div class="finance-row"><span class="fin-label">Transfer spend, this season</span><span class="fin-value neg">&minus;$95K</span></div>
         <div class="finance-divider"></div>
         <div class="finance-total-row"><span>Net this season</span><span class="fin-value pos">+$255K</span></div>
+        <div class="sparkline-wrap">
+          <svg viewBox="0 0 200 50" class="sparkline" aria-label="Net income by season: -80K, 120K, 190K, 90K, 255K">
+            <polyline points="10,40 55,19.1 100,11.8 145,22.2 190,5" class="sparkline-line"/>
+            <circle cx="190" cy="5" r="3" class="sparkline-dot"/>
+          </svg>
+          <div class="sparkline-labels"><span>22/23</span><span>23/24</span><span>24/25</span><span>25/26</span><span>26/27</span></div>
+        </div>
       </div>
 
       <div class="analysis-card">
@@ -2092,6 +2158,14 @@
         <div class="bio-line"><span class="k">Ownership</span><span>Private owner &middot; Benefactor</span></div>
         <div class="bio-line"><span class="k">Season budget set</span><span style="color:var(--gold)">$2.4M</span></div>
         <div class="bio-line"><span class="k">Board confidence</span><span style="color:var(--turf-strong)">Steady</span></div>
+        <div class="ring-wrap" style="margin:8px auto">
+          <svg width="82" height="82" viewBox="0 0 86 86">
+            <circle cx="43" cy="43" r="36" fill="none" stroke="var(--surface-3)" stroke-width="8"/>
+            <circle cx="43" cy="43" r="36" fill="none" stroke="var(--gold)" stroke-width="8" stroke-linecap="round" stroke-dasharray="226.2" stroke-dashoffset="72.4" transform="rotate(-90 43 43)"/>
+            <text x="43" y="49" text-anchor="middle" font-family="Barlow Condensed" font-weight="700" font-size="15" fill="var(--ink)">68%</text>
+          </svg>
+        </div>
+        <div class="ring-caption">Season budget spent so far</div>
         <button class="view-more-btn" onclick="showPanel('boardroom')">Open the Boardroom &mdash; ownership, objectives, budget split</button>
       </div>
     </div>
@@ -2161,8 +2235,20 @@
           <div>Confidence in you</div>
           <div class="trust-meter-wrap"><div class="info-meter"><span style="width:78%"></span></div></div>
         </div>
-        <div class="bio-line" style="margin-top:8px"><span class="k">Season objective</span><span>Finish top 4</span></div>
-        <div class="bio-line"><span class="k">Your contract</span><span>2 years remaining</span></div>
+        <div class="eyebrow" style="display:block;margin-top:10px;margin-bottom:4px;font-size:var(--fs-micro)">Season objectives</div>
+        <div class="staff-row">
+          <div class="staff-row-main"><span class="staff-name">Finish top 4</span><span class="staff-role-label">High importance</span></div>
+          <div class="staff-row-meta"><span class="facility-tier-badge tier-good">On track</span></div>
+        </div>
+        <div class="staff-row">
+          <div class="staff-row-main"><span class="staff-name">Reach the cup quarter-final</span><span class="staff-role-label">Medium importance</span></div>
+          <div class="staff-row-meta"><span class="facility-tier-badge tier-good">On track</span></div>
+        </div>
+        <div class="staff-row">
+          <div class="staff-row-main"><span class="staff-name">Blood at least two academy graduates</span><span class="staff-role-label">Low importance</span></div>
+          <div class="staff-row-meta"><span class="facility-tier-badge tier-average">At risk</span></div>
+        </div>
+        <div class="bio-line" style="margin-top:8px"><span class="k">Your contract</span><span>2 years remaining</span></div>
         <div class="notes-log" style="margin-top:10px">
           <div class="notes-log-item"><span class="note-date">Start of season</span>&ldquo;We back you to build on last year &mdash; a top-4 finish and real progress in the cup keeps us both happy.&rdquo;</div>
         </div>
@@ -2223,7 +2309,7 @@
         <span class="eyebrow"><svg class="icon sm"><use href="#i-users"/></svg> Coaching</span>
         <div class="staff-row" data-role="assistant">
           <div class="staff-row-main"><span class="staff-name">Farhan Sheikh</span><span class="staff-role-label">Assistant Coach</span></div>
-          <div class="staff-row-meta"><span class="facility-tier-badge tier-excellent">Excellent</span><span class="staff-tenure">4 seasons</span></div>
+          <div class="staff-row-meta"><span class="facility-tier-badge tier-excellent">Excellent</span><span class="staff-tenure">4 seasons</span><button class="staff-release-btn" onclick="releaseStaff('assistant')" title="Release">&times;</button></div>
         </div>
         <div class="staff-row vacant" data-role="batting-coach">
           <div class="staff-row-main"><span class="staff-name">Vacant</span><span class="staff-role-label">Batting Coach</span></div>
@@ -2231,15 +2317,15 @@
         </div>
         <div class="staff-row" data-role="bowling-coach">
           <div class="staff-row-main"><span class="staff-name">Imran Qureshi</span><span class="staff-role-label">Bowling Coach</span></div>
-          <div class="staff-row-meta"><span class="facility-tier-badge tier-good">Good</span><span class="staff-tenure">2 seasons</span></div>
+          <div class="staff-row-meta"><span class="facility-tier-badge tier-good">Good</span><span class="staff-tenure">2 seasons</span><button class="staff-release-btn" onclick="releaseStaff('bowling-coach')" title="Release">&times;</button></div>
         </div>
         <div class="staff-row" data-role="fielding-coach">
           <div class="staff-row-main"><span class="staff-name">Ali Rizwan</span><span class="staff-role-label">Fielding Coach</span></div>
-          <div class="staff-row-meta"><span class="facility-tier-badge tier-average">Average</span><span class="staff-tenure">1 season</span></div>
+          <div class="staff-row-meta"><span class="facility-tier-badge tier-average">Average</span><span class="staff-tenure">1 season</span><button class="staff-release-btn" onclick="releaseStaff('fielding-coach')" title="Release">&times;</button></div>
         </div>
         <div class="staff-row" data-role="fitness">
           <div class="staff-row-main"><span class="staff-name">Bilal Aslam</span><span class="staff-role-label">Strength &amp; Conditioning</span></div>
-          <div class="staff-row-meta"><span class="facility-tier-badge tier-good">Good</span><span class="staff-tenure">3 seasons</span></div>
+          <div class="staff-row-meta"><span class="facility-tier-badge tier-good">Good</span><span class="staff-tenure">3 seasons</span><button class="staff-release-btn" onclick="releaseStaff('fitness')" title="Release">&times;</button></div>
         </div>
         <div class="staff-row vacant" data-role="mental">
           <div class="staff-row-main"><span class="staff-name">Vacant</span><span class="staff-role-label">Mental Performance Coach</span></div>
@@ -2250,11 +2336,11 @@
         <span class="eyebrow"><svg class="icon sm"><use href="#i-medical"/></svg> Recruitment &amp; Medical</span>
         <div class="staff-row" data-role="chief-scout">
           <div class="staff-row-main"><span class="staff-name">Waseem Butt</span><span class="staff-role-label">Chief Scout</span></div>
-          <div class="staff-row-meta"><span class="facility-tier-badge tier-excellent">Excellent</span><span class="staff-tenure">5 seasons</span></div>
+          <div class="staff-row-meta"><span class="facility-tier-badge tier-excellent">Excellent</span><span class="staff-tenure">5 seasons</span><button class="staff-release-btn" onclick="releaseStaff('chief-scout')" title="Release">&times;</button></div>
         </div>
         <div class="staff-row" data-role="scout">
           <div class="staff-row-main"><span class="staff-name">Kamran Iqbal</span><span class="staff-role-label">Domestic Scout</span></div>
-          <div class="staff-row-meta"><span class="facility-tier-badge tier-average">Average</span><span class="staff-tenure">1 season</span></div>
+          <div class="staff-row-meta"><span class="facility-tier-badge tier-average">Average</span><span class="staff-tenure">1 season</span><button class="staff-release-btn" onclick="releaseStaff('scout')" title="Release">&times;</button></div>
         </div>
         <div class="staff-row vacant" data-role="analyst">
           <div class="staff-row-main"><span class="staff-name">Vacant</span><span class="staff-role-label">Data Analyst</span></div>
@@ -2262,7 +2348,7 @@
         </div>
         <div class="staff-row" data-role="physio">
           <div class="staff-row-main"><span class="staff-name">Dr. Sana Malik</span><span class="staff-role-label">Head Physiotherapist</span></div>
-          <div class="staff-row-meta"><span class="facility-tier-badge tier-good">Good</span><span class="staff-tenure">2 seasons</span></div>
+          <div class="staff-row-meta"><span class="facility-tier-badge tier-good">Good</span><span class="staff-tenure">2 seasons</span><button class="staff-release-btn" onclick="releaseStaff('physio')" title="Release">&times;</button></div>
         </div>
         <div class="staff-row vacant" data-role="mentor">
           <div class="staff-row-main"><span class="staff-name">Vacant</span><span class="staff-role-label">Mentor</span></div>
@@ -2774,6 +2860,26 @@
       </div>
     </div>
 
+    <div class="analysis-card" style="margin-top:16px">
+      <div class="tile-eyebrow"><span class="eyebrow"><svg class="icon sm"><use href="#i-star-fill"/></svg> Player of the Round</span></div>
+      <div class="bio-line"><span class="k">Hamza Malik</span><span>76 (48) &middot; SR 158.3 &middot; vs Lahore Lions</span></div>
+      <nav class="subnav" role="tablist" aria-label="Player of the Round detail">
+        <button class="subtab-btn" role="tab" aria-selected="true" aria-controls="potr-match" data-subtab="match">Match Report</button>
+        <button class="subtab-btn" role="tab" aria-selected="false" aria-controls="potr-discipline" data-subtab="discipline">Discipline Report</button>
+      </nav>
+      <div class="subpanel" id="potr-match">
+        <div class="bio-line"><span class="k">Boundary split</span><span>6 fours &middot; 4 sixes</span></div>
+        <div class="bio-line"><span class="k">Scoring zones</span><span>Strongest through cover and long-on</span></div>
+        <div class="bio-line"><span class="k">Partnership impact</span><span>Anchored a 96-run stand after 2 early wickets</span></div>
+        <div class="bio-line"><span class="k">Match-winning contribution</span><span>Took the chase from 40/2 to a 4-wicket win</span></div>
+      </div>
+      <div class="subpanel" id="potr-discipline" hidden>
+        <div class="bio-line"><span class="k">Over-rate</span><span>On target &middot; no fine incurred</span></div>
+        <div class="bio-line"><span class="k">Conduct</span><span>Clean &middot; no demerit points this match</span></div>
+        <div class="role-hint" style="margin-top:6px">Discipline is tracked match by match &mdash; a genuinely clean report, not just an absence of headlines.</div>
+      </div>
+    </div>
+
     <div class="tactics-grid" style="margin-top:16px">
       <div class="analysis-card">
         <span class="eyebrow"><svg class="icon sm"><use href="#i-bat-ball"/></svg> Match records</span>
@@ -2786,9 +2892,18 @@
       </div>
       <div class="analysis-card">
         <span class="eyebrow"><svg class="icon sm"><use href="#i-trend-up"/></svg> Career leaderboards</span>
-        <div class="bio-line"><span class="k">Most runs</span><span>Hamza Malik &middot; 3,214</span></div>
-        <div class="bio-line"><span class="k">Most wickets</span><span>Adeel Hayat &middot; 187</span></div>
-        <div class="bio-line"><span class="k">Most catches</span><span>Bilal Nadeem &middot; 64</span></div>
+        <div class="table-card">
+          <table class="career">
+            <thead><tr><th>Record</th><th>Player</th><th class="num">Total</th></tr></thead>
+            <tbody>
+              <tr><td>Most runs</td><td>Hamza Malik</td><td class="num">3,214</td></tr>
+              <tr><td>Most wickets</td><td>Adeel Hayat</td><td class="num">187</td></tr>
+              <tr><td>Most catches</td><td>Bilal Nadeem</td><td class="num">64</td></tr>
+              <tr><td>Most appearances</td><td>Tariq Farooq</td><td class="num">241</td></tr>
+              <tr><td>Most centuries</td><td>Hamza Malik</td><td class="num">9</td></tr>
+            </tbody>
+          </table>
+        </div>
         <div class="role-hint" style="margin-top:10px">Every century and every five-for is kept on the honour board chronologically, exactly as a real ground keeps one &mdash; a new name at the top never removes the last.</div>
       </div>
     </div>
@@ -2827,27 +2942,27 @@
 
     <div class="analysis-card" style="margin-top:16px">
       <span class="eyebrow"><svg class="icon sm"><use href="#i-globe"/></svg> Competitions</span>
-      <div class="staff-row">
+      <div class="staff-row clickable" onclick="openCompetitionProfile('t20cup')">
         <div class="staff-row-main"><span class="staff-name">Pakistan T20 Cup</span><span class="staff-role-label">Domestic &middot; T20 &middot; currently playing</span></div>
         <div class="staff-row-meta"><span class="facility-tier-badge tier-good">Good</span></div>
       </div>
-      <div class="staff-row">
+      <div class="staff-row clickable" onclick="openCompetitionProfile('fcc')">
         <div class="staff-row-main"><span class="staff-name">Pakistan First-Class Championship</span><span class="staff-role-label">Domestic &middot; First-Class</span></div>
         <div class="staff-row-meta"><span class="facility-tier-badge tier-average">Average</span></div>
       </div>
-      <div class="staff-row">
+      <div class="staff-row clickable" onclick="openCompetitionProfile('lista')">
         <div class="staff-row-main"><span class="staff-name">Pakistan List A Cup</span><span class="staff-role-label">Domestic &middot; ODI</span></div>
         <div class="staff-row-meta"><span class="facility-tier-badge tier-average">Average</span></div>
       </div>
-      <div class="staff-row">
+      <div class="staff-row clickable" onclick="openCompetitionProfile('ppl')">
         <div class="staff-row-main"><span class="staff-name">Pakistan Premier League</span><span class="staff-role-label">Franchise &middot; T20 &middot; auction-assembled squads</span></div>
         <div class="staff-row-meta"><span class="facility-tier-badge tier-excellent">Excellent</span></div>
       </div>
-      <div class="staff-row">
+      <div class="staff-row clickable" onclick="openCompetitionProfile('crescent')">
         <div class="staff-row-main"><span class="staff-name">The Crescent Trophy</span><span class="staff-role-label">International &middot; T20 &middot; biennial</span></div>
         <div class="staff-row-meta"><span class="facility-tier-badge tier-excellent">Excellent</span></div>
       </div>
-      <div class="role-hint" style="margin-top:10px">A competition&rsquo;s own standing moves season by season on how full the grounds are, how close the title race was, and the calibre of the sides in it &mdash; a healthier league is worth more to every club inside it, not just the champions.</div>
+      <div class="role-hint" style="margin-top:10px">A competition&rsquo;s own standing moves season by season on how full the grounds are, how close the title race was, and the calibre of the sides in it &mdash; a healthier league is worth more to every club inside it, not just the champions. Click a competition for its profile.</div>
     </div>
   </section>
 
@@ -2915,6 +3030,46 @@
       </table>
     </div>
     <div class="role-hint" style="margin-top:10px">Comparing against the squad&rsquo;s other middle-order option. Pick a different player from Squad to compare against instead.</div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="drs-backdrop" onclick="if(event.target===this) closeDrsReview()">
+  <div class="negotiation-modal" role="dialog" aria-modal="true" aria-labelledby="drs-title" style="max-width:480px">
+    <div class="negotiation-head">
+      <h2 id="drs-title" style="margin:0">Decision review</h2>
+      <button class="modal-close" onclick="closeDrsReview()" aria-label="Close">&times;</button>
+    </div>
+    <div class="role-hint" style="margin-top:2px">Umpire's original call: <strong style="color:var(--ink)">Out &mdash; lbw</strong>, appeal upheld against Hamza Malik.</div>
+    <div class="table-card" style="margin-top:10px">
+      <div class="transfer-status-row"><span>Pitching</span><span style="color:var(--turf-strong)">In line</span></div>
+      <div class="transfer-status-row"><span>Impact</span><span style="color:var(--turf-strong)">In line</span></div>
+      <div class="transfer-status-row"><span>Wickets</span><span style="color:var(--gold)">Umpire's call &middot; clipping leg stump</span></div>
+      <div class="transfer-status-row"><span>Edge detected</span><span style="color:var(--ink-faint)">None</span></div>
+    </div>
+    <div class="drs-verdict"><svg class="icon"><use href="#i-shield"/></svg>Umpire's call stands &middot; the on-field decision is upheld</div>
+    <div class="role-hint" style="margin-top:8px">A marginal call inside the umpire's-call margin always stands as given &mdash; the review is used either way.</div>
+    <button class="view-more-btn" onclick="closeDrsReview()" style="margin-top:10px">Continue</button>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="competition-profile-backdrop" onclick="if(event.target===this) closeCompetitionProfile()">
+  <div class="negotiation-modal" role="dialog" aria-modal="true" aria-labelledby="cprofile-title" style="max-width:480px">
+    <div class="negotiation-head">
+      <h2 id="cprofile-title" style="margin:0">Competition profile</h2>
+      <button class="modal-close" onclick="closeCompetitionProfile()" aria-label="Close">&times;</button>
+    </div>
+    <div id="cprofile-body"></div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="target-offer-backdrop" onclick="if(event.target===this) closeTargetOffer()">
+  <div class="negotiation-modal" role="dialog" aria-modal="true" aria-labelledby="target-offer-title" style="max-width:420px">
+    <div class="negotiation-head">
+      <h2 id="target-offer-title" style="margin:0">Make an offer</h2>
+      <button class="modal-close" onclick="closeTargetOffer()" aria-label="Close">&times;</button>
+    </div>
+    <div class="role-hint" style="margin-top:2px">An opening bid at <strong id="target-offer-name" style="color:var(--ink)"></strong>'s valuation of <strong id="target-offer-fee" style="color:var(--gold)"></strong>. Their club can accept, reject, or come back with a higher asking price.</div>
+    <button class="view-more-btn" style="margin-top:14px" onclick="sendTargetOffer()">Send offer</button>
   </div>
 </div>
 
@@ -3112,6 +3267,51 @@
 </div>
 
 <script>
+  var bowlingPlanDesc = {
+    "New Ball": "Full and around off stump, hunting the outside edge while the shine and the new-ball nip both last.",
+    "Corridor of Uncertainty": "A relentless fourth-stump line, inviting a drive that isn't really there.",
+    "Bounce Him": "Repeated short balls at a batter who's shown he doesn't fancy the short ball.",
+    "Choke the Scoring": "A packed ring and a tight line &mdash; concede nothing free, force the batter to manufacture his own risk.",
+    "Death Yorkers": "Full at the base of the stumps &mdash; the hardest ball to execute, and the hardest to hit when it lands.",
+    "Spin Containment": "Flat, quick through the air, straight lines &mdash; no room to use the feet.",
+    "Edge Trap": "A packed cordon and a probing line just outside off, daring the drive.",
+    "Cramp for Room": "Into the body, no width &mdash; take away the free-swinging arms.",
+    "Partnership Breaker": "A change of pace or angle aimed squarely at whichever batter looks set.",
+    "Tailender Attack": "Straight and full at the stumps &mdash; no room for a mis-hit to find the gap.",
+    "Angle the Crease": "Round the wicket to open up the stumps and the pads from a different angle."
+  };
+  var battingPlanDesc = {
+    "Counter-Attack": "Take the fight straight back to the bowling &mdash; the best defence against a plan is not letting it settle.",
+    "Target the Gap": "Work the ball into a specific gap the field has left open.",
+    "Avoid the Trap": "See off the plan being bowled at him rather than take the bait.",
+    "Attack the Short Side": "Load the shorter boundary &mdash; less bat speed needed to clear the rope.",
+    "Attack Pace": "Back himself against the quicks specifically, sit deeper in the crease.",
+    "Attack Spin": "Use the feet, don't let the spinner settle into a length.",
+    "Preserve Wicket": "Bat time above all else &mdash; the innings needs him there in twenty overs more than it needs quick runs now.",
+    "Rotate and Rebuild": "Anchoring for a couple of overs after the last wicket, then back to his own game."
+  };
+  var tacticsPhasePlans = {
+    "new-ball": { bowling: "New Ball", batting: "Preserve Wicket", field: "New Ball" },
+    "middle":   { bowling: "Choke the Scoring", batting: "Attack Spin", field: "Middle Overs" },
+    "death":    { bowling: "Death Yorkers", batting: "Attack the Short Side", field: "Death Overs" }
+  };
+  function describePlan(kind) {
+    var select = document.getElementById(kind + '-plan-select');
+    var desc = document.getElementById(kind + '-plan-desc');
+    var table = kind === 'bowling' ? bowlingPlanDesc : battingPlanDesc;
+    var value = select.value;
+    desc.innerHTML = '<strong>' + value + '</strong> &mdash; ' + (table[value] || 'A standing plan for this phase.');
+  }
+  function setTacticsPhase(btn) {
+    document.querySelectorAll('.phase-btn').forEach(function (b) { b.setAttribute('aria-selected', 'false'); });
+    btn.setAttribute('aria-selected', 'true');
+    var plan = tacticsPhasePlans[btn.dataset.phase];
+    document.getElementById('bowling-plan-select').value = plan.bowling;
+    describePlan('bowling');
+    document.getElementById('batting-plan-select').value = plan.batting;
+    describePlan('batting');
+    document.getElementById('field-phase-suffix').textContent = '· ' + plan.field;
+  }
   function filterPress(btn) {
     var group = btn.closest('.press-filter');
     group.querySelectorAll('.press-filter-btn').forEach(function (b) { b.setAttribute('aria-selected', 'false'); });
@@ -3473,6 +3673,94 @@
   }
   function openCompare() { document.getElementById('compare-backdrop').classList.add('open'); }
   function closeCompare() { document.getElementById('compare-backdrop').classList.remove('open'); }
+  var teamTalkLines = {
+    batting: {
+      assured: "Bat like you belong out there &mdash; you've done the work, now go and show it.",
+      demanding: "No soft dismissals today. Every wicket costs us something &mdash; make them earn it.",
+      calm: "Play each ball on its merits. There's no rush, the whole innings is in front of you."
+    },
+    bowling: {
+      assured: "Trust the plans we've set &mdash; they've been built around exactly this batting line-up.",
+      demanding: "Discipline with the ball from over one. A loose first over sets the tone the wrong way.",
+      calm: "Bowl your areas, let the pressure build. The wickets will come on their own."
+    },
+    fielding: {
+      assured: "Every run saved is a run they don't have &mdash; back yourselves in the field today.",
+      demanding: "Sharp in the field, no half-efforts. A misfield costs exactly as much as a bad ball.",
+      calm: "Stay switched on between deliveries. It's a long day &mdash; concentration wins it."
+    },
+    individual: {
+      assured: "Hamza, you're the senior man out there &mdash; the others will follow your lead.",
+      demanding: "Zain, you've been in fine form. Don't let one soft shot undo six good weeks.",
+      calm: "Rizwan, keep it simple behind the stumps today. You don't need to force anything."
+    }
+  };
+  function pickTeamTalkTone(group, tone) {
+    var log = document.getElementById('talk-log-' + group);
+    var placeholder = document.getElementById('talk-placeholder-' + group);
+    if (placeholder) placeholder.remove();
+    var toneLabel = tone.charAt(0).toUpperCase() + tone.slice(1);
+    log.insertAdjacentHTML('beforeend',
+      '<div class="convo-line you"><span class="who">You</span><div class="convo-bubble">' + toneLabel + '</div></div>' +
+      '<div class="convo-line him"><span class="who">Squad</span><div class="convo-bubble">' + teamTalkLines[group][tone] + '</div></div>');
+  }
+  var competitionProfiles = {
+    t20cup: {
+      name: "Pakistan T20 Cup", meta: "Domestic &middot; T20 &middot; est. 1999",
+      blurb: "The domestic season's headline event, contested by every first-class side over a group stage and a four-team playoff.",
+      champions: ["2025: Islamabad Icons", "2024: Karachi Kings", "2023: Lahore Lions", "2022: Karachi Kings"]
+    },
+    fcc: {
+      name: "Pakistan First-Class Championship", meta: "Domestic &middot; First-Class &middot; est. 1953",
+      blurb: "The oldest domestic competition in the country, and still the one a coach's Test-ready players are judged on.",
+      champions: ["2025: Lahore Lions", "2024: Multan Sultans", "2023: Islamabad Icons", "2022: Lahore Lions"]
+    },
+    lista: {
+      name: "Pakistan List A Cup", meta: "Domestic &middot; ODI &middot; est. 1980",
+      blurb: "A shorter, earlier-season one-day competition that doubles as the primary shop window for a 50-over call-up.",
+      champions: ["2025: Quetta Falcons", "2024: Islamabad Icons", "2023: Peshawar Zalmi", "2022: Karachi Kings"]
+    },
+    ppl: {
+      name: "Pakistan Premier League", meta: "Franchise &middot; T20 &middot; est. 2016",
+      blurb: "A six-franchise auction-assembled league drawing from the whole world's player pool, run entirely separately from the domestic pyramid.",
+      champions: ["2025: Lahore Lions", "2024: Multan Sultans", "2023: Lahore Lions", "2022: Karachi Kings"]
+    },
+    crescent: {
+      name: "The Crescent Trophy", meta: "International &middot; T20 &middot; biennial",
+      blurb: "A regional international trophy held by whichever side won the last series between the two nations, contested every two years.",
+      champions: ["2025: Pakistan", "2023: India", "2021: Pakistan", "2019: Pakistan"]
+    }
+  };
+  function openCompetitionProfile(key) {
+    var c = competitionProfiles[key];
+    document.getElementById('cprofile-body').innerHTML =
+      '<h3 style="margin:10px 0 2px">' + c.name + '</h3>' +
+      '<div class="role-hint" style="margin-bottom:0">' + c.meta + '</div>' +
+      '<p style="font-size:var(--fs-body);color:var(--ink-dim);line-height:1.5">' + c.blurb + '</p>' +
+      '<div class="eyebrow" style="display:block;margin-bottom:6px">Recent champions</div>' +
+      '<div class="notes-log">' + c.champions.map(function (line) {
+        return '<div class="notes-log-item"><span>' + line + '</span></div>';
+      }).join('') + '</div>';
+    document.getElementById('competition-profile-backdrop').classList.add('open');
+  }
+  function closeCompetitionProfile() { document.getElementById('competition-profile-backdrop').classList.remove('open'); }
+  var pendingOfferRow = null;
+  function openTargetOffer(name, fee, rowId) {
+    document.getElementById('target-offer-name').textContent = name;
+    document.getElementById('target-offer-fee').textContent = fee;
+    pendingOfferRow = rowId;
+    document.getElementById('target-offer-backdrop').classList.add('open');
+  }
+  function closeTargetOffer() { document.getElementById('target-offer-backdrop').classList.remove('open'); }
+  function sendTargetOffer() {
+    if (pendingOfferRow) {
+      var btn = document.querySelector('#' + pendingOfferRow + ' .view-more-btn');
+      if (btn) { btn.textContent = 'Offer sent'; btn.disabled = true; btn.style.opacity = '0.6'; }
+    }
+    closeTargetOffer();
+  }
+  function openDrsReview() { document.getElementById('drs-backdrop').classList.add('open'); }
+  function closeDrsReview() { document.getElementById('drs-backdrop').classList.remove('open'); }
   function closeNegotiation() {
     document.getElementById('negotiation-backdrop').classList.remove('open');
   }
@@ -3489,6 +3777,8 @@
   wireTabs('#panel-matchday .subtab-btn', 'sub-');
   wireTabs('#panel-player .subtab-btn', 'psub-');
   wireTabs('#panel-inbox .subtab-btn', 'inbox-');
+  wireTabs('#stage-teamtalk .subtab-btn', 'talk-');
+  wireTabs('#panel-records .subtab-btn', 'potr-');
 
   // Global search: opens ANY player's profile from the whole database, not just this squad -
   // available from every screen, unlike Match Day which only appears while a match is live.
@@ -3996,28 +4286,66 @@
 
   var STAFF_ROLE_LABELS = {
     'batting-coach': 'Batting Coach', 'mental': 'Mental Performance Coach',
-    'analyst': 'Data Analyst', 'mentor': 'Mentor'
+    'analyst': 'Data Analyst', 'mentor': 'Mentor', 'assistant': 'Assistant Coach',
+    'bowling-coach': 'Bowling Coach', 'fielding-coach': 'Fielding Coach',
+    'fitness': 'Strength &amp; Conditioning', 'chief-scout': 'Chief Scout',
+    'scout': 'Domestic Scout', 'physio': 'Head Physiotherapist'
   };
   var STAFF_VACANCY_CANDIDATES = {
     'batting-coach': [
-      { name: 'Sarfraz Bhatti', tierClass: 'tier-excellent', tierLabel: 'Excellent', wage: 80 },
-      { name: 'Noman Sheikh', tierClass: 'tier-good', tierLabel: 'Good', wage: 58 },
-      { name: 'Adeel Raza', tierClass: 'tier-average', tierLabel: 'Average', wage: 35 }
+      { name: 'Sarfraz Bhatti', tierClass: 'tier-excellent', tierLabel: 'Excellent', wage: 80, note: 'Built his name on turning promising top-order bats into genuine run-scorers; two of his former students now play internationally.' },
+      { name: 'Noman Sheikh', tierClass: 'tier-good', tierLabel: 'Good', wage: 58, note: 'A solid technical eye, best known for reworking a batter’s method against spin.' },
+      { name: 'Adeel Raza', tierClass: 'tier-average', tierLabel: 'Average', wage: 35, note: 'Early in his coaching career after a modest playing record — keen, but unproven at this level.' }
     ],
     'mental': [
-      { name: 'Dr. Ayesha Farooq', tierClass: 'tier-excellent', tierLabel: 'Excellent', wage: 65 },
-      { name: 'Zubair Khan', tierClass: 'tier-good', tierLabel: 'Good', wage: 45 },
-      { name: 'Hina Malik', tierClass: 'tier-average', tierLabel: 'Average', wage: 28 }
+      { name: 'Dr. Ayesha Farooq', tierClass: 'tier-excellent', tierLabel: 'Excellent', wage: 65, note: 'A sports psychologist with a decade in professional cricket; credited with several careers turned around after a loss of form.' },
+      { name: 'Zubair Khan', tierClass: 'tier-good', tierLabel: 'Good', wage: 45, note: 'Strong on pressure-handling work with young players making their first-team debut.' },
+      { name: 'Hina Malik', tierClass: 'tier-average', tierLabel: 'Average', wage: 28, note: 'Newly qualified, still building a track record in a professional dressing room.' }
     ],
     'analyst': [
-      { name: 'Faisal Chaudhry', tierClass: 'tier-excellent', tierLabel: 'Excellent', wage: 60 },
-      { name: 'Rabia Aziz', tierClass: 'tier-good', tierLabel: 'Good', wage: 42 },
-      { name: 'Omar Siddiqui', tierClass: 'tier-average', tierLabel: 'Average', wage: 26 }
+      { name: 'Faisal Chaudhry', tierClass: 'tier-excellent', tierLabel: 'Excellent', wage: 60, note: 'A meticulous opposition scout — his reports are trusted enough that bowlers rarely question the plan.' },
+      { name: 'Rabia Aziz', tierClass: 'tier-good', tierLabel: 'Good', wage: 42, note: 'Sharp with the numbers, still developing the communication side of the role.' },
+      { name: 'Omar Siddiqui', tierClass: 'tier-average', tierLabel: 'Average', wage: 26, note: 'Covers the headline names well; the tail of an opposition line-up gets a thinner read.' }
     ],
     'mentor': [
-      { name: 'Younis Baig', tierClass: 'tier-excellent', tierLabel: 'Excellent', wage: 50 },
-      { name: 'Asif Karim', tierClass: 'tier-good', tierLabel: 'Good', wage: 34 },
-      { name: 'Tariq Mehmood', tierClass: 'tier-average', tierLabel: 'Average', wage: 20 }
+      { name: 'Younis Baig', tierClass: 'tier-excellent', tierLabel: 'Excellent', wage: 50, note: 'A widely respected former captain — exactly the presence a dressing room’s existing mentoring bonds need strengthening around.' },
+      { name: 'Asif Karim', tierClass: 'tier-good', tierLabel: 'Good', wage: 34, note: 'A steady, well-liked former pro with real time for the squad’s younger players.' },
+      { name: 'Tariq Mehmood', tierClass: 'tier-average', tierLabel: 'Average', wage: 20, note: 'Willing, but a short playing career means less standing in the room than the role really wants.' }
+    ],
+    'assistant': [
+      { name: 'Jamal Akhtar', tierClass: 'tier-excellent', tierLabel: 'Excellent', wage: 90, note: 'A genuine head-coach-in-waiting — he’d step up and run the side well if it ever came to that.' },
+      { name: 'Rashid Latif Jr.', tierClass: 'tier-good', tierLabel: 'Good', wage: 62, note: 'Organised and well-liked by the squad, strongest on the day-to-day training schedule.' },
+      { name: 'Kabir Yousaf', tierClass: 'tier-average', tierLabel: 'Average', wage: 38, note: 'First assistant role after a long playing career — raw but willing.' }
+    ],
+    'bowling-coach': [
+      { name: 'Wahab Sultan', tierClass: 'tier-excellent', tierLabel: 'Excellent', wage: 78, note: 'Turned a modest county attack into genuine wicket-takers inside two seasons.' },
+      { name: 'Imran Qureshi', tierClass: 'tier-good', tierLabel: 'Good', wage: 56, note: 'Reliable technical work, particularly strong with pace bowlers rebuilding an action.' },
+      { name: 'Junaid Farooq', tierClass: 'tier-average', tierLabel: 'Average', wage: 33, note: 'Early in his second career; more comfortable with spin than pace so far.' }
+    ],
+    'fielding-coach': [
+      { name: 'Ali Rizwan', tierClass: 'tier-excellent', tierLabel: 'Excellent', wage: 55, note: 'An electric former fielder himself — the squad’s catching numbers have visibly improved under him elsewhere.' },
+      { name: 'Bilal Sheikh', tierClass: 'tier-good', tierLabel: 'Good', wage: 40, note: 'Sound drills, good with the young athletes in particular.' },
+      { name: 'Nauman Aziz', tierClass: 'tier-average', tierLabel: 'Average', wage: 24, note: 'Enthusiastic, but a short track record in a professional environment.' }
+    ],
+    'fitness': [
+      { name: 'Dr. Bilal Aslam', tierClass: 'tier-excellent', tierLabel: 'Excellent', wage: 70, note: 'A real reputation for cutting soft-tissue injury rates — the kind of hire a board notices in the medical bills.' },
+      { name: 'Sana Riaz', tierClass: 'tier-good', tierLabel: 'Good', wage: 48, note: 'Strong programming, well regarded by the squad’s quicker bowlers specifically.' },
+      { name: 'Fahad Chaudhry', tierClass: 'tier-average', tierLabel: 'Average', wage: 29, note: 'Competent generalist, no particular specialism yet.' }
+    ],
+    'chief-scout': [
+      { name: 'Waseem Butt', tierClass: 'tier-excellent', tierLabel: 'Excellent', wage: 85, note: 'A worldwide scouting network built over twenty years — few surprises get past him.' },
+      { name: 'Haroon Sheikh', tierClass: 'tier-good', tierLabel: 'Good', wage: 60, note: 'Strong on the domestic circuit specifically; the wider world is a thinner read.' },
+      { name: 'Kashif Nadeem', tierClass: 'tier-average', tierLabel: 'Average', wage: 36, note: 'A promising eye for a player, still building his own network of contacts.' }
+    ],
+    'scout': [
+      { name: 'Shahid Rauf', tierClass: 'tier-excellent', tierLabel: 'Excellent', wage: 45, note: 'Rarely misses a genuine talent in the domestic pyramid.' },
+      { name: 'Kamran Iqbal', tierClass: 'tier-good', tierLabel: 'Good', wage: 32, note: 'A solid, reliable domestic read, especially on batters.' },
+      { name: 'Danish Aziz', tierClass: 'tier-average', tierLabel: 'Average', wage: 19, note: 'New to the role, leans heavily on the headline statistics rather than his own eye so far.' }
+    ],
+    'physio': [
+      { name: 'Dr. Sana Malik', tierClass: 'tier-excellent', tierLabel: 'Excellent', wage: 62, note: 'Widely trusted across the domestic game — several players have specifically asked to be treated by her.' },
+      { name: 'Owais Farooq', tierClass: 'tier-good', tierLabel: 'Good', wage: 44, note: 'Good, steady work — nothing flashy, injuries get managed properly.' },
+      { name: 'Rida Khan', tierClass: 'tier-average', tierLabel: 'Average', wage: 27, note: 'Recently qualified, still building her own reputation in a first-team environment.' }
     ]
   };
   var staffCommitted = 375;
@@ -4028,9 +4356,10 @@
     document.getElementById('staff-recruit-title').textContent = 'Recruit: ' + STAFF_ROLE_LABELS[key];
     var list = document.getElementById('staff-recruit-list');
     list.innerHTML = candidates.map(function (cand) {
-      return '<div class="standing-row"><div><div style="font-weight:700;color:var(--ink);font-size:var(--fs-small)">' + cand.name + '</div>' +
-        '<div style="font-size:var(--fs-micro);color:var(--ink-faint)">Wage ask ' + fmtBoardAmt(cand.wage) + '/yr</div></div>' +
-        '<div style="display:flex;align-items:center;gap:10px"><span class="facility-tier-badge ' + cand.tierClass + '">' + cand.tierLabel + '</span>' +
+      return '<div class="standing-row" style="align-items:flex-start"><div><div style="font-weight:700;color:var(--ink);font-size:var(--fs-small)">' + cand.name + '</div>' +
+        '<div style="font-size:var(--fs-micro);color:var(--ink-faint)">Wage ask ' + fmtBoardAmt(cand.wage) + '/yr</div>' +
+        '<div style="font-size:var(--fs-caption);color:var(--ink-dim);margin-top:4px;max-width:260px;line-height:1.4">' + cand.note + '</div></div>' +
+        '<div style="display:flex;align-items:center;gap:10px;flex-shrink:0"><span class="facility-tier-badge ' + cand.tierClass + '">' + cand.tierLabel + '</span>' +
         '<button class="facility-request-btn" onclick="hireStaff(\'' + key + '\',\'' + cand.name + '\',\'' + cand.tierClass + '\',\'' + cand.tierLabel + '\',' + cand.wage + ')">Hire</button></div></div>';
     }).join('');
     document.getElementById('staff-recruit-backdrop').classList.add('open');
@@ -4048,6 +4377,14 @@
     staffCommitted += wage;
     updateStaffBudgetReadout();
     closeStaffRecruit();
+  }
+  function releaseStaff(roleKey) {
+    var row = document.querySelector('.staff-row[data-role="' + roleKey + '"]');
+    if (!row) return;
+    if (!confirm('Release this member of staff?')) return;
+    row.classList.add('vacant');
+    row.querySelector('.staff-row-main').innerHTML = '<span class="staff-name">Vacant</span><span class="staff-role-label">' + STAFF_ROLE_LABELS[roleKey] + '</span>';
+    row.querySelector('.staff-row-meta').innerHTML = '<button class="facility-request-btn" onclick="openStaffRecruit(\'' + roleKey + '\')">Recruit</button>';
   }
   function updateStaffBudgetReadout() {
     var el = document.getElementById('staff-budget-readout');
