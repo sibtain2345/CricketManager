@@ -10226,6 +10226,172 @@ is done" - plus a direct instruction to overhaul the colour palette for better v
     (1499/1499, 7/7, 15/15, 114/114, 843/843, 230/230), the single `<script>` block's braces/parens
     exactly balanced (347/347, 850/850), all 15 panel sections still present.
 
+### Major IA redesign: nav consolidation, Club/Recruitment hubs, Staff/World depth (this pass)
+
+The user's next directive, given verbatim (Roman Urdu/English) after Tier 1-4 shipped: the
+Tier 1-4 pass was judged too conservative - "redesign ka mtlb hai optimised banao intelligently
+cheezu ko optimise kro" (redesign means intelligently optimise things), not just extend what's
+already there. Ten concrete points followed: (1) consolidate Finance/Boardroom/Staff into one
+"Club" profile hub; (2) fold Academy into Squad as a sub-tab; (3) build a Recruitment hub
+absorbing Transfers + a real Player Database/Shortlists/Squad Planner; (4) real transfer
+negotiation dialogues, not tick/cross buttons; (5) a real world-wide browsable Staff Database,
+distinct from the recruit shortlist, mirroring the Player Database; (6) a Staff Profile screen
+(missing entirely - "every person should have one"); (7) Records restructured into Club/Ground/
+World, filterable; (8) World genuinely global, with browsable Nation and Club profiles, not just
+the domestic league; (9) sidebar-vs-navbar left explicitly as my own call; (10) cut what's
+genuinely redundant rather than just extending everything.
+
+**A real data-loss incident happened mid-pass, and is recorded honestly here rather than
+glossed over.** The mockup file was found at 0 bytes partway through this session - a prior
+large in-place Python rewrite crashed or was interrupted mid-write, and the file had never been
+verified non-empty afterward. Recovered cleanly from git (`git checkout -- docs/ui-mockup/
+cover-point-mockup.html`), losing only uncommitted work from that same session (the Squad+Academy
+merge and the sidebar edit), which was then redone. **The write discipline changed as a direct
+result**: every subsequent large edit in this pass writes to a `.tmp` file first, asserts its
+size is sane (a floor well above the file's known size, so a truncated write is caught before it
+ever overwrites the real file), then `os.replace()`s it into place - the same "verify before you
+trust a write" discipline this project's C# side already applies to shipped code, now applied to
+the mockup's own edit tooling. Large multi-KB heredoc scripts also proved unreliable in this
+shell (a quoting failure on a ~150-line `<<'EOF'` block) - every large script from this point on
+is written to a real `.py` file via the Write tool first, then run with `python3 <path>`, never
+piped through a heredoc.
+
+**Nav consolidated from 14 sidebar items to 11**: Portal, Squad, Tactics, Recruitment, Club,
+Player, Fixtures, International, Records, World, Inbox. `Match Day` stays deliberately off the
+persistent nav (it only exists as a takeover while a match is live, per the standing design).
+**The sidebar-vs-navbar call (point 9), made explicitly**: kept the sidebar. FM26's own reference
+videos use a persistent top navbar with mega-menu dropdowns, which was seriously considered - but
+this mockup's sidebar already supports collapse, and the real ask underneath "should this be a
+navbar" was "does the nav feel bloated", which the 14->11 consolidation solves directly. Swapping
+the shell itself would have been a large, purely cosmetic rewrite for no functional gain over
+what the consolidation already delivers - stated here as a deliberate call, not an oversight.
+
+**1/2 - Squad absorbs Academy.** `#panel-squad` gained a `First Team` / `Academy & Youth`
+subnav (`wireTabs('#panel-squad .subtab-btn', 'squad-')`); the Academy panel's full content
+(youth-setup card, this-year's-intake card, the tiered intake-assessment list, the "academy
+squad already developing" table) moved into the `squad-youth` subpanel verbatim, and the
+standalone `panel-academy` section + its sidebar button were deleted.
+
+**1 - the Club hub.** `#panel-club` replaces the three former panels with one, subnav'd
+`Overview / Finances / Staff / Boardroom`. The Overview subtab is new - three at-a-glance cards
+(Finances/Boardroom/Staff headline numbers) each with a `view-more-btn` that calls a new
+`openClubTab(name)` helper (finds the matching `.subtab-btn[data-subtab=name]` inside `#panel-club`
+and calls `.click()` on it, reusing `wireTabs`'s own click-handler logic rather than duplicating
+it) plus a compact facilities summary. The existing Finances/Staff/Boardroom bodies were moved in
+unmodified except one cross-link fix: Finances' "Open the Boardroom" button used to call
+`showPanel('boardroom')` (a panel that no longer exists) - now calls `openClubTab('boardroom')`.
+
+**3 - the Recruitment hub.** `#panel-recruitment` (renamed from `#panel-transfers`) gained a
+`Transfer Activity / Player Database / Shortlists / Squad Planner` subnav. Transfer Activity is
+the original Transfers content, untouched. Player Database is a real filterable
+(role-preset buttons, not yet wired to actual filtering logic) worldwide `table.squad`-style
+listing with a per-row "Shortlist" action (`addToShortlist(name)`, a stub that marks the button
+disabled - this is a static mockup, so "wiring" means the affordance exists and behaves
+sensibly, not that it persists across a reload). Shortlists lists the names added, each with a
+priority pill and a remove (`&times;`) button (`removeFromShortlist(btn)`, removes the `.staff-row`
+from the DOM). Squad Planner is FM26's own "position issues" pattern, cricket-translated: a
+`facility-tier-badge`-style status per broad role group (Well stocked / Adequate / Position
+issue) with a one-line reason underneath the ones that aren't fully healthy.
+
+**4 - real transfer negotiation dialogue.** The old `target-offer-backdrop` modal was a single
+"Send offer" button with no back-and-forth. Rebuilt into a genuine loop, mirroring the existing
+contract-negotiation modal's own re-suggest-until-settled shape (see the Contract-offer work
+noted earlier in this section) rather than inventing a second pattern: a `term-slider` (bounded
+0.5x-1.6x the target's stated valuation) plus a `.convo-log`/`.convo-line` exchange
+(`targetOfferLog(who, text)`, reusing the exact convo-bubble markup the team-talk stage already
+established). `sendTargetOffer()` reads the slider against the player's valuation each time it's
+clicked: >=1.05x accepts outright and marks the Recruitment row "Offer accepted"; 0.85x-1.05x
+draws a genuine counter-response ("close, but we want a bit more") and the dialogue stays open
+for another offer; below 0.85x is a lowball - tracked via `pendingOfferLowballStreak`, and after
+the third consecutive lowball the club ends the conversation outright ("we are not continuing
+this"). The two existing target rows (Ahsan Butt $220K, Hamid Rauf $95K) had their `onclick`
+changed from a formatted string (`'$220K'`) to a bare number (`220`) so the slider bounds could
+be computed from it directly.
+
+**5 - a real Staff Database.** Added as a third card inside Club > Staff, below the existing
+Coaching / Recruitment & Medical roster cards: a `table.squad`-shaped worldwide listing (name,
+role, current club, quality tier, wage) with a "View shortlist" action per row that opens the
+SAME `openStaffRecruit(roleKey)` modal a vacant role's own "Recruit" button already opens - the
+database is presented as the wider pool that shortlist is drawn from, not a second, disconnected
+system. Genuinely distinct from the Recruitment hub's Player Database (staff, not players) and
+from the existing 3-candidate recruit-vacancy popup (a real browsable table, not a fixed
+shortlist), per the user's own point 5 distinction.
+
+**6 - Staff Profile.** All 7 originally-filled staff rows in Club > Staff gained `class=
+"clickable"` + `onclick="openStaffProfile(this)"` (reusing the exact `.staff-row.clickable`
+convention the World screen's competition rows already established); the pre-existing
+`releaseStaff(roleKey)` release button on each row had its `onclick` changed to
+`event.stopPropagation();releaseStaff(roleKey)` so clicking Release doesn't also open the
+profile underneath it. `openStaffProfile(rowEl)` reads the row's own already-rendered DOM
+(name, role label, quality-tier badge, tenure text) rather than a second parallel data object -
+the profile can never disagree with the roster row it was opened from. A new
+`#staff-profile-backdrop` modal (the same `.negotiation-modal` shell every other modal in this
+file uses) shows Overview (quality, tenure, nationality, a philosophy note), Career (a short
+dated history log, reusing `.notes-log`), and Contract (salary, end date) - deliberately not
+sub-tabbed like the full Player Profile, to keep a staff profile genuinely lighter than a
+player's, matching how much less data actually exists about a staff member in this project's
+own C# domain model (`StaffMember` has far fewer fields than `Player`).
+
+**7 - Records restructured.** `#panel-records` gained a `Club / Ground / World` subnav
+(`wireTabs('#panel-records nav[aria-label="Records views"] > .subtab-btn', 'records-')`, deliberately
+scoped by the nav's own `aria-label` rather than a bare `.subtab-btn` selector, since the
+pre-existing "Player of the Round" card inside Club has its own nested Match-Report/Discipline-
+Report subnav using the identical class - a plain selector would have wired both navs to the
+same, wrong `panelPrefix`; the two `wireTabs` calls now target their own nav by `aria-label` so
+neither clobbers the other). Club keeps everything that was already there (Trophy Cabinet, Player
+of the Round, Match Records, Career Leaderboards, Hall of Fame) untouched. Ground is new - Jinnah
+Stadium's own record book (highest/lowest total, highest chase, best individual/bowling figures,
+its own chronological honour board), with a format filter dropdown. World is new - the genuine
+world record book across every competition/club the scouting network covers (highest T20 total,
+most career runs/wickets worldwide, a World Hall of Fame), also filter-dropdown'd. Both new tabs'
+filter `<select>`s are presentational only in this static mockup (no filtering logic wired) -
+stated plainly rather than implied to be functional.
+
+**8 - World genuinely global.** `#panel-world` gained a `Competitions / Nations / Clubs` subnav.
+Competitions keeps the existing league-table + competition-directory content unchanged. Nations
+lists six real nations (Pakistan plus India/Australia/England/New Zealand/Netherlands - the same
+set the International screen's ICC rankings already established, for cross-screen continuity)
+as clickable rows opening a Nation Profile. Clubs lists all six Pakistan T20 Cup sides (the same
+canonical six used everywhere else in the mockup) as clickable rows opening a Club Profile. Both
+profile types reuse the EXISTING `competition-profile-backdrop` modal shell (the same one
+`openCompetitionProfile` already used) rather than a third modal - `openWorldProfile(kind, key)`
+looks up a `nationProfiles` or `clubProfiles` data object and repopulates the same `#cprofile-title`/
+`#cprofile-body` elements, keyed generically enough that the one modal now serves three related
+"browse an entity's history" moments (competition/nation/club) instead of three near-duplicate
+ones. **A deliberate scope cut, stated honestly**: nation/club rows use plain text + colour, not
+the real CC2014 flag assets already embedded elsewhere on the International screen - re-extracting
+those large base64 blobs for six more rows was judged not worth the token/time cost against
+everything else in this pass, and this is recorded as a real, conscious simplification rather
+than silently dropped or misrepresented as "flags everywhere."
+
+**9 - decided, see above** (kept the sidebar; consolidated the count instead of changing the
+shell).
+
+**10 - cutting redundancy.** The consolidation itself IS the cut: Finance/Boardroom/Staff as
+three separate top-level destinations, and Academy as a fourth thing entirely separate from
+Squad, were exactly the kind of "sidebar bloat FM26 doesn't have" the user's directive named
+directly ("kuch screen sidebar me agr fazool hain... FM26 ka yhi kaha tha").
+
+**Deliberately still open, tracked honestly rather than silently dropped:**
+- Franchise-specific auction screens (a live bidding room, retention/RTM UI, the EOI-conversion
+  meeting) - confirmed needed eventually in an earlier pass, still deferred; this pass's
+  Recruitment/Auction work only extended the domestic-transfer side.
+- Filter buttons/dropdowns across the new Player Database, Squad Planner and Records Ground/World
+  tabs are presentational only - no live filtering JS wired, stated per-item above rather than
+  implied.
+- Real flag assets on World's new Nations/Clubs rows (see point 8's own note).
+- The Records cross-cutting popup sweep from the earlier Tier 3-4 pass (trophy-cabinet/leaderboard
+  rows pointing at named players with no real profile behind most of them) is still the same
+  honestly-scoped gap it was before - unchanged by this pass.
+
+**Verification**: the same structural sanity discipline as every prior pass, re-run after every
+edit in this session (not just at the end) given the data-loss incident above - `<div>`/`<table>`/
+`<tr>`/`<span>`/`<svg>`/`<nav>` balance checked and confirmed exactly matched at each checkpoint,
+the single `<script>` block's brace/paren balance likewise; a direct nav-integrity check
+(every sidebar `data-tab` has a matching `panel-<name>` id, and vice versa apart from the
+deliberately-orphaned `matchday`) confirmed clean at the end. Final state: 12 panel sections
+(down from 15 pre-this-pass), file size ~2.55MB.
+
 ---
 
 ## CONSOLIDATED DEFERRED-ITEMS REGISTER (maintained - the single source of truth)
