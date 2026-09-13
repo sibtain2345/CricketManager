@@ -19,13 +19,24 @@ mockup's own history lives in dated entries near the end of that file (search fo
 UI MOCKUP" and read forward from there — it's a long, detailed, chronological log of every
 screen/feature built, every correction the user made, and the reasoning behind each).
 
-## The live artifact
+## The live artifact — NOTE: this does NOT carry over to the new account
 
-Published at: `https://claude.ai/code/artifact/0e9296b7-4f1d-4fb7-8904-e40b644ddb50`
-(currently **Version 61** as of this handoff). In the new session, before publishing any
-further update, **read this artifact URL first** (`Artifact` tool, `action: "read"`) — the
-publish flow refuses an update from a session that hasn't read the current live version.
-Then republish the same local file path to the same URL to push any further edit.
+Was published at `https://claude.ai/code/artifact/0e9296b7-4f1d-4fb7-8904-e40b644ddb50`
+(Version 61 as of this handoff), owned by the account this session ran under. **Confirmed
+after this handoff doc was written**: a background notification reported the artifact
+watch stopped because "no such artifact for this account" — artifacts are per-account, so
+the new account will not be able to read or update that URL at all. This is expected, not
+a problem — nothing is lost, since the mockup's actual source of truth is the committed
+HTML file in this git repo (`docs/ui-mockup/cover-point-mockup.html`), and the artifact was
+always just a published copy of it.
+
+**In the new session**: do not attempt to read or republish to the old URL — it will fail.
+Instead, publish a **brand-new** artifact (`Artifact` tool, `file_path` only, no `url`
+param) from the current committed file. Ask the user first whether they want a fresh
+artifact published now or only once there's a new change to show — don't publish
+proactively just to "restore" the old one, since publishing is a visible, shareable action.
+Once a new artifact exists, follow the normal update discipline from there (read before
+each future republish, same URL each time).
 
 ## The editing discipline (follow this exactly — it's load-bearing)
 
