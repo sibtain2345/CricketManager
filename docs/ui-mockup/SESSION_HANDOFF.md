@@ -59,21 +59,41 @@ Then republish the same local file path to the same URL to push any further edit
    Always use the `Write` tool to create the `.py` file, then run it with
    `python <path>` (not `python3` — this environment's Python is invoked as `python`).
 
-## Content-never-borrowed discipline (Principle 1/2 — see CLAUDE.md's own UI-mockup section)
+## Borrow-and-adapt discipline (Principle 1/2 — CORRECTED 2026-09-13, see CLAUDE.md's UI-mockup section)
 
 Two real reference games were extracted and catalogued (`docs/external_game_reference/`,
 with its own `GUIDE.md`): Cricket Coach 2014 (CC2014) for pixel-level UI chrome/icons, and
 Football Manager 23 (FM23) for real layout-XML structural patterns and a design-vocabulary.
-**Principle 1**: no CC2014/FM23 *text*, narrative, or game logic is ever borrowed — every
-plan name, stat, news line, bio, dialogue and piece of copy in the mockup is this project's
-own, generated from what the real C# domain services would actually produce. Only three
-specific *visual* things are genuinely reused: fielder/position markers on the match view,
-real fielding-position *names* (labelling this project's own `FieldingPositions` catalog),
-and generic ground-type graphics. **Principle 2**: FM23 supplies UI *structure* (layout
-patterns, tab/subnav conventions, information density), CC2014 supplies the pixel *finish*
-(buttons, panel chrome, icons, backgrounds). Never invent a mechanic that has no real
-grounding in the actual C# domain code — when in doubt, verify against the domain services
-named in CLAUDE.md's Phase write-ups before building a UI affordance for it.
+
+**The rule as of the end of this session (the user's own correction, verbatim):**
+"content borrow kr skte ho layout kr skte ho saara mechanism kr skte ho but usko modify
+cricket k hisaab se krna hai like game k hisaab se" — you CAN borrow content, layout, and
+the whole mechanism from CC2014/FM23. The requirement is that it gets genuinely **modified
+and adapted for cricket** — reshaped into this project's own cricket terms, vocabulary,
+attributes and domain events — not left as football content, not pasted verbatim. A
+borrowed FM interaction pattern or a CC2014 wording style is a legitimate starting point;
+shipping it un-adapted, or leaving anything recognizably football-shaped, is not.
+
+This **supersedes** the earlier, stricter reading that operated through most of this
+sub-track's build history ("no CC2014/FM23 text, narrative, or game logic is ever
+borrowed, only three specific visual things are") — do not apply that older, stricter rule
+in the new session; it's kept in CLAUDE.md's dated history only as a record of what was
+true up to this point, not as the current standing rule.
+
+**What does NOT change**: the separate, still fully strict **Phase-18 exclusion list** —
+real player names, real historical records/statistics, real per-country name pools, real
+venue names. That restriction is unrelated to the borrowing question above; it exists
+because that specific data is a real-world factual claim that goes stale, not because of
+whose IP it originally is. Keep treating it exactly as strictly as before.
+
+FM23 still supplies UI *structure* (layout patterns, tab/subnav conventions, information
+density) and CC2014 still supplies the pixel *finish* (buttons, panel chrome, icons,
+backgrounds) — that split (the old "Principle 2") is unchanged and is now simply one
+legitimate instance of the broader borrow-and-adapt rule above, not the only sanctioned
+form of borrowing. Still verify any borrowed mechanic against the real C# domain services
+named in CLAUDE.md's Phase write-ups before building a UI affordance for it — "adapted for
+cricket" means grounded in what the actual simulation does, not just cricket-flavoured copy
+over an unmodified football mechanic.
 
 ## Domain-grounding discipline — the pattern that matters most for this handoff
 

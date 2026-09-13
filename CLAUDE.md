@@ -9774,13 +9774,24 @@ is under active development as a single-file HTML mockup at `docs/ui-mockup/cove
 same discipline this file already documents for the C# side's own throwaway build scripts; those
 scripts are NOT committed once used). Real reference assets live in `docs/external_game_reference/`
 (Cricket Coach 2014's bitmap chrome/icons and Football Manager 23's real layout-XML/design-vocabulary,
-both catalogued in that directory's own `GUIDE.md`) under a strict two-principle discipline recorded
-in the session's plan file: **Principle 1** - no CC2014/FM23 text, narrative, or game logic is ever
-borrowed, only three specific visual things are (fielder/position markers, real fielding-position
-names, ground-type graphics) - every plan, dialogue, stat and line of copy is this project's own,
-driven by the domain events this project's own C# services would actually produce. **Principle 2** -
-FM23 supplies UI *structure* (layout patterns, information density, widget naming), CC2014 supplies
-the pixel *finish* (buttons, panel chrome, icons).
+both catalogued in that directory's own `GUIDE.md`) under a two-principle discipline recorded
+in the session's plan file: **Principle 1** - content, layout AND mechanism from CC2014/FM23 may
+all genuinely be borrowed as a starting point - the earlier, stricter reading ("no CC2014/FM23 text,
+narrative, or game logic is ever borrowed, only three specific visual things are") was the operating
+rule through most of this sub-track's build history and is **corrected as of 2026-09-13, on the
+user's own direct instruction**: "content borrow kr skte ho layout kr skte ho saara mechanism kr
+skte ho but usko modify cricket k hisaab se krna hai" - you can borrow content, layout, the whole
+mechanism, but it has to be modified for cricket, for the game it actually is. The bar is genuine
+cricket-adaptation, not football-content left untouched or pasted verbatim - a borrowed FM
+interaction pattern or CC2014 wording has to be reshaped into this project's own cricket terms
+(its own attributes, its own domain events, its own vocabulary) before it ships, not merely relabelled.
+**This does NOT touch the separate, still-binding Phase-18 exclusion list** (real player names, real
+historical records, real per-country name pools, real venue names) - that restriction exists because
+that specific data goes stale/is a real-world factual claim, a different concern from "is this
+project's own IP," and stays exactly as strict as before. **Principle 2** (unchanged) - FM23 supplies
+UI *structure* (layout patterns, information density, widget naming), CC2014 supplies the pixel
+*finish* (buttons, panel chrome, icons) - now simply one legitimate special case of the broader
+Principle 1 rather than the only sanctioned form of borrowing.
 
 **Screens built so far**: Portal, Squad, Tactics (fixture/analysis context, Full Squad + ordered
 Lineup tables, Roles, bowling/batting plan dropdowns, field placement, pitch preparation), Transfers
