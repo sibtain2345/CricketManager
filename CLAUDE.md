@@ -11410,6 +11410,131 @@ File size ~2.72MB.
 
 ---
 
+### 2026-09-13: International/Franchise staff, board relationships, national squad announcement, central contracts, franchise retention & trade, training camps, calendar — then a close-out pass on eight remaining gaps
+
+A large batch of work covering most of the domain-facing gaps this UI sub-track still had open,
+worked through the standard Research → Plan → Implement discipline before building (real
+C#-domain verification against `StaffRole`, `NationalSelectionService`, `NationalPoolService`,
+`CentralContractService`, `FranchiseRetentionService`, `FranchiseTradeService`,
+`TrainingCampService`, `WorldClockService`'s calendar machinery). The user's own directive was
+large and explicit; where it conflicted with what the real domain actually supports, the honest,
+domain-grounded version was built instead and the correction reported, not silently substituted.
+
+**Backroom staff for International and Franchise** — both previously had no real hiring surface.
+International now has a Selection Panel (chief selector + selectors, sourced from ex-cricketers
+only per `NationalPoolMeetingService`'s real convention, no hire button since a national panel is
+staffed differently from a club) plus ordinary specialist coaching staff on the same hire/release
+machinery Club already had, with deliberately distinct role keys (`intl-*`) so the shared
+`data-role` lookup used by `hireStaff`/`releaseStaff`/`openStaffRecruit` can never collide with
+Club's own keys. Franchise got a real Campaign Staff section, replacing a stale disclaimer that
+had claimed "no permanent backroom staff" — correct for the OLD assumption, wrong against the real
+`FranchiseCoachService` model (year-round, campaign-bound, senior-relationship coaching, corrected
+in an earlier pass) which this stale copy had never caught up with.
+
+**A board relationship layer for both** — reactive campaign review, explicitly NOT budget
+negotiation for International (matching the user's own correction: international boards don't
+negotiate a budget with the coach the way a domestic board does).
+
+**Universal player/staff click-through, fixed and extended.** The user's own direct bug report
+("player profile isn't wired anywhere a name appears, staff either") traced to two real gaps:
+`hireStaff()`/`releaseStaff()` never added or removed the `.clickable`+`onclick` attributes a
+freshly-hired or just-vacated row needs, and five further click-through gaps (Match Day Scorecard,
+the retention table, the National Pool list, the World screen's nation-profile contracts list,
+Recruitment's Shortlist rows) found by a systematic audit rather than fixed one at a time as
+reported. `openPlayerFromRow()` was extended to fall back through `.staff-name`/`.duty-player` so
+rows built for staff-shaped markup didn't need restructuring to become player-clickable.
+
+**A real national squad announcement system**, format-scoped (Test/ODI/T20I genuinely
+independent — announcing a T20I squad never touches the Test or ODI ones), with a real National
+Pool + call-up/drop flow, three call-up entry points (Tactics action area, right-click context
+menu, Player Profile), a submit-with-diff-from-previous flow, a mid-series-replacement mechanic
+for home series, and illustrative cross-country squad-announcement news (both the human's own
+announcements and an AI country's, clickable through to the full squad and its diff).
+
+**Central contracts** — expanded from 3 illustrative rows to the full, real 29-player list (Tier
+A: 6, Tier B: 9, Tier C: 14) across all 6 established domestic teams, reusing already-established
+names throughout for continuity; a petition mechanic (`openContractPetition`) framed honestly —
+heard and reasoned about, never an instant grant, since the real annual review stays the actual
+deciding mechanism.
+
+**Franchise retention and trade built as genuine, honest features** — two places where the
+user's literal ask conflicted with the real domain and the correction was reported rather than
+silently complied with or silently ignored: retention is date-gated but explicitly NOT the same
+day as the auction (matching `FranchiseRetentionService`'s real cadence, not the user's original
+phrasing); trade is a real pick-your-own-player-and-offer-something-back flow with a live 45%
+value-gap veto (`renderTradeGap`), not a fixed pre-decided swap.
+
+**Training camps + an individual per-player training focus**, and a **calendar screen built from
+scratch** — a genuine, real-`Date`-math month grid (verified against a direct `node -e` check
+that "27 Mar 2027" really is the Saturday the frozen topbar already claimed, rather than trusted
+on sight) with identity-aware event dots and deep-link actions, plus a `franchiseButtonStage`
+state machine (`eoi`/`preauction`/`auction`/`trade`) driving the Franchise action button through
+all four real stages, demonstrable by jumping from a specific calendar event. Two real bugs found
+and fixed along the way: `exitCalendarMode()` was unconditionally calling `showPanel("portal")`
+after a calendar event's own deep-link had already navigated elsewhere, silently overriding it;
+and two `CALENDAR_EVENTS` entries had literal double-backslash JS-string escapes
+(`\\\\u2014`, `today\\\\'s`) left over from an earlier `Edit` call, breaking `node --check` until traced
+and fixed.
+
+**Then a close-out pass on the eight items this whole batch had left as "what's remaining":**
+
+1. **A confirmed, real duplicate-id bug fixed.** `applyPlayerProfileData` was re-creating a
+   second `id="player-contract-until"` element inside `wageEl.innerHTML` every time it ran,
+   colliding with the original static header span that already owned that id. Fixed by dropping
+   the id from the dynamically-generated span (`wageEl.querySelector('.vitals-sub')` is what
+   nothing actually needed anyway — the variable was unused).
+2. **The "Faisal Nadeem" name collision, found and flagged in an earlier pass, now fixed.** The
+   retired World Hall-of-Fame opening batter (Multan Sultans, 2008–2023) shared a name with the
+   active international front-line spinner also at Multan Sultans — two different people. Renamed
+   the retired legend to "Zaheer Anwar" across its 4 occurrences (the Hall of Fame entry plus 3
+   ground/world record rows), leaving the active spinner's ~15+ references untouched.
+3. **World screen Nation/Club profiles converted from a modal to a real full-screen redirect**,
+   following the exact precedent already established for Staff Profile's own earlier modal→screen
+   conversion: a new `panel-world-profile` section inside `.shell` (so `showPanel`'s hide-query
+   handles it like any ordinary sidebar destination), a breadcrumb whose first link returns to
+   `showPanel('world')`, and `openWorldProfile(kind, key)` rewritten to populate it and call
+   `showPanel('world-profile')` instead of opening `competition-profile-backdrop`. The six
+   Competitions-directory profiles (t20cup/fcc/lista/ppl/crescent + the two new leagues below)
+   were never flagged as the problem and stay a modal, matching several other lightweight lookups
+   in this file.
+4. **Records screen click-through closed.** The two-level record drill-down's dynamically
+   rendered tables (`openRecordType`) now wire every singular "Player" column cell through to
+   `openPlayerFromRow` (a joint "Players" partnership cell like "Malik & Khan" is deliberately
+   left alone — it names two people at once, no single row to redirect to); the "Player of the
+   Round" highlight (Hamza Malik) is wired the same way.
+5. **Attribute-tile click-through built.** All 19 attribute rows on the Player Profile screen are
+   now clickable, opening a real per-attribute trend/breakdown popup grounded in this project's
+   own domain mechanics (`TrainingService`'s focus system, `PlayerAgeingService`'s four
+   different-schedule decline curves, the scout's own estimate-not-truth read already stated in
+   the grid's caption) rather than invented flavour text — a genuine "why does this number say
+   what it says" answer for every one of the 5 attribute groups.
+6. **A second and third franchise league added** (the real C# domain supports IPL/PSL/CPL/SA20/
+   BBL-shaped leagues; this mockup's fictional world only ever modelled one). Deliberately scoped
+   LIGHT rather than duplicating the entire Franchise menu's auction/retention/trade machinery per
+   league — two more genuine directory entries with their own profile (Indian Masters League,
+   hosted by India; Southern Blaze League, hosted by Australia), team names checked against real
+   BBL/IPL rosters to keep clear distance from any real trademark, per this project's own
+   "never borrow real content" discipline.
+7. **An interactive annual central-contract review moment built.** A new "Review this year's
+   announcement" button opens a real diff against the already-shown Tier A/B/C lists — a
+   promotion, a demotion, a new inclusion and a genuine drop, each with a one-line reason,
+   reusing the existing squad-news-diff modal shape rather than inventing a new one.
+8. Item 1 (franchise action-button date-cycling) and item 2 (Player Profile per-player data) were
+   both already complete from earlier in this same batch — item 2's only remaining defect was the
+   duplicate-id bug closed in point 1 above.
+
+**Verification, every step**: the established write-verify-then-replace discipline (standalone
+throwaway Python scripts, `must_replace`/`must_replace_all` with existence+uniqueness assertions,
+write-to-`.tmp`-then-`os.replace`), followed by the full structural suite after every script — tag-
+count parity (`div` 2223/2223, `table` 31/31, `tr` 169/169, `span` 1366/1366, `svg` 360/360, `nav`
+14/14, `section` 21/21, `button` 314/314 final), a stack-based div-nesting scan (0 unclosed, 0
+extra closes throughout), a duplicate-id scan (clean at every checkpoint, including the one that
+was NOT clean before this pass started), and `node --check` on the extracted trailing `<script>`
+block (`NODE SYNTAX OK` every time, script braces 909/909, parens 1984/1984 final). File size
+~2.75MB.
+
+---
+
 ## CONSOLIDATED DEFERRED-ITEMS REGISTER (maintained - the single source of truth)
 
 This table is the index. Every item is either NOW (the wiring & tech-debt pass above), a

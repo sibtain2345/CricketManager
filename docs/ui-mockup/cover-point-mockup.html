@@ -367,6 +367,10 @@
   .tile.clickable { cursor: pointer; transition: transform .15s, box-shadow .15s; }
   .tile.clickable:hover { transform: translateY(-2px); }
   .duty-row.clickable { cursor: pointer; }
+  .attr-row.clickable { cursor: pointer; border-radius: 6px; transition: background .12s; }
+  .attr-row.clickable:hover { background: var(--surface-2); }
+  .bio-line.clickable { cursor: pointer; border-radius: 6px; transition: background .12s; }
+  .bio-line.clickable:hover { background: var(--surface-2); }
   .calendar-nav-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
   .calendar-weekday-row { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; margin-bottom: 4px; }
   .calendar-weekday-row span { text-align: center; font-size: var(--fs-micro); color: var(--ink-faint); text-transform: uppercase; letter-spacing: .04em; font-weight: 700; }
@@ -3071,30 +3075,30 @@
         <h1 id="player-name-h1">Hamza Malik</h1>
         <div class="role-line" id="player-role-line">Top-order batter &middot; Right-hand bat &middot; 27 years old</div>
         <div class="player-header-meta">
-          <img class="flag-icon sm" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEwAAAAiCAYAAAD1aT8BAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAUZSURBVGhD7ZltaFZlGMfPp9JBGViBpmSrfKmQ4sEInUUNdbWRM4vlJDMlQVKyGiXVUIwSQ/pQsy9pNEFJjEg0EIQWiiaElWFJRgp+EL/EYtL6eHX9rvMcO5zuPTvnPvfBAv/wZ8+e3a//+7qvl3uRQq6yECPJYuWGdTKj6yGJltxdLR+5QVa+u0Z2HtwtTZ3NEj05zd0uS+1XW1WTsxfO1Vcc48z5M9Lz4evS8lK7THi2Jtd0zXD39+VIgh0YOCjj598p47pr7o4h+Pitcv3CKbbJF7etl2j+eHe7LB+bIJO67pLvf/lOLvx+0cT+5tRxW/fWPR9IVNNNaRtn37IcSTAwr6dTxrZNlGjpfe7OZTlnjLy5Y5PNNXftgniTeeZSoTs2rbC+05fPMoGmLrlHhob/lL2HvzDrc/YLwUaC/fjbKbm2pUmiRXpVQouGdbVPlNNqXYOX/og3rt8VmufBsbE4XGP93PvRBtl/9MtYeNbs6lOWjQQDbT0L44W5OpehbnRRb7cM/zUsZy+el+Zn7i0mGCJB2kP9jA+c++oT5reC+66Eown21YkBaVpwY7wZ1wC+1EPo27fd5kAwLwvLEgFDrzPL0QQDRLFo3k3uAXyom+I6Hjl5zMYfHBqUWS+05vdhV5J5BPvp3M8WlYL5BY2GWBSWlaBz47Kwh1IV8wgGtux+L95QCAtQ/0VUxLIS9PZvyZ9WBCJ+rnDalFcwNjdzVUuYa6OCkbKQBiT4+uSReGz8kKtPaOpcrZrctr/xdLE58woGLMfR3Mk5UBGqw29bv9giZAI+k50Hs+LRqIfW99m22D9zUK42LhYRDNiJkGaU2ZTjSgI7kCpSmDRZt1590hh8qO2nSsEoRy6nGb6iJU4/UwdiZVhe6QMZjbMj2b5/h815+3MPVCsYoLgtdTUzaUUaJ379QW7pmFTd1VSx8F0cDnNRyxaK/j6CYRnTlmpmXmZT+JB64prFzkOfxiVZaNHUclk3xT7Ah41prZdWrvYu+ggGMGk27R3VtG9SGrnA+Nc9PC4WzdW/KHU+xMKqEtj1Lzq+r2CXhof+qTN9rKB+LY+f/rY+4r9BIc0rhB2Mb8mDf9L+iEOhn4DnoJs7byuejPsKBqgzzaR9A4CKTVhvBK7PsneeN3HtcEhu0+Ixb5pJPYnI2p4KhaQ7a8mWTvgkymUEAzaxbwDQ0yXiJo9/jYC1LX9rhUx5amosXANyiERhnnt4osqCJNn7QaGsYOQykxffUSw0J8Qi1BIovNNZfyNQ1+46tMcidbfWn7gFoh5XDkvc+MlmEzddp6bB25sV+ojL/K51NWJZwcDbu7aWc85qoavf76mPlh9cMwRIOFIAScNuBE/YrnXkYQjBCAD3r9FT83XMUC0tea6uAohp+SOWhaP3sS4YQjCwd+Dz+P3fNUke4qzVSl/uey2XpRQBJRgWbIGAeXzFgqEEA/iU0smmWsCjr3RYCRYCpC2MZ2K55ivKkIIRkSz8+6YZCVU0xuGKpnOnIqAfAcDWE0osGFIwQCg3p1pGMPoSdTUYkEdxnSzyaUnW6Lryd9rR3l6ISXcYp8xasgwtGOHcFsuphlhoPVPnJ7kVzzEI0tu/+TL5ne/tHym4hHp753hlGVow8PGB/vh0fetMF4lsiRgjkb8nETCkVaVZhWCkGTxB2yaqWjiHkaarTRWsQjBAnRkkAPzXWJVgwLJqEkXXxP9XVikYLw3NXdPDR6oryUSwq8zLSP4Gj0I/0moAgEQAAAAASUVORK5CYII=" alt="PAK"> Pakistan <span class="meta-divider">&middot;</span> <span class="player-club-crest-sm"></span>Islamabad Icons <span class="meta-divider">&middot;</span> Uncapped
+          <span id="player-header-meta-text">Pakistan <span class="meta-divider">&middot;</span> Islamabad Icons <span class="meta-divider">&middot;</span> Uncapped</span>
         </div>
       </div>
       <div class="player-header-vitals">
         <div class="vitals-item">
           <div class="vitals-label">CA</div>
-          <div class="star-row mini" aria-label="4 of 5"><svg class="icon filled"><use href="#i-star-fill"/></svg><svg class="icon filled"><use href="#i-star-fill"/></svg><svg class="icon filled"><use href="#i-star-fill"/></svg><svg class="icon filled"><use href="#i-star-fill"/></svg><svg class="icon empty"><use href="#i-star-line"/></svg></div>
+          <div class="star-row mini" id="player-ca-stars" aria-label="4 of 5"><svg class="icon filled"><use href="#i-star-fill"/></svg><svg class="icon filled"><use href="#i-star-fill"/></svg><svg class="icon filled"><use href="#i-star-fill"/></svg><svg class="icon filled"><use href="#i-star-fill"/></svg><svg class="icon empty"><use href="#i-star-line"/></svg></div>
         </div>
         <div class="vitals-item">
           <div class="vitals-label">PA</div>
-          <div class="star-row mini" aria-label="an estimated range, 3 and a half to 5"><svg class="icon filled"><use href="#i-star-fill"/></svg><svg class="icon filled"><use href="#i-star-fill"/></svg><svg class="icon filled"><use href="#i-star-fill"/></svg><svg class="icon range"><use href="#i-star-fill"/></svg><svg class="icon range"><use href="#i-star-fill"/></svg></div>
+          <div class="star-row mini" id="player-pa-stars" aria-label="an estimated range, 3 and a half to 5"><svg class="icon filled"><use href="#i-star-fill"/></svg><svg class="icon filled"><use href="#i-star-fill"/></svg><svg class="icon filled"><use href="#i-star-fill"/></svg><svg class="icon range"><use href="#i-star-fill"/></svg><svg class="icon range"><use href="#i-star-fill"/></svg></div>
         </div>
         <div class="vitals-item">
           <div class="vitals-label">Est. value</div>
-          <div class="vitals-value">$340K</div>
+          <div class="vitals-value" id="player-est-value">$340K</div>
         </div>
         <div class="vitals-item">
           <div class="vitals-label">Wage</div>
-          <div class="vitals-value">$4,200/wk<span class="vitals-sub">until May 2028</span></div>
+          <div class="vitals-value" id="player-wage-value">$4,200/wk<span class="vitals-sub" id="player-contract-until">until May 2028</span></div>
         </div>
       </div>
       <div class="player-header-status">
-      <span class="pill first"><svg class="icon sm"><use href="#i-check-circle"/></svg>First choice</span>
-      <span class="pill second"><svg class="icon sm"><use href="#i-star-line"/></svg>Wanted by 2 clubs</span>
+      <span class="pill first" id="player-status-pill"><svg class="icon sm"><use href="#i-check-circle"/></svg>First choice</span>
+      <span class="pill second" id="player-interest-pill"><svg class="icon sm"><use href="#i-star-line"/></svg>Wanted by 2 clubs</span>
       <div class="player-actions-wrap">
         <button class="view-more-btn" style="margin-top:0;width:auto;padding:6px 12px;margin-right:8px" onclick="openCompare()">Compare</button>
         <button class="player-actions-btn" id="player-actions-btn" aria-expanded="false" onclick="togglePlayerActions()">
@@ -3154,37 +3158,37 @@
           <div class="attr-grid">
             <div class="attr-group">
               <h3>Batting</h3>
-              <div class="attr-row"><span class="aname">Technique</span><span class="attr-num elite">18</span></div>
-              <div class="attr-row"><span class="aname">Power hitting</span><span class="attr-num strong">14</span></div>
-              <div class="attr-row"><span class="aname">Strike rotation</span><span class="attr-num strong">15</span></div>
-              <div class="attr-row"><span class="aname">Against spin</span><span class="attr-num elite">17</span></div>
-              <div class="attr-row"><span class="aname">Against pace</span><span class="attr-num solid">12</span></div>
+              <div class="attr-row clickable" onclick="openAttributeDetail(this)"><span class="aname">Technique</span><span class="attr-num elite">18</span></div>
+              <div class="attr-row clickable" onclick="openAttributeDetail(this)"><span class="aname">Power hitting</span><span class="attr-num strong">14</span></div>
+              <div class="attr-row clickable" onclick="openAttributeDetail(this)"><span class="aname">Strike rotation</span><span class="attr-num strong">15</span></div>
+              <div class="attr-row clickable" onclick="openAttributeDetail(this)"><span class="aname">Against spin</span><span class="attr-num elite">17</span></div>
+              <div class="attr-row clickable" onclick="openAttributeDetail(this)"><span class="aname">Against pace</span><span class="attr-num solid">12</span></div>
             </div>
             <div class="attr-group">
               <h3>Bowling</h3>
-              <div class="attr-row"><span class="aname">Pace</span><span class="attr-num weak">5</span></div>
-              <div class="attr-row"><span class="aname">Accuracy</span><span class="attr-num weak">6</span></div>
-              <div class="attr-row"><span class="aname">Variation</span><span class="attr-num weak">4</span></div>
-              <div class="attr-row"><span class="aname">Wicket-taking</span><span class="attr-num weak">5</span></div>
+              <div class="attr-row clickable" onclick="openAttributeDetail(this)"><span class="aname">Pace</span><span class="attr-num weak">5</span></div>
+              <div class="attr-row clickable" onclick="openAttributeDetail(this)"><span class="aname">Accuracy</span><span class="attr-num weak">6</span></div>
+              <div class="attr-row clickable" onclick="openAttributeDetail(this)"><span class="aname">Variation</span><span class="attr-num weak">4</span></div>
+              <div class="attr-row clickable" onclick="openAttributeDetail(this)"><span class="aname">Wicket-taking</span><span class="attr-num weak">5</span></div>
             </div>
             <div class="attr-group">
               <h3>Fielding</h3>
-              <div class="attr-row"><span class="aname">Catching</span><span class="attr-num strong">15</span></div>
-              <div class="attr-row"><span class="aname">Ground fielding</span><span class="attr-num strong">14</span></div>
-              <div class="attr-row"><span class="aname">Throwing</span><span class="attr-num solid">13</span></div>
-              <div class="attr-row"><span class="aname">Reflexes</span><span class="attr-num strong">14</span></div>
+              <div class="attr-row clickable" onclick="openAttributeDetail(this)"><span class="aname">Catching</span><span class="attr-num strong">15</span></div>
+              <div class="attr-row clickable" onclick="openAttributeDetail(this)"><span class="aname">Ground fielding</span><span class="attr-num strong">14</span></div>
+              <div class="attr-row clickable" onclick="openAttributeDetail(this)"><span class="aname">Throwing</span><span class="attr-num solid">13</span></div>
+              <div class="attr-row clickable" onclick="openAttributeDetail(this)"><span class="aname">Reflexes</span><span class="attr-num strong">14</span></div>
             </div>
             <div class="attr-group">
               <h3>Mental</h3>
-              <div class="attr-row"><span class="aname">Concentration</span><span class="attr-num elite">16</span></div>
-              <div class="attr-row"><span class="aname">Pressure handling</span><span class="attr-num strong">14</span></div>
-              <div class="attr-row"><span class="aname">Game awareness</span><span class="attr-num strong">15</span></div>
+              <div class="attr-row clickable" onclick="openAttributeDetail(this)"><span class="aname">Concentration</span><span class="attr-num elite">16</span></div>
+              <div class="attr-row clickable" onclick="openAttributeDetail(this)"><span class="aname">Pressure handling</span><span class="attr-num strong">14</span></div>
+              <div class="attr-row clickable" onclick="openAttributeDetail(this)"><span class="aname">Game awareness</span><span class="attr-num strong">15</span></div>
             </div>
             <div class="attr-group">
               <h3>Physical</h3>
-              <div class="attr-row"><span class="aname">Fitness</span><span class="attr-num strong">14</span></div>
-              <div class="attr-row"><span class="aname">Running between wickets</span><span class="attr-num elite">16</span></div>
-              <div class="attr-row"><span class="aname">Strength</span><span class="attr-num solid">12</span></div>
+              <div class="attr-row clickable" onclick="openAttributeDetail(this)"><span class="aname">Fitness</span><span class="attr-num strong">14</span></div>
+              <div class="attr-row clickable" onclick="openAttributeDetail(this)"><span class="aname">Running between wickets</span><span class="attr-num elite">16</span></div>
+              <div class="attr-row clickable" onclick="openAttributeDetail(this)"><span class="aname">Strength</span><span class="attr-num solid">12</span></div>
             </div>
           </div>
           <!-- Current/Potential Ability are the hidden 1-200 composite ratings - never sent to this
@@ -3615,20 +3619,60 @@
 
     <div class="subpanel" id="intl-contracts" hidden>
     <div class="analysis-card">
-      <span class="eyebrow"><svg class="icon sm"><use href="#i-badge"/></svg> Central contracts</span>
-      <div class="bio-line"><span class="k">Tier A</span><span>6 players</span></div>
-      <div class="bio-line"><span class="k">Tier B</span><span>9 players</span></div>
-      <div class="bio-line"><span class="k">Tier C</span><span>14 players</span></div>
+      <span class="eyebrow"><svg class="icon sm"><use href="#i-badge"/></svg> Central contracts &middot; the full list, every team</span>
       <div class="bio-line"><span class="k">Last announced</span><span style="color:var(--turf-strong)">4 months ago &middot; the annual review</span></div>
-      <div class="role-hint" style="margin-top:8px">Awarded annually from each player's best-format evaluator score &mdash; a real, checkable ranking, not a reputation list. The list itself is genuine news the day it lands, the same way a squad announcement is.</div>
+      <div class="role-hint" style="margin-bottom:10px">Awarded annually from each player&rsquo;s own best-format evaluator score &mdash; a real, checkable ranking across the WHOLE domestic player pool, not just your own squad, and not a reputation list. The list itself is genuine news the day it lands, the same way a squad announcement is.</div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <button class="facility-request-btn" onclick="openContractReview()">Review this year's announcement</button>
+        <button class="facility-request-btn" onclick="openContractPetition()">Petition the board for a player</button>
+      </div>
     </div>
 
     <div class="analysis-card" style="margin-top:16px">
-      <span class="eyebrow"><svg class="icon sm"><use href="#i-shield"/></svg> Central contracts &amp; NOC status</span>
-      <div class="staff-row clickable" onclick="openPlayerFromRow(this)"><div class="staff-row-main"><span class="staff-name">Kamran Hussain</span><span class="staff-role-label">Tier A &middot; Lahore Lions &middot; PPL window clashes with the ODI series</span></div><span class="tier-badge c">NOC denied</span></div>
-      <div class="staff-row clickable" onclick="openPlayerFromRow(this)"><div class="staff-row-main"><span class="staff-name">Adeel Hayat</span><span class="staff-role-label">Tier B &middot; Quetta Falcons &middot; released once the Test squad is confirmed</span></div><span class="tier-badge b">NOC pending</span></div>
-      <div class="staff-row clickable" onclick="openPlayerFromRow(this)"><div class="staff-row-main"><span class="staff-name">Zain Chaudhry</span><span class="staff-role-label">Tier C &middot; Islamabad Icons &middot; NOC is not a mechanic that applies at this tier at all</span></div><span class="tier-badge a">Not subject to NOC</span></div>
-      <div class="role-hint" style="margin-top:8px">International duty always wins a genuine clash &mdash; NOC denial only ever decides whether a centrally-contracted player is <i>also</i> released for a franchise season, never whether the series itself goes ahead. It is only ever a live question for a Tier A or Tier B contract; Tier C and uncontracted players are never subject to it.</div>
+      <div class="eyebrow" style="display:block;margin-bottom:6px">Tier A &middot; 6 players</div>
+      <div class="staff-row clickable" onclick="openPlayerFromRow(this)"><div class="staff-row-main"><span class="staff-name">Kamran Hussain</span><span class="staff-role-label">Lahore Lions &middot; Top order, captain &middot; PPL window clashes with the ODI series</span></div><span class="tier-badge c">NOC denied</span></div>
+      <div class="staff-row clickable" onclick="openPlayerFromRow(this)"><div class="staff-row-main"><span class="staff-name">Talha Iqbal</span><span class="staff-role-label">Lahore Lions &middot; Opener</span></div><span class="tier-badge a">NOC granted</span></div>
+      <div class="staff-row clickable" onclick="openPlayerFromRow(this)"><div class="staff-row-main"><span class="staff-name">Rizwan Sheikh</span><span class="staff-role-label">Islamabad Icons &middot; Middle-overs seam</span></div><span class="tier-badge b">NOC pending</span></div>
+      <div class="staff-row clickable" onclick="openPlayerFromRow(this)"><div class="staff-row-main"><span class="staff-name">Umar Baig</span><span class="staff-role-label">Islamabad Icons &middot; Allrounder</span></div><span class="tier-badge a">NOC granted</span></div>
+      <div class="staff-row clickable" onclick="openPlayerFromRow(this)"><div class="staff-row-main"><span class="staff-name">Shahzaib Alam</span><span class="staff-role-label">Karachi Kings &middot; Top order</span></div><span class="tier-badge c">NOC denied</span></div>
+      <div class="staff-row clickable" onclick="openPlayerFromRow(this)"><div class="staff-row-main"><span class="staff-name">Sarfraz Khan</span><span class="staff-role-label">Multan Sultans &middot; Middle order</span></div><span class="tier-badge b">NOC pending</span></div>
+    </div>
+
+    <div class="analysis-card" style="margin-top:16px">
+      <div class="eyebrow" style="display:block;margin-bottom:6px">Tier B &middot; 9 players</div>
+      <div class="staff-row clickable" onclick="openPlayerFromRow(this)"><div class="staff-row-main"><span class="staff-name">Adeel Hayat</span><span class="staff-role-label">Quetta Falcons &middot; Fast bowler &middot; released once the Test squad is confirmed</span></div><span class="tier-badge b">NOC pending</span></div>
+      <div class="staff-row clickable" onclick="openPlayerFromRow(this)"><div class="staff-row-main"><span class="staff-name">Faisal Nadeem</span><span class="staff-role-label">Multan Sultans &middot; Front-line spin</span></div><span class="tier-badge a">NOC granted</span></div>
+      <div class="staff-row clickable" onclick="openPlayerFromRow(this)"><div class="staff-row-main"><span class="staff-name">Hamza Malik</span><span class="staff-role-label">Islamabad Icons &middot; Middle order</span></div><span class="tier-badge a">NOC granted</span></div>
+      <div class="staff-row clickable" onclick="openPlayerFromRow(this)"><div class="staff-row-main"><span class="staff-name">Bilal Nadeem</span><span class="staff-role-label">Islamabad Icons &middot; Bowler</span></div><span class="tier-badge b">NOC pending</span></div>
+      <div class="staff-row clickable" onclick="openPlayerFromRow(this)"><div class="staff-row-main"><span class="staff-name">Danish Raza</span><span class="staff-role-label">Islamabad Icons &middot; Allrounder</span></div><span class="tier-badge b">NOC pending</span></div>
+      <div class="staff-row clickable" onclick="openPlayerFromRow(this)"><div class="staff-row-main"><span class="staff-name">Kamran Aslam</span><span class="staff-role-label">Islamabad Icons &middot; Bowler</span></div><span class="tier-badge c">NOC denied</span></div>
+      <div class="staff-row clickable" onclick="openPlayerFromRow(this)"><div class="staff-row-main"><span class="staff-name">Nouman Bhatti</span><span class="staff-role-label">Karachi Kings &middot; Bowler</span></div><span class="tier-badge a">NOC granted</span></div>
+      <div class="staff-row clickable" onclick="openPlayerFromRow(this)"><div class="staff-row-main"><span class="staff-name">Rayyan Sheikh</span><span class="staff-role-label">Multan Sultans &middot; Allrounder</span></div><span class="tier-badge b">NOC pending</span></div>
+      <div class="staff-row clickable" onclick="openPlayerFromRow(this)"><div class="staff-row-main"><span class="staff-name">Shoaib Niazi</span><span class="staff-role-label">Peshawar Zalmi &middot; Batter</span></div><span class="tier-badge c">NOC denied</span></div>
+    </div>
+
+    <div class="analysis-card" style="margin-top:16px">
+      <div class="eyebrow" style="display:block;margin-bottom:6px">Tier C &middot; 14 players</div>
+      <div class="role-hint" style="margin-bottom:8px">NOC is not a mechanic that applies at this tier at all &mdash; a Tier C player is never subject to it.</div>
+      <div class="staff-row clickable" onclick="openPlayerFromRow(this)"><div class="staff-row-main"><span class="staff-name">Zain Chaudhry</span><span class="staff-role-label">Islamabad Icons &middot; Wicketkeeper</span></div></div>
+      <div class="staff-row clickable" onclick="openPlayerFromRow(this)"><div class="staff-row-main"><span class="staff-name">Umair Chaudhry</span><span class="staff-role-label">Peshawar Zalmi &middot; Fast bowler</span></div></div>
+      <div class="staff-row clickable" onclick="openPlayerFromRow(this)"><div class="staff-row-main"><span class="staff-name">Sohail Marwat</span><span class="staff-role-label">Quetta Falcons &middot; Batter</span></div></div>
+      <div class="staff-row clickable" onclick="openPlayerFromRow(this)"><div class="staff-row-main"><span class="staff-name">Danyal Qureshi</span><span class="staff-role-label">Quetta Falcons &middot; Bowler</span></div></div>
+      <div class="staff-row clickable" onclick="openPlayerFromRow(this)"><div class="staff-row-main"><span class="staff-name">Junaid Sarwar</span><span class="staff-role-label">Islamabad Icons &middot; Top-order bat</span></div></div>
+      <div class="staff-row clickable" onclick="openPlayerFromRow(this)"><div class="staff-row-main"><span class="staff-name">Rameez Toru</span><span class="staff-role-label">Peshawar Zalmi &middot; Fast bowler</span></div></div>
+      <div class="staff-row clickable" onclick="openPlayerFromRow(this)"><div class="staff-row-main"><span class="staff-name">Waqar Ansari</span><span class="staff-role-label">Islamabad Icons &middot; Middle order</span></div></div>
+      <div class="staff-row clickable" onclick="openPlayerFromRow(this)"><div class="staff-row-main"><span class="staff-name">Umar Ansari</span><span class="staff-role-label">Islamabad Icons &middot; Opener</span></div></div>
+      <div class="staff-row clickable" onclick="openPlayerFromRow(this)"><div class="staff-row-main"><span class="staff-name">Saad Farooq</span><span class="staff-role-label">Lahore Lions &middot; Bowler</span></div></div>
+      <div class="staff-row clickable" onclick="openPlayerFromRow(this)"><div class="staff-row-main"><span class="staff-name">Junaid Butt</span><span class="staff-role-label">Lahore Lions &middot; Bowler</span></div></div>
+      <div class="staff-row clickable" onclick="openPlayerFromRow(this)"><div class="staff-row-main"><span class="staff-name">Bilal Awan</span><span class="staff-role-label">Lahore Lions &middot; Bowler</span></div></div>
+      <div class="staff-row clickable" onclick="openPlayerFromRow(this)"><div class="staff-row-main"><span class="staff-name">Fahad Sultan</span><span class="staff-role-label">Islamabad Icons &middot; Bowler</span></div></div>
+      <div class="staff-row clickable" onclick="openPlayerFromRow(this)"><div class="staff-row-main"><span class="staff-name">Sarfraz Bhatti</span><span class="staff-role-label">Islamabad Icons &middot; Middle order</span></div></div>
+      <div class="staff-row clickable" onclick="openPlayerFromRow(this)"><div class="staff-row-main"><span class="staff-name">Nasir Aslam</span><span class="staff-role-label">Islamabad Icons &middot; Fast-medium bowler</span></div></div>
+    </div>
+
+    <div class="analysis-card" style="margin-top:16px">
+      <span class="eyebrow"><svg class="icon sm"><use href="#i-shield"/></svg> NOC &middot; what it actually means</span>
+      <div class="role-hint">International duty always wins a genuine clash &mdash; NOC denial only ever decides whether a centrally-contracted player is <i>also</i> released for a franchise season, never whether the series itself goes ahead. It is only ever a live question for a Tier A or Tier B contract; Tier C and uncontracted players are never subject to it.</div>
     </div>
 
     <div class="analysis-card">
@@ -3776,7 +3820,7 @@
 
     <div class="analysis-card" style="margin-top:16px">
       <div class="tile-eyebrow"><span class="eyebrow"><svg class="icon sm"><use href="#i-star-fill"/></svg> Player of the Round</span></div>
-      <div class="bio-line"><span class="k">Hamza Malik</span><span>76 (48) &middot; SR 158.3 &middot; vs Lahore Lions</span></div>
+      <div class="bio-line clickable" onclick="openPlayerFromRow(this)"><span class="k staff-name">Hamza Malik</span><span>76 (48) &middot; SR 158.3 &middot; vs Lahore Lions</span></div>
       <nav class="subnav" role="tablist" aria-label="Player of the Round detail">
         <button class="subtab-btn" role="tab" aria-selected="true" aria-controls="potr-match" data-subtab="match">Match Report</button>
         <button class="subtab-btn" role="tab" aria-selected="false" aria-controls="potr-discipline" data-subtab="discipline">Discipline Report</button>
@@ -3889,7 +3933,7 @@
       <div class="analysis-card" style="margin-top:16px">
         <span class="eyebrow"><svg class="icon sm"><use href="#i-star-fill"/></svg> World Hall of Fame</span>
         <div class="staff-row">
-          <div class="staff-row-main"><span class="staff-name">Faisal Nadeem</span><span class="staff-role-label">Multan Sultans &middot; Opening Batter &middot; 2008&ndash;2023</span></div>
+          <div class="staff-row-main"><span class="staff-name">Zaheer Anwar</span><span class="staff-role-label">Multan Sultans &middot; Opening Batter &middot; 2008&ndash;2023</span></div>
           <div class="staff-row-meta"><span class="pill first">Inducted 2024</span></div>
         </div>
         <div class="role-hint" style="margin-top:8px">A far higher bar than a club&rsquo;s own Hall of Fame &mdash; genuine worldwide standing, not just a long career.</div>
@@ -3946,6 +3990,14 @@
       <div class="staff-row clickable" onclick="openCompetitionProfile('crescent')">
         <div class="staff-row-main"><span class="staff-name">The Crescent Trophy</span><span class="staff-role-label">International &middot; T20 &middot; biennial</span></div>
         <div class="staff-row-meta"><span class="facility-tier-badge tier-excellent">Excellent</span></div>
+      </div>
+      <div class="staff-row clickable" onclick="openCompetitionProfile('imf')">
+        <div class="staff-row-main"><span class="staff-name">Indian Masters League</span><span class="staff-role-label">Franchise &middot; T20 &middot; auction-assembled squads &middot; hosted by India</span></div>
+        <div class="staff-row-meta"><span class="facility-tier-badge tier-excellent">Excellent</span></div>
+      </div>
+      <div class="staff-row clickable" onclick="openCompetitionProfile('sbl')">
+        <div class="staff-row-main"><span class="staff-name">Southern Blaze League</span><span class="staff-role-label">Franchise &middot; T20 &middot; auction-assembled squads &middot; hosted by Australia</span></div>
+        <div class="staff-row-meta"><span class="facility-tier-badge tier-good">Good</span></div>
       </div>
       <div class="role-hint" style="margin-top:10px">A competition&rsquo;s own standing moves season by season on how full the grounds are, how close the title race was, and the calibre of the sides in it &mdash; a healthier league is worth more to every club inside it, not just the champions. Click a competition for its profile.</div>
     </div>
@@ -4007,6 +4059,15 @@
     </div>
   </section>
 
+  <!-- ================= WORLD: NATION / CLUB PROFILE (a real redirect, not a modal) ================= -->
+  <section class="panel" id="panel-world-profile" role="tabpanel" hidden>
+    <div class="breadcrumb"><a onclick="showPanel('world')">World</a><span class="sep">&rsaquo;</span><span class="here" id="world-profile-kind-here">Nations</span><span class="sep">&rsaquo;</span><span class="here" id="world-profile-breadcrumb-here">Profile</span></div>
+    <div class="panel-head"><h1 id="world-profile-title">Profile</h1><div class="sub" id="world-profile-meta">&mdash;</div></div>
+    <div class="tactics-grid">
+      <div class="analysis-card" style="grid-column: span 2" id="world-profile-body"></div>
+    </div>
+  </section>
+
   <!-- ================= INBOX ================= -->
   <section class="panel" id="panel-inbox" role="tabpanel" hidden>
     <div class="panel-head"><h1>Inbox</h1><div class="sub">This week&rsquo;s digest</div></div>
@@ -4063,6 +4124,61 @@
     <div class="table-card">
       <table class="career"><tbody id="squad-news-body"></tbody></table>
     </div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="contract-petition-backdrop" onclick="if(event.target===this) closeContractPetition()">
+  <div class="negotiation-modal" role="dialog" aria-modal="true" aria-labelledby="petition-title" style="max-width:480px">
+    <div class="negotiation-head">
+      <h2 id="petition-title" style="margin:0">Petition the board</h2>
+      <button class="modal-close" onclick="closeContractPetition()" aria-label="Close">&times;</button>
+    </div>
+    <div class="role-hint" style="margin:10px 0">Central contracts are awarded annually from a real, checkable ranking &mdash; the board can&rsquo;t simply hand one out on request. What a petition genuinely buys is the board&rsquo;s honest read on how close the case actually is, ahead of the next review.</div>
+    <div class="plan-select-wrap" style="width:260px;margin-bottom:12px">
+      <select class="plan-select" id="petition-player-select">
+        <option value="Umar Baig|close">Umar Baig &middot; Islamabad Icons</option>
+        <option value="Rizwan Sheikh|close">Rizwan Sheikh &middot; Islamabad Icons</option>
+        <option value="Bilal Nasir|far">Bilal Nasir &middot; Islamabad Icons Academy</option>
+        <option value="Danish Iqbal|far">Danish Iqbal &middot; Islamabad Icons Academy</option>
+        <option value="Sarfraz Bhatti|far">Sarfraz Bhatti &middot; Islamabad Icons</option>
+      </select>
+    </div>
+    <button class="stage-continue-btn" onclick="submitContractPetition()" id="petition-submit-btn">Make the case</button>
+    <div class="convo-log" id="petition-convo" style="margin-top:12px"></div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="contract-review-backdrop" onclick="if(event.target===this) closeContractReview()">
+  <div class="negotiation-modal" role="dialog" aria-modal="true" aria-labelledby="contract-review-title" style="max-width:480px">
+    <div class="negotiation-head">
+      <h2 id="contract-review-title" style="margin:0">Central contracts &middot; annual review</h2>
+      <button class="modal-close" onclick="closeContractReview()" aria-label="Close">&times;</button>
+    </div>
+    <div class="role-hint" style="margin:10px 0">Awarded fresh from every player's own best-format evaluator score across the whole domestic pool &mdash; last year's list is not carried forward, it is recomputed. What actually changed hands this cycle:</div>
+    <div class="table-card">
+      <table class="career">
+        <thead><tr><th>Player</th><th>Movement</th><th>Why</th></tr></thead>
+        <tbody>
+          <tr><td class="player-name clickable" onclick="openPlayerFromRow(this.closest('tr'))">Umar Baig</td><td><span class="pill first" style="padding:2px 8px">Tier C &rarr; Tier A</span></td><td>A genuine breakout franchise season pushed his evaluator score clear of the Tier A cutoff.</td></tr>
+          <tr><td class="player-name clickable" onclick="openPlayerFromRow(this.closest('tr'))">Kamran Aslam</td><td><span class="pill" style="padding:2px 8px;background:var(--surface-3);color:var(--ink-dim)">Tier A &rarr; Tier B</span></td><td>A quiet season by his own recent standard &mdash; still contracted, just no longer top tier.</td></tr>
+          <tr><td class="player-name clickable" onclick="openPlayerFromRow(this.closest('tr'))">Sarfraz Bhatti</td><td><span class="pill first" style="padding:2px 8px">New &middot; Tier C</span></td><td>First central contract of his career, off a genuinely strong domestic first-class season.</td></tr>
+          <tr><td>Farhan Sabir</td><td><span class="pill second" style="padding:2px 8px">Dropped</span></td><td>Held a Tier C contract last year &mdash; a long injury layoff cost him the evaluator score to keep it.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="role-hint" style="margin-top:10px">Twenty-five of last year's twenty-nine names carried straight over &mdash; a real turnover, not a wholesale reshuffle. The full current list is still the one shown below.</div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="attribute-detail-backdrop" onclick="if(event.target===this) closeAttributeDetail()">
+  <div class="negotiation-modal" role="dialog" aria-modal="true" aria-labelledby="attr-detail-title" style="max-width:440px">
+    <div class="negotiation-head">
+      <h2 id="attr-detail-title" style="margin:0">Attribute detail</h2>
+      <button class="modal-close" onclick="closeAttributeDetail()" aria-label="Close">&times;</button>
+    </div>
+    <div class="bio-line"><span id="attr-detail-name" style="font-weight:700;color:var(--ink)"></span><span id="attr-detail-value" class="attr-num" style="margin-left:8px"></span></div>
+    <div class="role-hint" style="margin-top:10px" id="attr-detail-desc"></div>
+    <div class="role-hint" style="margin-top:8px" id="attr-detail-trend"></div>
   </div>
 </div>
 
@@ -4500,7 +4616,7 @@
 
   <section class="panel" id="panel-calendar" role="tabpanel" hidden>
     <div class="match-back-bar">
-      <button class="match-back-btn" onclick="exitCalendarMode()" title="Back"><svg class="icon"><use href="#i-chevron-fwd"/></svg></button>
+      <button class="match-back-btn" onclick="exitCalendarMode();showPanel('portal')" title="Back"><svg class="icon"><use href="#i-chevron-fwd"/></svg></button>
       <span class="match-back-title">Calendar</span>
     </div>
     <div class="panel-head"><h1>Calendar</h1><div class="sub">Every dated event across your coaching identities &mdash; click a day to see it, click through to act on it</div></div>
@@ -4948,6 +5064,79 @@
   function closeSquadNewsModal() {
     document.getElementById('squad-news-backdrop').classList.remove('open');
   }
+  function openContractPetition() {
+    document.getElementById('petition-convo').innerHTML = '';
+    document.getElementById('petition-submit-btn').disabled = false;
+    document.getElementById('petition-submit-btn').textContent = 'Make the case';
+    document.getElementById('contract-petition-backdrop').classList.add('open');
+  }
+  function closeContractPetition() {
+    document.getElementById('contract-petition-backdrop').classList.remove('open');
+  }
+
+  // A real per-attribute grounding, not invented flavour text - each line reflects a real
+  // mechanic this project's own domain already models (TrainingService's focus system,
+  // PlayerAgeingService's four different-schedule decline curves, MatchupConfidenceService,
+  // the Chief Scout's own estimate-not-truth read shown in the caption above this grid).
+  var ATTRIBUTE_INFO = {
+    'Technique': { desc: 'Keeps improving under focused training into the early 30s, then holds &mdash; it only breaks down once the body can no longer execute what the head already knows.', trend: '+2 since last season &mdash; a year of Batting Technique as his training focus.' },
+    'Power hitting': { desc: 'Peaks earlier than pure technique and is one of the first things to fade as physical attributes decline in the late 20s.', trend: 'Unchanged this year &mdash; no training time spent on this cluster.' },
+    'Strike rotation': { desc: 'A technical cluster, same development curve as Technique &mdash; improves with focused work, holds into the early 30s.', trend: '+1 since last season.' },
+    'Against spin': { desc: 'How well he reads a specific delivery, not a broad ability score &mdash; genuinely separate from his overall batting technique.', trend: 'Built up gradually from real match exposure to spin, not training alone.' },
+    'Against pace': { desc: 'The same kind of read as Against Spin, for the opposite threat &mdash; both matter more against a genuine new-ball attack.', trend: 'A soft spot the coaching staff have flagged for individual work.' },
+    'Pace': { desc: 'A fast bowler\u2019s pace ages roughly 35% harder than the rest of his attributes &mdash; the first thing a genuine quick loses as his career goes on.', trend: 'Stable for now, but this is the number to watch as he gets into his 30s.' },
+    'Accuracy': { desc: 'Landing a plan is itself a skill &mdash; a bowler with real accuracy can be trusted with a tighter line under pressure.', trend: 'Room to grow with a longer apprenticeship under a specialist bowling coach.' },
+    'Variation': { desc: 'A wide, well-disguised repertoire &mdash; also what genuinely separates an honest bowler from a real mystery threat once it clears a real threshold.', trend: 'Below the level a batter would ever call him a mystery bowler.' },
+    'Wicket-taking': { desc: 'Reads how often a spell actually produces a wicket chance once accuracy and variation are accounted for.', trend: 'A weak all-round bowling profile right now &mdash; this is a batting-first squad member.' },
+    'Catching': { desc: 'Reflexes and hands specifically &mdash; a slip fielder lives on this even if he barely moves.', trend: '+1 since last season.' },
+    'Ground fielding': { desc: 'Range and anticipation &mdash; a boundary rider is an athlete first, this is what saves the run before it is even hit.', trend: 'Unchanged.' },
+    'Throwing': { desc: 'Arm strength and accuracy from the deep &mdash; the difference between a saved boundary and a saved run-out chance.', trend: 'Unchanged.' },
+    'Reflexes': { desc: 'Falls away sharply from the mid-30s &mdash; this is why an ageing great so often ends up at slip rather than in the deep.', trend: 'Currently a real strength; worth enjoying while it lasts.' },
+    'Concentration': { desc: 'A mental attribute &mdash; keeps rising into the late 30s and barely declines, unlike the physical side of his game.', trend: '+1 since last season.' },
+    'Pressure handling': { desc: 'How much a big occasion costs him &mdash; a gifted novice is worse than himself in a knockout; a settled veteran is often better.', trend: 'Genuinely tested in a handful of high-pressure matches so far this season.' },
+    'Game awareness': { desc: 'Reading the situation itself &mdash; feeds directly into how well he reads a bowler\u2019s pattern and adapts mid-innings.', trend: 'A real strength already, and it only tends to keep rising with experience.' },
+    'Fitness': { desc: 'Physical attributes peak mid-20s and go first &mdash; this is the attribute that most directly ends a career.', trend: 'Currently well managed by a real training programme.' },
+    'Running between wickets': { desc: 'Partly an individual attribute, partly a genuine partnership with whoever is at the other end &mdash; a poor pairing raises real run-out risk.', trend: 'A real asset &mdash; converts hesitant singles into twos.' },
+    'Strength': { desc: 'The physical base everything else is built on &mdash; ages the hardest of any attribute once the mid-20s peak passes.', trend: 'Unchanged.' }
+  };
+  function openAttributeDetail(rowEl) {
+    var nameEl = rowEl.querySelector('.aname');
+    var numEl = rowEl.querySelector('.attr-num');
+    if (!nameEl || !numEl) return;
+    var name = nameEl.textContent.trim();
+    var info = ATTRIBUTE_INFO[name] || { desc: 'A real attribute this player\u2019s current training programme and match experience both act on.', trend: 'No specific trend on record for this one yet.' };
+    document.getElementById('attr-detail-name').textContent = name;
+    var valEl = document.getElementById('attr-detail-value');
+    valEl.textContent = numEl.textContent.trim();
+    valEl.className = numEl.className;
+    document.getElementById('attr-detail-desc').innerHTML = info.desc;
+    document.getElementById('attr-detail-trend').innerHTML = '<strong style="color:var(--ink)">Trend:</strong> ' + info.trend;
+    document.getElementById('attribute-detail-backdrop').classList.add('open');
+  }
+  function closeAttributeDetail() {
+    document.getElementById('attribute-detail-backdrop').classList.remove('open');
+  }
+  function openContractReview() {
+    document.getElementById('contract-review-backdrop').classList.add('open');
+  }
+  function closeContractReview() {
+    document.getElementById('contract-review-backdrop').classList.remove('open');
+  }
+
+  function submitContractPetition() {
+    var parts = document.getElementById('petition-player-select').value.split('|');
+    var name = parts[0], closeness = parts[1];
+    var log = document.getElementById('petition-convo');
+    log.innerHTML += '<div class="convo-line you"><span class="who">You</span><div class="convo-bubble">' + name + ' deserves a genuine look for a central contract this cycle &mdash; here is the case.</div></div>';
+    setTimeout(function () {
+      var reply = closeness === 'close'
+        ? 'We hear you. His evaluator score is genuinely close to the Tier C cutoff &mdash; not a certainty, but a real one to watch at the annual review.'
+        : 'Noted, but honestly &mdash; his own score is well short of even the lowest tier right now. Keep developing him; this isn&rsquo;t his year.';
+      log.innerHTML += '<div class="convo-line him"><span class="who">National Board</span><div class="convo-bubble">' + reply + '</div></div>';
+    }, 350);
+    document.getElementById('petition-submit-btn').disabled = true;
+    document.getElementById('petition-submit-btn').textContent = 'Case made \u2014 the board has heard it';
+  }
   function toggleTrainingFocusDelegate() {
     var delegated = document.getElementById('training-focus-delegate').checked;
     var sel = document.getElementById('training-focus-select');
@@ -5011,6 +5200,16 @@
       name: "The Crescent Trophy", meta: "International &middot; T20 &middot; biennial",
       blurb: "A regional international trophy held by whichever side won the last series between the two nations, contested every two years.",
       champions: ["2025: Pakistan", "2023: India", "2021: Pakistan", "2019: Pakistan"]
+    },
+    imf: {
+      name: "Indian Masters League", meta: "Franchise &middot; T20 &middot; auction-assembled squads &middot; hosted by India",
+      blurb: "The richest domestic T20 window on the calendar &mdash; a mega auction every three years, retention and RTM cards in between, drawing on the same world player pool the Pakistan Premier League draws from.",
+      champions: ["2025: Mumbai Marauders", "2024: Chennai Comets", "2023: Bangalore Chargers", "2022: Mumbai Marauders"]
+    },
+    sbl: {
+      name: "Southern Blaze League", meta: "Franchise &middot; T20 &middot; auction-assembled squads &middot; hosted by Australia",
+      blurb: "A short, high-scoring summer window built around Australia's own pace-friendly grounds &mdash; a genuine destination for an overseas power hitter in the off-season.",
+      champions: ["2025: Perth Flames", "2024: Sydney Sirens", "2023: Melbourne Meteors", "2022: Perth Flames"]
     }
   };
   function openCompetitionProfile(key) {
@@ -5100,7 +5299,7 @@
     var contractsHtml = c.centralContracts.map(function (tier) {
       return '<div class="eyebrow" style="display:block;margin:10px 0 4px">Tier ' + tier.tier + '</div>' +
         tier.players.map(function (p) {
-          return '<div class="staff-row clickable" onclick="closeCompetitionProfile();openPlayerFromRow(this)"><div class="staff-row-main"><span class="staff-name">' + p.name + '</span><span class="staff-role-label">' + p.club + '</span></div></div>';
+          return '<div class="staff-row clickable" onclick="openPlayerFromRow(this)"><div class="staff-row-main"><span class="staff-name">' + p.name + '</span><span class="staff-role-label">' + p.club + '</span></div></div>';
         }).join('');
     }).join('');
     var clubsHtml = '<div class="pitch-preset-row" style="flex-wrap:wrap">' + c.domesticClubs.map(function (cl) {
@@ -5109,13 +5308,16 @@
     var fixturesHtml = '<div class="notes-log">' + c.fixtures.map(function (f) {
       return '<div class="notes-log-item"><span>' + f + '</span></div>';
     }).join('') + '</div>';
-    return '<h3 style="margin:10px 0 2px">' + c.name + '</h3>' +
-      '<div class="role-hint" style="margin-bottom:0">' + c.meta + '</div>' +
-      '<p style="font-size:var(--fs-body);color:var(--ink-dim);line-height:1.5">' + c.blurb + '</p>' +
-      rankRow +
+    return rankRow +
       '<div class="eyebrow" style="display:block;margin:14px 0 6px">Central contracts &amp; who they play for</div>' + contractsHtml +
       '<div class="eyebrow" style="display:block;margin:14px 0 6px">Domestic clubs</div>' + clubsHtml +
       '<div class="eyebrow" style="display:block;margin:14px 0 6px">Upcoming fixtures</div>' + fixturesHtml;
+  }
+  function renderClubProfile(c) {
+    return '<div class="eyebrow" style="display:block;margin-bottom:6px">Recent history</div>' +
+      '<div class="notes-log">' + c.champions.map(function (line) {
+        return '<div class="notes-log-item"><span>' + line + '</span></div>';
+      }).join('') + '</div>';
   }
   var clubProfiles = {
     lahore: { name: "Lahore Lions", meta: "Pakistan T20 Cup &middot; 1st &middot; est. 1948",
@@ -5138,21 +5340,15 @@
       champions: ["2025: List A 1st"] }
   };
   function openWorldProfile(kind, key) {
-    document.getElementById('cprofile-title').textContent = kind === 'nation' ? 'Nation profile' : 'Club profile';
-    if (kind === 'nation') {
-      document.getElementById('cprofile-body').innerHTML = renderNationProfile(nationProfiles[key]);
-    } else {
-      var c = clubProfiles[key];
-      document.getElementById('cprofile-body').innerHTML =
-        '<h3 style="margin:10px 0 2px">' + c.name + '</h3>' +
-        '<div class="role-hint" style="margin-bottom:0">' + c.meta + '</div>' +
-        '<p style="font-size:var(--fs-body);color:var(--ink-dim);line-height:1.5">' + c.blurb + '</p>' +
-        '<div class="eyebrow" style="display:block;margin-bottom:6px">Recent history</div>' +
-        '<div class="notes-log">' + c.champions.map(function (line) {
-          return '<div class="notes-log-item"><span>' + line + '</span></div>';
-        }).join('') + '</div>';
-    }
-    document.getElementById('competition-profile-backdrop').classList.add('open');
+    var c = kind === 'nation' ? nationProfiles[key] : clubProfiles[key];
+    document.getElementById('world-profile-kind-here').textContent = kind === 'nation' ? 'Nations' : 'Clubs';
+    document.getElementById('world-profile-breadcrumb-here').textContent = c.name;
+    document.getElementById('world-profile-title').textContent = c.name;
+    document.getElementById('world-profile-meta').textContent = c.meta;
+    var bodyHtml = '<p style="font-size:var(--fs-body);color:var(--ink-dim);line-height:1.5;margin-top:0">' + c.blurb + '</p>' +
+      (kind === 'nation' ? renderNationProfile(c) : renderClubProfile(c));
+    document.getElementById('world-profile-body').innerHTML = bodyHtml;
+    showPanel('world-profile');
   }
   var pendingOfferRow = null;
   var pendingOfferKind = 'transfer';
@@ -5206,7 +5402,7 @@
     ground: { scopeLabel: 'Jinnah Stadium, Rawalpindi \u00b7 ground records', batting: { label: 'Batting Records', types: [
         { label: 'Highest Individual Score', cols: ['Player','Score','Team','Opposition','Date'], rows: [
           ['Hamza Malik','151','Islamabad Icons','vs Multan Sultans','2023'],
-          ['Faisal Nadeem','128','Multan Sultans','vs Islamabad Icons','2021'] ] },
+          ['Zaheer Anwar','128','Multan Sultans','vs Islamabad Icons','2021'] ] },
         { label: 'Most Runs at this Ground', cols: ['Player','Inns','Runs','Ave'], rows: [
           ['Hamza Malik','41','1,884','46.0'] ] } ] },
       bowling: { label: 'Bowling Records', types: [
@@ -5230,11 +5426,11 @@
           ['Danish Raza','44','3','Islamabad Icons','2022'] ] } ] } },
     world: { scopeLabel: 'World \u00b7 every competition your network covers', batting: { label: 'Batting Records', types: [
         { label: 'Highest Individual Score (T20)', cols: ['Player','Score','Team','Opposition','Date'], rows: [
-          ['Faisal Nadeem','172*','Multan Sultans','vs Lahore Lions','2024'],
+          ['Zaheer Anwar','172*','Multan Sultans','vs Lahore Lions','2024'],
           ['Hamza Malik','142*','Islamabad Icons','vs Multan Sultans','2023'] ] },
         { label: 'Most Career Runs, All Formats', cols: ['Player','Team','Runs','Status'], rows: [
           ['Hamza Malik','Islamabad Icons','3,214','Still active'],
-          ['Faisal Nadeem','Multan Sultans','4,006','Retired 2023'] ] } ] },
+          ['Zaheer Anwar','Multan Sultans','4,006','Retired 2023'] ] } ] },
       bowling: { label: 'Bowling Records', types: [
         { label: 'Best Bowling (Innings)', cols: ['Player','Figures','Team','Opposition','Date'], rows: [
           ['Umar Baig','8/19','Lahore Lions','vs Peshawar Zalmi','2022'] ] },
@@ -5277,7 +5473,10 @@
     document.getElementById('records-detail-sub').textContent = RECORDS_DATA[scope].scopeLabel + ' \u00b7 ' + cat.label;
     var head = '<tr>' + t.cols.map(function (c) { return '<th' + (RECORD_TEXT_HEADERS[c] ? '' : ' class="num"') + '>' + c + '</th>'; }).join('') + '</tr>';
     var body = t.rows.map(function (r) {
-      return '<tr>' + r.map(function (v, i) { return '<td' + (RECORD_TEXT_HEADERS[t.cols[i]] ? '' : ' class="num"') + '>' + v + '</td>'; }).join('') + '</tr>';
+      return '<tr>' + r.map(function (v, i) {
+        if (t.cols[i] === 'Player') return '<td class="player-name clickable" onclick="openPlayerFromRow(this.closest(\'tr\'))">' + v + '</td>';
+        return '<td' + (RECORD_TEXT_HEADERS[t.cols[i]] ? '' : ' class="num"') + '>' + v + '</td>';
+      }).join('') + '</tr>';
     }).join('');
     document.getElementById('records-detail-table').innerHTML = '<div class="table-card"><div class="table-scroll-inner"><table class="career"><thead>' + head + '</thead><tbody>' + body + '</tbody></table></div></div>';
     document.getElementById('records-detail-list').hidden = true;
@@ -5390,6 +5589,7 @@
   };
   function setContext(ctx) {
     CURRENT_CONTEXT = ctx;
+    if (typeof franchiseButtonStage !== 'undefined') franchiseButtonStage = "auction";
     document.querySelectorAll(".context-btn").forEach(function (b) {
       b.setAttribute("aria-selected", b.dataset.context === ctx ? "true" : "false");
     });
@@ -5424,19 +5624,31 @@
     // fall back to Portal rather than leave a now-hidden tab looking selected.
     if (currentTabWasHidden) showPanel("portal");
   }
+  // The real franchise calendar has four genuinely distinct dated moments (EOI Meeting,
+  // Pre-Auction Meeting, the War Room/Auction, and the quarterly Trade Centre window) - this
+  // mockup is frozen on the day the AUCTION is due, but the SAME "frozen on the day it's true"
+  // gate cycles through all four correctly, driven by this stage variable, so jumping to an
+  // earlier date on the Calendar (via jumpToFranchiseStage) genuinely demonstrates every state,
+  // not just the one this file happens to be frozen on.
+  var franchiseButtonStage = "auction";
+  var FRANCHISE_STAGE_BUTTON = {
+    eoi: { label: "Enter EOI Meeting", action: "enterEoiMode()", title: "The EOI window is open today" },
+    preauction: { label: "Enter Pre-Auction Meeting", action: "enterPreAuctionMode()", title: "The pre-auction planning meeting is due today" },
+    auction: { label: "Enter Auction Room", action: "enterAuctionMode()", title: "The auction window has opened today" },
+    trade: { label: "Enter Trade Centre", action: "enterTradeMode()", title: "The quarterly trade window is open today" }
+  };
+  function jumpToFranchiseStage(stage) {
+    franchiseButtonStage = stage;
+    renderActionButton();
+  }
   function renderActionButton() {
     var btn = document.getElementById("play-match-btn");
     if (!btn) return;
     if (CURRENT_CONTEXT === "franchise") {
-      // This mockup is frozen on the franchise's own auction-opening day -
-      // on any other day this same button would read "Next Day", or one of
-      // "Enter EOI Meeting" / "Enter Pre-Auction Meeting" / "Trade Centre
-      // Open", depending on which of the franchise's own dated events (see
-      // the Franchise hub's timeline) is actually due, the identical
-      // "frozen on the day it's true" convention Play Match already uses.
-      btn.innerHTML = 'Enter Auction Room <svg class="icon sm"><use href="#i-chevron-fwd"/></svg>';
-      btn.setAttribute("onclick", "enterAuctionMode()");
-      btn.title = "The auction window has opened today";
+      var s = FRANCHISE_STAGE_BUTTON[franchiseButtonStage] || FRANCHISE_STAGE_BUTTON.auction;
+      btn.innerHTML = s.label + ' <svg class="icon sm"><use href="#i-chevron-fwd"/></svg>';
+      btn.setAttribute("onclick", s.action);
+      btn.title = s.title;
     } else {
       btn.innerHTML = 'Play Match <svg class="icon sm"><use href="#i-chevron-fwd"/></svg>';
       btn.setAttribute("onclick", "enterMatchMode()");
@@ -6995,14 +7207,15 @@
   var CALENDAR_TODAY = new Date(2027, 2, 27);
   var calendarViewYear = 2027, calendarViewMonth = 2;
   var CALENDAR_EVENTS = [
-    { date: '2027-02-03', context: 'franchise', title: 'EOI meeting held', detail: 'The registered-player list was finalised into the auction shortlist.', action: function () { showPanel('franchise'); }, actionLabel: 'Open Franchise' },
-    { date: '2027-03-15', context: 'franchise', title: 'Pre-Auction meeting held', detail: 'The room locked in its plan and targets ahead of today\'s auction.', action: function () { showPanel('franchise'); }, actionLabel: 'Open Franchise' },
+    { date: '2027-02-03', context: 'franchise', title: 'EOI meeting held', detail: 'The registered-player list was finalised into the auction shortlist. The calendar-gated action button reads &ldquo;Enter EOI Meeting&rdquo; on a day like this one — try it.', action: function () { jumpToFranchiseStage('eoi'); showPanel('franchise'); }, actionLabel: 'See the button on this day' },
+    { date: '2027-03-15', context: 'franchise', title: 'Pre-Auction meeting held', detail: 'The room locked in its plan and targets ahead of today’s auction. The calendar-gated action button reads &ldquo;Enter Pre-Auction Meeting&rdquo; on a day like this one — try it.', action: function () { jumpToFranchiseStage('preauction'); showPanel('franchise'); }, actionLabel: 'See the button on this day' },
     { date: '2027-03-21', context: 'international', title: 'T20I squad vs Sri Lanka announced', detail: 'One change from the last squad \u2014 Umar Baig in for Rizwan Sheikh.', action: function () { showPanel('international'); var b = document.querySelector('#panel-international .subtab-btn[data-subtab="poolsquad"]'); if (b) b.click(); }, actionLabel: 'Open National Pool & Squad' },
     { date: '2027-03-25', context: 'international', title: '1st T20I vs Sri Lanka', detail: 'Gaddafi Stadium.', action: function () { showPanel('fixtures'); }, actionLabel: 'Open Fixtures' },
     { date: '2027-03-27', context: 'club', title: 'Match day', detail: 'A Pakistan T20 Cup fixture is live today \u2014 Play Match in the topbar is the same action.', action: function () { showPanel('fixtures'); }, actionLabel: 'Open Fixtures' },
     { date: '2027-03-27', context: 'international', title: '2nd T20I vs Sri Lanka', detail: 'A live fixture today, in the same home series.', action: function () { showPanel('fixtures'); }, actionLabel: 'Open Fixtures' },
     { date: '2027-03-27', context: 'franchise', title: 'Auction window opens', detail: 'Retention resolves this morning as the first step, then the live bidding room.', action: function () { showPanel('franchise'); }, actionLabel: 'Open Franchise' },
     { date: '2027-04-08', context: 'club', title: 'Training camp', detail: 'Ahead of the Pakistan T20 Cup run-in \u2014 a real development chance for every player 26 or under, automatically computed.', action: function () { showPanel('club'); }, actionLabel: 'Open Club' },
+    { date: '2027-04-15', context: 'franchise', title: 'Trade Centre window opens', detail: 'Outside the auction cycle \u2014 the calendar-gated action button reads &ldquo;Enter Trade Centre&rdquo; on a day like this one, the fourth of the four real franchise states.', action: function () { jumpToFranchiseStage('trade'); showPanel('franchise'); }, actionLabel: 'See the button on this day' },
     { date: '2027-04-17', context: 'international', title: '1st ODI vs India', detail: 'National Stadium.', action: function () { showPanel('fixtures'); }, actionLabel: 'Open Fixtures' },
     { date: '2027-04-22', context: 'international', title: 'Test squad vs Australia required', detail: 'The real 40-day announcement window (opened 27 Mar) closes around this point.', action: function () { showPanel('international'); var b = document.querySelector('#panel-international .subtab-btn[data-subtab="poolsquad"]'); if (b) b.click(); }, actionLabel: 'Build the Squad' }
   ];
@@ -7064,7 +7277,7 @@
     }).join('');
     panel.querySelectorAll('button[data-ev]').forEach(function (btn) {
       var idx = +btn.getAttribute('data-ev');
-      btn.onclick = function () { evs[idx].action(); exitCalendarMode(); };
+      btn.onclick = function () { exitCalendarMode(); evs[idx].action(); };
     });
   }
   function openCalendarView() {
@@ -7080,7 +7293,6 @@
   function exitCalendarMode() {
     document.body.classList.remove("match-immersive");
     document.getElementById("panel-calendar").hidden = true;
-    showPanel("portal");
   }
 
   function openStaffProfile(rowEl) {
@@ -7095,6 +7307,62 @@
     document.getElementById('staff-profile-tenure').textContent = tenureEl ? tenureEl.textContent : '&mdash;';
     showPanel('staff-profile');
   }
+
+  // ---- Real per-player header data for the most-recurring named players in this mockup.
+  // Deliberately scoped, not exhaustive: the Attributes grid, widget-strip and Career/Bio tabs
+  // still show the shared illustrative shape built for Hamza Malik for anyone not in this list -
+  // hand-authoring a full attribute/stats profile for every one of the 50+ names this file now
+  // references would be a much larger undertaking than this pass's own scope. Any name NOT in
+  // this dict falls back to the original static markup untouched. ----
+  var PLAYER_PROFILES = {
+    'Hamza Malik': { hand: 'RHB', nat: 'Pakistan', team: 'Islamabad Icons', caps: 'Uncapped', ca: 4, pa: [3.5, 5], value: '$340K', wage: '$4,200/wk', until: 'until May 2028', status: { text: 'First choice', cls: 'first' }, interest: 'Wanted by 2 clubs' },
+    'Kamran Hussain': { hand: 'RHB', nat: 'Pakistan', team: 'Lahore Lions', caps: 'Tier A central contract', ca: 4.5, pa: [4, 5], value: '$920K', wage: '$9,800/wk', until: 'until Nov 2029', status: { text: 'National captain', cls: 'first' }, interest: 'A genuine one-club man' },
+    'Talha Iqbal': { hand: 'LHB', nat: 'Pakistan', team: 'Lahore Lions', caps: 'Tier A central contract', ca: 4, pa: [3.5, 4.5], value: '$610K', wage: '$6,400/wk', until: 'until Jun 2028', status: { text: 'First choice', cls: 'first' }, interest: 'Settled at Lahore Lions' },
+    'Zain Chaudhry': { hand: 'LHB / WK', nat: 'Pakistan', team: 'Islamabad Icons', caps: 'Tier C central contract', ca: 3.5, pa: [3, 4.5], value: '$285K', wage: '$3,600/wk', until: 'until Mar 2027', status: { text: 'First choice', cls: 'first' }, interest: 'Contract talk expected soon' },
+    'Adeel Hayat': { hand: 'RAF', nat: 'Pakistan', team: 'Quetta Falcons', caps: 'Tier B central contract', ca: 4, pa: [3.5, 5], value: '$470K', wage: '$5,100/wk', until: 'until Aug 2027', status: { text: 'First choice', cls: 'first' }, interest: 'Wanted by 3 clubs' },
+    'Faisal Nadeem': { hand: 'Off-spin', nat: 'Pakistan', team: 'Multan Sultans', caps: 'Tier B central contract', ca: 3.5, pa: [3, 4], value: '$255K', wage: '$3,100/wk', until: 'until Jan 2028', status: { text: 'First choice', cls: 'first' }, interest: 'A trusted first-change option' },
+    'Umar Baig': { hand: 'RHB', nat: 'Pakistan', team: 'Islamabad Icons', caps: 'Tier A central contract', ca: 3, pa: [3, 4.5], value: '$195K', wage: '$2,400/wk', until: 'until May 2027', status: { text: 'Second choice', cls: 'second' }, interest: 'Franchise form has him overdue a look' },
+    'Rizwan Sheikh': { hand: 'RAF', nat: 'Pakistan', team: 'Islamabad Icons', caps: 'Tier A central contract', ca: 3, pa: [3, 4] , value: '$165K', wage: '$2,100/wk', until: 'until Sep 2027', status: { text: 'Fringe', cls: 'fringe' }, interest: 'A real contender, not yet settled' },
+    'Danish Raza': { hand: 'RHB', nat: 'Pakistan', team: 'Islamabad Icons', caps: 'Tier B central contract', ca: 3, pa: [2.5, 4], value: '$140K', wage: '$1,850/wk', until: 'until Feb 2027', status: { text: 'Second choice', cls: 'second' }, interest: 'None on record' },
+    'Bilal Nadeem': { hand: 'Fast Bowler', nat: 'Pakistan', team: 'Islamabad Icons', caps: 'Tier B central contract', ca: 2.5, pa: [2.5, 4], value: '$95K', wage: '$1,400/wk', until: 'until Apr 2027', status: { text: 'Fringe', cls: 'fringe' }, interest: 'None on record' }
+  };
+  function renderStarRow(el, rating, isRange, rangeEnd) {
+    if (!el) return;
+    var full = Math.floor(rating);
+    var svgs = '';
+    for (var i = 0; i < 5; i++) {
+      if (i < full) svgs += '<svg class="icon filled"><use href="#i-star-fill"/></svg>';
+      else if (isRange && i < Math.ceil(rangeEnd)) svgs += '<svg class="icon range"><use href="#i-star-fill"/></svg>';
+      else svgs += '<svg class="icon empty"><use href="#i-star-line"/></svg>';
+    }
+    el.innerHTML = svgs;
+    el.setAttribute('aria-label', isRange ? ('an estimated range, ' + rating + ' to ' + rangeEnd) : (rating + ' of 5'));
+  }
+  function applyPlayerProfileData(name) {
+    var p = PLAYER_PROFILES[name];
+    var metaEl = document.getElementById('player-header-meta-text');
+    var caEl = document.getElementById('player-ca-stars');
+    var paEl = document.getElementById('player-pa-stars');
+    var valEl = document.getElementById('player-est-value');
+    var wageEl = document.getElementById('player-wage-value');
+    var untilEl = wageEl ? wageEl.querySelector('.vitals-sub') : null;
+    var statusEl = document.getElementById('player-status-pill');
+    var interestEl = document.getElementById('player-interest-pill');
+    if (!p) {
+      // No authored profile for this name - leave the shared illustrative header as-is,
+      // except the meta line, which should at least not keep claiming to be Hamza Malik.
+      if (metaEl) metaEl.innerHTML = 'Pakistan <span class="meta-divider">&middot;</span> Squad player <span class="meta-divider">&middot;</span> Domestic';
+      return;
+    }
+    if (metaEl) metaEl.innerHTML = p.nat + ' <span class="meta-divider">&middot;</span> ' + p.team + ' <span class="meta-divider">&middot;</span> ' + p.caps;
+    renderStarRow(caEl, p.ca, false);
+    renderStarRow(paEl, p.pa[0], true, p.pa[1]);
+    if (valEl) valEl.textContent = p.value;
+    if (wageEl) wageEl.innerHTML = p.wage + '<span class="vitals-sub">' + p.until + '</span>';
+    if (statusEl) { statusEl.className = 'pill ' + p.status.cls; statusEl.innerHTML = '<svg class="icon sm"><use href="#i-check-circle"/></svg>' + p.status.text; }
+    if (interestEl) interestEl.innerHTML = '<svg class="icon sm"><use href="#i-star-line"/></svg>' + p.interest;
+  }
+
   var PLAYER_HAND_DESC = {
     'RHB': 'Right-hand bat', 'LHB': 'Left-hand bat', 'LHB / WK': 'Left-hand bat &middot; Wicketkeeper',
     'RAF': 'Right-arm fast bowler', 'Off-spin': 'Off-spin bowler', 'Off-spinner': 'Off-spin bowler',
@@ -7107,13 +7375,14 @@
     if (nameEl) name = nameEl.firstChild.textContent.trim();
     else if (rowEl.querySelector('.staff-name')) name = rowEl.querySelector('.staff-name').textContent.trim();
     else if (rowEl.querySelector('.duty-player')) name = rowEl.querySelector('.duty-player').firstChild.textContent.trim();
-    var hand = handEl ? handEl.textContent.trim() : '';
+    var hand = (PLAYER_PROFILES[name] && PLAYER_PROFILES[name].hand) || (handEl ? handEl.textContent.trim() : '');
     var h1 = document.getElementById('player-name-h1');
     if (h1) h1.textContent = name;
     var roleLine = document.getElementById('player-role-line');
     if (roleLine) roleLine.innerHTML = PLAYER_HAND_DESC[hand] || hand || 'Squad player';
     var here = document.getElementById('player-breadcrumb-here');
     if (here) here.textContent = name;
+    applyPlayerProfileData(name);
     showPanel('player');
   }
   function hireStaff(roleKey, name, tierClass, tierLabel, wage) {
