@@ -220,18 +220,32 @@ in Parts A/B and the reference-asset adoption in Part B/C, not a restyle.
 9. **The two bare `0.8rem` declarations** (Part F) — trivial, bundle into whichever other
    Match Day edit happens next rather than a standalone pass.
 
-## Part E — Open decisions (need the user's call, not mine to make silently)
+## Part E — Decisions (RESOLVED with the user, 2026-09-14)
 
-1. **A1's fix scope**: gate the context switcher by onboarding choice (recommended), or
-   leave it as an always-available three-way demo toggle and just note the inconsistency
-   in `CLAUDE.md` as an accepted simplification?
-2. **Panel-background style**: keep CC2014's flat navy + real corner art (current, live
-   everywhere), or trial FM23's real gradient texture (`skin_0017.png`)?
-3. **Icon style**: keep the current custom SVG sprite, or adopt FM23's real clean
-   sport-agnostic icon set for some/all status chips?
-4. **The two newer franchise leagues**: build them a full auction/retention/trade cycle
-   like PPL, or keep them profile-only by design (a real, permanent scope decision, not a
-   deferral)?
+1. **A1's fix scope — DECIDED: gate the context switcher by onboarding choice.** The
+   recommended option. `finishOnboarding(ctx, label)` should restrict the topbar's visible
+   context pills to the role actually chosen; the "Continue" (demo save) path keeps all
+   three, since showing every identity is the whole point of that path.
+2. **Panel-background style — DECIDED: keep CC2014's flat navy + real corner art (no
+   change).** The user asked for my recommendation as a professional call. Reasoning: Part
+   F's audit found zero real craft problem with the current system to justify a large,
+   cross-cutting visual change touching every screen's contrast/readability; FM23's
+   gradient is FM's own signature look, and adopting it wholesale risks the mockup reading
+   as "an FM reskin" rather than holding its own considered identity — the opposite of the
+   distinct-point-of-view principle this review is applying. Not a rejection of FM23's
+   asset — just not the right lever to pull here.
+3. **Icon style — DECIDED: keep the current custom SVG sprite as the default (no wholesale
+   swap).** Same reasoning as #2, plus a functional edge the custom sprite has and FM23's
+   fixed PNGs don't: `currentColor` tinting for hover/active/selected states, already
+   depended on across the whole app. **Refinement, not a rejection**: when a genuinely NEW
+   icon concept is needed later (one the custom sprite doesn't already have), check FM23's
+   real icon vocabulary first before inventing one from scratch — a single addition is low
+   risk; a wholesale swap is not.
+4. **The two newer franchise leagues — DECIDED: keep profile-only.** The recommended
+   option. Indian Masters League and Southern Blaze League stay world-directory entries
+   only; Pakistan Premier League remains the one fully interactive franchise league. Keeps
+   scope tight; revisit only if a future request specifically asks for a second live
+   auction cycle.
 
 ## Self-review (per the skill's own checklist)
 
