@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CricketManager.Tests", "tes
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CricketManager.App", "src\CricketManager.App\CricketManager.App.csproj", "{DCA63287-AA80-4075-929A-0B76BBA7E2AE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CricketManager.Api", "src\CricketManager.Api\CricketManager.Api.csproj", "{D02F5A9A-DDD4-47EB-9118-34CF01B0CCE1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -73,6 +75,18 @@ Global
 		{DCA63287-AA80-4075-929A-0B76BBA7E2AE}.Release|x64.Build.0 = Release|Any CPU
 		{DCA63287-AA80-4075-929A-0B76BBA7E2AE}.Release|x86.ActiveCfg = Release|Any CPU
 		{DCA63287-AA80-4075-929A-0B76BBA7E2AE}.Release|x86.Build.0 = Release|Any CPU
+		{D02F5A9A-DDD4-47EB-9118-34CF01B0CCE1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D02F5A9A-DDD4-47EB-9118-34CF01B0CCE1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D02F5A9A-DDD4-47EB-9118-34CF01B0CCE1}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{D02F5A9A-DDD4-47EB-9118-34CF01B0CCE1}.Debug|x64.Build.0 = Debug|Any CPU
+		{D02F5A9A-DDD4-47EB-9118-34CF01B0CCE1}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{D02F5A9A-DDD4-47EB-9118-34CF01B0CCE1}.Debug|x86.Build.0 = Debug|Any CPU
+		{D02F5A9A-DDD4-47EB-9118-34CF01B0CCE1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D02F5A9A-DDD4-47EB-9118-34CF01B0CCE1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D02F5A9A-DDD4-47EB-9118-34CF01B0CCE1}.Release|x64.ActiveCfg = Release|Any CPU
+		{D02F5A9A-DDD4-47EB-9118-34CF01B0CCE1}.Release|x64.Build.0 = Release|Any CPU
+		{D02F5A9A-DDD4-47EB-9118-34CF01B0CCE1}.Release|x86.ActiveCfg = Release|Any CPU
+		{D02F5A9A-DDD4-47EB-9118-34CF01B0CCE1}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -82,5 +96,6 @@ Global
 		{AD861957-A8BD-4DAD-AE29-C6B9C1AF2163} = {D6F0A75F-9728-477C-99D6-ABAE9EC1B710}
 		{136B37EC-33BB-44C5-ACA8-5717F4043FEE} = {AA0109B7-1060-42A9-B154-856EF3E26386}
 		{DCA63287-AA80-4075-929A-0B76BBA7E2AE} = {D6F0A75F-9728-477C-99D6-ABAE9EC1B710}
+		{D02F5A9A-DDD4-47EB-9118-34CF01B0CCE1} = {D6F0A75F-9728-477C-99D6-ABAE9EC1B710}
 	EndGlobalSection
 EndGlobal
