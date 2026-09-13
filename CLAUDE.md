@@ -11533,6 +11533,68 @@ was NOT clean before this pass started), and `node --check` on the extracted tra
 block (`NODE SYNTAX OK` every time, script braces 909/909, parens 1984/1984 final). File size
 ~2.75MB.
 
+### 2026-09-13 (continued): central-contract annual review corrected to real coach authority
+
+Immediately after the batch above shipped, the user directly rejected item 7's own design (the
+"Review this year's announcement" feature had just been built as a passive modal — the National
+Board's own already-decided diff, coach could only view it, or separately petition). Four
+follow-up corrections, given in quick succession, pinned down the actual intended model:
+
+1. Promotion/demotion/removal/inclusion for central contracts is the **coach's own authority**,
+   not the board's — the coach decides, he does not just review a decision already made for him.
+2. NOC (No Objection Certificate — the grant/deny call on releasing a centrally-contracted player
+   for a clashing franchise season) is **also the coach's own call**, not the board's.
+3. The **announcement itself stays a gated, once-a-year event** (matching this mockup's standing
+   convention of calendar-gated moments like the auction/squad announcement) — but **reviewing an
+   already-contracted player's tier or NOC status is available to the coach all year round**, and
+   that year-round review can **never induct a brand-new player from outside** the current list.
+4. Clarified further: at the announcement itself (the gated moment), the coach genuinely CAN
+   add or remove any domestic player, including someone from outside the current list — that full
+   redraft authority belongs specifically to the announcement. The separate, always-available
+   "review" capability is deliberately narrower: tier reassignment and NOC only, among players
+   already on the list.
+
+**Rebuilt accordingly, in three pieces:**
+- **The intro card** (International &gt; Staff &amp; Board &gt; Central contracts) now states both
+  mechanics plainly: "Last announced ... you drew up the list" / "Next announcement due in around
+  5 months", and a role-hint spelling out the two-tier authority model (full redraft power at the
+  gated announcement; standing tier/NOC review the rest of the year, never an outside induction).
+- **Every one of the 29 Tier A/B/C rows** (6 + 9 + 14) got a real, always-available inline control:
+  the 15 Tier A/B rows' static `NOC granted/denied/pending` badges became clickable
+  (`.tier-badge.noc-badge`, `onclick="event.stopPropagation();openCentralContractManage(this)"`);
+  the 14 Tier C rows (which never had a badge — NOC never applies at that tier) gained a small new
+  `.cc-manage-btn` ("Manage") for tier-only reassignment. Built via one Python regex pass over the
+  block (`ROW_RE`), not 29 individual `must_replace` calls, asserted against an exact `n_rows == 29`
+  count so a missed or double-matched row would fail loudly rather than ship silently wrong.
+  `openCentralContractManage(el)` reads the row's own name off `.staff-name` and derives the
+  player's CURRENT tier from `el.closest('.analysis-card').querySelector('.eyebrow')`'s own text
+  ("Tier A · 6 players" etc.) rather than a duplicated per-row data attribute — the tier a player
+  is in is already stated once, by which section his row lives in, and reading that is more honest
+  than a second copy that could drift out of sync with it. The popup itself (`#central-contract-
+  manage-backdrop`) offers ONLY tier-move buttons + (for Tier A/B) Grant/Deny/Leave-pending NOC
+  buttons — no outsider picker anywhere in it, enforcing constraint 3/4's "never from outside" rule
+  structurally rather than just in copy.
+- **The announcement modal itself** (`#contract-review-backdrop`, reached via the now-relabelled
+  "This year's announcement" button) was rebuilt from a static diff table into a real decision
+  surface: each of the four example moves (Umar Baig's promotion, Kamran Aslam's demotion, Sarfraz
+  Bhatti's new inclusion, Farhan Sabir's drop) now carries a genuine **Approve** / **Override**
+  button pair (`decideAnnouncementMove(btn, decision)` — disables the pair, colours the chosen one,
+  and prints a real "Approved — the recommendation stands" / "Overridden — your call replaces it"
+  note). A new "Bring in another player…" select + **Add at Tier C** button
+  (`addOutsiderToAnnouncement()`) is the one place in the whole screen that IS allowed to induct an
+  outsider — deliberately scoped to the three Tier C names already shown elsewhere on this same
+  screen (Zain Chaudhry / Waqar Ansari / Junaid Butt) rather than an unbounded picker, matching
+  this project's own domain-grounding discipline (never invent a mechanic with no real boundary).
+  A closing **Confirm this year's announcement** button (`confirmAnnouncement()`) locks the modal
+  and logs a "the list is confirmed and goes out as news today" line, closing the loop honestly —
+  the announcement is a real, committed decision, not an open-ended form.
+
+**Verified**: the same full structural suite as every prior script this session — tag-count parity
+(`div` 2245/2245, `table` 31/31, `tr` 169/169, `span` 1368/1368, `svg` 360/360, `nav` 14/14,
+`section` 21/21, `button` 342/342), a stack-based div-nesting scan (0 unclosed, 0 extra closes), a
+duplicate-id scan (clean), and `node --check` on the extracted trailing `<script>` block (`NODE
+SYNTAX OK`, script braces/parens both balanced at 0). File size ~2.76MB.
+
 ---
 
 ## CONSOLIDATED DEFERRED-ITEMS REGISTER (maintained - the single source of truth)

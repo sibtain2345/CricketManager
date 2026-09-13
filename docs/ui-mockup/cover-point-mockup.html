@@ -1060,6 +1060,13 @@
   .facility-tier-badge.tier-poor { color: var(--ball); }
   .facility-request-btn { appearance: none; background: var(--surface-3); border: 1px solid var(--border); color: var(--ink-dim); font: inherit; font-size: var(--fs-micro); font-weight: 700; padding: 7px 12px; border-radius: 7px; cursor: pointer; flex-shrink: 0; white-space: nowrap; }
   .facility-request-btn:hover { border-color: var(--chrome-strong); color: var(--ink); }
+  .facility-request-btn:disabled { cursor: default; }
+  .tier-badge.noc-badge { cursor: pointer; }
+  .tier-badge.noc-badge:hover { filter: brightness(1.15); }
+  .cc-manage-btn { appearance: none; background: var(--surface-3); border: 1px solid var(--border); color: var(--ink-dim); font: inherit; font-size: var(--fs-micro); font-weight: 700; padding: 4px 10px; border-radius: 6px; cursor: pointer; flex-shrink: 0; white-space: nowrap; }
+  .cc-manage-btn:hover { border-color: var(--chrome-strong); color: var(--ink); }
+  .cc-decision-cell { display: flex; flex-direction: column; gap: 4px; align-items: flex-start; }
+  .cc-decision-cell .facility-request-btn { padding: 5px 9px; }
   .academy-action-btn { appearance: none; background: var(--surface-3); border: 1px solid var(--border); color: var(--ink-dim); font: inherit; font-size: var(--fs-micro); font-weight: 700; padding: 7px 12px; border-radius: 7px; cursor: pointer; flex-shrink: 0; white-space: nowrap; }
   .academy-action-btn:hover { border-color: var(--chrome-strong); color: var(--ink); }
 
@@ -3620,59 +3627,61 @@
     <div class="subpanel" id="intl-contracts" hidden>
     <div class="analysis-card">
       <span class="eyebrow"><svg class="icon sm"><use href="#i-badge"/></svg> Central contracts &middot; the full list, every team</span>
-      <div class="bio-line"><span class="k">Last announced</span><span style="color:var(--turf-strong)">4 months ago &middot; the annual review</span></div>
-      <div class="role-hint" style="margin-bottom:10px">Awarded annually from each player&rsquo;s own best-format evaluator score &mdash; a real, checkable ranking across the WHOLE domestic player pool, not just your own squad, and not a reputation list. The list itself is genuine news the day it lands, the same way a squad announcement is.</div>
+      <div class="bio-line"><span class="k">Last announced</span><span style="color:var(--turf-strong)">4 months ago &middot; you drew up the list</span></div>
+      <div class="bio-line"><span class="k">Next announcement</span><span style="color:var(--ink-dim)">due in around 5 months, once the domestic season concludes</span></div>
+      <div class="role-hint" style="margin-bottom:10px">The evaluator's own best-format ranking across the whole domestic pool feeds the announcement &mdash; but the tier list itself is drawn up by you, not handed down by the board. At the annual announcement you hold full authority: promote, demote, bring in anyone from the domestic pool, or drop a name entirely. Between announcements you can still revisit an already-contracted player's tier or NOC status any time you like &mdash; the small &ldquo;Manage&rdquo; action on his own row below &mdash; but that standing review can never induct someone who wasn't already on the list; a genuine outsider only ever comes in through the next full announcement, or a petition heard in between.</div>
       <div style="display:flex;gap:10px;flex-wrap:wrap">
-        <button class="facility-request-btn" onclick="openContractReview()">Review this year's announcement</button>
+        <button class="facility-request-btn" onclick="openContractReview()">This year's announcement</button>
         <button class="facility-request-btn" onclick="openContractPetition()">Petition the board for a player</button>
       </div>
     </div>
 
     <div class="analysis-card" style="margin-top:16px">
       <div class="eyebrow" style="display:block;margin-bottom:6px">Tier A &middot; 6 players</div>
-      <div class="staff-row clickable" onclick="openPlayerFromRow(this)"><div class="staff-row-main"><span class="staff-name">Kamran Hussain</span><span class="staff-role-label">Lahore Lions &middot; Top order, captain &middot; PPL window clashes with the ODI series</span></div><span class="tier-badge c">NOC denied</span></div>
-      <div class="staff-row clickable" onclick="openPlayerFromRow(this)"><div class="staff-row-main"><span class="staff-name">Talha Iqbal</span><span class="staff-role-label">Lahore Lions &middot; Opener</span></div><span class="tier-badge a">NOC granted</span></div>
-      <div class="staff-row clickable" onclick="openPlayerFromRow(this)"><div class="staff-row-main"><span class="staff-name">Rizwan Sheikh</span><span class="staff-role-label">Islamabad Icons &middot; Middle-overs seam</span></div><span class="tier-badge b">NOC pending</span></div>
-      <div class="staff-row clickable" onclick="openPlayerFromRow(this)"><div class="staff-row-main"><span class="staff-name">Umar Baig</span><span class="staff-role-label">Islamabad Icons &middot; Allrounder</span></div><span class="tier-badge a">NOC granted</span></div>
-      <div class="staff-row clickable" onclick="openPlayerFromRow(this)"><div class="staff-row-main"><span class="staff-name">Shahzaib Alam</span><span class="staff-role-label">Karachi Kings &middot; Top order</span></div><span class="tier-badge c">NOC denied</span></div>
-      <div class="staff-row clickable" onclick="openPlayerFromRow(this)"><div class="staff-row-main"><span class="staff-name">Sarfraz Khan</span><span class="staff-role-label">Multan Sultans &middot; Middle order</span></div><span class="tier-badge b">NOC pending</span></div>
+      <div class="staff-row clickable" onclick="openPlayerFromRow(this)"><div class="staff-row-main"><span class="staff-name">Kamran Hussain</span><span class="staff-role-label">Lahore Lions &middot; Top order, captain &middot; PPL window clashes with the ODI series</span></div><span class="tier-badge c noc-badge" onclick="event.stopPropagation();openCentralContractManage(this)" title="Manage tier &amp; NOC">NOC denied</span></div>
+      <div class="staff-row clickable" onclick="openPlayerFromRow(this)"><div class="staff-row-main"><span class="staff-name">Talha Iqbal</span><span class="staff-role-label">Lahore Lions &middot; Opener</span></div><span class="tier-badge a noc-badge" onclick="event.stopPropagation();openCentralContractManage(this)" title="Manage tier &amp; NOC">NOC granted</span></div>
+      <div class="staff-row clickable" onclick="openPlayerFromRow(this)"><div class="staff-row-main"><span class="staff-name">Rizwan Sheikh</span><span class="staff-role-label">Islamabad Icons &middot; Middle-overs seam</span></div><span class="tier-badge b noc-badge" onclick="event.stopPropagation();openCentralContractManage(this)" title="Manage tier &amp; NOC">NOC pending</span></div>
+      <div class="staff-row clickable" onclick="openPlayerFromRow(this)"><div class="staff-row-main"><span class="staff-name">Umar Baig</span><span class="staff-role-label">Islamabad Icons &middot; Allrounder</span></div><span class="tier-badge a noc-badge" onclick="event.stopPropagation();openCentralContractManage(this)" title="Manage tier &amp; NOC">NOC granted</span></div>
+      <div class="staff-row clickable" onclick="openPlayerFromRow(this)"><div class="staff-row-main"><span class="staff-name">Shahzaib Alam</span><span class="staff-role-label">Karachi Kings &middot; Top order</span></div><span class="tier-badge c noc-badge" onclick="event.stopPropagation();openCentralContractManage(this)" title="Manage tier &amp; NOC">NOC denied</span></div>
+      <div class="staff-row clickable" onclick="openPlayerFromRow(this)"><div class="staff-row-main"><span class="staff-name">Sarfraz Khan</span><span class="staff-role-label">Multan Sultans &middot; Middle order</span></div><span class="tier-badge b noc-badge" onclick="event.stopPropagation();openCentralContractManage(this)" title="Manage tier &amp; NOC">NOC pending</span></div>
     </div>
 
     <div class="analysis-card" style="margin-top:16px">
       <div class="eyebrow" style="display:block;margin-bottom:6px">Tier B &middot; 9 players</div>
-      <div class="staff-row clickable" onclick="openPlayerFromRow(this)"><div class="staff-row-main"><span class="staff-name">Adeel Hayat</span><span class="staff-role-label">Quetta Falcons &middot; Fast bowler &middot; released once the Test squad is confirmed</span></div><span class="tier-badge b">NOC pending</span></div>
-      <div class="staff-row clickable" onclick="openPlayerFromRow(this)"><div class="staff-row-main"><span class="staff-name">Faisal Nadeem</span><span class="staff-role-label">Multan Sultans &middot; Front-line spin</span></div><span class="tier-badge a">NOC granted</span></div>
-      <div class="staff-row clickable" onclick="openPlayerFromRow(this)"><div class="staff-row-main"><span class="staff-name">Hamza Malik</span><span class="staff-role-label">Islamabad Icons &middot; Middle order</span></div><span class="tier-badge a">NOC granted</span></div>
-      <div class="staff-row clickable" onclick="openPlayerFromRow(this)"><div class="staff-row-main"><span class="staff-name">Bilal Nadeem</span><span class="staff-role-label">Islamabad Icons &middot; Bowler</span></div><span class="tier-badge b">NOC pending</span></div>
-      <div class="staff-row clickable" onclick="openPlayerFromRow(this)"><div class="staff-row-main"><span class="staff-name">Danish Raza</span><span class="staff-role-label">Islamabad Icons &middot; Allrounder</span></div><span class="tier-badge b">NOC pending</span></div>
-      <div class="staff-row clickable" onclick="openPlayerFromRow(this)"><div class="staff-row-main"><span class="staff-name">Kamran Aslam</span><span class="staff-role-label">Islamabad Icons &middot; Bowler</span></div><span class="tier-badge c">NOC denied</span></div>
-      <div class="staff-row clickable" onclick="openPlayerFromRow(this)"><div class="staff-row-main"><span class="staff-name">Nouman Bhatti</span><span class="staff-role-label">Karachi Kings &middot; Bowler</span></div><span class="tier-badge a">NOC granted</span></div>
-      <div class="staff-row clickable" onclick="openPlayerFromRow(this)"><div class="staff-row-main"><span class="staff-name">Rayyan Sheikh</span><span class="staff-role-label">Multan Sultans &middot; Allrounder</span></div><span class="tier-badge b">NOC pending</span></div>
-      <div class="staff-row clickable" onclick="openPlayerFromRow(this)"><div class="staff-row-main"><span class="staff-name">Shoaib Niazi</span><span class="staff-role-label">Peshawar Zalmi &middot; Batter</span></div><span class="tier-badge c">NOC denied</span></div>
+      <div class="staff-row clickable" onclick="openPlayerFromRow(this)"><div class="staff-row-main"><span class="staff-name">Adeel Hayat</span><span class="staff-role-label">Quetta Falcons &middot; Fast bowler &middot; released once the Test squad is confirmed</span></div><span class="tier-badge b noc-badge" onclick="event.stopPropagation();openCentralContractManage(this)" title="Manage tier &amp; NOC">NOC pending</span></div>
+      <div class="staff-row clickable" onclick="openPlayerFromRow(this)"><div class="staff-row-main"><span class="staff-name">Faisal Nadeem</span><span class="staff-role-label">Multan Sultans &middot; Front-line spin</span></div><span class="tier-badge a noc-badge" onclick="event.stopPropagation();openCentralContractManage(this)" title="Manage tier &amp; NOC">NOC granted</span></div>
+      <div class="staff-row clickable" onclick="openPlayerFromRow(this)"><div class="staff-row-main"><span class="staff-name">Hamza Malik</span><span class="staff-role-label">Islamabad Icons &middot; Middle order</span></div><span class="tier-badge a noc-badge" onclick="event.stopPropagation();openCentralContractManage(this)" title="Manage tier &amp; NOC">NOC granted</span></div>
+      <div class="staff-row clickable" onclick="openPlayerFromRow(this)"><div class="staff-row-main"><span class="staff-name">Bilal Nadeem</span><span class="staff-role-label">Islamabad Icons &middot; Bowler</span></div><span class="tier-badge b noc-badge" onclick="event.stopPropagation();openCentralContractManage(this)" title="Manage tier &amp; NOC">NOC pending</span></div>
+      <div class="staff-row clickable" onclick="openPlayerFromRow(this)"><div class="staff-row-main"><span class="staff-name">Danish Raza</span><span class="staff-role-label">Islamabad Icons &middot; Allrounder</span></div><span class="tier-badge b noc-badge" onclick="event.stopPropagation();openCentralContractManage(this)" title="Manage tier &amp; NOC">NOC pending</span></div>
+      <div class="staff-row clickable" onclick="openPlayerFromRow(this)"><div class="staff-row-main"><span class="staff-name">Kamran Aslam</span><span class="staff-role-label">Islamabad Icons &middot; Bowler</span></div><span class="tier-badge c noc-badge" onclick="event.stopPropagation();openCentralContractManage(this)" title="Manage tier &amp; NOC">NOC denied</span></div>
+      <div class="staff-row clickable" onclick="openPlayerFromRow(this)"><div class="staff-row-main"><span class="staff-name">Nouman Bhatti</span><span class="staff-role-label">Karachi Kings &middot; Bowler</span></div><span class="tier-badge a noc-badge" onclick="event.stopPropagation();openCentralContractManage(this)" title="Manage tier &amp; NOC">NOC granted</span></div>
+      <div class="staff-row clickable" onclick="openPlayerFromRow(this)"><div class="staff-row-main"><span class="staff-name">Rayyan Sheikh</span><span class="staff-role-label">Multan Sultans &middot; Allrounder</span></div><span class="tier-badge b noc-badge" onclick="event.stopPropagation();openCentralContractManage(this)" title="Manage tier &amp; NOC">NOC pending</span></div>
+      <div class="staff-row clickable" onclick="openPlayerFromRow(this)"><div class="staff-row-main"><span class="staff-name">Shoaib Niazi</span><span class="staff-role-label">Peshawar Zalmi &middot; Batter</span></div><span class="tier-badge c noc-badge" onclick="event.stopPropagation();openCentralContractManage(this)" title="Manage tier &amp; NOC">NOC denied</span></div>
     </div>
 
     <div class="analysis-card" style="margin-top:16px">
       <div class="eyebrow" style="display:block;margin-bottom:6px">Tier C &middot; 14 players</div>
-      <div class="role-hint" style="margin-bottom:8px">NOC is not a mechanic that applies at this tier at all &mdash; a Tier C player is never subject to it.</div>
-      <div class="staff-row clickable" onclick="openPlayerFromRow(this)"><div class="staff-row-main"><span class="staff-name">Zain Chaudhry</span><span class="staff-role-label">Islamabad Icons &middot; Wicketkeeper</span></div></div>
-      <div class="staff-row clickable" onclick="openPlayerFromRow(this)"><div class="staff-row-main"><span class="staff-name">Umair Chaudhry</span><span class="staff-role-label">Peshawar Zalmi &middot; Fast bowler</span></div></div>
-      <div class="staff-row clickable" onclick="openPlayerFromRow(this)"><div class="staff-row-main"><span class="staff-name">Sohail Marwat</span><span class="staff-role-label">Quetta Falcons &middot; Batter</span></div></div>
-      <div class="staff-row clickable" onclick="openPlayerFromRow(this)"><div class="staff-row-main"><span class="staff-name">Danyal Qureshi</span><span class="staff-role-label">Quetta Falcons &middot; Bowler</span></div></div>
-      <div class="staff-row clickable" onclick="openPlayerFromRow(this)"><div class="staff-row-main"><span class="staff-name">Junaid Sarwar</span><span class="staff-role-label">Islamabad Icons &middot; Top-order bat</span></div></div>
-      <div class="staff-row clickable" onclick="openPlayerFromRow(this)"><div class="staff-row-main"><span class="staff-name">Rameez Toru</span><span class="staff-role-label">Peshawar Zalmi &middot; Fast bowler</span></div></div>
-      <div class="staff-row clickable" onclick="openPlayerFromRow(this)"><div class="staff-row-main"><span class="staff-name">Waqar Ansari</span><span class="staff-role-label">Islamabad Icons &middot; Middle order</span></div></div>
-      <div class="staff-row clickable" onclick="openPlayerFromRow(this)"><div class="staff-row-main"><span class="staff-name">Umar Ansari</span><span class="staff-role-label">Islamabad Icons &middot; Opener</span></div></div>
-      <div class="staff-row clickable" onclick="openPlayerFromRow(this)"><div class="staff-row-main"><span class="staff-name">Saad Farooq</span><span class="staff-role-label">Lahore Lions &middot; Bowler</span></div></div>
-      <div class="staff-row clickable" onclick="openPlayerFromRow(this)"><div class="staff-row-main"><span class="staff-name">Junaid Butt</span><span class="staff-role-label">Lahore Lions &middot; Bowler</span></div></div>
-      <div class="staff-row clickable" onclick="openPlayerFromRow(this)"><div class="staff-row-main"><span class="staff-name">Bilal Awan</span><span class="staff-role-label">Lahore Lions &middot; Bowler</span></div></div>
-      <div class="staff-row clickable" onclick="openPlayerFromRow(this)"><div class="staff-row-main"><span class="staff-name">Fahad Sultan</span><span class="staff-role-label">Islamabad Icons &middot; Bowler</span></div></div>
-      <div class="staff-row clickable" onclick="openPlayerFromRow(this)"><div class="staff-row-main"><span class="staff-name">Sarfraz Bhatti</span><span class="staff-role-label">Islamabad Icons &middot; Middle order</span></div></div>
-      <div class="staff-row clickable" onclick="openPlayerFromRow(this)"><div class="staff-row-main"><span class="staff-name">Nasir Aslam</span><span class="staff-role-label">Islamabad Icons &middot; Fast-medium bowler</span></div></div>
+      <div class="role-hint" style="margin-bottom:8px">NOC is not a mechanic that applies at this tier at all &mdash; a Tier C player is never subject to it, though his tier itself can still be revisited any time via his own &ldquo;Manage&rdquo; button.</div>
+      <div class="staff-row clickable" onclick="openPlayerFromRow(this)"><div class="staff-row-main"><span class="staff-name">Zain Chaudhry</span><span class="staff-role-label">Islamabad Icons &middot; Wicketkeeper</span></div><button class="cc-manage-btn" onclick="event.stopPropagation();openCentralContractManage(this)" title="Manage tier">Manage</button></div>
+      <div class="staff-row clickable" onclick="openPlayerFromRow(this)"><div class="staff-row-main"><span class="staff-name">Umair Chaudhry</span><span class="staff-role-label">Peshawar Zalmi &middot; Fast bowler</span></div><button class="cc-manage-btn" onclick="event.stopPropagation();openCentralContractManage(this)" title="Manage tier">Manage</button></div>
+      <div class="staff-row clickable" onclick="openPlayerFromRow(this)"><div class="staff-row-main"><span class="staff-name">Sohail Marwat</span><span class="staff-role-label">Quetta Falcons &middot; Batter</span></div><button class="cc-manage-btn" onclick="event.stopPropagation();openCentralContractManage(this)" title="Manage tier">Manage</button></div>
+      <div class="staff-row clickable" onclick="openPlayerFromRow(this)"><div class="staff-row-main"><span class="staff-name">Danyal Qureshi</span><span class="staff-role-label">Quetta Falcons &middot; Bowler</span></div><button class="cc-manage-btn" onclick="event.stopPropagation();openCentralContractManage(this)" title="Manage tier">Manage</button></div>
+      <div class="staff-row clickable" onclick="openPlayerFromRow(this)"><div class="staff-row-main"><span class="staff-name">Junaid Sarwar</span><span class="staff-role-label">Islamabad Icons &middot; Top-order bat</span></div><button class="cc-manage-btn" onclick="event.stopPropagation();openCentralContractManage(this)" title="Manage tier">Manage</button></div>
+      <div class="staff-row clickable" onclick="openPlayerFromRow(this)"><div class="staff-row-main"><span class="staff-name">Rameez Toru</span><span class="staff-role-label">Peshawar Zalmi &middot; Fast bowler</span></div><button class="cc-manage-btn" onclick="event.stopPropagation();openCentralContractManage(this)" title="Manage tier">Manage</button></div>
+      <div class="staff-row clickable" onclick="openPlayerFromRow(this)"><div class="staff-row-main"><span class="staff-name">Waqar Ansari</span><span class="staff-role-label">Islamabad Icons &middot; Middle order</span></div><button class="cc-manage-btn" onclick="event.stopPropagation();openCentralContractManage(this)" title="Manage tier">Manage</button></div>
+      <div class="staff-row clickable" onclick="openPlayerFromRow(this)"><div class="staff-row-main"><span class="staff-name">Umar Ansari</span><span class="staff-role-label">Islamabad Icons &middot; Opener</span></div><button class="cc-manage-btn" onclick="event.stopPropagation();openCentralContractManage(this)" title="Manage tier">Manage</button></div>
+      <div class="staff-row clickable" onclick="openPlayerFromRow(this)"><div class="staff-row-main"><span class="staff-name">Saad Farooq</span><span class="staff-role-label">Lahore Lions &middot; Bowler</span></div><button class="cc-manage-btn" onclick="event.stopPropagation();openCentralContractManage(this)" title="Manage tier">Manage</button></div>
+      <div class="staff-row clickable" onclick="openPlayerFromRow(this)"><div class="staff-row-main"><span class="staff-name">Junaid Butt</span><span class="staff-role-label">Lahore Lions &middot; Bowler</span></div><button class="cc-manage-btn" onclick="event.stopPropagation();openCentralContractManage(this)" title="Manage tier">Manage</button></div>
+      <div class="staff-row clickable" onclick="openPlayerFromRow(this)"><div class="staff-row-main"><span class="staff-name">Bilal Awan</span><span class="staff-role-label">Lahore Lions &middot; Bowler</span></div><button class="cc-manage-btn" onclick="event.stopPropagation();openCentralContractManage(this)" title="Manage tier">Manage</button></div>
+      <div class="staff-row clickable" onclick="openPlayerFromRow(this)"><div class="staff-row-main"><span class="staff-name">Fahad Sultan</span><span class="staff-role-label">Islamabad Icons &middot; Bowler</span></div><button class="cc-manage-btn" onclick="event.stopPropagation();openCentralContractManage(this)" title="Manage tier">Manage</button></div>
+      <div class="staff-row clickable" onclick="openPlayerFromRow(this)"><div class="staff-row-main"><span class="staff-name">Sarfraz Bhatti</span><span class="staff-role-label">Islamabad Icons &middot; Middle order</span></div><button class="cc-manage-btn" onclick="event.stopPropagation();openCentralContractManage(this)" title="Manage tier">Manage</button></div>
+      <div class="staff-row clickable" onclick="openPlayerFromRow(this)"><div class="staff-row-main"><span class="staff-name">Nasir Aslam</span><span class="staff-role-label">Islamabad Icons &middot; Fast-medium bowler</span></div><button class="cc-manage-btn" onclick="event.stopPropagation();openCentralContractManage(this)" title="Manage tier">Manage</button></div>
     </div>
 
     <div class="analysis-card" style="margin-top:16px">
-      <span class="eyebrow"><svg class="icon sm"><use href="#i-shield"/></svg> NOC &middot; what it actually means</span>
-      <div class="role-hint">International duty always wins a genuine clash &mdash; NOC denial only ever decides whether a centrally-contracted player is <i>also</i> released for a franchise season, never whether the series itself goes ahead. It is only ever a live question for a Tier A or Tier B contract; Tier C and uncontracted players are never subject to it.</div>
+      <span class="eyebrow"><svg class="icon sm"><use href="#i-shield"/></svg> Standing authority &middot; tiers, NOC, and what you can't do here</span>
+      <div class="role-hint" style="margin-bottom:6px">Grant or deny NOC yourself, any time &mdash; it's your call, not the board's, on whether a centrally-contracted player is <i>also</i> released for a clashing franchise season. International duty always wins the clash regardless of what you decide here; NOC denial only ever withholds the franchise release, never the series itself. It's only ever a live question for a Tier A or Tier B contract &mdash; Tier C and uncontracted players are never subject to it.</div>
+      <div class="role-hint">Reassigning a tier or an NOC call from a player's own &ldquo;Manage&rdquo; button works whenever you like, all season. What it can't do: bring in a name who isn't already on this list. A genuine outsider only ever joins through the next full announcement &mdash; or gets heard, not guaranteed, through a petition in between.</div>
     </div>
 
     <div class="analysis-card">
@@ -4149,24 +4158,88 @@
 </div>
 
 <div class="modal-backdrop" id="contract-review-backdrop" onclick="if(event.target===this) closeContractReview()">
-  <div class="negotiation-modal" role="dialog" aria-modal="true" aria-labelledby="contract-review-title" style="max-width:480px">
+  <div class="negotiation-modal" role="dialog" aria-modal="true" aria-labelledby="contract-review-title" style="max-width:560px">
     <div class="negotiation-head">
-      <h2 id="contract-review-title" style="margin:0">Central contracts &middot; annual review</h2>
+      <h2 id="contract-review-title" style="margin:0">This year's announcement</h2>
       <button class="modal-close" onclick="closeContractReview()" aria-label="Close">&times;</button>
     </div>
-    <div class="role-hint" style="margin:10px 0">Awarded fresh from every player's own best-format evaluator score across the whole domestic pool &mdash; last year's list is not carried forward, it is recomputed. What actually changed hands this cycle:</div>
+    <div class="role-hint" style="margin:10px 0">The evaluator's own best-format ranking across the whole domestic pool is the starting point &mdash; but nothing here is final until <strong style="color:var(--ink)">you</strong> sign off on it. Approve a recommendation, or override it, one row at a time.</div>
     <div class="table-card">
-      <table class="career">
-        <thead><tr><th>Player</th><th>Movement</th><th>Why</th></tr></thead>
+      <table class="career" id="cc-announcement-table">
+        <thead><tr><th>Player</th><th>Recommended</th><th>Your call</th></tr></thead>
         <tbody>
-          <tr><td class="player-name clickable" onclick="openPlayerFromRow(this.closest('tr'))">Umar Baig</td><td><span class="pill first" style="padding:2px 8px">Tier C &rarr; Tier A</span></td><td>A genuine breakout franchise season pushed his evaluator score clear of the Tier A cutoff.</td></tr>
-          <tr><td class="player-name clickable" onclick="openPlayerFromRow(this.closest('tr'))">Kamran Aslam</td><td><span class="pill" style="padding:2px 8px;background:var(--surface-3);color:var(--ink-dim)">Tier A &rarr; Tier B</span></td><td>A quiet season by his own recent standard &mdash; still contracted, just no longer top tier.</td></tr>
-          <tr><td class="player-name clickable" onclick="openPlayerFromRow(this.closest('tr'))">Sarfraz Bhatti</td><td><span class="pill first" style="padding:2px 8px">New &middot; Tier C</span></td><td>First central contract of his career, off a genuinely strong domestic first-class season.</td></tr>
-          <tr><td>Farhan Sabir</td><td><span class="pill second" style="padding:2px 8px">Dropped</span></td><td>Held a Tier C contract last year &mdash; a long injury layoff cost him the evaluator score to keep it.</td></tr>
+          <tr data-cc-row="promote">
+            <td class="player-name clickable" onclick="openPlayerFromRow(this.closest('tr'))">Umar Baig</td>
+            <td><span class="pill first" style="padding:2px 8px">Tier C &rarr; Tier A</span><div class="role-hint" style="margin:2px 0 0">A genuine breakout franchise season pushed his evaluator score clear of the Tier A cutoff.</div></td>
+            <td class="cc-decision-cell">
+              <button class="facility-request-btn" onclick="decideAnnouncementMove(this,'approve')">Approve</button>
+              <button class="facility-request-btn" onclick="decideAnnouncementMove(this,'override')">Keep at Tier C</button>
+              <div class="cc-decision-note" style="display:none"></div>
+            </td>
+          </tr>
+          <tr data-cc-row="demote">
+            <td class="player-name clickable" onclick="openPlayerFromRow(this.closest('tr'))">Kamran Aslam</td>
+            <td><span class="pill" style="padding:2px 8px;background:var(--surface-3);color:var(--ink-dim)">Tier A &rarr; Tier B</span><div class="role-hint" style="margin:2px 0 0">A quiet season by his own recent standard &mdash; still contracted, just no longer top tier.</div></td>
+            <td class="cc-decision-cell">
+              <button class="facility-request-btn" onclick="decideAnnouncementMove(this,'approve')">Approve</button>
+              <button class="facility-request-btn" onclick="decideAnnouncementMove(this,'override')">Keep at Tier A</button>
+              <div class="cc-decision-note" style="display:none"></div>
+            </td>
+          </tr>
+          <tr data-cc-row="include">
+            <td class="player-name clickable" onclick="openPlayerFromRow(this.closest('tr'))">Sarfraz Bhatti</td>
+            <td><span class="pill first" style="padding:2px 8px">New &middot; Tier C</span><div class="role-hint" style="margin:2px 0 0">First central contract of his career, off a genuinely strong domestic first-class season.</div></td>
+            <td class="cc-decision-cell">
+              <button class="facility-request-btn" onclick="decideAnnouncementMove(this,'approve')">Approve</button>
+              <button class="facility-request-btn" onclick="decideAnnouncementMove(this,'override')">Leave uncontracted</button>
+              <div class="cc-decision-note" style="display:none"></div>
+            </td>
+          </tr>
+          <tr data-cc-row="drop">
+            <td>Farhan Sabir</td>
+            <td><span class="pill second" style="padding:2px 8px">Dropped</span><div class="role-hint" style="margin:2px 0 0">Held a Tier C contract last year &mdash; a long injury layoff cost him the evaluator score to keep it.</div></td>
+            <td class="cc-decision-cell">
+              <button class="facility-request-btn" onclick="decideAnnouncementMove(this,'approve')">Approve</button>
+              <button class="facility-request-btn" onclick="decideAnnouncementMove(this,'override')">Keep his contract</button>
+              <div class="cc-decision-note" style="display:none"></div>
+            </td>
+          </tr>
         </tbody>
       </table>
     </div>
-    <div class="role-hint" style="margin-top:10px">Twenty-five of last year's twenty-nine names carried straight over &mdash; a real turnover, not a wholesale reshuffle. The full current list is still the one shown below.</div>
+    <div class="role-hint" style="margin:10px 0">Twenty-five of last year's twenty-nine names aren't in question at all &mdash; a real turnover, not a wholesale reshuffle. Want to bring in someone the evaluator didn't flag? At announcement time, and only at announcement time, you can pull any currently-uncontracted domestic player straight in.</div>
+    <div class="cc-add-row" style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:10px">
+      <select id="cc-add-outsider-select" style="flex:1;min-width:180px">
+        <option value="">Bring in another player&hellip;</option>
+        <option value="Zain Chaudhry|Tier C">Zain Chaudhry &middot; wicketkeeper, Islamabad Icons</option>
+        <option value="Waqar Ansari|Tier C">Waqar Ansari &middot; middle order, Islamabad Icons</option>
+        <option value="Junaid Butt|Tier C">Junaid Butt &middot; bowler, Lahore Lions</option>
+      </select>
+      <button class="facility-request-btn" onclick="addOutsiderToAnnouncement()">Add at Tier C</button>
+    </div>
+    <div class="convo-log" id="cc-announcement-log" style="display:none"></div>
+    <button class="stage-continue-btn" onclick="confirmAnnouncement()" id="cc-confirm-btn">Confirm this year's announcement</button>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="central-contract-manage-backdrop" onclick="if(event.target===this) closeCentralContractManage()">
+  <div class="negotiation-modal" role="dialog" aria-modal="true" aria-labelledby="ccm-title" style="max-width:400px">
+    <div class="negotiation-head">
+      <h2 id="ccm-title" style="margin:0">Player</h2>
+      <button class="modal-close" onclick="closeCentralContractManage()" aria-label="Close">&times;</button>
+    </div>
+    <div class="role-hint" style="margin:6px 0 10px">Currently <strong id="ccm-current-tier" style="color:var(--ink)">Tier A</strong>. Standing authority only &mdash; a tier move here never brings in a new name, it only reassigns someone already on the list.</div>
+    <div class="eyebrow" style="display:block;margin-bottom:6px">Tier</div>
+    <div id="ccm-tier-options" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px"></div>
+    <div id="ccm-noc-options">
+      <div class="eyebrow" style="display:block;margin-bottom:6px">NOC for the next clashing franchise window</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:6px">
+        <button class="facility-request-btn" data-noc-word="granted">Grant</button>
+        <button class="facility-request-btn" data-noc-word="denied">Deny</button>
+        <button class="facility-request-btn" data-noc-word="pending">Leave pending</button>
+      </div>
+    </div>
+    <div class="convo-log" id="ccm-log" style="margin-top:10px;display:none"></div>
   </div>
 </div>
 
@@ -5121,6 +5194,87 @@
   }
   function closeContractReview() {
     document.getElementById('contract-review-backdrop').classList.remove('open');
+  }
+
+  function decideAnnouncementMove(btn, decision) {
+    var cell = btn.closest('.cc-decision-cell');
+    cell.querySelectorAll('button').forEach(function (b) { b.disabled = true; b.style.opacity = '0.45'; });
+    btn.style.opacity = '1';
+    btn.style.borderColor = decision === 'approve' ? 'var(--turf-strong)' : 'var(--gold)';
+    var note = cell.querySelector('.cc-decision-note');
+    note.style.display = 'block';
+    note.style.color = decision === 'approve' ? 'var(--turf-strong)' : 'var(--gold)';
+    note.textContent = decision === 'approve' ? 'Approved \u2014 the recommendation stands.' : 'Overridden \u2014 your call replaces it.';
+  }
+
+  function addOutsiderToAnnouncement() {
+    var sel = document.getElementById('cc-add-outsider-select');
+    if (!sel.value) return;
+    var parts = sel.value.split('|');
+    var log = document.getElementById('cc-announcement-log');
+    log.style.display = 'block';
+    var line = document.createElement('div');
+    line.className = 'convo-line you';
+    line.textContent = 'You: bring ' + parts[0] + ' into this year\'s list at ' + parts[1] + '.';
+    log.appendChild(line);
+    sel.querySelector('option[value="' + sel.value.replace(/"/g, '\\"') + '"]').disabled = true;
+    sel.value = '';
+  }
+
+  function confirmAnnouncement() {
+    var log = document.getElementById('cc-announcement-log');
+    log.style.display = 'block';
+    var line = document.createElement('div');
+    line.className = 'convo-line him';
+    line.textContent = 'Board secretary: this year\'s central-contract list is confirmed and goes out as news today.';
+    log.appendChild(line);
+    document.getElementById('cc-confirm-btn').disabled = true;
+    document.getElementById('cc-confirm-btn').style.opacity = '0.6';
+  }
+
+  var CC_TIER_ORDER = ['A', 'B', 'C'];
+  function openCentralContractManage(el) {
+    var row = el.closest('.staff-row');
+    var name = row.querySelector('.staff-name').textContent;
+    var section = el.closest('.analysis-card').querySelector('.eyebrow').textContent;
+    var currentTier = section.indexOf('Tier A') === 0 ? 'A' : (section.indexOf('Tier B') === 0 ? 'B' : 'C');
+    var hasNoc = /NOC (denied|granted|pending)/.test(el.textContent);
+    document.getElementById('ccm-title').textContent = name;
+    document.getElementById('ccm-current-tier').textContent = 'Tier ' + currentTier;
+    var tierWrap = document.getElementById('ccm-tier-options');
+    tierWrap.innerHTML = '';
+    CC_TIER_ORDER.forEach(function (t) {
+      var b = document.createElement('button');
+      b.className = 'facility-request-btn';
+      b.textContent = t === currentTier ? ('Tier ' + t + ' (current)') : ('Move to Tier ' + t);
+      b.disabled = t === currentTier;
+      if (t === currentTier) b.style.opacity = '0.45';
+      b.onclick = function () { ccmLog('Moved to Tier ' + t + ' \u2014 takes effect immediately, no announcement needed.'); };
+      tierWrap.appendChild(b);
+    });
+    var nocWrap = document.getElementById('ccm-noc-options');
+    if (hasNoc) {
+      nocWrap.style.display = 'block';
+      nocWrap.querySelectorAll('button').forEach(function (b) {
+        b.onclick = function () { ccmLog('NOC ' + b.dataset.nocWord + ' for the next clashing franchise window.'); };
+      });
+    } else {
+      nocWrap.style.display = 'none';
+    }
+    document.getElementById('ccm-log').style.display = 'none';
+    document.getElementById('ccm-log').innerHTML = '';
+    document.getElementById('central-contract-manage-backdrop').classList.add('open');
+  }
+  function ccmLog(text) {
+    var log = document.getElementById('ccm-log');
+    log.style.display = 'block';
+    var line = document.createElement('div');
+    line.className = 'convo-line you';
+    line.textContent = 'You: ' + text;
+    log.appendChild(line);
+  }
+  function closeCentralContractManage() {
+    document.getElementById('central-contract-manage-backdrop').classList.remove('open');
   }
 
   function submitContractPetition() {
