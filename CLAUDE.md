@@ -11104,6 +11104,98 @@ id (`panel-franchise`, `panel-eoi`, `panel-preauction`, `intl-overview`, `intl-c
 `intl-fixtures`) appears exactly once; and a grep confirming zero remaining references to the
 deleted `auction-eoi`/`auction-preauction` stage ids. Final state: file size ~2.645MB.
 
+### Multi-domain identity switcher, National Pool & Squad + Selection Meeting + Major Tournament, NOC correction, and the New Game / Load Game / Job Market onboarding flow
+
+A separate, large piece of work, started from a direct user correction: the earlier per-screen
+domain-leakage work was not enough - the user's actual point was that the ENTIRE sidebar
+composition, not just individual screen content, has to differ by coaching identity (club coach
+vs franchise coach vs international coach vs domestic-non-franchise coach). Before designing
+anything, the user explicitly instructed real research into how FM handles the international-
+vs-club UI split and how it switches a user between multiple concurrent coaching roles (career-
+type choice at the start: Club / International / Club & International / Unemployed; delegation as
+the actual dual-role workload mechanism; calendar-based role separation rather than a merged UI) -
+done via real WebSearch/WebFetch with cited sources, used here only as STRUCTURAL reference, never
+literal FM text or football content, per this sub-track's own standing Principle 1/2. The user then
+asked for a genuinely detailed C# codebase audit (an Explore agent pass) to pin down exactly which
+mockup features are franchise-exclusive, international-exclusive, or domestic-non-franchise-
+exclusive before touching any markup - so nothing on any one profile's sidebar would be a
+fabricated mechanic or wrongly scoped to the wrong domain.
+
+**Context switcher** - a new `.context-switch` pill control in the topbar (Club / Franchise /
+International, deliberately new `.context-btn` class rather than reusing the existing `.phase-btn`
+Tactics-phase toggle, whose global `document.querySelectorAll('.phase-btn')` query would otherwise
+have cross-wired the two features - caught and avoided before writing any code). `setContext(ctx)`
+drives: which sidebar `.tab-btn`s are visible (`data-context` tagging - Recruitment/Club are
+club-only, Franchise is franchise-only, International is international-only; Portal/Squad/Tactics/
+Fixtures/Records/World/Inbox stay always-visible), the Squad panel's Academy & Youth subtab
+(club-only - a franchise/international identity has no youth pipeline of its own), the wordmark's
+identity line, and the primary calendar-action button's label/target (`renderActionButton()`:
+Franchise shows "Enter Auction Room", Club/International show "Play Match"). **Acknowledged
+simplification, not yet reported back for confirmation at the time this entry was written**: the
+franchise button only distinguishes Franchise-vs-not - it does not yet cycle through Enter EOI /
+Enter Pre-Auction Meeting / Enter Auction / Trade Centre by the actual due date the user originally
+named all four of, consistent with this mockup's existing "frozen on the day it's true" convention
+but a real, stated gap against the original ask.
+
+**International: National Pool & Squad, Selection Meeting, Major Tournament** - a new 4th subtab
+("National Pool & Squad") on the International screen, built only after auditing the real
+`NationalPool`/`NationalPoolService`/`SelectionMeetingService`/`CentralContractService` C# code, not
+assumed: a National Pool card (per-format, ~9 coverage-slot-driven entries with a watchlist
+mechanism and its real 540-day drop rule stated in a role-hint); a Squad card (drawn FROM the pool,
+date-gated announcement, a bilateral-vs-tournament squad-shape distinction, a "preferred squad
+size" input); a paired Selection Meeting card stating the real discretionary-meeting thresholds
+(always-held for a first-ever squad or 2+ turnover, otherwise probabilistic by thoroughness) plus
+an example report (a real 3-2 panel vote, a surprise pick, a captain's quote, the 3-consecutive-
+Outvoted "selectors at war" consequence); and a Major Tournament card explaining the real
+`Competition.IsMajor` threshold and its harsher post-major board judgment. **A real domain-accuracy
+bug caught and fixed in the pre-existing NOC card**: Tier C was shown as a live "NOC granted" case,
+which the real `CentralContractService.ReviewNoc` confirms is never actually a live mechanic for
+Tier C or an uncontracted player - corrected to state plainly that NOC is only ever a real question
+for a Tier A or B contract.
+
+**New Game / Load Game / Job Market onboarding flow** - the game's entire start-of-game UI,
+genuinely never built before this session (confirmed by the user's own direct question earlier in
+this session about whether the mockup would keep being extended - yes, and this is the first
+"before the club exists at all" screen). Grounded directly in the real `AppCommands.NewGame` /
+`VacancyAdvert` / `JobMarketApplicationService` / `CoachingLicense` C# domain code, not invented:
+a clickable crest opens a full-screen `.match-immersive` takeover (`enterOnboardingMode()`/
+`exitOnboardingMode()`, the same pattern Match Day/Auction Room already use, with the same
+defensive hide of the two panels that live outside `.shell` - `panel-player`/`panel-staff-profile`
+- discovered this session as a real gap any new immersive-mode function has to account for) with
+five real stages: Main Menu -> Load Game -> Manager Profile (name / nationality / playing
+background / a starting `CoachingLicense.Basic`, honestly reflecting that the real code has no
+licence progression at creation, only via `CoachCareerService.ProgressLicence` later) -> Career
+Setup (Club / Franchise / International / Unemployed, the real FM-researched career-type split) ->
+Job Market (a real vacancy list with licence-gated "Not eligible" head-coach rows next to
+appliable licence-free specialist-staff rows, an honestly-modelled "no interview, just wait for the
+advert's own closing date" flow - matching the real code's lack of an interview stage - and an
+asymmetric appointed/not-selected outcome, `advanceToDecisionDay()`).
+
+**A real HTML mis-nesting bug, found and fixed via structural verification before shipping** - the
+`build_intl_pool_squad.py` script's `must_replace` old-string matched only ONE of two consecutive
+pre-existing `</div>` closing lines (the file had one closing `tactics-grid` then a second closing
+`intl-overview` itself, right before `intl-contracts` opened), leaving `intl-overview` permanently
+unclosed once the replacement text didn't reproduce the second one. Diagnosed via a stack-based
+scanner, a `git show HEAD:...` baseline comparison (confirming the pre-session file was genuinely
+balanced, ruling out a pre-existing bug), and finally by hand-tracing the exact `must_replace`
+old/new strings against the file's real pre-edit structure - the reported "unclosed `app-body`"
+from the naive scanner was a LIFO red herring (a stack-pop doesn't check tag identity, so the real
+unclosed div deep in the tree "stole" `app-body`'s eventual closing tag). Fixed with a direct
+one-off replace re-inserting the missing `</div>`.
+
+**Verification**: tag-count parity across `div`/`table`/`tr`/`span`/`svg`/`nav`/`section`/`button`
+(2056/2056, 29/29, 170/170, 1219/1219, 342/342, 14/14, 19/19, 283/283), the single trailing
+`<script>` block's brace/paren balance (706/706, 1548/1548) confirmed via `node --check` (`NODE_OK`),
+a stack-based div-nesting scan (0 unclosed, 0 extra closes), and a duplicate-id scan (none). Final
+state: file size ~2.68MB.
+
+**Deliberately not done this session, tracked honestly:**
+- The franchise action button's full EOI/Pre-Auction/Auction/Trade-Centre calendar cycling (see
+  the acknowledged simplification above) - the user's original ask named all four states; only the
+  Franchise-vs-not binary shipped.
+- No git commit / CLAUDE.md update / artifact publish had happened as of the point this entry
+  itself needed writing - all three are the immediate next steps for this session.
+
 ---
 
 ## CONSOLIDATED DEFERRED-ITEMS REGISTER (maintained - the single source of truth)
