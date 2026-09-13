@@ -11193,8 +11193,146 @@ state: file size ~2.68MB.
 - The franchise action button's full EOI/Pre-Auction/Auction/Trade-Centre calendar cycling (see
   the acknowledged simplification above) - the user's original ask named all four states; only the
   Franchise-vs-not binary shipped.
-- No git commit / CLAUDE.md update / artifact publish had happened as of the point this entry
-  itself needed writing - all three are the immediate next steps for this session.
+
+This slice's own work was committed, published, and reported back to the user before the next
+slice (below) began - the standing end-of-slice ritual for this sub-track.
+
+### Backroom staff for International/Franchise, board relationship, universal click-through, the national squad announcement flow, central-contract workload permission, franchise retention/trade rebuilt, training camps + individual focus
+
+A second large, multi-part directive from the user, given as a rapid Roman-Urdu/English list
+covering roughly ten distinct features at once. Per the user's own explicit mid-message
+interjection ("aur baaki remaining cheezen bhi implement kro" - implement the rest too), this was
+built straight through as one long implementation pass rather than paused for a plan-approval
+checkpoint - the user had already signalled they wanted everything actioned, not reviewed slice
+by slice. Two background Explore-agent audits ran first (one over the mockup's own current
+coverage, one over the REAL C# domain mechanics for every feature named), plus targeted WebSearch
+research on FM26's real national-squad-selection and training-calendar UI patterns (used only as
+structural reference, per this sub-track's own standing content-never-borrowed discipline) -
+consistent with this project's own established Research-first practice for large tickets.
+
+**Several of the user's own assumptions were corrected against the real domain code before
+building, rather than built as literally described - the same "verify, then build the honest
+version" discipline this sub-track has followed since the Meeting-Driven Selection Ticket:**
+- **Franchise retention does NOT resolve some days before the auction** - the real
+  `FranchiseRetentionService.RunRetention` runs INSIDE the same `RunAuctionDetailed` call, on the
+  same simulated date, as the very first phase of auction day itself. The mockup's own pre-existing
+  "retention deadline closed 6 days ago" copy was itself already wrong against the real code and is
+  now corrected to "resolves as the very first order of business this morning, the same sitting as
+  today's auction."
+- **Franchise trades have no accept/reject/counter-offer step** - `FranchiseTradeService.RunQuarterly`
+  applies exactly one veto, BEFORE a trade is even proposed:
+  `Math.Abs(va-vb) > Math.Max(va,vb) * 0.45`. There is no "the other side reviews and might still
+  say no" branch in the real code. Built as the real veto, not a fabricated negotiation.
+- **Training camps have no settable focus, ever** - the development boost is always a single
+  generic automatic roll (`TrainingCampService`), never coach-steerable, and club/franchise/
+  international training are three fully independent systems with zero cross-awareness (a national
+  duty window does not pause or reshape club training in the real code). Built as the real automatic
+  effect only; individual per-player training focus (`PlayerTrainingPlan.Focus`) is the genuinely
+  separate, real, coach-settable mechanic the user's own "individual ko focus dena" ask actually maps
+  to, and was built as such.
+- **Central contracts carry no per-player "permission" of their own** - but `Player.WorkloadPriority`
+  (Balanced/Prioritise-red-ball/Prioritise-white-ball) is a real, already-wired field
+  (`WorkloadRotationService.RestNeed` reads it) that nothing in the whole codebase had ever set. This
+  is exactly what the user's "rest this player, manage his workload" ask maps to - built as a real
+  control on the Player Profile, not invented from nothing.
+- **Selectors have no individual hire/fire mechanism** - `AiClubManagementService.FillSelectionPanel`
+  is fully AI-run, ex-cricketer-sourced (7+ Tests, or 30+ FC, or 10+ ODIs+20+ FC, retired 5+ years),
+  chairman = most-capped; the only human lever is a blanket delegate toggle. Built the panel as
+  clickable, informational staff profiles with that one real toggle - not a fake Recruit button.
+
+**Built, in order:**
+1. **International "Staff & Board" subtab** (new 5th subtab) - a real, clickable Selection Panel
+   (chairman + 2 selectors, ex-cricketer backgrounds stated, the one real delegate-toggle lever), a
+   genuine year-round coaching-staff roster (assistant/batting/bowling coach, analyst, physio - hired
+   and released exactly like a domestic club's, via the same `openStaffRecruit`/`hireStaff`/
+   `releaseStaff` machinery with new, collision-free `intl-*` role keys), a **National Board** card
+   (Ambition, Politicisation, scrutiny multiplier, a real "last verdict" narrative line, explicitly
+   stated as reactive/no-budget-to-negotiate), and a **Campaign review** card. The Overview subtab's
+   old National-selection-panel/Coaching-structure cards were collapsed into one lighter snapshot
+   card linking through to the new subtab. Also added a calendar-gated "Squad required" alert card
+   to Overview (the real 40-day `AiClubManagementService.SquadLeadTimeDays` window, frozen on the day
+   it's true, matching this mockup's own established Play-Match/Auction-Room convention).
+2. **Franchise Staff, real year-round contracts** - the old "What this menu deliberately does NOT
+   have... no permanent backroom staff" disclaimer card was STALE against the real domain (NEW-A /
+   the Corrections Pass gave franchise specialist staff genuine multi-year `StaffContract`s months
+   ago) and was replaced with a real Campaign Staff section (assistant/batting/bowling coach/
+   analyst/physio, new `fr-*` role keys, same hire/release machinery) plus a **Campaign review** card
+   (end-of-campaign-only judgment, a title lifting circuit reputation, a poor finish able to end even
+   a real multi-year deal early with the replacement appointed immediately - matching
+   `FranchiseCoachService.ReviewAfterCampaign`'s real behaviour).
+3. **The national squad announcement flow** - the largest single piece. A real, format-scoped,
+   fully interactive rebuild of the National Pool & Squad subtab: `NATIONAL_POOL`/`NATIONAL_SQUADS`
+   JS state keyed by format (Test/ODI/T20I, each genuinely independent - confirmed against the real
+   domain fact that `Competition.Format` is single-format so Test/ODI/T20I are always separate
+   `SquadAnnouncement`s, never merged or cleared by each other), a real Call-up/Drop interaction
+   reading from the pool, a Submit button that computes and displays a real IN/OUT diff against the
+   previous squad (replicating the domain's own `OrderByDescending(AnnouncedDate).FirstOrDefault()`
+   comparison pattern), and a genuine mid-series-replacement alert (only shown for the live home
+   T20I series, matching `SquadAnnouncement.RegisterMidSeriesReplacement`'s real home-series-only,
+   next-match-only guard). Three real call-up entry points, as asked: inside the dedicated screen
+   itself, a new "Call up to national squad" option on the Tactics right-click context menu, and a
+   new action on the Player Profile's Actions dropdown. Two illustrative, clickable squad-announcement
+   news tiles (Inbox &gt; Club for the human's own squad, Inbox &gt; World for an AI country - India -
+   announcing theirs) open a shared squad-news modal showing the full XI and the diff line, closing
+   the "AI bhi jab squad announce kre gi to news aaye gi" ask.
+4. **Central contracts** - an annual-announcement framing line added to the existing Tier A/B/C
+   card, the central-contracts table and the international-duty roster made clickable
+   (`openPlayerFromRow` extended with `.staff-name`/`.duty-player` fallbacks so these staff-shaped
+   rows didn't need restructuring), and a real **Workload priority** control added to the Player
+   Profile's Contract sub-tab, mapped directly onto `Player.WorkloadPriority`.
+5. **Franchise retention rebuilt** - from a fait-accompli "already decided" table into a genuine
+   interactive choose-from-the-full-squad checkbox table (`FRANCHISE_FULL_SQUAD`, live purse-cost
+   and RTM-card-remaining readouts, the real 5-capped/2-uncapped/6-total cap enforced live) with a
+   Submit button that locks the list in - closing the "poora squad samne karke, us mein se choose
+   karke, submit karwana" ask, with the timing corrected to same-day per the domain finding above.
+6. **Franchise trade rebuilt** - from a fixed, pre-decided matched trade into a genuine
+   pick-your-own-offer builder (two dropdowns: your surplus player, their target player), with a
+   LIVE value-gap computation against the real 45% veto, disabling Confirm and explaining the
+   rejection reason when the gap is too wide - the honest version of "unhe review karti hai, phir
+   proceed ya fall through hoti hai."
+7. **Training** - a real, individual "Training focus" control added to the Player Profile Overview
+   tab (a delegate checkbox defaulting on, reading the real staff-suggestion-vs-explicit-Focus
+   distinction from `TrainingService`/`PlayerTrainingPlan`), and a "Training camp - due in N days"
+   card on Club Overview stating the real automatic mechanism (42-day lead time, the age-26 dev-boost
+   gate, the franchise-contract exclusion window) with no fabricated camp-focus control, since none
+   exists in the domain.
+8. **Universal click-through completion** - the Franchise Auction Room's Squads tab rows, all six
+   Academy intake prospect rows (Sign/Release buttons kept working via `event.stopPropagation()`),
+   and a missing `.player-cell.clickable { cursor: pointer; }` CSS rule (a pre-existing gap - this
+   convention was already used pervasively across the file with no cursor styling backing it) were
+   all closed in this pass.
+
+**A real placement bug caught and fixed before it shipped, not after** - the first attempt at the
+Club Overview "Training camp" card put the closing `</div>` for `#club-overview` BEFORE the new
+card instead of after it, which would have made the card a direct child of `#panel-club` itself -
+always visible regardless of which subtab was selected, since `wireTabs`/`showPanel` only toggles
+`.subpanel` elements, not arbitrary siblings. Caught by re-reading the edit's own structural
+placement against the panel/subpanel nesting convention before moving on, not by the tag-count
+verifier (which cannot detect a div landing in the wrong PARENT, only a wrong total) - re-fixed by
+moving the new card's markup inside the subpanel before its closing tag.
+
+**Verification, run repeatedly across the whole pass** (after every individual script, not just at
+the end): tag-count parity across `div`/`table`/`tr`/`span`/`svg`/`nav`/`section`/`button`, a
+stack-based div-nesting scan (0 unclosed, 0 extra closes throughout), a duplicate-id scan (none),
+and `node --check` on the extracted trailing `&lt;script&gt;` block after every JS-bearing change
+(`NODE_OK` every time). Final state: `div` 2120/2120, `table` 30/30, `tr` 164/164, `span` 1269/1269,
+`svg` 354/354, `nav` 14/14, `section` 19/19, `button` 304/304, script braces 807/807, script parens
+1774/1774. File size ~2.71MB.
+
+**Deliberately not attempted this session, tracked honestly:**
+- The full FM-style clickable monthly calendar screen ("calendar system... clicking on a calendar
+  date doing different things") - the user's own closing ask, and a genuinely large, separate UI
+  subsystem in its own right (a real month grid, per-day-type click behaviour spanning training,
+  matches, squad-required prompts, camp lead-time countdowns). Given the sheer size of everything
+  else in this same pass, this was consciously deferred rather than rushed - the calendar-GATED
+  pattern itself (a control that only activates on the day it's true, already used for Play Match/
+  Auction Room/the new Squad-required alert) is real and extensively used throughout the mockup, but
+  a literal browsable month-grid view does not yet exist.
+- A fuller Right-to-Match-aware retention interaction and a fuller in-auction accept/reject flow for
+  trades were both deliberately built as the HONEST real-domain version (a value-gap veto, a same-day
+  choose-and-submit step) rather than the literal back-and-forth negotiation the user's own message
+  described, since the real C# code has no such negotiation step for either mechanic - flagged here
+  rather than silently built as something the domain doesn't actually do.
 
 ---
 
