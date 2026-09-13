@@ -36,12 +36,12 @@ C# domain project's own phase history, in the same document.
 (`CricketManager.Domain`, `CricketManager.Data`, `CricketManager.App`,
 `CricketManager.Api`, `CricketManager.Tests`).
 
-**Tests**: `CLAUDE.md` records 699/699 passing as of the end of Phase 17 Part 1. A full
-live re-run was kicked off in this session (`dotnet run --project tests/CricketManager.Tests
--c Release --no-build`) to confirm this is still true — **check whether that run's result
-was captured before this handoff was finalized; if not, re-run it yourself before trusting
-the count** (it takes a few minutes — the suite includes multi-year/multi-decade
-integration and determinism tests).
+**Tests**: a full live re-run was done this session (`dotnet run --project
+tests/CricketManager.Tests -c Release --no-build`, after the `CricketManager.Api` fix below
+landed) — **confirmed: 699 passed, 0 failed (of 699), exit code 0.** Took roughly 16 minutes
+on this machine (the suite includes multi-year/multi-decade integration and determinism
+tests) — don't be alarmed if a future run takes a while with no interim output; the runner
+doesn't print progress until it finishes.
 
 **Phase status** (per `CLAUDE.md`'s own phase table, cross-checked against the actual
 project references in `CricketManager.sln` this session):
@@ -52,16 +52,12 @@ project references in `CricketManager.sln` this session):
 - Phase 18 (Real-World Data Import — real players/teams/competitions/grounds, the ICC FTP,
   Cricsheet match history): **PLANNED, not started.**
 
-### A genuine, significant finding: `src/CricketManager.Api/` — undocumented, uncommitted
+### RESOLVED this session: `src/CricketManager.Api/` — reviewed, one bug fixed, committed
 
-This is important and needs **your decision**, not a silent assumption either way.
-
-`git status` shows `src/CricketManager.Api/` as untracked, and `CricketManager.sln` as
-modified (a real `dotnet sln add` operation added the project — confirmed via `git diff`,
-not just a stray folder). **A full grep of `CLAUDE.md` for "CricketManager.Api" or "Phase
-17 Part 2" returns zero results** — this project does not exist anywhere in the project's
-own documented history, despite being real, working, well-designed code that **builds
-clean** as part of the solution.
+**This was flagged, the user confirmed it as intentional, and it's now done — no action
+needed in the new session beyond being aware of it.** Originally found untracked in git and
+completely undocumented anywhere in `CLAUDE.md`; `CricketManager.sln` was also modified (a
+real `dotnet sln add` had added the project — confirmed via `git diff`, not a stray folder).
 
 **What it actually is**, confirmed by reading the source (584 lines across 7 files):
 - A real ASP.NET Core Minimal API + SignalR backend. `Program.cs` wires CORS for
@@ -104,19 +100,31 @@ clean** as part of the solution.
   International, Records, World, Inbox, live Match Day simulation, and the Auction Room
   have no endpoints yet — expected for a first slice, not a defect.
 
-**Why this matters for the plan below**: this is not abandoned or accidental code — it is
-a genuine, working start on turning the mockup's illustrative screens into a real
-data-backed application, and its DTO shapes already assume the mockup's own qualitative
-(tier + bar) display conventions. **Per this project's own standing incident-log
-discipline** ("investigate before deleting or overwriting, as it may represent in-progress
-work" — `CLAUDE.md`'s own "Session incident log" section), it was deliberately left
-untouched and uncommitted throughout this session, exactly as the prior session's own
-summary already flagged it ("pre-existing unrelated changes"). **Do not commit, delete, or
-silently start building on top of this in the new session without asking the user
-directly**: is this real, current work (maybe from a session on the account being switched
-away from, or the new one?) that should now be reviewed, documented in `CLAUDE.md` as a
-real "Phase 17 Part 2," and committed? Or is there a reason it's been left out that isn't
-visible from the code alone?
+**Why this mattered**: this was not abandoned or accidental code — it is a genuine, working
+start on turning the mockup's illustrative screens into a real data-backed application, and
+its DTO shapes already assume the mockup's own qualitative (tier + bar) display conventions.
+Per this project's own standing incident-log discipline ("investigate before deleting or
+overwriting, as it may represent in-progress work"), it was flagged rather than silently
+committed or silently ignored; the user then confirmed it directly ("ye review kro commit
+kro").
+
+**What was done, in order**: read every one of the 7 source files in full (not skimmed);
+found one real, confirmed determinism bug in `Program.cs`'s player-profile endpoint — the
+scout-confidence RNG was seeded with `HashCode.Combine(playerId, dayNumber)`, the exact
+banned pattern this project's own history calls out repeatedly by name (`.NET` salts
+`HashCode.Combine` per process, so the identical player+day would silently produce a
+different scout read across a server restart, even though it looked stable within one
+running process); fixed it to the same `WorldSeed * prime + int` convention
+`GameCalendar.RandomForDay`/etc. already establish, keyed off the player `Guid`'s own bytes
+rather than any hash code; rebuilt clean (0 warnings, 0 errors); documented as a full new
+**"PHASE 17 PART 2"** section in `CLAUDE.md` (with the phase-status table row updated too);
+committed (`338d1b9`) — `CricketManager.sln`, `CLAUDE.md`, and all 7
+`src/CricketManager.Api/` source files (never `bin/`/`obj/`, already gitignored).
+
+**What's still true and unchanged**: no new endpoints or DTOs were added, and this was NOT
+wired to the HTML mockup — that's still a genuinely separate, larger piece of forward work
+(see Part 5 below). `docs/external_game_reference/` remains untracked/untouched — that's a
+different, unrelated pre-existing item, not part of this decision.
 
 ---
 
@@ -253,14 +261,12 @@ Given everything above, here is the honest gap picture and a concrete next-step 
 priority order. **This is a recommendation, not a queued task list** — confirm direction
 with the user before starting any of it in the new session.
 
-### Immediate: a decision, not code
+### Already resolved (no action needed) — kept here as a record
 
-1. **Resolve the `CricketManager.Api` question first.** Show the user this section of the
-   handoff, ask directly whether that work is intentional/current and should be folded
-   into the project's real history (documented in `CLAUDE.md`, committed to git) or left
-   alone for now. This blocks nothing else, but leaving it silently uncommitted forever
-   while continuing to build the mockup risks the same "unexplained state" problem
-   `CLAUDE.md`'s own incident log warns about.
+The `CricketManager.Api` question from the previous version of this doc is **done**: the
+user confirmed it was intentional, it was reviewed in full, one real determinism bug was
+found and fixed, and it's now documented + committed (see Part 1 above, commit `338d1b9`).
+Nothing further needed on this specific item unless the user raises it again.
 
 ### Near-term UI mockup work (highest leverage, now unblocked by the policy correction)
 
@@ -390,6 +396,11 @@ to build that deviation faithfully, not defend the original domain-accurate desi
    produced Parts 1-5 above: a live `dotnet build` (clean), a live test-suite re-run
    (kicked off, confirm the result before trusting the exact count), a real screen
    inventory via grep, the `CricketManager.Api` finding, and the reference-asset audit.
+6. The user then said "ye review kro commit kro" (review this, commit it) — resolving the
+   `CricketManager.Api` question directly. Full source review, one real determinism bug
+   found and fixed (`HashCode.Combine` seeding — this project's own long-banned pattern),
+   rebuilt clean, documented as a new "PHASE 17 PART 2" section in `CLAUDE.md`, committed
+   (`338d1b9`).
 
 ## House style reminders for the new session
 

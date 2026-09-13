@@ -9866,10 +9866,10 @@ pass, plus the one real bug found along the way - not an extension.
 
 **Verification**: `dotnet build CricketManager.sln -c Release` clean (0 warnings, 0 errors, all five
 projects including `CricketManager.Api`) both before this review (confirming the pre-existing state
-genuinely built) and after the determinism fix. The full 699-test suite was re-run live in the same
-session to confirm Phase 0-17 Part 1 is still genuinely green - **see the next session's own
-verification note for the confirmed pass count**, since the run was still in progress when this
-entry was written.
+genuinely built) and after the determinism fix. The full test suite was re-run live in the same
+session to confirm Phase 0-17 Part 1 is still genuinely green after the fix -
+**699 passed, 0 failed (of 699)**, exit code 0 - roughly 16 minutes on this machine, worth knowing
+since the runner prints nothing until it finishes and a long silent wait is expected, not a hang.
 
 ---
 
