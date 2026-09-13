@@ -11320,19 +11320,93 @@ and `node --check` on the extracted trailing `&lt;script&gt;` block after every 
 1774/1774. File size ~2.71MB.
 
 **Deliberately not attempted this session, tracked honestly:**
-- The full FM-style clickable monthly calendar screen ("calendar system... clicking on a calendar
-  date doing different things") - the user's own closing ask, and a genuinely large, separate UI
-  subsystem in its own right (a real month grid, per-day-type click behaviour spanning training,
-  matches, squad-required prompts, camp lead-time countdowns). Given the sheer size of everything
-  else in this same pass, this was consciously deferred rather than rushed - the calendar-GATED
-  pattern itself (a control that only activates on the day it's true, already used for Play Match/
-  Auction Room/the new Squad-required alert) is real and extensively used throughout the mockup, but
-  a literal browsable month-grid view does not yet exist.
 - A fuller Right-to-Match-aware retention interaction and a fuller in-auction accept/reject flow for
   trades were both deliberately built as the HONEST real-domain version (a value-gap veto, a same-day
   choose-and-submit step) rather than the literal back-and-forth negotiation the user's own message
   described, since the real C# code has no such negotiation step for either mechanic - flagged here
   rather than silently built as something the domain doesn't actually do.
+- The full FM-style clickable monthly calendar screen was deferred at the end of this pass, purely
+  for scope reasons - built the very next session (see below).
+
+### The calendar screen, and a real click-through bug found and fixed across the file
+
+The deferred calendar screen from the previous session, plus a direct, urgent user report
+("player profile nae work rkhi hr jgh jha pe bhi naam ho wha se hule staff bhi" - the Player
+Profile click-through isn't working everywhere a name appears, staff either) that turned out to
+point at a real, previously-unnoticed bug, not a misunderstanding.
+
+**The calendar.** The topbar's own `.calendar-date-btn` ("Sat 27 Mar 2027") had a `title` attribute
+but no `onclick` at all - a dead button since the moment it was built. Wired it to a genuine new
+full-screen `#panel-calendar` (the same immersive-takeover pattern as Match Day/Auction Room):
+a real month grid (Mon-Sun, Prev/Next navigation) built entirely from real JS `Date` math - no
+hand-authored weekday grid anywhere, confirmed via `node` that 27 Mar 2027 genuinely IS a Saturday
+in real date arithmetic before trusting it, matching the topbar's own pre-existing frozen-date text
+rather than contradicting it. A `CALENDAR_EVENTS` array collects every dated fact this mockup
+already establishes elsewhere this session and last (the EOI/Pre-Auction/War-Room dates, the live
+T20I series, the Test-squad-required date, the ODI series opener, the training camp) - each event
+tagged by coaching identity (`context: 'club'|'franchise'|'international'`) so the SAME calendar
+genuinely shows different dots depending on which identity is currently active via the
+context-switcher, and each carries a real deep-link (`action`) that jumps straight to the relevant
+screen and closes the calendar. Clicking a day highlights it and shows its events in a side panel;
+a day with nothing dated for the CURRENT identity can still carry an event for a different one,
+stated plainly in the screen's own role-hint rather than looking like a gap.
+
+**The bug - a genuine one, not a misunderstanding.** Investigating the user's report found a real,
+concrete defect: `hireStaff()` (the function that fills a vacant staff role after a successful
+recruitment negotiation) rewrote the row's inner `.staff-row-main` HTML with the new hire's name,
+but never added the `.clickable` class or the `onclick="openStaffProfile(this)"` handler to the
+row itself - so a FRESHLY HIRED member of staff's name appeared on screen but did nothing when
+clicked, exactly matching the user's report. `releaseStaff()` had the mirror-image gap: it never
+REMOVED `.clickable`/`onclick` from a row being vacated, so a released staff member's old profile
+would have kept opening from an now-empty "Vacant" row. Both fixed - hire adds the class + handler,
+release removes them.
+
+**Five further real, confirmed click-through gaps**, found via a systematic audit (grepping every
+`.player-name`/`.player-cell`/`.staff-name`/`.duty-player` occurrence in the file and checking
+each one's enclosing markup for `clickable` + a real onclick, rather than trusting memory of what
+had already been fixed):
+- **Match Day's own Scorecard sub-tab** - all ten batting/bowling scorecard rows (a genuine
+  gap missed entirely in the original click-through pass, since these `<td class="player-name">`
+  cells have no `.player-cell` wrapper the way every other table in the file does). Fixed with a
+  new `td.player-name.clickable` CSS rule and `onclick="openPlayerFromRow(this.closest('tr'))"` -
+  the same `.closest('tr')` convention the Staff Database rows already used.
+- **The interactive retention table** (built last session) - the checkbox rows never got a
+  clickable player-cell.
+- **The National Pool list** (built last session, the interactive Call-up/Drop rebuild) - the pool
+  rows themselves were never made clickable (the Call-up button inside them worked, the name did
+  not); fixed, and the Call-up button was given `event.stopPropagation()` so clicking it no longer
+  ALSO triggers a navigation away mid-click.
+- **The World screen's Nation-profile "Central contracts by tier" list** (inside the shared
+  competition-profile modal) - now closes the modal first, then navigates
+  (`closeCompetitionProfile();openPlayerFromRow(this)`), the same close-then-act pattern the
+  Player Actions dropdown already uses for its own menu items.
+- **Recruitment &gt; Shortlists** (Ahsan Butt, Hamid Rauf) - a real, standing gap the screen's OWN
+  role-hint directly contradicted ("Clicking a name opens their own profile" was true for the
+  Player Database above it, but not for these two rows below it).
+
+**Deliberately left non-clickable, confirmed by re-checking each one rather than assumed** -
+vacancy postings in the Job Market that name a role at another club but no actual hired person yet
+("Head Coach, Karachi Kings"); franchise/team names (not individuals); the four dated-event
+timeline entries on the Franchise screen (EOI Meeting etc - these already have their own distinct
+onclick); vacant-role placeholders; board objectives; auction pre-auction-plan role TARGETS ("a
+genuine strike bowler" - a role description, not a named player); and the Records screen's two
+Hall of Fame entries (Tariq Farooq, Faisal Nadeem) - retired legends with no active Player Profile
+to honestly show, consistent with the Records screen's own already-established "not every name has
+a real profile behind it" design call from an earlier session, not an oversight.
+
+**A genuine, separate content collision spotted but not fixed this pass** (out of scope for a
+click-through bug hunt, flagged for whoever next touches Records or the National Pool): the World
+Hall of Fame entry "Faisal Nadeem" (Multan Sultans, 2008-2023, retired) shares a name with the
+ACTIVE current international spinner "Faisal Nadeem" (Multan Sultans, the real front-line-spin pool
+player used across the International screen) - two different people, same name, in the same
+fictional world. Worth a rename on either side whenever that screen is next revisited.
+
+**Verification**: the same discipline as every prior script this session - tag-count parity
+(`div` 2135/2135, `table` 30/30, `tr` 164/164, `span` 1285/1285, `svg` 355/355, `nav` 14/14,
+`section` 20/20, `button` 308/308), a stack-based div-nesting scan (0 unclosed, 0 extra closes), a
+duplicate-id scan (none), and `node --check` on the extracted trailing `&lt;script&gt;` block after
+every JS-bearing change (`NODE_OK` every time, script braces 845/845, parens 1899/1899 final).
+File size ~2.72MB.
 
 ---
 

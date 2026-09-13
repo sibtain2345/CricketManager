@@ -362,9 +362,25 @@
   .who.clickable { cursor: pointer; text-decoration: underline; text-decoration-color: var(--border); text-underline-offset: 3px; }
   .staff-row.clickable { cursor: pointer; }
   .player-cell.clickable { cursor: pointer; }
+  td.player-name.clickable { cursor: pointer; }
+  td.player-name.clickable:hover { color: var(--gold); }
   .tile.clickable { cursor: pointer; transition: transform .15s, box-shadow .15s; }
   .tile.clickable:hover { transform: translateY(-2px); }
   .duty-row.clickable { cursor: pointer; }
+  .calendar-nav-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+  .calendar-weekday-row { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; margin-bottom: 4px; }
+  .calendar-weekday-row span { text-align: center; font-size: var(--fs-micro); color: var(--ink-faint); text-transform: uppercase; letter-spacing: .04em; font-weight: 700; }
+  .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
+  .calendar-day-cell { aspect-ratio: 1; border-radius: 8px; background: var(--surface-3); border: 1px solid transparent; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; cursor: pointer; position: relative; }
+  .calendar-day-cell:hover { border-color: var(--chrome-strong); }
+  .calendar-day-cell.empty { background: none; cursor: default; }
+  .calendar-day-cell.past { opacity: .5; }
+  .calendar-day-cell .cal-day-num { font-family: var(--font-mono); font-size: var(--fs-small); color: var(--ink-dim); }
+  .calendar-day-cell.today { background: var(--turf-dim); border-color: var(--turf-strong); }
+  .calendar-day-cell.today .cal-day-num { color: var(--turf-strong); font-weight: 700; }
+  .calendar-day-cell.selected { border-color: var(--gold); box-shadow: 0 0 0 1px var(--gold); }
+  .calendar-day-cell .cal-day-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--gold); }
+  .calendar-day-cell.today .cal-day-dot { background: var(--turf-strong); }
   .staff-row.clickable:hover { background: var(--surface-2); }
   .sparkline-wrap { margin-top: 12px; }
   .sparkline { width: 100%; height: 44px; display: block; }
@@ -1135,7 +1151,7 @@
       <div class="meta-item"><div class="label">Board confidence</div><div class="value">Steady</div><div class="meter"><span style="width:71%"></span></div></div>
       <div class="meta-item"><div class="label">Budget</div><div class="value num">$2.4M</div></div>
       <div class="calendar-control">
-        <button class="calendar-date-btn" title="Jump to a date">
+        <button class="calendar-date-btn" title="Open the calendar" onclick="openCalendarView()">
           <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
           Sat 27 Mar 2027
         </button>
@@ -1573,11 +1589,11 @@
         <table class="scorecard">
           <thead><tr><th>Batter</th><th></th><th class="num">R</th><th class="num">B</th><th class="num">4s</th><th class="num">6s</th><th class="num">SR</th></tr></thead>
           <tbody>
-            <tr><td class="player-name">Umar Ansari</td><td class="dismissal">b Iqbal</td><td class="num">28</td><td class="num">19</td><td class="num">4</td><td class="num">0</td><td class="num">147.3</td></tr>
-            <tr><td class="player-name">Rizwan Sheikh</td><td class="dismissal">c Malik b Awan</td><td class="num">17</td><td class="num">14</td><td class="num">2</td><td class="num">0</td><td class="num">121.4</td><td class="num">6</td><td class="num">245</td><td class="num">$185K</td><td class="num">$2,400/wk</td></tr>
-            <tr><td class="player-name">Waqar Ansari</td><td class="dismissal">run out (Farooq)</td><td class="num">31</td><td class="num">22</td><td class="num">3</td><td class="num">1</td><td class="num">140.9</td></tr>
-            <tr><td class="player-name">Hamza Malik*</td><td class="not-out">not out</td><td class="num">58</td><td class="num">41</td><td class="num">5</td><td class="num">2</td><td class="num">141.5</td><td class="num">6</td><td class="num">312</td><td class="num">$340K</td><td class="num">$4,200/wk</td></tr>
-            <tr><td class="player-name">Zain Chaudhry</td><td class="not-out">not out</td><td class="num">12</td><td class="num">9</td><td class="num">1</td><td class="num">0</td><td class="num">133.3</td><td class="num">6</td><td class="num">298</td><td class="num">$210K</td><td class="num">$2,800/wk</td></tr>
+            <tr><td class="player-name clickable" onclick="openPlayerFromRow(this.closest('tr'))">Umar Ansari</td><td class="dismissal">b Iqbal</td><td class="num">28</td><td class="num">19</td><td class="num">4</td><td class="num">0</td><td class="num">147.3</td></tr>
+            <tr><td class="player-name clickable" onclick="openPlayerFromRow(this.closest('tr'))">Rizwan Sheikh</td><td class="dismissal">c Malik b Awan</td><td class="num">17</td><td class="num">14</td><td class="num">2</td><td class="num">0</td><td class="num">121.4</td><td class="num">6</td><td class="num">245</td><td class="num">$185K</td><td class="num">$2,400/wk</td></tr>
+            <tr><td class="player-name clickable" onclick="openPlayerFromRow(this.closest('tr'))">Waqar Ansari</td><td class="dismissal">run out (Farooq)</td><td class="num">31</td><td class="num">22</td><td class="num">3</td><td class="num">1</td><td class="num">140.9</td></tr>
+            <tr><td class="player-name clickable" onclick="openPlayerFromRow(this.closest('tr'))">Hamza Malik*</td><td class="not-out">not out</td><td class="num">58</td><td class="num">41</td><td class="num">5</td><td class="num">2</td><td class="num">141.5</td><td class="num">6</td><td class="num">312</td><td class="num">$340K</td><td class="num">$4,200/wk</td></tr>
+            <tr><td class="player-name clickable" onclick="openPlayerFromRow(this.closest('tr'))">Zain Chaudhry</td><td class="not-out">not out</td><td class="num">12</td><td class="num">9</td><td class="num">1</td><td class="num">0</td><td class="num">133.3</td><td class="num">6</td><td class="num">298</td><td class="num">$210K</td><td class="num">$2,800/wk</td></tr>
           </tbody>
           <tfoot><tr class="extras-row"><td colspan="2">Extras (b 2, lb 1, w 3)</td><td class="num">6</td><td colspan="4"></td></tr></tfoot>
         </table>
@@ -1590,11 +1606,11 @@
         <table class="scorecard">
           <thead><tr><th>Bowler</th><th class="num">O</th><th class="num">M</th><th class="num">R</th><th class="num">W</th><th class="num">Econ</th></tr></thead>
           <tbody>
-            <tr><td class="player-name">Talha Iqbal</td><td class="num">3.2</td><td class="num">0</td><td class="num">29</td><td class="num">1</td><td class="num">8.70</td></tr>
-            <tr><td class="player-name">Bilal Awan</td><td class="num">4.0</td><td class="num">0</td><td class="num">31</td><td class="num">1</td><td class="num">7.75</td></tr>
-            <tr><td class="player-name">Saad Farooq</td><td class="num">4.0</td><td class="num">1</td><td class="num">22</td><td class="num">0</td><td class="num">5.50</td></tr>
-            <tr><td class="player-name">Junaid Butt</td><td class="num">3.0</td><td class="num">0</td><td class="num">36</td><td class="num">1</td><td class="num">12.00</td></tr>
-            <tr><td class="player-name">Kamran Hussain</td><td class="num">0.0</td><td class="num">0</td><td class="num">0</td><td class="num">0</td><td class="num">&mdash;</td></tr>
+            <tr><td class="player-name clickable" onclick="openPlayerFromRow(this.closest('tr'))">Talha Iqbal</td><td class="num">3.2</td><td class="num">0</td><td class="num">29</td><td class="num">1</td><td class="num">8.70</td></tr>
+            <tr><td class="player-name clickable" onclick="openPlayerFromRow(this.closest('tr'))">Bilal Awan</td><td class="num">4.0</td><td class="num">0</td><td class="num">31</td><td class="num">1</td><td class="num">7.75</td></tr>
+            <tr><td class="player-name clickable" onclick="openPlayerFromRow(this.closest('tr'))">Saad Farooq</td><td class="num">4.0</td><td class="num">1</td><td class="num">22</td><td class="num">0</td><td class="num">5.50</td></tr>
+            <tr><td class="player-name clickable" onclick="openPlayerFromRow(this.closest('tr'))">Junaid Butt</td><td class="num">3.0</td><td class="num">0</td><td class="num">36</td><td class="num">1</td><td class="num">12.00</td></tr>
+            <tr><td class="player-name clickable" onclick="openPlayerFromRow(this.closest('tr'))">Kamran Hussain</td><td class="num">0.0</td><td class="num">0</td><td class="num">0</td><td class="num">0</td><td class="num">&mdash;</td></tr>
           </tbody>
         </table>
       </div>
@@ -2728,17 +2744,17 @@
 <div class="subpanel" id="recruit-shortlists" hidden>
       <div class="analysis-card">
         <span class="eyebrow"><svg class="icon sm"><use href="#i-star-fill"/></svg> Death-overs bowler</span>
-        <div class="staff-row" data-shortlist="ahsan">
+        <div class="staff-row clickable" data-shortlist="ahsan" onclick="openPlayerFromRow(this)">
           <div class="staff-row-main"><span class="staff-name">Ahsan Butt</span><span class="staff-role-label">Peshawar Zalmi &middot; genuine pace, real yorker skill</span></div>
-          <div class="staff-row-meta"><span class="pill first">Priority</span><button class="staff-release-btn" onclick="removeFromShortlist(this)" title="Remove">&times;</button></div>
+          <div class="staff-row-meta"><span class="pill first">Priority</span><button class="staff-release-btn" onclick="event.stopPropagation();removeFromShortlist(this)" title="Remove">&times;</button></div>
         </div>
         <div class="role-hint" style="margin-top:6px">Added from the Player Database or right after a scout report names a genuine gap.</div>
       </div>
       <div class="analysis-card" style="margin-top:16px">
         <span class="eyebrow"><svg class="icon sm"><use href="#i-star-fill"/></svg> Back-up wicketkeeper</span>
-        <div class="staff-row" data-shortlist="hamid">
+        <div class="staff-row clickable" data-shortlist="hamid" onclick="openPlayerFromRow(this)">
           <div class="staff-row-main"><span class="staff-name">Hamid Rauf</span><span class="staff-role-label">Karachi Kings &middot; unsettled, transfer-listed</span></div>
-          <div class="staff-row-meta"><span class="pill second">Monitor</span><button class="staff-release-btn" onclick="removeFromShortlist(this)" title="Remove">&times;</button></div>
+          <div class="staff-row-meta"><span class="pill second">Monitor</span><button class="staff-release-btn" onclick="event.stopPropagation();removeFromShortlist(this)" title="Remove">&times;</button></div>
         </div>
       </div>
     </div>
@@ -4481,6 +4497,30 @@
     </div>
 
   </section>
+
+  <section class="panel" id="panel-calendar" role="tabpanel" hidden>
+    <div class="match-back-bar">
+      <button class="match-back-btn" onclick="exitCalendarMode()" title="Back"><svg class="icon"><use href="#i-chevron-fwd"/></svg></button>
+      <span class="match-back-title">Calendar</span>
+    </div>
+    <div class="panel-head"><h1>Calendar</h1><div class="sub">Every dated event across your coaching identities &mdash; click a day to see it, click through to act on it</div></div>
+    <div class="tactics-grid" style="grid-template-columns: 2fr 1fr">
+      <div class="analysis-card">
+        <div class="calendar-nav-row">
+          <button class="facility-request-btn" onclick="calendarShiftMonth(-1)">&larr; Prev</button>
+          <span id="calendar-nav-label" style="font-weight:700;font-family:var(--font-display);font-size:var(--fs-body-lg)"></span>
+          <button class="facility-request-btn" onclick="calendarShiftMonth(1)">Next &rarr;</button>
+        </div>
+        <div class="calendar-weekday-row"><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span></div>
+        <div class="calendar-grid" id="calendar-grid"></div>
+        <div class="role-hint" style="margin-top:10px">Shown for your currently active identity (the Club/Franchise/International switch in the topbar) &mdash; a day with nothing dated for one identity can still carry a real event for another.</div>
+      </div>
+      <div class="analysis-card" id="calendar-day-detail">
+        <span class="eyebrow">Select a day</span>
+        <div class="role-hint" style="margin-top:8px">Click any date on the calendar to see what&rsquo;s happening.</div>
+      </div>
+    </div>
+  </section>
 <script>
   var bowlingPlanDesc = {
     "New Ball": "Full and around off stump, hunting the outside edge while the shine and the new-ball nip both last.",
@@ -5060,7 +5100,7 @@
     var contractsHtml = c.centralContracts.map(function (tier) {
       return '<div class="eyebrow" style="display:block;margin:10px 0 4px">Tier ' + tier.tier + '</div>' +
         tier.players.map(function (p) {
-          return '<div class="staff-row"><div class="staff-row-main"><span class="staff-name">' + p.name + '</span><span class="staff-role-label">' + p.club + '</span></div></div>';
+          return '<div class="staff-row clickable" onclick="closeCompetitionProfile();openPlayerFromRow(this)"><div class="staff-row-main"><span class="staff-name">' + p.name + '</span><span class="staff-role-label">' + p.club + '</span></div></div>';
         }).join('');
     }).join('');
     var clubsHtml = '<div class="pitch-preset-row" style="flex-wrap:wrap">' + c.domesticClubs.map(function (cl) {
@@ -6815,10 +6855,10 @@
     if (!list) return;
     list.innerHTML = pool.map(function (p) {
       var already = inSquad.indexOf(p.name) > -1;
-      return '<div class="staff-row"><div class="staff-row-main"><span class="staff-name">' + p.name + '</span><span class="staff-role-label">' + p.role + '</span></div>'
+      return '<div class="staff-row clickable" onclick="openPlayerFromRow(this)"><div class="staff-row-main"><span class="staff-name">' + p.name + '</span><span class="staff-role-label">' + p.role + '</span></div>'
         + (p.watchlist ? '<span class="tier-badge b">Watchlist</span>' : '')
         + (already ? '<span class="tier-badge a" style="margin-left:6px">In squad</span>'
-          : '<button class="facility-request-btn" onclick="callUpToSquad(\'' + fmt + '\',\'' + p.name.replace(/'/g, "\\'") + '\',\'' + p.role.replace(/'/g, "\\'").replace(/&middot;.*/, '').trim() + '\')">Call up</button>')
+          : '<button class="facility-request-btn" onclick="event.stopPropagation();callUpToSquad(\'' + fmt + '\',\'' + p.name.replace(/'/g, "\\'") + '\',\'' + p.role.replace(/'/g, "\\'").replace(/&middot;.*/, '').trim() + '\')">Call up</button>')
         + '</div>';
     }).join('');
   }
@@ -6917,7 +6957,7 @@
       var atCapForSlab = p.slab === 'capped' ? counts.capped >= 5 : counts.uncapped >= 2;
       var disabled = retentionSubmitted || (!p.retained && atCapForSlab);
       return '<tr><td><input type="checkbox" ' + (p.retained ? 'checked' : '') + (disabled ? ' disabled' : '') + ' onchange="toggleRetention(' + i + ')"></td>'
-        + '<td><div class="player-cell"><div class="player-avatar">' + p.name.split(' ').map(function (w) { return w[0]; }).join('') + '</div><div class="player-name">' + p.name + '</div></div></td>'
+        + '<td><div class="player-cell clickable" onclick="openPlayerFromRow(this)"><div class="player-avatar">' + p.name.split(' ').map(function (w) { return w[0]; }).join('') + '</div><div class="player-name">' + p.name + '</div></div></td>'
         + '<td><span class="role-cell">' + p.role + '</span></td>'
         + '<td><span class="tier-badge ' + (p.slab === 'capped' ? 'a' : 'c') + '">' + (p.slab === 'capped' ? 'Capped' : 'Uncapped') + '</span></td>'
         + '<td class="num">' + p.cost + 'cr</td></tr>';
@@ -6945,6 +6985,102 @@
     banner.hidden = false;
     var kept = FRANCHISE_FULL_SQUAD.filter(function (p) { return p.retained; }).map(function (p) { return p.name; });
     banner.innerHTML = 'Retention locked in: ' + kept.join(', ') + '. On to the auction.';
+  }
+
+
+  // ---- Calendar: every dated event this mockup already establishes elsewhere, in one clickable
+  // month-grid view. Real JS Date math throughout (never a hand-authored grid), so the weekday
+  // alignment is always genuinely correct - confirmed 27 Mar 2027 is a real Saturday, matching
+  // the topbar's own frozen-date text, before a single day was ever hardcoded. ----
+  var CALENDAR_TODAY = new Date(2027, 2, 27);
+  var calendarViewYear = 2027, calendarViewMonth = 2;
+  var CALENDAR_EVENTS = [
+    { date: '2027-02-03', context: 'franchise', title: 'EOI meeting held', detail: 'The registered-player list was finalised into the auction shortlist.', action: function () { showPanel('franchise'); }, actionLabel: 'Open Franchise' },
+    { date: '2027-03-15', context: 'franchise', title: 'Pre-Auction meeting held', detail: 'The room locked in its plan and targets ahead of today\'s auction.', action: function () { showPanel('franchise'); }, actionLabel: 'Open Franchise' },
+    { date: '2027-03-21', context: 'international', title: 'T20I squad vs Sri Lanka announced', detail: 'One change from the last squad \u2014 Umar Baig in for Rizwan Sheikh.', action: function () { showPanel('international'); var b = document.querySelector('#panel-international .subtab-btn[data-subtab="poolsquad"]'); if (b) b.click(); }, actionLabel: 'Open National Pool & Squad' },
+    { date: '2027-03-25', context: 'international', title: '1st T20I vs Sri Lanka', detail: 'Gaddafi Stadium.', action: function () { showPanel('fixtures'); }, actionLabel: 'Open Fixtures' },
+    { date: '2027-03-27', context: 'club', title: 'Match day', detail: 'A Pakistan T20 Cup fixture is live today \u2014 Play Match in the topbar is the same action.', action: function () { showPanel('fixtures'); }, actionLabel: 'Open Fixtures' },
+    { date: '2027-03-27', context: 'international', title: '2nd T20I vs Sri Lanka', detail: 'A live fixture today, in the same home series.', action: function () { showPanel('fixtures'); }, actionLabel: 'Open Fixtures' },
+    { date: '2027-03-27', context: 'franchise', title: 'Auction window opens', detail: 'Retention resolves this morning as the first step, then the live bidding room.', action: function () { showPanel('franchise'); }, actionLabel: 'Open Franchise' },
+    { date: '2027-04-08', context: 'club', title: 'Training camp', detail: 'Ahead of the Pakistan T20 Cup run-in \u2014 a real development chance for every player 26 or under, automatically computed.', action: function () { showPanel('club'); }, actionLabel: 'Open Club' },
+    { date: '2027-04-17', context: 'international', title: '1st ODI vs India', detail: 'National Stadium.', action: function () { showPanel('fixtures'); }, actionLabel: 'Open Fixtures' },
+    { date: '2027-04-22', context: 'international', title: 'Test squad vs Australia required', detail: 'The real 40-day announcement window (opened 27 Mar) closes around this point.', action: function () { showPanel('international'); var b = document.querySelector('#panel-international .subtab-btn[data-subtab="poolsquad"]'); if (b) b.click(); }, actionLabel: 'Build the Squad' }
+  ];
+  function calendarDateKey(y, m, d) {
+    return y + '-' + String(m + 1).padStart(2, '0') + '-' + String(d).padStart(2, '0');
+  }
+  function calendarEventsFor(key) {
+    return CALENDAR_EVENTS.filter(function (e) { return e.date === key && (e.context === 'all' || e.context === CURRENT_CONTEXT); });
+  }
+  function calendarShiftMonth(delta) {
+    calendarViewMonth += delta;
+    if (calendarViewMonth < 0) { calendarViewMonth = 11; calendarViewYear--; }
+    if (calendarViewMonth > 11) { calendarViewMonth = 0; calendarViewYear++; }
+    renderCalendarMonth();
+  }
+  function renderCalendarMonth() {
+    var monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    document.getElementById('calendar-nav-label').textContent = monthNames[calendarViewMonth] + ' ' + calendarViewYear;
+    var first = new Date(calendarViewYear, calendarViewMonth, 1);
+    var startWeekday = (first.getDay() + 6) % 7;
+    var daysInMonth = new Date(calendarViewYear, calendarViewMonth + 1, 0).getDate();
+    var grid = document.getElementById('calendar-grid');
+    var html = '';
+    for (var i = 0; i < startWeekday; i++) html += '<div class="calendar-day-cell empty"></div>';
+    for (var d = 1; d <= daysInMonth; d++) {
+      var key = calendarDateKey(calendarViewYear, calendarViewMonth, d);
+      var evs = calendarEventsFor(key);
+      var isToday = (calendarViewYear === CALENDAR_TODAY.getFullYear() && calendarViewMonth === CALENDAR_TODAY.getMonth() && d === CALENDAR_TODAY.getDate());
+      var thisDate = new Date(calendarViewYear, calendarViewMonth, d);
+      var isPast = thisDate < CALENDAR_TODAY && !isToday;
+      html += '<div class="calendar-day-cell' + (isToday ? ' today' : '') + (isPast ? ' past' : '') + '" data-key="' + key + '" onclick="selectCalendarDay(\'' + key + '\')">'
+        + '<span class="cal-day-num">' + d + '</span>'
+        + (evs.length ? '<span class="cal-day-dot"></span>' : '')
+        + '</div>';
+    }
+    grid.innerHTML = html;
+    var showToday = (calendarViewYear === CALENDAR_TODAY.getFullYear() && calendarViewMonth === CALENDAR_TODAY.getMonth());
+    selectCalendarDay(showToday ? calendarDateKey(calendarViewYear, calendarViewMonth, CALENDAR_TODAY.getDate()) : calendarDateKey(calendarViewYear, calendarViewMonth, 1));
+  }
+  function selectCalendarDay(key) {
+    document.querySelectorAll('#calendar-grid .calendar-day-cell.selected').forEach(function (c) { c.classList.remove('selected'); });
+    var cell = document.querySelector('#calendar-grid .calendar-day-cell[data-key="' + key + '"]');
+    if (cell) cell.classList.add('selected');
+    var parts = key.split('-');
+    var d = new Date(+parts[0], +parts[1] - 1, +parts[2]);
+    var label = d.toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+    var evs = calendarEventsFor(key);
+    var panel = document.getElementById('calendar-day-detail');
+    if (!evs.length) {
+      panel.innerHTML = '<span class="eyebrow">' + label + '</span><div class="role-hint" style="margin-top:8px">Nothing dated for this identity on this day.</div>';
+      return;
+    }
+    panel.innerHTML = '<span class="eyebrow">' + label + '</span>' + evs.map(function (e, i) {
+      return '<div style="margin-top:' + (i === 0 ? 10 : 14) + 'px;display:flex;flex-direction:column;align-items:flex-start;gap:4px">'
+        + '<span style="font-weight:700;color:var(--ink);font-size:var(--fs-body)">' + e.title + '</span>'
+        + '<span class="role-hint" style="margin:0">' + e.detail + '</span>'
+        + (e.action ? '<button class="view-more-btn" style="margin-top:4px" data-ev="' + i + '">' + e.actionLabel + '</button>' : '')
+        + '</div>';
+    }).join('');
+    panel.querySelectorAll('button[data-ev]').forEach(function (btn) {
+      var idx = +btn.getAttribute('data-ev');
+      btn.onclick = function () { evs[idx].action(); exitCalendarMode(); };
+    });
+  }
+  function openCalendarView() {
+    document.body.classList.add("match-immersive");
+    document.querySelectorAll("body > .app-body > .main-content > .shell > section.panel").forEach(function (p) { p.hidden = true; });
+    var staffPanel = document.getElementById("panel-staff-profile"); if (staffPanel) staffPanel.hidden = true;
+    var onboardPanel = document.getElementById("panel-onboarding"); if (onboardPanel) onboardPanel.hidden = true;
+    document.getElementById("panel-calendar").hidden = false;
+    calendarViewYear = CALENDAR_TODAY.getFullYear();
+    calendarViewMonth = CALENDAR_TODAY.getMonth();
+    renderCalendarMonth();
+  }
+  function exitCalendarMode() {
+    document.body.classList.remove("match-immersive");
+    document.getElementById("panel-calendar").hidden = true;
+    showPanel("portal");
   }
 
   function openStaffProfile(rowEl) {
@@ -6984,6 +7120,8 @@
     var row = document.querySelector('.staff-row[data-role="' + roleKey + '"]');
     if (row) {
       row.classList.remove('vacant');
+      row.classList.add('clickable');
+      row.setAttribute('onclick', 'openStaffProfile(this)');
       row.querySelector('.staff-row-main').innerHTML = '<span class="staff-name">' + name + '</span><span class="staff-role-label">' + STAFF_ROLE_LABELS[roleKey] + '</span>';
       row.querySelector('.staff-row-meta').innerHTML = '<span class="facility-tier-badge ' + tierClass + '">' + tierLabel + '</span><span class="staff-tenure">Just appointed</span>';
     }
@@ -6996,6 +7134,8 @@
     if (!row) return;
     if (!confirm('Release this member of staff?')) return;
     row.classList.add('vacant');
+    row.classList.remove('clickable');
+    row.removeAttribute('onclick');
     row.querySelector('.staff-row-main').innerHTML = '<span class="staff-name">Vacant</span><span class="staff-role-label">' + STAFF_ROLE_LABELS[roleKey] + '</span>';
     row.querySelector('.staff-row-meta').innerHTML = '<button class="facility-request-btn" onclick="openStaffRecruit(\'' + roleKey + '\')">Recruit</button>';
   }
