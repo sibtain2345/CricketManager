@@ -8226,6 +8226,42 @@
     return 'dot';
   }
 
+  // Composes a delivery record + a shot record into the same {legs, points}
+  // shape animateDeliveryBall already builds by hand today (spec S3) - the
+  // delivery supplies leg1/leg2 (release->pitch, pitch->bat), the shot
+  // supplies leg3 (bat->target) when a shot is actually played.
+  var LIVE_ZONE_TARGETS_BY_ZONE = {
+    straight: [{ x: 320, y: 440 }, { x: 320, y: 565 }],
+    off: [{ x: 605, y: 300 }, { x: 500, y: 115 }, { x: 560, y: 400 }],
+    leg: [{ x: 35, y: 340 }, { x: 80, y: 115 }, { x: 110, y: 490 }],
+    behind: [{ x: 560, y: 320 }, { x: 90, y: 320 }, { x: 368, y: 228 }]
+  };
+  function composeLegs(deliveryId, shotId, outcome, pitchLineOffset) {
+    var delivery = DELIVERY_TYPES[deliveryId] || DELIVERY_TYPES.off_break;
+    var shot = SHOT_TYPES[shotId] || SHOT_TYPES.defensive_block;
+    var bowlerPt = { x: 320, y: 432 };
+    var pitchPt = { x: 320 + pitchLineOffset, y: delivery.pitchY };
+    var batPt = { x: 320, y: 236 };
+    var points = [bowlerPt, pitchPt, batPt];
+    var bows = [delivery.leg1Bow, delivery.leg2Bow];
+    var msArr = [Math.round(260 * delivery.durMul), Math.round((delivery.family === 'spin' ? 260 : 210) * delivery.durMul)];
+    if (outcome !== 'wicket' && shotId !== 'leave' && shotId !== 'defensive_block') {
+      var zoneTargets = LIVE_ZONE_TARGETS_BY_ZONE[shot.zone] || LIVE_ZONE_TARGETS_BY_ZONE.straight;
+      var target = zoneTargets[Math.floor(Math.random() * zoneTargets.length)];
+      points.push(target);
+      var shotBow = 8 + shot.power * 44;
+      var shotMs = 260 + shot.power * 340;
+      bows.push(shotBow);
+      msArr.push(Math.round(shotMs));
+    } else if (shotId === 'defensive_block') {
+      var blockPt = { x: batPt.x + 6, y: batPt.y + 14 };
+      points.push(blockPt);
+      bows.push(3); msArr.push(160);
+    }
+    var legs = buildLegs(points, bows, msArr, null);
+    return { legs: legs, points: points };
+  }
+
   var BOWLER_RUNUP = {
     'field-iqbal': { from: { x: 320, y: 476 }, bow: 5, ms: 480, style: 'spin' },
     'field-awan': { from: { x: 284, y: 558 }, bow: -26, ms: 780, style: 'pace' }
