@@ -8120,6 +8120,47 @@
   // (over the wicket, right-arm) - the concrete visual difference the user
   // asked for between bowling actions, not one generic straight line for
   // everyone.
+  // ---- Delivery-type visual taxonomy (spec: docs/superpowers/specs/
+  // 2026-09-14-delivery-shot-visual-taxonomy-design.md). Grounded in this
+  // project's own BowlingStyle/DeliveryVariation domain enums, not
+  // invented - CC14's own extracted assets were re-checked for this
+  // specific ask and confirmed to hold no swing/turn/shot-shape data at
+  // all (colour-dot sprites + a 4-frame ball-rotation checkerboard only),
+  // so this is grounded in the real C# domain model instead. ----
+  var DELIVERY_TYPES = {
+    outswinger:  { family: 'pace', leg1Bow: 7,  leg2Bow: 4,  pitchY: 300, durMul: 1 },
+    inswinger:   { family: 'pace', leg1Bow: -7, leg2Bow: -4, pitchY: 300, durMul: 1 },
+    bouncer:     { family: 'pace', leg1Bow: 3,  leg2Bow: 2,  pitchY: 340, durMul: 1 },
+    yorker:      { family: 'pace', leg1Bow: 2,  leg2Bow: 1,  pitchY: 252, durMul: 1 },
+    slower_ball: { family: 'pace', leg1Bow: 3,  leg2Bow: 2,  pitchY: 300, durMul: 1.35 },
+    off_break:   { family: 'spin', leg1Bow: 4,  leg2Bow: 15, pitchY: 300, durMul: 1 },
+    leg_break:   { family: 'spin', leg1Bow: 4,  leg2Bow: -15, pitchY: 300, durMul: 1 },
+    googly:      { family: 'spin', leg1Bow: 4,  leg2Bow: 15, pitchY: 300, durMul: 1 },
+    arm_ball:    { family: 'spin', leg1Bow: 4,  leg2Bow: 2,  pitchY: 300, durMul: 1 }
+  };
+  // Only the deliveries a bowler could genuinely bowl in real cricket -
+  // Iqbal is an off-spinner (off-break stock ball + the occasional arm-
+  // ball that doesn't turn); Awan is a pace bowler with the standard
+  // swing/bouncer/yorker/change-of-pace repertoire. leg_break/googly have
+  // no leg-spin bowler in this mockup's illustrative data yet - real,
+  // tested code, honestly unreachable through today's two field-toggle
+  // buttons (spec S8), not silently invented onto a bowler who wouldn't
+  // bowl them.
+  var BOWLER_REPERTOIRE = {
+    'field-iqbal': [['off_break', 78], ['arm_ball', 22]],
+    'field-awan': [['outswinger', 26], ['inswinger', 20], ['bouncer', 16], ['yorker', 16], ['slower_ball', 22]]
+  };
+  function pickDeliveryType(wrapId) {
+    var options = BOWLER_REPERTOIRE[wrapId] || BOWLER_REPERTOIRE['field-iqbal'];
+    var total = options.reduce(function (s, o) { return s + o[1]; }, 0);
+    var roll = Math.random() * total;
+    for (var i = 0; i < options.length; i++) {
+      roll -= options[i][1];
+      if (roll <= 0) return options[i][0];
+    }
+    return options[0][0];
+  }
+
   var BOWLER_RUNUP = {
     'field-iqbal': { from: { x: 320, y: 476 }, bow: 5, ms: 480, style: 'spin' },
     'field-awan': { from: { x: 284, y: 558 }, bow: -26, ms: 780, style: 'pace' }
