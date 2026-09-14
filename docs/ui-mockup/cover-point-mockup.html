@@ -8277,10 +8277,16 @@
     return { legs: legs, points: points };
   }
 
+  var PACE_TIER_MULTIPLIER = { Fast: 0.78, FastMedium: 0.9, MediumFast: 1.05, Medium: 1.22 };
   var BOWLER_RUNUP = {
     'field-iqbal': { from: { x: 320, y: 476 }, bow: 5, ms: 480, style: 'spin' },
-    'field-awan': { from: { x: 284, y: 558 }, bow: -26, ms: 780, style: 'pace' }
+    'field-awan': { from: { x: 284, y: 558 }, bow: -26, ms: 780, style: 'pace', paceTier: 'FastMedium' }
   };
+  function paceTierFor(wrapId) {
+    var r = BOWLER_RUNUP[wrapId];
+    if (!r || r.style !== 'pace' || !r.paceTier) return 1;
+    return PACE_TIER_MULTIPLIER[r.paceTier] || 1;
+  }
   var COMMENTARY_TEMPLATES = {
     dot: ['{b} to {batter}, no run \u2014 solidly defended back down the pitch.', '{b} to {batter}, dot ball, worked straight to a fielder.'],
     single: ['{b} to {batter}, worked into the gap for a single, quick between the wickets.', '{b} to {batter}, pushed for one to keep the strike ticking over.'],
