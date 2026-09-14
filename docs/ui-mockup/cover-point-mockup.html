@@ -8025,26 +8025,9 @@
   // (the audio-credit note above is honest that only one reaction cue
   // exists) -- outcomes here are a weighted random draw, the same
   // scripted-not-simulated honesty this screen already keeps for sound.
-  var LIVE_ZONE_TARGETS = {
-    dot: [{ x: 318, y: 258 }],
-    single: [{ x: 230, y: 440 }, { x: 410, y: 440 }, { x: 320, y: 340 }],
-    two: [{ x: 90, y: 320 }, { x: 560, y: 320 }],
-    four: [{ x: 605, y: 300 }, { x: 35, y: 340 }, { x: 560, y: 115 }, { x: 80, y: 115 }],
-    six: [{ x: 615, y: 75 }, { x: 25, y: 90 }, { x: 320, y: 35 }],
-    wicket: [{ x: 320, y: 222 }]
-  };
   var LIVE_OUTCOME_WEIGHTS = [['dot', 40], ['single', 28], ['two', 8], ['four', 14], ['six', 5], ['wicket', 5]];
   var LIVE_OUTCOME_PIP = { dot: '&bull;', single: '1', two: '2', four: '4', six: '6', wicket: 'W' };
   var LIVE_OUTCOME_FLASH = { four: 'FOUR!', six: 'SIX!', wicket: 'OUT!' };
-  function pickLiveOutcome() {
-    var total = LIVE_OUTCOME_WEIGHTS.reduce(function (sum, o) { return sum + o[1]; }, 0);
-    var roll = Math.random() * total;
-    for (var i = 0; i < LIVE_OUTCOME_WEIGHTS.length; i++) {
-      roll -= LIVE_OUTCOME_WEIGHTS[i][1];
-      if (roll <= 0) return LIVE_OUTCOME_WEIGHTS[i][0];
-    }
-    return 'dot';
-  }
 
   // ---- A real curved-motion engine, used for both the bowler's run-up and
   // the ball's own flight. Straight CSS-transition hops between 2-3 fixed
@@ -8225,6 +8208,15 @@
     }
     return 'dot';
   }
+  var DELIVERY_LABEL = { outswinger: 'an outswinger', inswinger: 'an inswinger', bouncer: 'a bouncer', yorker: 'a yorker', slower_ball: 'a slower ball', off_break: 'an off-break', leg_break: 'a leg-break', googly: 'a googly', arm_ball: 'the arm-ball' };
+  var SHOT_LABEL = { straight_drive: 'driven straight', cover_drive: 'driven through cover', on_drive: 'driven back past the bowler', off_drive: 'driven through mid-off', square_cut: 'cut hard square', late_cut: 'late-cut fine', upper_cut: 'upper-cut over the slips', pull: 'pulled away', hook: 'hooked away', leg_glance: 'glanced off the pads', square_leg_whip: 'whipped through square leg', sweep: 'swept away', reverse_sweep: 'reverse-swept', slog_sweep: 'slog-swept', paddle_sweep: 'paddled fine', lofted_drive: 'lofted over the infield', slog: 'slogged away', defensive_block: 'defended solidly', leave: 'left alone', edge: 'edged' };
+  function buildDeliveryCommentaryLine(deliveryId, shotId, outcome) {
+    var b = currentBowlerName(), batter = currentBatterName();
+    var dLabel = DELIVERY_LABEL[deliveryId] || 'a delivery';
+    var sLabel = SHOT_LABEL[shotId] || 'played';
+    var outcomeText = { dot: 'no run.', single: 'a single.', two: 'two runs.', four: 'FOUR!', six: 'SIX!', wicket: 'OUT!' }[outcome] || '';
+    return b + ' to ' + batter + ', ' + dLabel + ' \u2014 ' + sLabel + ', ' + outcomeText;
+  }
 
   // Composes a delivery record + a shot record into the same {legs, points}
   // shape animateDeliveryBall already builds by hand today (spec S3) - the
@@ -8287,14 +8279,6 @@
     if (!r || r.style !== 'pace' || !r.paceTier) return 1;
     return PACE_TIER_MULTIPLIER[r.paceTier] || 1;
   }
-  var COMMENTARY_TEMPLATES = {
-    dot: ['{b} to {batter}, no run \u2014 solidly defended back down the pitch.', '{b} to {batter}, dot ball, worked straight to a fielder.'],
-    single: ['{b} to {batter}, worked into the gap for a single, quick between the wickets.', '{b} to {batter}, pushed for one to keep the strike ticking over.'],
-    two: ['{b} to {batter}, driven wide and they come back for two.', '{b} to {batter}, good running gets them a couple.'],
-    four: ['{b} to {batter}, FOUR! Cracked through the covers, no chance for the fielder.', '{b} to {batter}, FOUR! Finds the gap and races away to the rope.'],
-    six: ['{b} to {batter}, SIX! Launched high into the stands.', '{b} to {batter}, SIX! That one\u2019s not coming back.'],
-    wicket: ['{b} to {batter}, OUT! A huge wicket at this stage of the innings.', '{b} to {batter}, OUT! That has done for him \u2014 back to the pavilion.']
-  };
   function currentBowlerName() {
     var eyebrow = document.querySelector('#delivery-field-card .field-card-head .eyebrow');
     if (!eyebrow) return 'The bowler';
@@ -8306,11 +8290,6 @@
     var who = document.querySelector('.rail .figures-card .crease-card .who');
     if (!who) return 'the batter';
     return who.textContent.replace('*', '').trim();
-  }
-  function buildCommentaryLine(outcome) {
-    var opts = COMMENTARY_TEMPLATES[outcome] || COMMENTARY_TEMPLATES.dot;
-    var tpl = opts[Math.floor(Math.random() * opts.length)];
-    return tpl.replace('{b}', currentBowlerName()).replace('{batter}', currentBatterName());
   }
   function prependCommentaryLine(text, outcome) {
     var log = document.querySelector('.commentary-card');
@@ -8336,31 +8315,16 @@
     if (!svg) return;
     var bowlBtn = document.getElementById('bowl-btn');
     if (bowlBtn) bowlBtn.disabled = true;
-    var outcome = pickLiveOutcome();
-    var targets = LIVE_ZONE_TARGETS[outcome];
-    var target = targets[Math.floor(Math.random() * targets.length)];
     var runup = BOWLER_RUNUP[wrap.id] || BOWLER_RUNUP['field-iqbal'];
-    var isSpin = runup.style === 'spin';
-
-    var bowlerPt = { x: 320, y: 432 };
+    var deliveryId = pickDeliveryType(wrap.id);
+    var shotId = pickShot(deliveryId);
+    var outcome = rollOutcome(shotId);
     var pitchLineOffset = Math.round(Math.random() * 16 - 8);
-    var pitchPt = { x: 320 + pitchLineOffset, y: 300 };
-    var batPt = { x: 320, y: 236 };
-    var points = outcome === 'wicket' ? [bowlerPt, pitchPt, batPt] : [bowlerPt, pitchPt, batPt, target];
-
-    // The bow (curve depth) of each leg is a real, if approximate, physical
-    // read: a little drift in the air, a sharper deviation off the pitch
-    // (more for a spinner - turn - than a quick - seam), then an
-    // outcome-shaped final arc: tight for a dot/single, a sweeping ground
-    // curve for a four, and a real, wide swooping arc for a six.
-    var bows = [isSpin ? 4 : 7, isSpin ? 15 : 6];
-    var legMs = [260, isSpin ? 260 : 210];
-    if (outcome !== 'wicket') {
-      var finalBow = { dot: 5, single: 9, two: 10, four: 24, six: 44 }[outcome] || 8;
-      var finalMs = { dot: 260, single: 320, two: 340, four: 420, six: 560 }[outcome] || 320;
-      bows.push(finalBow); legMs.push(finalMs);
-    }
-    var legs = buildLegs(points, bows, legMs, null);
+    var mirrorX = false; // no left-arm/left-hand character in today's mockup data yet (spec S7/S8) - mirrorLegs is real and tested (task 5), wired here so the next bowler/batter added only needs to flip this flag, not touch the pipeline
+    var composed = mirrorLegs(composeLegs(deliveryId, shotId, outcome, pitchLineOffset), mirrorX);
+    var legs = composed.legs;
+    var points = composed.points;
+    var bowlerPt = points[0], pitchPt = points[1], batPt = points[2];
     var pathD = legsToPathD(legs);
 
     var ns = 'http://www.w3.org/2000/svg';
@@ -8418,7 +8382,7 @@
     if (bowlerMarker) {
       bowlerMarker.setAttribute('cx', runup.from.x);
       bowlerMarker.setAttribute('cy', runup.from.y);
-      var runupLegs = buildLegs([runup.from, bowlerPt], [runup.bow], [runup.ms], [easeInOutQuad]);
+      var runupLegs = buildLegs([runup.from, bowlerPt], [runup.bow], [Math.round(runup.ms * paceTierFor(wrap.id))], [easeInOutQuad]);
       tweenLegs(bowlerMarker, runupLegs, null, releaseBall);
     } else {
       releaseBall();
@@ -8494,7 +8458,7 @@
 
       // THIS ball's own commentary, shown right here in the focused view -
       // not buried in a background list.
-      var line = buildCommentaryLine(outcome);
+      var line = buildDeliveryCommentaryLine(deliveryId, shotId, outcome);
       if (caption) {
         caption.innerHTML = '<b>' + (outcome === 'wicket' ? 'WICKET' : outcome === 'four' ? 'FOUR' : outcome === 'six' ? 'SIX' : outcome.toUpperCase()) + '</b> &middot; ' + line;
         caption.classList.add('shown');
