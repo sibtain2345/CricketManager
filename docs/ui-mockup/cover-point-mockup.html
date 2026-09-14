@@ -8262,6 +8262,21 @@
     return { legs: legs, points: points };
   }
 
+  // Mirrors a composed delivery for a left-arm bowler and/or a left-
+  // handed batter (spec S7) - arm and hand mirror INDEPENDENTLY (an XOR,
+  // not "either flips it the same way"): a left-arm bowler to a right-
+  // handed batter looks different from a left-arm bowler to a left-
+  // handed batter, which is real cricket geometry, not a simplification.
+  function mirrorPoint(p) { return { x: 640 - p.x, y: p.y }; }
+  function mirrorLegs(composed, mirrorX) {
+    if (!mirrorX) return composed;
+    var points = composed.points.map(mirrorPoint);
+    var legs = composed.legs.map(function (leg) {
+      return { from: mirrorPoint(leg.from), control: mirrorPoint(leg.control), to: mirrorPoint(leg.to), ms: leg.ms, ease: leg.ease };
+    });
+    return { legs: legs, points: points };
+  }
+
   var BOWLER_RUNUP = {
     'field-iqbal': { from: { x: 320, y: 476 }, bow: 5, ms: 480, style: 'spin' },
     'field-awan': { from: { x: 284, y: 558 }, bow: -26, ms: 780, style: 'pace' }
