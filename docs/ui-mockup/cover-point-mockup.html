@@ -8190,6 +8190,42 @@
     edge:            { zone: 'behind',   aerial: false, power: 0.25, outcomeWeights: { dot: 8,  single: 6,  two: 2,  four: 20, six: 0,  wicket: 64 } }
   };
 
+  // Realistic delivery -> shot weighting (spec S6) - a bouncer draws a
+  // pull/hook/duck, a yorker draws a block or gets driven/misses, spin
+  // draws a sweep or a drive down the ground. This is what stops the
+  // shot from ever contradicting the ball that was actually bowled.
+  var DELIVERY_TO_SHOT = {
+    outswinger:  [['cover_drive', 22], ['square_cut', 14], ['edge', 20], ['defensive_block', 22], ['off_drive', 14], ['leave', 8]],
+    inswinger:   [['on_drive', 22], ['square_leg_whip', 16], ['pull', 10], ['defensive_block', 24], ['edge', 16], ['leave', 12]],
+    bouncer:     [['pull', 30], ['hook', 18], ['leave', 24], ['upper_cut', 10], ['edge', 18]],
+    yorker:      [['defensive_block', 42], ['straight_drive', 18], ['edge', 22], ['leg_glance', 18]],
+    slower_ball: [['lofted_drive', 16], ['slog', 14], ['defensive_block', 30], ['edge', 22], ['straight_drive', 18]],
+    off_break:   [['sweep', 20], ['on_drive', 18], ['defensive_block', 24], ['edge', 16], ['slog_sweep', 10], ['late_cut', 12]],
+    leg_break:   [['sweep', 18], ['cover_drive', 18], ['defensive_block', 24], ['edge', 18], ['reverse_sweep', 12], ['slog_sweep', 10]],
+    googly:      [['edge', 28], ['defensive_block', 26], ['sweep', 14], ['on_drive', 12], ['slog_sweep', 10], ['leave', 10]],
+    arm_ball:    [['on_drive', 20], ['defensive_block', 28], ['edge', 22], ['square_leg_whip', 16], ['leave', 14]]
+  };
+  function pickShot(deliveryId) {
+    var options = DELIVERY_TO_SHOT[deliveryId] || DELIVERY_TO_SHOT.off_break;
+    var total = options.reduce(function (s, o) { return s + o[1]; }, 0);
+    var roll = Math.random() * total;
+    for (var i = 0; i < options.length; i++) {
+      roll -= options[i][1];
+      if (roll <= 0) return options[i][0];
+    }
+    return options[0][0];
+  }
+  function rollOutcome(shotId) {
+    var w = (SHOT_TYPES[shotId] || SHOT_TYPES.defensive_block).outcomeWeights;
+    var order = ['dot', 'single', 'two', 'four', 'six', 'wicket'];
+    var roll = Math.random() * 100;
+    for (var i = 0; i < order.length; i++) {
+      roll -= w[order[i]];
+      if (roll <= 0) return order[i];
+    }
+    return 'dot';
+  }
+
   var BOWLER_RUNUP = {
     'field-iqbal': { from: { x: 320, y: 476 }, bow: 5, ms: 480, style: 'spin' },
     'field-awan': { from: { x: 284, y: 558 }, bow: -26, ms: 780, style: 'pace' }
