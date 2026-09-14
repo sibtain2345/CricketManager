@@ -8161,6 +8161,35 @@
     return options[0][0];
   }
 
+  // 20 real shots (spec S5) - each carries a ShotZone-equivalent, whether
+  // it's played along the ground or in the air, a power/risk band, and
+  // its OWN outcome tendency (dot/single/two/four/six/wicket, integers
+  // summing to 100) - this is what makes the pipeline shot-driven rather
+  // than picking a random outcome independently of what was actually
+  // played (spec S3/S8's core fix).
+  var SHOT_TYPES = {
+    straight_drive:  { zone: 'straight', aerial: false, power: 0.55, outcomeWeights: { dot: 30, single: 30, two: 12, four: 22, six: 2,  wicket: 4  } },
+    cover_drive:     { zone: 'off',      aerial: false, power: 0.6,  outcomeWeights: { dot: 22, single: 26, two: 12, four: 32, six: 2,  wicket: 6  } },
+    on_drive:        { zone: 'leg',      aerial: false, power: 0.55, outcomeWeights: { dot: 28, single: 30, two: 12, four: 24, six: 2,  wicket: 4  } },
+    off_drive:       { zone: 'off',      aerial: false, power: 0.5,  outcomeWeights: { dot: 30, single: 32, two: 12, four: 20, six: 1,  wicket: 5  } },
+    square_cut:      { zone: 'off',      aerial: false, power: 0.7,  outcomeWeights: { dot: 18, single: 20, two: 8,  four: 38, six: 3,  wicket: 13 } },
+    late_cut:        { zone: 'behind',   aerial: false, power: 0.35, outcomeWeights: { dot: 40, single: 34, two: 6,  four: 14, six: 0,  wicket: 6  } },
+    upper_cut:       { zone: 'behind',   aerial: true,  power: 0.65, outcomeWeights: { dot: 20, single: 10, two: 3,  four: 28, six: 15, wicket: 24 } },
+    pull:            { zone: 'leg',      aerial: false, power: 0.75, outcomeWeights: { dot: 18, single: 18, two: 8,  four: 30, six: 12, wicket: 14 } },
+    hook:            { zone: 'leg',      aerial: true,  power: 0.8,  outcomeWeights: { dot: 15, single: 8,  two: 2,  four: 22, six: 28, wicket: 25 } },
+    leg_glance:      { zone: 'behind',   aerial: false, power: 0.3,  outcomeWeights: { dot: 38, single: 40, two: 8,  four: 10, six: 0,  wicket: 4  } },
+    square_leg_whip: { zone: 'leg',      aerial: false, power: 0.55, outcomeWeights: { dot: 26, single: 30, two: 12, four: 26, six: 2,  wicket: 4  } },
+    sweep:           { zone: 'leg',      aerial: false, power: 0.5,  outcomeWeights: { dot: 24, single: 32, two: 10, four: 26, six: 2,  wicket: 6  } },
+    reverse_sweep:   { zone: 'off',      aerial: false, power: 0.5,  outcomeWeights: { dot: 26, single: 26, two: 8,  four: 24, six: 3,  wicket: 13 } },
+    slog_sweep:      { zone: 'leg',      aerial: true,  power: 0.78, outcomeWeights: { dot: 18, single: 8,  two: 2,  four: 22, six: 30, wicket: 20 } },
+    paddle_sweep:    { zone: 'behind',   aerial: false, power: 0.3,  outcomeWeights: { dot: 32, single: 38, two: 8,  four: 14, six: 0,  wicket: 8  } },
+    lofted_drive:    { zone: 'off',      aerial: true,  power: 0.75, outcomeWeights: { dot: 16, single: 10, two: 2,  four: 28, six: 26, wicket: 18 } },
+    slog:            { zone: 'leg',      aerial: true,  power: 0.9,  outcomeWeights: { dot: 20, single: 6,  two: 2,  four: 18, six: 32, wicket: 22 } },
+    defensive_block: { zone: 'straight', aerial: false, power: 0.08, outcomeWeights: { dot: 88, single: 9,  two: 0,  four: 0,  six: 0,  wicket: 3  } },
+    leave:           { zone: 'straight', aerial: false, power: 0,    outcomeWeights: { dot: 100, single: 0, two: 0,  four: 0,  six: 0,  wicket: 0  } },
+    edge:            { zone: 'behind',   aerial: false, power: 0.25, outcomeWeights: { dot: 8,  single: 6,  two: 2,  four: 20, six: 0,  wicket: 64 } }
+  };
+
   var BOWLER_RUNUP = {
     'field-iqbal': { from: { x: 320, y: 476 }, bow: 5, ms: 480, style: 'spin' },
     'field-awan': { from: { x: 284, y: 558 }, bow: -26, ms: 780, style: 'pace' }
