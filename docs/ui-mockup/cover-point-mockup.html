@@ -6128,12 +6128,17 @@
       '<div class="eyebrow" style="display:block;margin:14px 0 6px">Upcoming fixtures</div>' + fixturesHtml;
   }
   function renderClubProfile(c) {
+    var identityHtml = '<div class="eyebrow" style="display:block;margin-bottom:6px">Club identity</div>' +
+      '<div class="bio-line"><span class="k">Reputation</span><span class="facility-tier-badge ' + c.repTier + '">' + c.repLabel + '</span></div>' +
+      '<div class="bio-line"><span class="k">Home ground</span><span>' + c.ground + '</span></div>' +
+      '<div class="bio-line"><span class="k">Ownership</span><span>' + c.ownership + '</span></div>' +
+      '<div class="bio-line"><span class="k">Season budget</span><span>' + c.budget + '</span></div>';
     var leadHtml = (c.captain || c.coach)
-      ? ('<div class="eyebrow" style="display:block;margin-bottom:6px">Leadership</div>' +
+      ? ('<div class="eyebrow" style="display:block;margin:14px 0 6px">Leadership</div>' +
          '<div class="bio-line"><span class="k">Captain</span><span>' + (c.captain || '&mdash;') + '</span></div>' +
          '<div class="bio-line"><span class="k">Head coach</span><span>' + (c.coach || '&mdash;') + '</span></div>')
       : '';
-    return leadHtml + '<div class="eyebrow" style="display:block;margin:14px 0 6px">Recent history</div>' +
+    return identityHtml + leadHtml + '<div class="eyebrow" style="display:block;margin:14px 0 6px">Recent history</div>' +
       '<div class="notes-log">' + c.champions.map(function (line) {
         return '<div class="notes-log-item"><span>' + line + '</span></div>';
       }).join('') + '</div>';
@@ -6141,22 +6146,22 @@
   var clubProfiles = {
     lahore: { name: "Lahore Lions", meta: "Pakistan T20 Cup &middot; 1st &middot; est. 1948",
       blurb: "The most decorated club in the domestic pyramid, with a squad built for pace-friendly home conditions at Gaddafi Stadium.",
-      champions: ["2025: 1st", "2024: 1st", "2023: 3rd", "2022: 2nd"], captain: 'Talha Iqbal', coach: 'Shahid Nawaz' },
+      champions: ["2025: 1st", "2024: 1st", "2023: 3rd", "2022: 2nd"], captain: 'Talha Iqbal', coach: 'Shahid Nawaz' , repTier: 'tier-excellent', repLabel: 'Elite', ground: 'Gaddafi Stadium, Lahore', ownership: 'Board-controlled regional association', budget: 'Well-funded &mdash; the most decorated club in the pyramid' },
     karachi: { name: "Karachi Kings", meta: "Pakistan T20 Cup &middot; 2nd &middot; est. 1951",
       blurb: "A big-city club with a genuinely worldwide scouting reach, historically strong through the middle order.",
-      champions: ["2025: 2nd", "2024: 1st", "2023: 4th", "2022: 1st"], captain: 'Shahzaib Alam', coach: 'Waqas Ahmed' },
+      champions: ["2025: 2nd", "2024: 1st", "2023: 4th", "2022: 1st"], captain: 'Shahzaib Alam', coach: 'Waqas Ahmed' , repTier: 'tier-excellent', repLabel: 'Elite', ground: 'National Stadium, Karachi', ownership: 'Board-controlled regional association', budget: 'The biggest scouting budget in the domestic game' },
     islamabad: { name: "Islamabad Icons", meta: "Pakistan T20 Cup &middot; 3rd &middot; est. 1985",
       blurb: "Your club &mdash; a private-owner, benefactor-backed side with real ambition and a genuinely competitive recent record.",
-      champions: ["2023: 1st", "2021: 2nd", "2019: 1st"], captain: 'Hamza Malik', coach: 'Islamabad Icons head coach (you)' },
+      champions: ["2023: 1st", "2021: 2nd", "2019: 1st"], captain: 'Hamza Malik', coach: 'Islamabad Icons head coach (you)' , repTier: 'tier-good', repLabel: 'Strong', ground: 'Jinnah Stadium, Rawalpindi', ownership: 'Private owner, benefactor-backed', budget: '$2.4M this season' },
     multan: { name: "Multan Sultans", meta: "Pakistan T20 Cup &middot; 4th &middot; est. 1962",
       blurb: "A mid-table domestic mainstay with a real reputation for developing young pace bowlers.",
-      champions: ["2024: FCC 2nd", "2021: List A 1st"], captain: 'Faisal Nadeem', coach: 'Junaid Basit' },
+      champions: ["2024: FCC 2nd", "2021: List A 1st"], captain: 'Faisal Nadeem', coach: 'Junaid Basit' , repTier: 'tier-average', repLabel: 'Solid', ground: 'Multan Cricket Stadium', ownership: 'Board-controlled regional association', budget: 'A modest, sustainable budget built on academy graduates' },
     peshawar: { name: "Peshawar Zalmi", meta: "Pakistan T20 Cup &middot; 5th &middot; est. 1970",
       blurb: "A genuinely spin-friendly home ground and a squad built to exploit it, though depth away from home has been thin.",
-      champions: ["2023: FCC 3rd"], captain: 'Umair Chaudhry', coach: 'Riaz Mumtaz' },
+      champions: ["2023: FCC 3rd"], captain: 'Umair Chaudhry', coach: 'Riaz Mumtaz' , repTier: 'tier-average', repLabel: 'Solid', ground: 'Arbab Niaz Stadium, Peshawar', ownership: 'Board-controlled regional association', budget: 'A tight budget, and it shows away from home' },
     quetta: { name: "Quetta Falcons", meta: "Pakistan T20 Cup &middot; 6th &middot; est. 1977",
       blurb: "The smallest budget in the domestic pyramid, leaning hard on its academy pipeline rather than the transfer market.",
-      champions: ["2025: List A 1st"], captain: 'Sohail Marwat', coach: 'Zubair Ahsan' }
+      champions: ["2025: List A 1st"], captain: 'Sohail Marwat', coach: 'Zubair Ahsan' , repTier: 'tier-poor', repLabel: 'Developing', ground: 'Bugti Stadium, Quetta', ownership: 'Board-controlled regional association', budget: 'The smallest budget in the pyramid, leaning on the academy' }
   };
   function openWorldProfile(kind, key) {
     var c = kind === 'nation' ? nationProfiles[key] : clubProfiles[key];

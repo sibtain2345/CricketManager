@@ -12174,6 +12174,29 @@ show their honest fallback text instead of a fake table; the World screen's own 
 competition still opens the right profile with no broken references. Structurally verified clean
 (`verify.py`: tag balance, no duplicate ids, `node --check` - all clean).
 
+### Club Profile deepened (this pass)
+
+The last item on the "screens still thin" list. Club Profile stayed a flat blurb+champions view
+(plus a leadership card from an earlier pass) while Nation Profile had real rankings/coaching-
+structure/central-contracts/fixtures depth - a genuine asymmetry, closed by adding a "Club identity"
+card to `renderClubProfile`: **Reputation** (a real `.facility-tier-badge` tier - Elite for Lahore
+Lions/Karachi Kings, Strong for Islamabad Icons, Solid for Multan Sultans/Peshawar Zalmi, Developing
+for Quetta Falcons - derived honestly from each club's own already-stated finishing-position history,
+not invented), **Home ground** (reusing venue names already established elsewhere in this file -
+Gaddafi Stadium for Lahore, National Stadium for Karachi, Jinnah Stadium/Rawalpindi for Islamabad,
+Multan Cricket Stadium for Multan - and naming Peshawar's/Quetta's grounds consistently with that
+same real-Pakistani-venue convention rather than leaving two of six clubs the odd ones out),
+**Ownership** (grounded in the real domain's `OwnershipModel` concept - board-controlled regional
+association as the honest default for five of the six, keeping Islamabad Icons' own already-
+established private-owner/benefactor exception unchanged), and **Season budget** (Islamabad reuses
+its own real, already-shown $2.4M topbar figure for consistency; the other five get a qualitative
+read grounded in their own existing blurb text - Karachi's "worldwide scouting reach" reads as the
+biggest budget, Quetta's "smallest budget... leaning on its academy" reads as the smallest).
+
+Verified in-browser via Playwright across all six clubs (Islamabad's full render checked directly,
+the other five checked for a clean, error-free render) - all six show the new Club identity card with
+no runtime errors. Structurally verified clean (`verify.py`).
+
 ---
 
 ## CONSOLIDATED DEFERRED-ITEMS REGISTER (maintained - the single source of truth)
