@@ -12126,6 +12126,54 @@ Structurally verified clean (`verify.py`) and functionally verified in-browser v
 panel opens, both live vacancy rows respond correctly and independently, the licence-gated row stays
 disabled, and the confirmation log renders with a clean em-dash.
 
+### Competition Profile depth: real Rules/Standings/Fixtures sub-screens (this pass)
+
+The next explicitly-named item: "phir aur competition pe ap click krte ho usko apni boht saari
+cheezen hoti hain rules stadning subscreens, fixtures wagera" - a competition's own profile was a
+flat 480px modal (blurb + a table for 2 of 7 competitions + a champions list). Converted to a real
+full-screen `panel-competition-profile`, mirroring the same modal-&rarr;screen conversion this file
+already used for World's own Nation/Club profiles - breadcrumb (`World &rsaquo; Competitions &rsaquo;
+{name}`), a `panel-head`, the blurb, then a genuine **Rules / Standings / Fixtures** subnav
+(`wireTabs`, the same pattern International/World already use).
+
+**Rules** - a real per-competition rule set (format, points system, qualification/playoff shape,
+overseas quota, squad rules), authored honestly per competition type rather than one generic
+template: the domestic T20 Cup and List A Cup get an IPL-style-playoff/table-topper-vs-final
+distinction; the First-Class Championship states its real Ranji-style bonus-point system (already
+in the old blurb text, now structured as real rule lines); the three franchise leagues (PPL/IMF/SBL)
+state their auction-assembly/retention/RTM mechanism and overseas caps (4 in the XI, 8 in the squad -
+grounded in this project's own researched domain rule from the Meeting-Driven Selection ticket);
+the Crescent Trophy states plainly that it is NOT a table competition at all - a single bilateral
+series decides it outright.
+
+**Standings** - the T20 Cup's table is the SAME table already shown on the World screen's Competitions
+directory (10 played, Lahore Lions top on 16, Islamabad Icons 3rd) - kept byte-identical rather than
+authoring a second table that could quietly disagree with it. The First-Class Championship and List A
+Cup keep their existing tables. The three franchise leagues and the Crescent Trophy get an honest
+standings NOTE instead of a fabricated table - "between windows, a franchise league's squads are torn
+down and rebuilt at auction, so there's no table to show until it opens" / "not a table competition -
+decided entirely by the head-to-head series result."
+
+**Fixtures** - recent results + upcoming fixtures, grounded in the already-established six domestic
+teams; an honest empty state ("No matches played yet.", "Nothing scheduled yet.") for a competition
+between windows rather than fabricated fixtures.
+
+Data-driven: `competitionProfiles[key]` now carries `rules`, and either `table` (with its own `note`)
+or `standingsNote`, plus `fixtures.recent`/`fixtures.upcoming`; `renderCompetitionProfile(key)` builds
+all three subpanels from it in one pass, and `openCompetitionProfile(key)` (still the same function
+name every existing click-through call site already uses - the World screen's directory rows and
+Club/Boardroom's own competition links needed zero changes) resets the subnav to Rules and calls
+`showPanel('competition-profile')` instead of opening the old modal. The dead
+`closeCompetitionProfile()` function and the `competition-profile-backdrop` modal markup were removed
+entirely (confirmed via grep: zero remaining references to either).
+
+Verified in-browser via Playwright across all 7 competitions: the panel opens and defaults to Rules;
+Standings/Fixtures tabs switch correctly and show/hide the right subpanel; the T20 Cup's real table
+renders identically to the World screen's own; a franchise league (PPL) and the Crescent Trophy both
+show their honest fallback text instead of a fake table; the World screen's own click-through into a
+competition still opens the right profile with no broken references. Structurally verified clean
+(`verify.py`: tag balance, no duplicate ids, `node --check` - all clean).
+
 ---
 
 ## CONSOLIDATED DEFERRED-ITEMS REGISTER (maintained - the single source of truth)

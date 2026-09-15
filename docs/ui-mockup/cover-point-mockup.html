@@ -4731,15 +4731,21 @@
   </div>
 </div>
 
-<div class="modal-backdrop" id="competition-profile-backdrop" onclick="if(event.target===this) closeCompetitionProfile()">
-  <div class="negotiation-modal" role="dialog" aria-modal="true" aria-labelledby="cprofile-title" style="max-width:480px">
-    <div class="negotiation-head">
-      <h2 id="cprofile-title" style="margin:0">Competition profile</h2>
-      <button class="modal-close" onclick="closeCompetitionProfile()" aria-label="Close">&times;</button>
-    </div>
-    <div id="cprofile-body"></div>
-  </div>
-</div>
+<!-- ================= COMPETITION PROFILE ================= -->
+  <section class="panel" id="panel-competition-profile" role="tabpanel" hidden>
+    <div class="breadcrumb"><a onclick="showPanel('world')">World</a><span class="sep">&rsaquo;</span><span class="here">Competitions</span><span class="sep">&rsaquo;</span><span class="here" id="cprofile-breadcrumb-here">Profile</span></div>
+    <div class="panel-head"><h1 id="cprofile-title">Competition</h1><div class="sub" id="cprofile-meta">&mdash;</div></div>
+    <p id="cprofile-blurb" style="font-size:var(--fs-body);color:var(--ink-dim);line-height:1.5;max-width:820px"></p>
+    <nav class="subnav" role="tablist" aria-label="Competition profile views">
+      <button class="subtab-btn" role="tab" aria-selected="true" data-subtab="rules">Rules</button>
+      <button class="subtab-btn" role="tab" aria-selected="false" data-subtab="standings">Standings</button>
+      <button class="subtab-btn" role="tab" aria-selected="false" data-subtab="fixtures">Fixtures</button>
+    </nav>
+    <div class="subpanel" id="cprofile-rules"></div>
+    <div class="subpanel" id="cprofile-standings" hidden></div>
+    <div class="subpanel" id="cprofile-fixtures" hidden></div>
+  </section>
+
 
 <div class="modal-backdrop" id="records-detail-backdrop" onclick="if(event.target===this) closeRecordsDetail()">
   <div class="negotiation-modal" role="dialog" aria-modal="true" aria-labelledby="records-detail-title" style="max-width:640px">
@@ -5784,12 +5790,48 @@
     t20cup: {
       name: "Pakistan T20 Cup", meta: "Domestic &middot; T20 &middot; est. 1999",
       blurb: "The domestic season's headline event, contested by every first-class side over a group stage and a four-team playoff.",
-      champions: ["2025: Islamabad Icons", "2024: Karachi Kings", "2023: Lahore Lions", "2022: Karachi Kings"]
+      champions: ["2025: Islamabad Icons", "2024: Karachi Kings", "2023: Lahore Lions", "2022: Karachi Kings"],
+      rules: [
+        ["Format", "T20 &middot; a single round-robin group stage (10 rounds), then a 4-team knockout"],
+        ["Points", "Win 2 &middot; No result 1 &middot; Loss 0 &middot; a tie is settled by a Super Over"],
+        ["Qualification", "Top 4 advance to an IPL-style playoff &mdash; Qualifier 1, Eliminator, Qualifier 2, then the Final"],
+        ["Overseas players", "None &mdash; a fully domestic competition, no overseas quota applies"],
+        ["Squad rules", "Any contracted domestic player is eligible; no auction, no salary cap"]
+      ],
+      table: {
+        headers: ["Pos", "Team", "Pld", "W", "L", "NR", "NRR", "Pts"],
+        rows: [
+          ["1", "Lahore Lions", "10", "8", "2", "0", "+0.842", "16"],
+          ["2", "Karachi Kings", "10", "7", "3", "0", "+0.512", "14"],
+          ["3ic", "Islamabad Icons", "10", "6", "4", "0", "+0.203", "12"],
+          ["4", "Multan Sultans", "10", "5", "5", "0", "\u22120.088", "10"],
+          ["5", "Peshawar Zalmi", "10", "4", "5", "1", "\u22120.310", "9"],
+          ["6", "Quetta Falcons", "10", "2", "7", "1", "\u22120.940", "5"]
+        ],
+        note: "Top 4 qualify for the playoffs. Points, then net run rate, settle the order."
+      },
+      fixtures: {
+        recent: [
+          { us: true, opp: "Lahore Lions", venue: "Jinnah Stadium", result: "Won by 4 wickets" },
+          { us: true, opp: "Multan Sultans", venue: "Away", result: "Lost by 12 runs" }
+        ],
+        upcoming: [
+          { us: true, opp: "Peshawar Zalmi", venue: "Away", when: "Fri, 3 days" },
+          { us: false, opp: "Karachi Kings vs Quetta Falcons", venue: "National Stadium", when: "Sat, 4 days" }
+        ]
+      }
     },
     fcc: {
       name: "Pakistan First-Class Championship", meta: "Domestic &middot; First-Class &middot; est. 1953",
-      blurb: "The oldest domestic competition in the country, and still the one a coach's Test-ready players are judged on. Points come from a win (12) or a draw (4), plus real Ranji-style batting and bowling bonus points earned inside the first 100 overs of each side's own first innings.",
+      blurb: "The oldest domestic competition in the country, and still the one a coach's Test-ready players are judged on.",
       champions: ["2025: Lahore Lions", "2024: Multan Sultans", "2023: Islamabad Icons", "2022: Lahore Lions"],
+      rules: [
+        ["Format", "First-Class &middot; 4-day matches, home-and-away"],
+        ["Points", "Win 12 &middot; Draw 4 &middot; plus real Ranji-style batting and bowling bonus points earned inside the first 100 overs of each side's own first innings"],
+        ["Qualification", "No playoff &mdash; the table topper after every round is played is champion, the FC tradition"],
+        ["Overseas players", "None &mdash; a fully domestic competition"],
+        ["Squad rules", "A side must field at least 4 recognised bowling options across the innings"]
+      ],
       table: {
         headers: ["Pos", "Team", "Pld", "W", "L", "D", "Bt Pts", "Bw Pts", "Pts"],
         rows: [
@@ -5799,6 +5841,15 @@
           ["3ic", "Islamabad Icons", "6", "2", "2", "2", "11", "8", "35"],
           ["5", "Peshawar Zalmi", "6", "1", "2", "3", "9", "7", "27"],
           ["6", "Quetta Falcons", "6", "1", "4", "1", "8", "6", "20"]
+        ],
+        note: "Six rounds left. The table topper at the end of the season is champion outright &mdash; there is no playoff in first-class cricket."
+      },
+      fixtures: {
+        recent: [
+          { us: true, opp: "Karachi Kings", venue: "Jinnah Stadium", result: "Drawn" }
+        ],
+        upcoming: [
+          { us: true, opp: "Lahore Lions", venue: "Away", when: "Starts in 9 days" }
         ]
       }
     },
@@ -5806,42 +5857,130 @@
       name: "Pakistan List A Cup", meta: "Domestic &middot; ODI &middot; est. 1980",
       blurb: "A shorter, earlier-season one-day competition that doubles as the primary shop window for a 50-over call-up.",
       champions: ["2025: Quetta Falcons", "2024: Islamabad Icons", "2023: Peshawar Zalmi", "2022: Karachi Kings"],
+      rules: [
+        ["Format", "List A &middot; 50 overs a side, a single round-robin"],
+        ["Points", "Win 2 &middot; No result 1 &middot; Loss 0"],
+        ["Qualification", "The top 2 sides after the round-robin meet in a one-off Final"],
+        ["Overseas players", "None &mdash; a fully domestic competition"],
+        ["Squad rules", "Any contracted domestic player is eligible"]
+      ],
       table: {
         headers: ["Pos", "Team", "Pld", "W", "L", "NR", "NRR", "Pts"],
         rows: [
           ["1", "Karachi Kings", "8", "6", "2", "0", "+0.671", "12"],
           ["2", "Quetta Falcons", "8", "5", "3", "0", "+0.284", "10"],
           ["3ic", "Islamabad Icons", "8", "5", "3", "0", "+0.119", "10"],
-          ["4", "Lahore Lions", "8", "4", "4", "0", "-0.052", "8"],
-          ["5", "Peshawar Zalmi", "8", "3", "4", "1", "-0.340", "7"],
-          ["6", "Multan Sultans", "8", "2", "5", "1", "-0.610", "5"]
+          ["4", "Lahore Lions", "8", "4", "4", "0", "\u22120.052", "8"],
+          ["5", "Peshawar Zalmi", "8", "3", "4", "1", "\u22120.340", "7"],
+          ["6", "Multan Sultans", "8", "2", "5", "1", "\u22120.610", "5"]
+        ],
+        note: "Top 2 meet in the Final. Islamabad Icons hold 3rd on head-to-head record over Lahore Lions."
+      },
+      fixtures: {
+        recent: [
+          { us: true, opp: "Multan Sultans", venue: "Jinnah Stadium", result: "Won by 38 runs" }
+        ],
+        upcoming: [
+          { us: false, opp: "Season complete for this year", venue: "", when: "Resumes next season" }
         ]
       }
     },
     ppl: {
       name: "Pakistan Premier League", meta: "Franchise &middot; T20 &middot; est. 2016",
       blurb: "A six-franchise auction-assembled league drawing from the whole world's player pool, run entirely separately from the domestic pyramid.",
-      champions: ["2025: Lahore Lions", "2024: Multan Sultans", "2023: Lahore Lions", "2022: Karachi Kings"]
+      champions: ["2025: Lahore Lions", "2024: Multan Sultans", "2023: Lahore Lions", "2022: Karachi Kings"],
+      rules: [
+        ["Format", "T20 &middot; a double round-robin, then an IPL-style playoff (Qualifier 1, Eliminator, Qualifier 2, Final)"],
+        ["Squad assembly", "A mega auction every 3 years (full squad reset, retention slabs, Right-to-Match cards) with a smaller mini auction in the years between"],
+        ["Overseas players", "Up to 4 in the playing XI, up to 8 in the full squad"],
+        ["Franchise economy", "Every franchise starts each auction with the same purse &mdash; no wealth gap between clubs, and a franchise can never go bankrupt"]
+      ],
+      standingsNote: "Between windows &mdash; a franchise league's squads are torn down and rebuilt at auction, so there is no table to show until the window actually opens.",
+      fixtures: {
+        recent: [],
+        upcoming: [
+          { us: false, opp: "Auction window opens", venue: "", when: "In 4 months" }
+        ]
+      }
     },
     crescent: {
       name: "The Crescent Trophy", meta: "International &middot; T20 &middot; biennial",
       blurb: "A regional international trophy held by whichever side won the last series between the two nations, contested every two years.",
-      champions: ["2025: Pakistan", "2023: India", "2021: Pakistan", "2019: Pakistan"]
+      champions: ["2025: Pakistan", "2023: India", "2021: Pakistan", "2019: Pakistan"],
+      rules: [
+        ["Format", "A bilateral T20I series between Pakistan and India, played every two years"],
+        ["Deciding the trophy", "The series winner takes the trophy outright; a drawn series lets the previous holder retain it"],
+        ["Not a table competition", "Decided entirely by the head-to-head series result &mdash; there is no group stage or standings table"]
+      ],
+      standingsNote: "Not a table competition &mdash; a single bilateral series between the two nations decides the trophy outright.",
+      fixtures: {
+        recent: [],
+        upcoming: [
+          { us: false, opp: "Pakistan vs India", venue: "Neutral venue, to be confirmed", when: "Next series in 11 months" }
+        ]
+      }
     },
     imf: {
       name: "Indian Masters League", meta: "Franchise &middot; T20 &middot; auction-assembled squads &middot; hosted by India",
       blurb: "The richest domestic T20 window on the calendar &mdash; a mega auction every three years, retention and RTM cards in between, drawing on the same world player pool the Pakistan Premier League draws from.",
-      champions: ["2025: Mumbai Marauders", "2024: Chennai Comets", "2023: Bangalore Chargers", "2022: Mumbai Marauders"]
+      champions: ["2025: Mumbai Marauders", "2024: Chennai Comets", "2023: Bangalore Chargers", "2022: Mumbai Marauders"],
+      rules: [
+        ["Format", "T20 &middot; a double round-robin, then an IPL-style playoff"],
+        ["Squad assembly", "A mega auction every 3 years with real retention slabs and Right-to-Match cards; a smaller mini auction in the years between"],
+        ["Overseas players", "Up to 4 in the playing XI, up to 8 in the full squad"],
+        ["Window", "Runs in the same March-to-May window every year, clear of the domestic season"]
+      ],
+      standingsNote: "Between windows &mdash; squads are rebuilt at auction, so there's no table to show until the window opens.",
+      fixtures: {
+        recent: [],
+        upcoming: [
+          { us: false, opp: "Auction window opens", venue: "India", when: "In 6 months" }
+        ]
+      }
     },
     sbl: {
       name: "Southern Blaze League", meta: "Franchise &middot; T20 &middot; auction-assembled squads &middot; hosted by Australia",
       blurb: "A short, high-scoring summer window built around Australia's own pace-friendly grounds &mdash; a genuine destination for an overseas power hitter in the off-season.",
-      champions: ["2025: Perth Flames", "2024: Sydney Sirens", "2023: Melbourne Meteors", "2022: Perth Flames"]
+      champions: ["2025: Perth Flames", "2024: Sydney Sirens", "2023: Melbourne Meteors", "2022: Perth Flames"],
+      rules: [
+        ["Format", "T20 &middot; a round-robin then a top-4 IPL-style playoff"],
+        ["Squad assembly", "Annual auction, no multi-year mega/mini cycle &mdash; every squad is rebuilt fresh each year"],
+        ["Overseas players", "Up to 4 in the playing XI, up to 8 in the full squad"],
+        ["Window", "A short, high-scoring Australian-summer window, clear of the domestic and other franchise calendars"]
+      ],
+      standingsNote: "Between windows &mdash; squads are rebuilt at auction every year, so there's no table to show until the window opens.",
+      fixtures: {
+        recent: [],
+        upcoming: [
+          { us: false, opp: "Auction window opens", venue: "Australia", when: "In 9 months" }
+        ]
+      }
     }
   };
-  function openCompetitionProfile(key) {
+  function fixtureRowHtml(f) {
+    if (!f.opp) return '';
+    var crest = '<div class="vs-crest ' + (f.us ? 'us' : 'them') + '"></div>';
+    var meta = f.result ? '<div class="fixture-meta">' + f.result + '</div>' : '<div class="fixture-meta"><div class="when">' + f.when + '</div>' + (f.venue || '') + '</div>';
+    return '<div class="fixture-row" style="padding-top:8px;margin-top:8px;border-top:1px solid var(--border-soft)"><div class="fixture-teams">' + crest + '<div class="fixture-names">' + f.opp + (f.venue && f.result ? '<small>' + f.venue + '</small>' : '') + '</div></div>' + meta + '</div>';
+  }
+  function renderCompetitionProfile(key) {
     var c = competitionProfiles[key];
-    var tableHtml = '';
+    document.getElementById('cprofile-title').textContent = c.name;
+    document.getElementById('cprofile-breadcrumb-here').textContent = c.name;
+    document.getElementById('cprofile-meta').innerHTML = c.meta;
+    document.getElementById('cprofile-blurb').innerHTML = c.blurb;
+
+    document.getElementById('cprofile-rules').innerHTML =
+      '<div class="analysis-card"><span class="eyebrow"><svg class="icon sm"><use href="#i-shield"/></svg> How this competition works</span>' +
+      c.rules.map(function (r) {
+        return '<div class="bio-line"><span class="k">' + r[0] + '</span><span style="max-width:60%;text-align:right">' + r[1] + '</span></div>';
+      }).join('') + '</div>' +
+      '<div class="analysis-card" style="margin-top:16px"><span class="eyebrow"><svg class="icon sm"><use href="#i-trophy"/></svg> Recent champions</span>' +
+      '<div class="notes-log">' + c.champions.map(function (line) {
+        return '<div class="notes-log-item"><span>' + line + '</span></div>';
+      }).join('') + '</div></div>';
+
+    var standingsHtml;
     if (c.table) {
       var headRow = '<tr>' + c.table.headers.map(function (h, i) {
         return '<th' + (i >= 2 ? ' class="num"' : '') + '>' + h + '</th>';
@@ -5856,21 +5995,30 @@
           return '<td' + (i >= 2 ? ' class="num"' : '') + cellStyle + '>' + val + '</td>';
         }).join('') + '</tr>';
       }).join('');
-      tableHtml = '<div class="eyebrow" style="display:block;margin:12px 0 6px">This season\u2019s table</div>' +
-        '<div class="table-card"><div class="table-scroll-inner"><table class="career"><thead>' + headRow + '</thead><tbody>' + bodyRows + '</tbody></table></div></div>';
+      standingsHtml = '<div class="analysis-card"><span class="eyebrow"><svg class="icon sm"><use href="#i-trend-up"/></svg> This season\u2019s table</span>' +
+        '<div class="table-card"><div class="table-scroll-inner"><table class="career"><thead>' + headRow + '</thead><tbody>' + bodyRows + '</tbody></table></div></div>' +
+        '<div class="role-hint" style="margin-top:10px">' + c.table.note + '</div></div>';
+    } else {
+      standingsHtml = '<div class="analysis-card"><span class="eyebrow"><svg class="icon sm"><use href="#i-trend-up"/></svg> Standings</span>' +
+        '<div class="role-hint">' + c.standingsNote + '</div></div>';
     }
-    document.getElementById('cprofile-body').innerHTML =
-      '<h3 style="margin:10px 0 2px">' + c.name + '</h3>' +
-      '<div class="role-hint" style="margin-bottom:0">' + c.meta + '</div>' +
-      '<p style="font-size:var(--fs-body);color:var(--ink-dim);line-height:1.5">' + c.blurb + '</p>' +
-      tableHtml +
-      '<div class="eyebrow" style="display:block;margin:12px 0 6px">Recent champions</div>' +
-      '<div class="notes-log">' + c.champions.map(function (line) {
-        return '<div class="notes-log-item"><span>' + line + '</span></div>';
-      }).join('') + '</div>';
-    document.getElementById('competition-profile-backdrop').classList.add('open');
+    document.getElementById('cprofile-standings').innerHTML = standingsHtml;
+
+    var recentHtml = c.fixtures.recent.length ? c.fixtures.recent.map(fixtureRowHtml).join('') : '<div class="role-hint">No matches played yet.</div>';
+    var upcomingHtml = c.fixtures.upcoming.length ? c.fixtures.upcoming.map(fixtureRowHtml).join('') : '<div class="role-hint">Nothing scheduled yet.</div>';
+    document.getElementById('cprofile-fixtures').innerHTML =
+      '<div class="analysis-card"><span class="eyebrow"><svg class="icon sm"><use href="#i-cal-list"/></svg> Recent results</span>' + recentHtml + '</div>' +
+      '<div class="analysis-card" style="margin-top:16px"><span class="eyebrow"><svg class="icon sm"><use href="#i-cal-list"/></svg> Upcoming</span>' + upcomingHtml + '</div>';
   }
-  function closeCompetitionProfile() { document.getElementById('competition-profile-backdrop').classList.remove('open'); }
+  function openCompetitionProfile(key) {
+    renderCompetitionProfile(key);
+    var nav = document.querySelector('#panel-competition-profile nav.subnav');
+    nav.querySelectorAll('.subtab-btn').forEach(function (b, i) { b.setAttribute('aria-selected', i === 0 ? 'true' : 'false'); });
+    document.getElementById('cprofile-rules').hidden = false;
+    document.getElementById('cprofile-standings').hidden = true;
+    document.getElementById('cprofile-fixtures').hidden = true;
+    showPanel('competition-profile');
+  }
   var nationProfiles = {
     pak: { name: "Pakistan", meta: "Full Member &middot; ICC Test rank 4 &middot; ODI rank 5 &middot; T20I rank 3",
       blurb: "A pace-and-wrist-spin production line and a genuinely deep domestic pyramid, though selection panels have a real reputation for volatility.",
@@ -6364,6 +6512,7 @@
   wireTabs('#panel-club .subtab-btn', 'club-');
   wireTabs('#panel-recruitment .subtab-btn', 'recruit-');
   wireTabs('#panel-world .subtab-btn', 'world-');
+  wireTabs('#panel-competition-profile .subtab-btn', 'cprofile-');
   wireTabs('#panel-matchday .subtab-btn', 'sub-');
   wireTabs('#panel-player .subtab-btn', 'psub-');
   wireTabs('#panel-inbox .subtab-btn', 'inbox-');
