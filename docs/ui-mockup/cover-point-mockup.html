@@ -2148,7 +2148,7 @@
           </div>
           <div class="staff-row vacant" data-role="fr-bowling-coach">
             <div class="staff-row-main"><span class="staff-name">Vacant</span><span class="staff-role-label">Bowling Coach</span></div>
-            <div class="staff-row-meta"><button class="facility-request-btn" onclick="openStaffRecruit('fr-bowling-coach')">Recruit</button></div>
+            <div class="staff-row-meta"><button class="facility-request-btn" onclick="showPanel('recruitment');openRecruitTab('staffdb')">Recruit</button></div>
           </div>
         </div>
         <div>
@@ -2894,53 +2894,12 @@
         <div class="subpanel" id="recruit-staffdb" hidden>
       <div class="analysis-card">
         <span class="eyebrow"><svg class="icon sm"><use href="#i-users"/></svg> Staff database &middot; worldwide</span>
-        <div class="plan-desc">Every backroom name your network has a genuine read on &mdash; a real alternative to a vacancy&rsquo;s own shortlist, browsable rather than three candidates at a time.</div>
+        <div class="plan-desc">Every backroom name your network has a genuine read on, worldwide &mdash; browse and negotiate with anyone here directly, no pre-picked shortlist in between.</div>
         <div class="table-card">
           <div class="table-scroll-inner">
           <table class="squad">
             <thead><tr><th>Name</th><th>Role</th><th>Current club</th><th>Quality</th><th class="num">Wage</th><th></th></tr></thead>
-            <tbody>
-              <tr>
-                <td><div class="player-cell clickable" onclick="openStaffProfile(this.closest('tr'))"><div class="player-avatar">MI</div><span class="staff-name" style="display:none">Mudassar Iqbal</span><div class="player-name">Mudassar Iqbal</div></div></td>
-                <td><span class="role-cell staff-role-label" style="display:inline-flex">Batting Coach</span></td>
-                <td>Free agent</td>
-                <td><span class="facility-tier-badge tier-good">Good</span></td>
-                <td class="num">$45,000</td>
-                <td><button class="academy-action-btn" onclick="event.stopPropagation();openStaffRecruit('batting-coach')">View shortlist</button></td>
-              </tr>
-              <tr>
-                <td><div class="player-cell clickable" onclick="openStaffProfile(this.closest('tr'))"><div class="player-avatar">SR</div><span class="staff-name" style="display:none">Sohail Raza</span><div class="player-name">Sohail Raza</div></div></td>
-                <td><span class="role-cell staff-role-label" style="display:inline-flex">Mental Performance Coach</span></td>
-                <td>Multan Sultans</td>
-                <td><span class="facility-tier-badge tier-excellent">Excellent</span></td>
-                <td class="num">$58,000</td>
-                <td><button class="academy-action-btn" onclick="event.stopPropagation();openStaffRecruit('mental')">View shortlist</button></td>
-              </tr>
-              <tr>
-                <td><div class="player-cell clickable" onclick="openStaffProfile(this.closest('tr'))"><div class="player-avatar">FA</div><span class="staff-name" style="display:none">Fahad Anwar</span><div class="player-name">Fahad Anwar</div></div></td>
-                <td><span class="role-cell staff-role-label" style="display:inline-flex">Data Analyst</span></td>
-                <td>Free agent</td>
-                <td><span class="facility-tier-badge tier-average">Average</span></td>
-                <td class="num">$28,000</td>
-                <td><button class="academy-action-btn" onclick="event.stopPropagation();openStaffRecruit('analyst')">View shortlist</button></td>
-              </tr>
-              <tr>
-                <td><div class="player-cell clickable" onclick="openStaffProfile(this.closest('tr'))"><div class="player-avatar">NJ</div><span class="staff-name" style="display:none">Nadeem Jatoi</span><div class="player-name">Nadeem Jatoi</div></div></td>
-                <td><span class="role-cell staff-role-label" style="display:inline-flex">Chief Scout</span></td>
-                <td>Lahore Lions</td>
-                <td><span class="facility-tier-badge tier-good">Good</span></td>
-                <td class="num">$62,000</td>
-                <td><button class="academy-action-btn" onclick="event.stopPropagation();openStaffRecruit('chief-scout')">View shortlist</button></td>
-              </tr>
-              <tr>
-                <td><div class="player-cell clickable" onclick="openStaffProfile(this.closest('tr'))"><div class="player-avatar">HW</div><span class="staff-name" style="display:none">Haroon Wattoo</span><div class="player-name">Haroon Wattoo</div></div></td>
-                <td><span class="role-cell staff-role-label" style="display:inline-flex">Head Physiotherapist</span></td>
-                <td>Free agent</td>
-                <td><span class="facility-tier-badge tier-average">Average</span></td>
-                <td class="num">$38,000</td>
-                <td><button class="academy-action-btn" onclick="event.stopPropagation();openStaffRecruit('physio')">View shortlist</button></td>
-              </tr>
-            </tbody>
+            <tbody id="staffdb-body"></tbody>
           </table>
           </div>
         </div>
@@ -3135,7 +3094,7 @@
         </div>
         <div class="staff-row vacant" data-role="batting-coach">
           <div class="staff-row-main"><span class="staff-name">Vacant</span><span class="staff-role-label">Batting Coach</span></div>
-          <div class="staff-row-meta"><button class="facility-request-btn" onclick="openStaffRecruit('batting-coach')">Recruit</button></div>
+          <div class="staff-row-meta"><button class="facility-request-btn" onclick="showPanel('recruitment');openRecruitTab('staffdb')">Recruit</button></div>
         </div>
         <div class="staff-row clickable" data-role="bowling-coach" onclick="openStaffProfile(this)">
           <div class="staff-row-main"><span class="staff-name">Imran Qureshi</span><span class="staff-role-label">Bowling Coach</span></div>
@@ -3151,7 +3110,7 @@
         </div>
         <div class="staff-row vacant" data-role="mental">
           <div class="staff-row-main"><span class="staff-name">Vacant</span><span class="staff-role-label">Mental Performance Coach</span></div>
-          <div class="staff-row-meta"><button class="facility-request-btn" onclick="openStaffRecruit('mental')">Recruit</button></div>
+          <div class="staff-row-meta"><button class="facility-request-btn" onclick="showPanel('recruitment');openRecruitTab('staffdb')">Recruit</button></div>
         </div>
       </div>
       <div class="analysis-card">
@@ -3166,7 +3125,7 @@
         </div>
         <div class="staff-row vacant" data-role="analyst">
           <div class="staff-row-main"><span class="staff-name">Vacant</span><span class="staff-role-label">Data Analyst</span></div>
-          <div class="staff-row-meta"><button class="facility-request-btn" onclick="openStaffRecruit('analyst')">Recruit</button></div>
+          <div class="staff-row-meta"><button class="facility-request-btn" onclick="showPanel('recruitment');openRecruitTab('staffdb')">Recruit</button></div>
         </div>
         <div class="staff-row clickable" data-role="physio" onclick="openStaffProfile(this)">
           <div class="staff-row-main"><span class="staff-name">Dr. Sana Malik</span><span class="staff-role-label">Head Physiotherapist</span></div>
@@ -3174,7 +3133,7 @@
         </div>
         <div class="staff-row vacant" data-role="mentor">
           <div class="staff-row-main"><span class="staff-name">Vacant</span><span class="staff-role-label">Mentor</span></div>
-          <div class="staff-row-meta"><button class="facility-request-btn" onclick="openStaffRecruit('mentor')">Recruit</button></div>
+          <div class="staff-row-meta"><button class="facility-request-btn" onclick="showPanel('recruitment');openRecruitTab('staffdb')">Recruit</button></div>
         </div>
         <div class="role-hint" style="margin-top:10px">A Mentor doesn&rsquo;t coach directly &mdash; he strengthens the mentoring bonds already forming in the dressing room between your senior pros and your promising kids.</div>
       </div>
@@ -4038,7 +3997,7 @@
         </div>
         <div class="staff-row vacant" data-role="intl-bowling-coach">
           <div class="staff-row-main"><span class="staff-name">Vacant</span><span class="staff-role-label">Bowling Coach</span></div>
-          <div class="staff-row-meta"><button class="facility-request-btn" onclick="openStaffRecruit('intl-bowling-coach')">Recruit</button></div>
+          <div class="staff-row-meta"><button class="facility-request-btn" onclick="showPanel('recruitment');openRecruitTab('staffdb')">Recruit</button></div>
         </div>
       </div>
       <div class="analysis-card">
@@ -4049,7 +4008,7 @@
         </div>
         <div class="staff-row vacant" data-role="intl-physio">
           <div class="staff-row-main"><span class="staff-name">Vacant</span><span class="staff-role-label">Head Physiotherapist</span></div>
-          <div class="staff-row-meta"><button class="facility-request-btn" onclick="openStaffRecruit('intl-physio')">Recruit</button></div>
+          <div class="staff-row-meta"><button class="facility-request-btn" onclick="showPanel('recruitment');openRecruitTab('staffdb')">Recruit</button></div>
         </div>
         <div class="role-hint" style="margin-top:10px">Held on the same real, year-round contracts a domestic club's staff carry &mdash; a national job is not campaign-bound the way a franchise coaching seat is.</div>
       </div>
@@ -4409,6 +4368,13 @@
       <h1 id="staff-profile-title">Staff member</h1>
       <div class="role-line" id="staff-profile-sub">Role</div>
       <div class="player-header-meta"><span class="player-club-crest-sm"></span><span id="staff-profile-club">Islamabad Icons</span> <span class="meta-divider">&middot;</span> <span id="staff-profile-nat">Pakistan</span></div>
+    </div>
+    <div class="player-actions-wrap staff-actions-wrap" style="align-self:flex-start;margin-left:auto">
+      <button class="player-actions-btn" id="staff-actions-btn" aria-expanded="false" onclick="toggleStaffActions()">
+        Actions
+        <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8l7 8 7-8"/></svg>
+      </button>
+      <div class="player-actions-menu" id="staff-actions-menu"></div>
     </div>
   </div>
   <div class="tactics-grid">
@@ -4859,27 +4825,7 @@
   </div>
 </div>
 
-<div class="modal-backdrop" id="staff-recruit-backdrop" onclick="if(event.target===this) closeStaffRecruit()">
-  <div class="negotiation-modal" role="dialog" aria-modal="true" aria-labelledby="staff-recruit-title">
-    <div class="negotiation-head">
-      <div class="player-club-crest-sm" style="width:46px;height:46px;border-radius:11px;flex-shrink:0"></div>
-      <div>
-        <h2 id="staff-recruit-title">Recruit: Batting Coach</h2>
-        <div class="sub" id="staff-recruit-sub">A shortlist your scouting network has put together</div>
-      </div>
-      <button class="negotiation-close" onclick="closeStaffRecruit()" aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px"><path d="M5 5l14 14M19 5L5 19"/></svg></button>
-    </div>
-    <div class="negotiation-body">
-      <div class="negotiation-section">
-        <span class="eyebrow"><svg class="icon sm"><use href="#i-badge"/></svg> Shortlist</span>
-        <div id="staff-recruit-list"></div>
-      </div>
-    </div>
-    <div class="negotiation-actions">
-      <button class="btn-ghost" onclick="closeStaffRecruit()">Cancel</button>
-    </div>
-  </div>
-</div>
+
 
 
   <section class="panel" id="panel-onboarding" role="tabpanel" hidden>
@@ -5285,11 +5231,42 @@
     var open = menu.classList.toggle('open');
     btn.setAttribute('aria-expanded', open ? 'true' : 'false');
   }
+  function toggleStaffActions() {
+    var menu = document.getElementById('staff-actions-menu');
+    var btn = document.getElementById('staff-actions-btn');
+    var open = menu.classList.toggle('open');
+    btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+  }
+  function closeStaffActionsMenu() {
+    var menu = document.getElementById('staff-actions-menu');
+    var btn = document.getElementById('staff-actions-btn');
+    if (menu) menu.classList.remove('open');
+    if (btn) btn.setAttribute('aria-expanded', 'false');
+  }
+  function releaseStaffFromProfile(roleKey) {
+    releaseStaff(roleKey);
+    // releaseStaff() itself asks for confirmation and, if declined, leaves
+    // the real row untouched - re-read it rather than assuming success.
+    var row = document.querySelector('.staff-row[data-role="' + roleKey + '"]');
+    if (row && row.classList.contains('vacant')) {
+      showPanel(row.closest('#panel-franchise') ? 'franchise' : row.closest('#panel-international') ? 'international' : 'club');
+      if (row.closest('#panel-club')) openClubTab('staff');
+    }
+  }
   document.addEventListener('click', function (e) {
-    var wrap = document.querySelector('.player-actions-wrap');
+    // Two distinct actions-menu wraps now share the .player-actions-wrap
+    // class (Player Profile's own, and Staff Profile's) - a bare
+    // querySelector would only ever find the first, so each is closed by
+    // its own specific id instead.
+    var wrap = document.querySelector('.player-actions-wrap:not(.staff-actions-wrap)');
     if (wrap && !wrap.contains(e.target)) {
       document.getElementById('player-actions-menu').classList.remove('open');
       document.getElementById('player-actions-btn').setAttribute('aria-expanded', 'false');
+    }
+    var staffWrap = document.querySelector('.staff-actions-wrap');
+    if (staffWrap && !staffWrap.contains(e.target)) {
+      document.getElementById('staff-actions-menu').classList.remove('open');
+      document.getElementById('staff-actions-btn').setAttribute('aria-expanded', 'false');
     }
     var clauseWrap = document.querySelector('.add-clause-wrap');
     if (clauseWrap && !clauseWrap.contains(e.target)) {
@@ -7530,7 +7507,7 @@
     ],
     'scout': [
       { name: 'Shahid Rauf', tierClass: 'tier-excellent', tierLabel: 'Excellent', wage: 45, note: 'Rarely misses a genuine talent in the domestic pyramid.' },
-      { name: 'Kamran Iqbal', tierClass: 'tier-good', tierLabel: 'Good', wage: 32, note: 'A solid, reliable domestic read, especially on batters.' },
+      { name: 'Kamran Sheikh', tierClass: 'tier-good', tierLabel: 'Good', wage: 32, note: 'A solid, reliable domestic read, especially on batters.' },
       { name: 'Danish Aziz', tierClass: 'tier-average', tierLabel: 'Average', wage: 19, note: 'New to the role, leans heavily on the headline statistics rather than his own eye so far.' }
     ],
     'physio': [
@@ -7540,25 +7517,39 @@
     ]
   };
   var staffCommitted = 375;
-  var currentStaffRecruitKey = null;
-  function openStaffRecruit(key) {
-    currentStaffRecruitKey = key;
-    var candidates = STAFF_VACANCY_CANDIDATES[key];
-    document.getElementById('staff-recruit-title').textContent = 'Recruit: ' + STAFF_ROLE_LABELS[key];
-    var list = document.getElementById('staff-recruit-list');
-    list.innerHTML = candidates.map(function (cand) {
-      return '<div class="standing-row" style="align-items:flex-start"><div><div style="font-weight:700;color:var(--ink);font-size:var(--fs-small)">' + cand.name + '</div>' +
-        '<div style="font-size:var(--fs-micro);color:var(--ink-faint)">Wage ask ' + fmtBoardAmt(cand.wage) + '/yr</div>' +
-        '<div style="font-size:var(--fs-caption);color:var(--ink-dim);margin-top:4px;max-width:260px;line-height:1.4">' + cand.note + '</div></div>' +
-        '<div style="display:flex;align-items:center;gap:10px;flex-shrink:0"><span class="facility-tier-badge ' + cand.tierClass + '">' + cand.tierLabel + '</span>' +
-        '<button class="facility-request-btn" onclick="closeStaffRecruit();openTargetOffer(\'' + cand.name + '\',' + cand.wage + ',null,\'staff-hire\',{roleKey:\'' + key + '\',tierClass:\'' + cand.tierClass + '\',tierLabel:\'' + cand.tierLabel + '\'})">Negotiate</button></div></div>';
+  // The 5 individually-authored people this database always named, kept as
+  // real entries (not discarded) now that the whole database - not a
+  // per-role shortlist - is where every one of them is found and hired.
+  var STAFFDB_KNOWN = [
+    { name: 'Mudassar Iqbal', roleKey: 'batting-coach', club: 'Free agent', tierClass: 'tier-good', tierLabel: 'Good', wage: 45 },
+    { name: 'Sohail Raza', roleKey: 'mental', club: 'Multan Sultans', tierClass: 'tier-excellent', tierLabel: 'Excellent', wage: 58 },
+    { name: 'Fahad Anwar', roleKey: 'analyst', club: 'Free agent', tierClass: 'tier-average', tierLabel: 'Average', wage: 28 },
+    { name: 'Nadeem Jatoi', roleKey: 'chief-scout', club: 'Lahore Lions', tierClass: 'tier-good', tierLabel: 'Good', wage: 62 },
+    { name: 'Haroon Wattoo', roleKey: 'physio', club: 'Free agent', tierClass: 'tier-average', tierLabel: 'Average', wage: 38 }
+  ];
+  function staffInitials(name) {
+    return name.replace('Dr. ', '').split(' ').map(function (w) { return w[0]; }).join('').slice(0, 2).toUpperCase();
+  }
+  function renderStaffDatabase() {
+    var rows = STAFFDB_KNOWN.slice();
+    Object.keys(STAFF_VACANCY_CANDIDATES).forEach(function (key) {
+      STAFF_VACANCY_CANDIDATES[key].forEach(function (c) {
+        rows.push({ name: c.name, roleKey: key, club: 'Available', tierClass: c.tierClass, tierLabel: c.tierLabel, wage: c.wage });
+      });
+    });
+    var body = document.getElementById('staffdb-body');
+    if (!body) return;
+    body.innerHTML = rows.map(function (r) {
+      return '<tr data-role="' + r.roleKey + '"><td><div class="player-cell clickable" onclick="openStaffProfile(this.closest(' + String.fromCharCode(39) + 'tr' + String.fromCharCode(39) + '))"><div class="player-avatar">' + staffInitials(r.name) + '</div><span class="staff-name" style="display:none">' + r.name + '</span><div class="player-name">' + r.name + '</div></div></td>' +
+        '<td><span class="role-cell staff-role-label" style="display:inline-flex">' + STAFF_ROLE_LABELS[r.roleKey] + '</span></td>' +
+        '<td>' + r.club + '</td>' +
+        '<td><span class="facility-tier-badge ' + r.tierClass + '">' + r.tierLabel + '</span></td>' +
+        '<td class="num">$' + (r.wage * 1000).toLocaleString() + '</td>' +
+        '<td><button class="academy-action-btn" onclick="event.stopPropagation();openTargetOffer(' + String.fromCharCode(39) + r.name + String.fromCharCode(39) + ',' + r.wage + ',null,' + String.fromCharCode(39) + 'staff-hire' + String.fromCharCode(39) + ',{roleKey:' + String.fromCharCode(39) + r.roleKey + String.fromCharCode(39) + ',tierClass:' + String.fromCharCode(39) + r.tierClass + String.fromCharCode(39) + ',tierLabel:' + String.fromCharCode(39) + r.tierLabel + String.fromCharCode(39) + '})">Negotiate</button></td></tr>';
     }).join('');
-    document.getElementById('staff-recruit-backdrop').classList.add('open');
   }
-  function closeStaffRecruit() {
-    document.getElementById('staff-recruit-backdrop').classList.remove('open');
-  }
-
+  renderStaffDatabase();
+  
   // ---- National squad announcement: format-scoped, call-up/drop, submit-with-diff ----
   // Grounded in the real domain: a real 40-day announcement window before a competition's own
   // staging date (AiClubManagementService.SquadLeadTimeDays), one SquadAnnouncement per
@@ -8007,6 +7998,27 @@
     document.getElementById('staff-profile-sub').textContent = roleFull;
     document.getElementById('staff-profile-quality').innerHTML = tierEl ? tierEl.outerHTML : '\u2014';
     document.getElementById('staff-profile-tenure').textContent = tenureEl ? tenureEl.textContent : '\u2014';
+
+    // A real Actions menu, context-aware: an already-employed member of
+    // staff can be renewed or released; someone not on our books yet can
+    // only be negotiated with (there is nothing of ours to release him
+    // from). roleKey comes straight off the row's own data-role attribute -
+    // every staff-row and every Staff Database row now carries one.
+    var roleKey = rowEl.dataset.role || (rowEl.closest && rowEl.closest('[data-role]') ? rowEl.closest('[data-role]').dataset.role : '');
+    var wageBand = (typeof STAFF_WAGE_BANDS !== 'undefined' && STAFF_WAGE_BANDS[context]) ? STAFF_WAGE_BANDS[context][tierClass] : 45000;
+    var wageK = Math.round((wageBand || 45000) / 1000);
+    var tierLabelText = tierEl ? tierEl.textContent.trim() : 'Good';
+    var actionsMenu = document.getElementById('staff-actions-menu');
+    if (actionsMenu) {
+      var negotiateLabel = employedByUs ? 'Negotiate new terms' : 'Negotiate a contract';
+      var negotiateOnclick = "closeStaffActionsMenu();openTargetOffer('" + name.replace(/'/g, "\\'") + "'," + wageK + ",null,'staff-hire',{roleKey:'" + roleKey + "',tierClass:'" + tierClass + "',tierLabel:'" + tierLabelText + "'})";
+      var html = '<button onclick="' + negotiateOnclick + '"><svg class="icon sm"><use href="#i-swap"/></svg>' + negotiateLabel + '</button>';
+      if (employedByUs && roleKey) {
+        html += '<div class="menu-divider"></div>' +
+          '<button class="danger" onclick="closeStaffActionsMenu();releaseStaffFromProfile(\'' + roleKey + '\')"><svg class="icon sm"><use href="#i-alert"/></svg>Release from post</button>';
+      }
+      actionsMenu.innerHTML = html;
+    }
     var clubEl = document.getElementById('staff-profile-club');
     if (clubEl) clubEl.textContent = club;
     var natEl = document.getElementById('staff-profile-nat');
@@ -8170,7 +8182,7 @@
     row.classList.remove('clickable');
     row.removeAttribute('onclick');
     row.querySelector('.staff-row-main').innerHTML = '<span class="staff-name">Vacant</span><span class="staff-role-label">' + STAFF_ROLE_LABELS[roleKey] + '</span>';
-    row.querySelector('.staff-row-meta').innerHTML = '<button class="facility-request-btn" onclick="openStaffRecruit(\'' + roleKey + '\')">Recruit</button>';
+    row.querySelector('.staff-row-meta').innerHTML = '<button class="facility-request-btn" onclick="showPanel(&quot;recruitment&quot;);openRecruitTab(&quot;staffdb&quot;)">Recruit</button>';
   }
   function updateStaffBudgetReadout() {
     var el = document.getElementById('staff-budget-readout');
