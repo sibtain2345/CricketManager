@@ -11713,6 +11713,80 @@ follow-up corrections, given in quick succession, pinned down the actual intende
 duplicate-id scan (clean), and `node --check` on the extracted trailing `<script>` block (`NODE
 SYNTAX OK`, script braces/parens both balanced at 0). File size ~2.76MB.
 
+### Delivery-type × shot-type visual taxonomy (worked via Subagent-Driven Development, 8 tasks)
+
+The "abhi bhi smooth nae hai" correction pass (ball colour/trail, pitch texture, genuinely smooth
+bezier-curve run-up/flight motion — see the earlier "curved-motion animation engine" entry) was
+followed by a much larger, explicit ask: every real delivery type (outswinger/inswinger/slower-
+ball/bouncer/yorker; off-break/leg-break/googly/arm-ball) and every real shot from the book
+(cover drive, pull, hook, sweep, defensive block, leave, edge, ...) needed its own distinct visual
+signature — not one generic "six" feel and one generic "bouncer" feel reused everywhere — plus real
+weather/pitch-condition icons, fielding positions checked against this project's own real
+`FieldingPositions`/`ShotZone` domain catalog (CC14's own position *coordinates* were confirmed,
+by re-checking the earlier extraction, to be genuinely unrecoverable — only real position *names*
+survived; the layout data itself lives in proprietary `.dbj` binary this project's own extraction
+pass already established as unreadable), and bowler pace tiers (Fast/Fast-Medium/Medium-Fast/
+Medium) plus left-arm/left-hand mirroring modelled with visible distinction.
+
+Worked through the full Superpowers chain: **brainstorming** (architectural path — Approach A,
+parametric composition of a delivery-type record × a shot-type record into the existing bezier
+multi-leg engine, confirmed over a ~160-entry hand-authored delivery×shot matrix) → **writing-plans**
+(an 8-task plan with complete code, not placeholders, for every task) → **subagent-driven-development**
+(a fresh sonnet implementer + fresh sonnet task-reviewer per task, in an isolated worktree) →
+**finishing-a-development-branch**. Full design spec at
+`docs/superpowers/specs/2026-09-14-delivery-shot-visual-taxonomy-design.md`; full plan at
+`docs/superpowers/plans/2026-09-14-delivery-shot-visual-taxonomy.md`.
+
+**What shipped**: `DELIVERY_TYPES` (9 real records, each with its own release→pitch/pitch→bat bow
+and duration, grounded in the real `DeliveryVariation` enum) + `BOWLER_REPERTOIRE` (which of the 9
+each of the mockup's two illustrative bowlers can genuinely bowl — Iqbal spin-only, Awan pace-
+only, stated honestly rather than inventing a third bowler); `SHOT_TYPES` (20 real shots, each
+with a real `ShotZone`, an `aerial` flag, a `power` value, and `outcomeWeights` summing to 100);
+`DELIVERY_TO_SHOT` (realistic per-delivery shot-weighting) + `pickShot`/`rollOutcome`;
+`composeLegs` (the delivery+shot → bezier-leg composition, replacing the old outcome-first
+`pickLiveOutcome()`/hand-built `LIVE_ZONE_TARGETS` pipeline entirely); `mirrorLegs` (left-arm/
+left-hand mirroring); `paceTierFor` scaling both the bowler's run-up **and** the ball's own first
+two composed legs (release→pitch, pitch→bat — never the batter's own shot-reaction leg, which
+represents his speed, not the bowler's); the `animateDeliveryBall` rewire onto this whole
+pipeline, with real commentary built from what actually happened (`buildDeliveryCommentaryLine`).
+
+**The final whole-branch review (dispatched on opus, the most capable model, per the skill's own
+guidance for architecture-level review) found 4 Important + 3 Minor cross-task findings** — real
+gaps no single task's isolated diff review could see: pace-tier scaling never reached
+`composeLegs` (only the run-up); `shot.aerial` was completely unread, and three shot pairs
+(`on_drive`/`square_leg_whip`, `off_drive`/`reverse_sweep`, `leg_glance`/`paddle_sweep`) shared an
+identical `zone`+`power`, so they produced bit-identical curves; two of the three
+`LIVE_ZONE_TARGETS_BY_ZONE.behind` targets weren't actually behind square when checked against the
+real SVG coordinates (keeper y=208, crease y=252); a `defensive_block`-on-a-wicket case produces 3
+legs, but the cue-timing logic hardcoded `finalLegIndex=2` (built for the old always-2-leg
+assumption), firing the impact-flash cue ~160-260ms early in that rare case. Plus 3 minors
+(bouncer's spec'd 1.6x bounce-pulse scale never implemented; `leave` stopped dead at the bat
+instead of continuing to the keeper; an orphaned comment sitting above the wrong declaration) and
+2 already-known minors (a hardcoded `100` roll ceiling in `rollOutcome` instead of a dynamic sum;
+`LIVE_OUTCOME_WEIGHTS` left genuinely dead after its only consumer was deleted).
+
+**One comprehensive fix wave** (the skill's own "no second fix wave" rule) addressed all 9 items
+in a single commit, then **one scoped re-review** independently confirmed every item — several
+via genuine behavioural tests rather than source-text matching: `finalLegIndex` was confirmed
+necessary (not cosmetic) by enumerating real leg counts across every shot branch and proving a
+plain wicket off a real shot genuinely produces only 2 legs, not 3; `rollOutcome`'s dynamic sum
+was black-box-tested by temporarily skewing one shot's `wicket` weight to 900 and confirming
+~90% wicket rolls (vs. the ~3% the old hardcoded-`*100` ceiling would have produced); the
+bouncer's `.big` bounce-pulse class was confirmed to toggle OFF on the very next non-bouncer
+delivery using the same DOM element, not just toggle-on in isolation; the `leave` fix was
+confirmed to leave the bat-impact-flash element genuinely untouched through a full leave
+animation, immediately after confirming the identical flash mechanism correctly fires for a real
+shot in the same session (ruling out a broken test instrument, not just an untriggered one).
+Verdict: **CLEAN**, zero new defects. Merged to `main` as a fast-forward (`d4f9892..55196bc`);
+worktree and branch cleaned up.
+
+**Deliberately out of scope, stated up front in the spec**: a third (leg-spin) bowler character to
+make `leg_break`/`googly` reachable through today's two-bowler illustrative roster (both are real,
+correct, tested code with no live-bowler consumer yet); the "natural angle vs. into the angle"
+batter-relative swing/turn coupling real coaching books describe; any change to the real C#
+`DeliveryEffectService`/domain code — this was a mockup-only presentation-layer design, the
+standing session rule that the C# backend is untouched held throughout.
+
 ---
 
 ## CONSOLIDATED DEFERRED-ITEMS REGISTER (maintained - the single source of truth)
