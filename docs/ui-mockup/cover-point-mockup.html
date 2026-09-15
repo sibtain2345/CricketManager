@@ -245,7 +245,7 @@
   .tile { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 17px 19px; box-shadow: var(--shadow); }
   
   .tile .tile-eyebrow { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
-  .tile.next-fixture { grid-column: span 5; } .tile.board-mood { grid-column: span 3; } .tile.tasks { grid-column: span 4; } .tile.news { grid-column: span 7; } .tile.squad-alert { grid-column: span 5; }
+  .tile.next-fixture { grid-column: span 5; } .tile.board-mood { grid-column: span 3; } .tile.tasks { grid-column: span 4; } .tile.news { grid-column: span 7; } .tile.squad-alert { grid-column: span 5; } .tile.training-week { grid-column: span 6; } .tile.training-delegate { grid-column: span 6; } .tile.team-leaders { grid-column: span 9; }
 
   .fixture-row { display: flex; align-items: center; justify-content: space-between; padding-top: 6px; }
   .fixture-teams { display: flex; align-items: center; gap: 12px; }
@@ -1278,9 +1278,11 @@
   <div class="tabnav-inner">
     <button class="tab-btn" role="tab" aria-selected="true" aria-controls="panel-portal" data-tab="portal" title="Portal"><svg class="icon"><use href="#i-home"/></svg><span class="tab-label">Portal</span></button>
     <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-squad" data-tab="squad" title="Squad"><svg class="icon"><use href="#i-users"/></svg><span class="tab-label">Squad</span></button>
+    <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-training" data-tab="training" title="Training"><svg class="icon"><use href="#i-target"/></svg><span class="tab-label">Training</span></button>
     <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-tactics" data-tab="tactics" title="Tactics"><svg class="icon"><use href="#i-shield"/></svg><span class="tab-label">Tactics</span></button>
     <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-recruitment" data-tab="recruitment" data-context="club" title="Recruitment"><svg class="icon"><use href="#i-swap"/></svg><span class="tab-label">Recruitment</span></button>
     <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-club" data-tab="club" data-context="club" title="Club"><svg class="icon"><use href="#i-briefcase"/></svg><span class="tab-label">Club</span></button>
+    <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-dynamics" data-tab="dynamics" title="Dynamics"><svg class="icon"><use href="#i-user"/></svg><span class="tab-label">Dynamics</span></button>
     <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-franchise" data-tab="franchise" data-context="franchise" title="Franchise"><svg class="icon"><use href="#i-badge"/></svg><span class="tab-label">Franchise</span></button>
     <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-fixtures" data-tab="fixtures" title="Fixtures"><svg class="icon"><use href="#i-cal-list"/></svg><span class="tab-label">Fixtures</span></button>
     <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-international" data-tab="international" data-context="international" title="International"><svg class="icon"><use href="#i-plane"/></svg><span class="tab-label">International</span></button>
@@ -2422,7 +2424,88 @@
         </table>
         </div>
       </div>
+      <div class="analysis-card" style="margin-top:14px">
+        <span class="eyebrow"><svg class="icon sm"><use href="#i-users"/></svg> Squad depth by role</span>
+        <div class="role-hint" style="margin-bottom:10px">Who you can actually call on for each job right now, ranked by current ability - not who you're missing (that's Recruitment &rsaquo; Squad Planner).</div>
+        <div class="staff-row"><div class="staff-row-main"><span class="staff-name">Opening batting</span><span class="staff-role-label">Hamza Malik, Umar Baig</span></div><span class="facility-tier-badge tier-good">Covered</span></div>
+        <div class="staff-row"><div class="staff-row-main"><span class="staff-name">Middle order</span><span class="staff-role-label">Zain Chaudhry, Danish Raza</span></div><span class="facility-tier-badge tier-good">Covered</span></div>
+        <div class="staff-row"><div class="staff-row-main"><span class="staff-name">Wicketkeeping</span><span class="staff-role-label">Rizwan Sheikh - no back-up gloveman in the squad</span></div><span class="facility-tier-badge tier-poor">One deep</span></div>
+        <div class="staff-row"><div class="staff-row-main"><span class="staff-name">Front-line spin</span><span class="staff-role-label">Sarfraz Khan - genuinely thin beyond him</span></div><span class="facility-tier-badge tier-average">One deep</span></div>
+        <div class="staff-row"><div class="staff-row-main"><span class="staff-name">Pace bowling</span><span class="staff-role-label">Danish Iqbal, plus two more academy-graded options</span></div><span class="facility-tier-badge tier-good">Covered</span></div>
+        <div class="role-hint" style="margin-top:10px">A genuine injury to Rizwan Sheikh right now would mean fielding an occasional keeper - worth a look at Recruitment before the window closes.</div>
+      </div>
     </div>
+    </div>
+  </section>
+
+  <!-- ================= TRAINING ================= -->
+  <section class="panel" id="panel-training" role="tabpanel" hidden>
+    <div class="panel-head"><h1>Training</h1><div class="sub">Preparation week &middot; 4 days until the Lahore Lions fixture</div></div>
+    <nav class="subnav" role="tablist" aria-label="Training views">
+      <button class="subtab-btn" role="tab" aria-selected="true" data-subtab="focus">Team Focus</button>
+      <button class="subtab-btn" role="tab" aria-selected="false" data-subtab="individual">Individual Assignments</button>
+      <button class="subtab-btn" role="tab" aria-selected="false" data-subtab="camps">Camps &amp; Calendar</button>
+    </nav>
+    <div class="subpanel" id="training-focus">
+      <div class="tile-grid">
+        <div class="tile training-week">
+          <span class="eyebrow">This week</span>
+          <div class="role-hint" style="margin-bottom:0">Preparation week &mdash; no fixture inside three days, so the programme runs at full intensity. A match week drops development to zero and the whole squad works on recovery and shape instead; the off-season is where a young player genuinely rebuilds his game.</div>
+        </div>
+        <div class="tile training-delegate">
+          <span class="eyebrow">Who decides</span>
+          <label class="delegate-toggle-label"><input type="checkbox" id="delegate-training-toggle" checked> Delegate individual focus to staff</label>
+          <div class="role-hint" style="margin-top:8px;margin-bottom:0">Delegated by default &mdash; a specialist coach reads a player's genuine weakest cluster on his own. Untick to name a focus yourself for a specific player, from his own profile.</div>
+        </div>
+      </div>
+      <div class="analysis-card">
+        <span class="eyebrow"><svg class="icon sm"><use href="#i-target"/></svg> Squad-wide emphasis</span>
+        <div class="staff-row"><div class="staff-row-main"><span class="staff-name">Batting</span><span class="staff-role-label">Technique against genuine pace &mdash; the top order's recurring weakness this season</span></div><span class="tier-badge b">Normal</span></div>
+        <div class="staff-row"><div class="staff-row-main"><span class="staff-name">Bowling</span><span class="staff-role-label">Death-overs craft &mdash; building toward the back half of the campaign</span></div><span class="tier-badge a">Intensive</span></div>
+        <div class="staff-row"><div class="staff-row-main"><span class="staff-name">Fielding</span><span class="staff-role-label">Ground fielding and outfield catching</span></div><span class="tier-badge b">Normal</span></div>
+        <div class="staff-row"><div class="staff-row-main"><span class="staff-name">Mental</span><span class="staff-role-label">Composure under a required-rate squeeze</span></div><span class="tier-badge b">Normal</span></div>
+        <div class="staff-row"><div class="staff-row-main"><span class="staff-name">Physical</span><span class="staff-role-label">Conditioning &mdash; two quicks are carrying a heavy recent workload</span></div><span class="tier-badge c">Light</span></div>
+        <div class="role-hint" style="margin-top:10px">Intensive work develops a player faster but carries a real overtraining risk &mdash; six straight intensive blocks on the same player raises his injury proneness for good. The physical group has deliberately been eased back this week for exactly that reason.</div>
+      </div>
+      <div class="analysis-card">
+        <span class="eyebrow"><svg class="icon sm"><use href="#i-briefcase"/></svg> Coaching coverage</span>
+        <div class="staff-row"><div class="staff-row-main"><span class="staff-name">Batting Coach</span><span class="staff-role-label">Mudassar Iqbal</span></div><span class="facility-tier-badge tier-good">Good</span></div>
+        <div class="staff-row"><div class="staff-row-main"><span class="staff-name">Bowling Coach</span><span class="staff-role-label">Sohail Raza</span></div><span class="facility-tier-badge tier-good">Good</span></div>
+        <div class="staff-row"><div class="staff-row-main"><span class="staff-name">Fielding Coach</span><span class="staff-role-label">Vacant</span></div><span class="facility-tier-badge tier-poor">Vacant</span></div>
+        <div class="staff-row"><div class="staff-row-main"><span class="staff-name">Strength &amp; Conditioning</span><span class="staff-role-label">Haroon Wattoo (also Head Physiotherapist)</span></div><span class="facility-tier-badge tier-average">Average</span></div>
+        <div class="role-hint" style="margin-top:10px">No fielding coach on the books &mdash; without one, fielding development leans entirely on facility quality alone. <a href="#" onclick="event.preventDefault();showPanel('club');openClubTab('staff')" style="color:var(--turf-strong)">Recruit one from Club &rsaquo; Staff.</a></div>
+      </div>
+    </div>
+    <div class="subpanel" id="training-individual" hidden>
+      <div class="table-card">
+        <div class="table-scroll-inner">
+        <table class="squad">
+          <thead><tr><th>Player</th><th>Assigned Focus</th><th>Specialist Coach</th><th>Progress note</th></tr></thead>
+          <tbody>
+            <tr><td><div class="player-cell clickable" onclick="openPlayerFromRow(this)"><div class="player-avatar">HM</div><div><div class="player-name">Hamza Malik</div><div class="player-hand">RHB</div></div></div></td><td>Batting against genuine pace</td><td>Mudassar Iqbal</td><td>Real, gradual gains &mdash; third season under the same programme</td></tr>
+            <tr><td><div class="player-cell clickable" onclick="openPlayerFromRow(this)"><div class="player-avatar">ZC</div><div><div class="player-name">Zain Chaudhry</div><div class="player-hand">RHB</div></div></div></td><td>Finishing under pressure</td><td>Mudassar Iqbal</td><td>Genuinely his weakest cluster &mdash; a fast learner, real early movement</td></tr>
+            <tr><td><div class="player-cell clickable" onclick="openPlayerFromRow(this)"><div class="player-avatar">RS</div><div><div class="player-name">Rizwan Sheikh</div><div class="player-hand">LHB / WK</div></div></div></td><td>Keeping to spin</td><td>Delegated</td><td>Staff-read focus &mdash; a keeper's own glovework never sits idle</td></tr>
+            <tr><td><div class="player-cell clickable" onclick="openPlayerFromRow(this)"><div class="player-avatar">SK</div><div><div class="player-name">Sarfraz Khan</div><div class="player-hand">Off-spin</div></div></div></td><td>Bowling: containment outside off</td><td>Sohail Raza</td><td>Sharpening the plan that already works for him</td></tr>
+            <tr><td><div class="player-cell clickable" onclick="openPlayerFromRow(this)"><div class="player-avatar">UB</div><div><div class="player-name">Umar Baig</div><div class="player-hand">RHB</div></div></div></td><td>Delegated</td><td>Delegated</td><td>Low headroom near his current ceiling &mdash; modest, unremarkable gains expected</td></tr>
+            <tr><td><div class="player-cell clickable" onclick="openPlayerFromRow(this)"><div class="player-avatar">DR</div><div><div class="player-name">Danish Raza</div><div class="player-hand">RAF</div></div></div></td><td>Bowling: death yorkers</td><td>Sohail Raza</td><td>The squad's own intensive slot this week &mdash; workload being watched</td></tr>
+          </tbody>
+        </table>
+        </div>
+      </div>
+      <div class="role-hint" style="margin-top:10px">This is the squad-wide view of the same per-player focus set on each Player Profile &mdash; change it there, or here, and both stay in sync.</div>
+    </div>
+    <div class="subpanel" id="training-camps" hidden>
+      <div class="analysis-card">
+        <span class="eyebrow"><svg class="icon sm"><use href="#i-cal-list"/></svg> Club pre-season camp</span>
+        <div class="role-hint" style="margin-bottom:10px">Due in 6 days &mdash; a genuine development boost for the squad's under-26s, plus a real lift to dressing-room harmony for a squad that has churned this off-season.</div>
+        <div class="staff-row"><div class="staff-row-main"><span class="staff-name">Eligible</span><span class="staff-role-label">Every contracted player not on national or franchise duty during the window</span></div><span class="pill first">14 of 18</span></div>
+        <div class="staff-row"><div class="staff-row-main"><span class="staff-name">Excused</span><span class="staff-role-label">Danish Iqbal &mdash; still contracted to the Pakistan Premier League until its window closes</span></div><span class="pill">1</span></div>
+      </div>
+      <div class="analysis-card">
+        <span class="eyebrow"><svg class="icon sm"><use href="#i-alert"/></svg> Workload &amp; overtraining watch</span>
+        <div class="staff-row"><div class="staff-row-main"><span class="staff-name">Danish Raza</span><span class="staff-role-label">4 consecutive intensive blocks &mdash; two more and his injury proneness takes a permanent step up</span></div><span class="facility-tier-badge tier-average">Watch</span></div>
+        <div class="staff-row"><div class="staff-row-main"><span class="staff-name">Rest of the squad</span><span class="staff-role-label">No player currently past 2 consecutive intensive blocks</span></div><span class="facility-tier-badge tier-good">Clear</span></div>
+      </div>
     </div>
   </section>
 
@@ -3185,6 +3268,67 @@
     </div>
   </section>
 
+  <!-- ================= DYNAMICS ================= -->
+  <section class="panel" id="panel-dynamics" role="tabpanel" hidden>
+    <div class="panel-head"><h1>Dressing Room Dynamics</h1><div class="sub">How the group actually feels, not just how it plays</div></div>
+    <nav class="subnav" role="tablist" aria-label="Dynamics views">
+      <button class="subtab-btn" role="tab" aria-selected="true" data-subtab="hierarchy">Hierarchy</button>
+      <button class="subtab-btn" role="tab" aria-selected="false" data-subtab="relationships">Relationships</button>
+      <button class="subtab-btn" role="tab" aria-selected="false" data-subtab="issues">Issues</button>
+    </nav>
+    <div class="subpanel" id="dynamics-hierarchy">
+      <div class="tile-grid">
+        <div class="tile board-mood">
+          <span class="eyebrow">Dressing room harmony</span>
+          <div class="ring-wrap">
+            <svg width="82" height="82" viewBox="0 0 86 86">
+              <circle cx="43" cy="43" r="36" fill="none" stroke="var(--surface-3)" stroke-width="8"/>
+              <circle cx="43" cy="43" r="36" fill="none" stroke="var(--turf)" stroke-width="8" stroke-linecap="round" stroke-dasharray="226.2" stroke-dashoffset="52.0" transform="rotate(-90 43 43)"/>
+              <text x="43" y="49" text-anchor="middle" font-family="Barlow Condensed" font-weight="700" font-size="15" fill="var(--ink)">Good</text>
+            </svg>
+          </div>
+          <div class="ring-caption">A settled squad &mdash; low churn since last season</div>
+        </div>
+        <div class="tile team-leaders">
+          <span class="eyebrow">Team leaders</span>
+          <div class="role-hint" style="margin-bottom:0">The players the room actually gravitates toward &mdash; leadership and experience, not just the armband.</div>
+          <div class="staff-row" style="margin-top:8px"><div class="staff-row-main"><span class="staff-name">Hamza Malik</span><span class="staff-role-label">Captain &middot; Senior Pro</span></div><span class="pill first">Trust 78</span></div>
+          <div class="staff-row"><div class="staff-row-main"><span class="staff-name">Rizwan Sheikh</span><span class="staff-role-label">Vice-captain &middot; Senior Pro</span></div><span class="pill">Trust 71</span></div>
+        </div>
+      </div>
+      <div class="analysis-card">
+        <span class="eyebrow"><svg class="icon sm"><use href="#i-users"/></svg> The pecking order</span>
+        <div class="role-hint" style="margin-bottom:10px">Standing in the room, not on the team sheet &mdash; reputation, experience and age all feed it, and it decides whose voice actually carries.</div>
+        <div class="staff-row"><div class="staff-row-main"><span class="staff-name">Senior Pro</span><span class="staff-role-label">Hamza Malik, Rizwan Sheikh</span></div><span class="tier-badge a">Top of the room</span></div>
+        <div class="staff-row"><div class="staff-row-main"><span class="staff-name">Established</span><span class="staff-role-label">Zain Chaudhry, Sarfraz Khan</span></div><span class="tier-badge b">Respected</span></div>
+        <div class="staff-row"><div class="staff-row-main"><span class="staff-name">Squad Player</span><span class="staff-role-label">Danish Raza, Umar Baig</span></div><span class="tier-badge c">Settling in</span></div>
+        <div class="staff-row"><div class="staff-row-main"><span class="staff-name">Junior</span><span class="staff-role-label">Danish Iqbal, Bilal Nasir</span></div><span class="tier-badge c">Still finding his feet</span></div>
+      </div>
+    </div>
+    <div class="subpanel" id="dynamics-relationships" hidden>
+      <div class="analysis-card">
+        <span class="eyebrow"><svg class="icon sm"><use href="#i-user"/></svg> Real bonds in the group</span>
+        <div class="role-hint" style="margin-bottom:10px">Built from shared time in the dressing room and genuine personality fit &mdash; strong enough that a transfer decision has to weigh it.</div>
+        <div class="staff-row"><div class="staff-row-main"><span class="staff-name">Hamza Malik &amp; Zain Chaudhry</span><span class="staff-role-label">Friendship &middot; three seasons opening the batting together</span></div><span class="facility-tier-badge tier-good">Strong</span></div>
+        <div class="staff-row"><div class="staff-row-main"><span class="staff-name">Rizwan Sheikh &rarr; Bilal Nasir</span><span class="staff-role-label">Mentorship &middot; the keeper is quietly shaping the academy graduate's game</span></div><span class="facility-tier-badge tier-good">Active</span></div>
+        <div class="staff-row"><div class="staff-row-main"><span class="staff-name">Danish Raza &amp; Umar Baig</span><span class="staff-role-label">Rivalry &middot; a good-natured needle over who bats at six</span></div><span class="facility-tier-badge tier-average">Mild</span></div>
+      </div>
+      <div class="analysis-card">
+        <span class="eyebrow"><svg class="icon sm"><use href="#i-alert"/></svg> Nothing brewing right now</span>
+        <div class="role-hint" style="margin-bottom:0">No active feud in the squad this season &mdash; a genuine one drags on a real-world pairing's on-field chemistry (strike rotation, even run-out risk between the two), so it's worth checking back here after a contentious selection call.</div>
+      </div>
+    </div>
+    <div class="subpanel" id="dynamics-issues" hidden>
+      <div class="analysis-card">
+        <span class="eyebrow"><svg class="icon sm"><use href="#i-alert"/></svg> What's actually live</span>
+        <div class="staff-row"><div class="staff-row-main"><span class="staff-name">Umar Baig</span><span class="staff-role-label">Squad-player standing, three low scores &mdash; coach trust has softened this month</span></div><span class="facility-tier-badge tier-average">Worth a word</span></div>
+        <div class="staff-row"><div class="staff-row-main"><span class="staff-name">Danish Iqbal</span><span class="staff-role-label">Junior standing, genuinely raw &mdash; needs backing, not pressure, while he settles</span></div><span class="facility-tier-badge tier-average">Developing</span></div>
+        <div class="staff-row"><div class="staff-row-main"><span class="staff-name">Everyone else</span><span class="staff-role-label">No real complaint on record right now</span></div><span class="facility-tier-badge tier-good">Settled</span></div>
+        <div class="role-hint" style="margin-top:10px">A quiet room isn't a guarantee &mdash; a bad run, a contentious drop or a big signing can all move this fast. Worth a check after every selection meeting, not just when something's already gone wrong.</div>
+      </div>
+    </div>
+  </section>
+
   <!-- ================= PLAYER PROFILE ================= -->
   <section class="panel" id="panel-player" role="tabpanel" hidden>
     <div class="breadcrumb"><a onclick="showPanel('squad')">Squad</a><span class="sep">&rsaquo;</span><a onclick="showPanel('squad')">First-Team</a><span class="sep">&rsaquo;</span><span class="here" id="player-breadcrumb-here">Hamza Malik</span></div>
@@ -3568,6 +3712,33 @@
   <!-- ================= FIXTURES ================= -->
   <section class="panel" id="panel-fixtures" role="tabpanel" hidden>
     <div class="panel-head"><h1>Fixtures</h1><div class="sub">Pakistan T20 Cup &middot; Group stage</div></div>
+
+    <div class="analysis-card" style="margin-bottom:16px">
+      <span class="eyebrow"><svg class="icon sm"><use href="#i-trend-up"/></svg> Recent form &amp; the run ahead</span>
+      <div style="display:flex;gap:24px;flex-wrap:wrap;align-items:center">
+        <div>
+          <div style="font-size:var(--fs-caption);color:var(--ink-dim);margin-bottom:6px">Last 5</div>
+          <div style="display:flex;gap:5px">
+            <span class="pill first" title="Beat Peshawar Zalmi by 6 wickets">W</span>
+            <span class="pill first" title="Beat Quetta Falcons by 22 runs">W</span>
+            <span class="pill" style="background:var(--ball-dim);color:var(--ball)" title="Lost to Karachi Kings by 4 wickets">L</span>
+            <span class="pill first" title="Beat Multan Sultans by 3 wickets">W</span>
+            <span class="pill first" title="Beat Lahore Lions by 31 runs">W</span>
+          </div>
+        </div>
+        <div style="flex:1;min-width:220px">
+          <div style="font-size:var(--fs-caption);color:var(--ink-dim);margin-bottom:6px">Next 5 &mdash; by opponent strength</div>
+          <div style="display:flex;gap:5px">
+            <span class="pill" style="background:var(--ball-dim);color:var(--ball)" title="Karachi Kings &middot; league leaders, a genuinely hard fixture">Lahore Lions</span>
+            <span class="pill" style="background:var(--gold-dim);color:var(--gold)" title="An even contest on paper">Peshawar Zalmi</span>
+            <span class="pill first" title="A side well below the Icons in the table">Quetta Falcons</span>
+            <span class="pill" style="background:var(--gold-dim);color:var(--gold)" title="An even contest on paper">Multan Sultans</span>
+            <span class="pill" style="background:var(--ball-dim);color:var(--ball)" title="Karachi Kings &middot; league leaders, a genuinely hard fixture">Karachi Kings</span>
+          </div>
+          <div class="role-hint" style="margin-top:8px;margin-bottom:0">Two genuinely tough away trips inside the run &mdash; worth protecting your strike bowlers' workload for Karachi rather than the dead rubber either side of it.</div>
+        </div>
+      </div>
+    </div>
 
     <div class="tactics-grid">
       <div class="analysis-card">
@@ -5985,6 +6156,8 @@
   wireTabs('#panel-player .subtab-btn', 'psub-');
   wireTabs('#panel-inbox .subtab-btn', 'inbox-');
   wireTabs('#panel-international .subtab-btn', 'intl-');
+  wireTabs('#panel-training .subtab-btn', 'training-');
+  wireTabs('#panel-dynamics .subtab-btn', 'dynamics-');
   wireTabs('#stage-teamtalk .subtab-btn', 'talk-');
   wireTabs('#panel-records nav[aria-label="Records views"] > .subtab-btn', 'records-');
   wireTabs('#panel-records nav[aria-label="Player of the Round detail"] .subtab-btn', 'potr-');
