@@ -18,3 +18,12 @@ saves/
 # Claude Code local session settings/state (machine-specific, not project source)
 .claude/settings.local.json
 .claude/scheduled_tasks.lock
+
+# Third-party reference game installs/decompiles used locally for the UI-mockup
+# sub-track's design research (see "GRAPHICAL UI MOCKUP" in CLAUDE.md). These
+# include full Cricket Coach 2014 / Football Manager 2023 installs obtained
+# outside any legitimate channel - copyrighted, multi-gigabyte, and must never
+# be committed or pushed under any circumstances.
+docs/external_game_reference/
+CricketCoach2014.exe.c
+Cricket_fielding_positions2.svg.webp

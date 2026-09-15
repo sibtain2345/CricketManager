@@ -11787,6 +11787,62 @@ batter-relative swing/turn coupling real coaching books describe; any change to 
 `DeliveryEffectService`/domain code — this was a mockup-only presentation-layer design, the
 standing session rule that the C# backend is untouched held throughout.
 
+### Fielding-position table: full rebuild from three reference diagrams
+
+The user pushed back hard a second time on the mockup's fielding-position coordinates and asked
+for a genuine from-scratch rebuild against three reference images (a cricinfo off/leg-side wheel,
+a detailed labelled wheel with a glossary, and a clean off-side/leg-side wheel) — explicit that no
+old coordinate should survive, "sab yahan se banao, purani koi coordinate nahi chalegi" (build
+everything from here, no old coordinate is acceptable), including the slip cordon that had already
+been separately tuned and approved earlier in the session.
+
+Rebuilt via a one-shot Python script (never the Edit tool) rather than hand-editing 52+ individual
+values. Every position got a real-cricket **angle** (`theta`: 0° = directly behind the bat toward
+the keeper, 90° = square, 180° = straight down the pitch to the bowler; positive = off side,
+negative = leg side) assigned by cross-checking all three reference images against real cricket
+knowledge, then **geometrically solved from the striker's crease** (not ground center - the
+crease-pivot fix from earlier in the session, reused rather than re-derived) so every circle-tier
+position lands exactly on the 30-yard dashed ellipse and every deep-tier position lands exactly on
+the boundary ellipse (`solve_r`, the same quadratic-on-an-ellipse method established earlier).
+Short-tier positions use a fixed 66px (~15 yards) radius from the crease; silly/close-in positions
+use fixed small radii (22-29px, ~5-6.5 yards).
+
+**Two positions added that both reference images show but the prior table was missing**: **Long
+Leg** (squarer than Fine Leg but still behind square, boundary) and **Cow Corner** (leg side,
+forward of square, between Deep Mid Wicket and Long On, boundary) - bringing the total to 54.
+
+**Structurally fixes the earlier "Backward Point / Point swapped" complaint for good**: Backward
+Point (74°) < Point (88°) < Cover Point (106°) are now strictly increasing angles, and Deep
+Backward Point sits on Backward Point's own radial line (not Point's) - verified directly, not
+just eyeballed, via an in-browser geometric self-check confirming every same-family short/circle/
+deep triplet is co-linear (within 1°) and every circle/deep position's ellipse value is ~1.00.
+
+**Slip cordon rebuilt from scratch too**, once the user made clear nothing survives from before -
+went from a 60°-wide fan (visually too spread for what the three references actually show, a tight
+cluster right beside the keeper) to a compact, horizontally-dominant fan using a depth-taper
+method (`r = depth/cos(theta)`, holding each slip's depth from the bat roughly constant while the
+angle increases) - verified x-spread far exceeds y-spread. Then went through several rounds of
+small, explicit user-directed nudges (overall width, individual per-slip back/forward shifts, a
+`+2px` group shift that was first misread as an absolute target rather than a relative increment
+and corrected the moment the user flagged it, then simple absolute-pixel sets) to their final
+values: 1st (328,204), 2nd (336,208), 3rd (344,212), 4th (354,216), 5th (366,220), Gully (373,228).
+
+**A real verification-tooling dead end, worth recording**: repeated attempts to get Playwright to
+scroll to and screenshot the field-editor SVG inside this app's own layout all failed or returned
+blank/clipped images - the shell sets `body{overflow:hidden}` with `window.scroll`/`scrollIntoView`
+silently doing nothing, and `window.innerWidth/innerHeight` reported values inexplicably scaled by
+a factor unrelated to the requested viewport size. Abandoned in favour of (a) a rigorous in-browser
+geometric self-check (ellipse-landing precision, off/leg-side counts, family co-linearity, slip
+x/y-spread ratio) and (b) rendering the raw `FIELDING_POSITIONS` data as a small standalone SVG
+page outside the app's own CSS/layout entirely - both more reliable for coordinate correctness
+than a screenshot would have been anyway, and worth reaching for first next time a similar
+verification is needed rather than fighting an unfamiliar app shell's scroll behaviour.
+
+Published as Version 4 through Version 11 of the same artifact
+(`https://claude.ai/artifact/UmHKowfYBygEBwy5mTt9wo`) across the full rebuild and each subsequent
+micro-adjustment round, each preceded by a `verify.py` structural pass (tag balance, div-nesting,
+duplicate-id, `node --check`).
+
 ---
 
 ## CONSOLIDATED DEFERRED-ITEMS REGISTER (maintained - the single source of truth)
