@@ -357,7 +357,9 @@
   .ball-trail.outcome-wicket { stroke: var(--ball); stroke-width: 1.8; }
   .bounce-pulse { fill: none; stroke: #efe6cc; stroke-width: 1.4; opacity: 0; pointer-events: none; }
   .bounce-pulse.pulsing { animation: pitchBouncePulse .38s ease-out; }
+  .bounce-pulse.big.pulsing { animation: pitchBouncePulseBig .38s ease-out; }
   @keyframes pitchBouncePulse { 0% { r: 1.5; opacity: .85; } 100% { r: 9; opacity: 0; } }
+  @keyframes pitchBouncePulseBig { 0% { r: 2.4; opacity: .85; } 100% { r: 14.4; opacity: 0; } }
   .bat-impact-flash { fill: var(--gold); opacity: 0; pointer-events: none; }
   .bat-impact-flash.flashing { animation: batImpactFlash .3s ease-out; }
   @keyframes batImpactFlash { 0% { r: 1; opacity: .95; } 100% { r: 12; opacity: 0; } }
@@ -8025,7 +8027,6 @@
   // (the audio-credit note above is honest that only one reaction cue
   // exists) -- outcomes here are a weighted random draw, the same
   // scripted-not-simulated honesty this screen already keeps for sound.
-  var LIVE_OUTCOME_WEIGHTS = [['dot', 40], ['single', 28], ['two', 8], ['four', 14], ['six', 5], ['wicket', 5]];
   var LIVE_OUTCOME_PIP = { dot: '&bull;', single: '1', two: '2', four: '4', six: '6', wicket: 'W' };
   var LIVE_OUTCOME_FLASH = { four: 'FOUR!', six: 'SIX!', wicket: 'OUT!' };
 
@@ -8098,11 +8099,6 @@
     });
     return best;
   }
-  // Real domain-grounded run-up geometry per bowler: a spinner's is short
-  // and nearly straight in; a quick's is long and comes in at a real angle
-  // (over the wicket, right-arm) - the concrete visual difference the user
-  // asked for between bowling actions, not one generic straight line for
-  // everyone.
   // ---- Delivery-type visual taxonomy (spec: docs/superpowers/specs/
   // 2026-09-14-delivery-shot-visual-taxonomy-design.md). Grounded in this
   // project's own BowlingStyle/DeliveryVariation domain enums, not
@@ -8161,11 +8157,11 @@
     pull:            { zone: 'leg',      aerial: false, power: 0.75, outcomeWeights: { dot: 18, single: 18, two: 8,  four: 30, six: 12, wicket: 14 } },
     hook:            { zone: 'leg',      aerial: true,  power: 0.8,  outcomeWeights: { dot: 15, single: 8,  two: 2,  four: 22, six: 28, wicket: 25 } },
     leg_glance:      { zone: 'behind',   aerial: false, power: 0.3,  outcomeWeights: { dot: 38, single: 40, two: 8,  four: 10, six: 0,  wicket: 4  } },
-    square_leg_whip: { zone: 'leg',      aerial: false, power: 0.55, outcomeWeights: { dot: 26, single: 30, two: 12, four: 26, six: 2,  wicket: 4  } },
+    square_leg_whip: { zone: 'leg',      aerial: false, power: 0.58, outcomeWeights: { dot: 26, single: 30, two: 12, four: 26, six: 2,  wicket: 4  } },
     sweep:           { zone: 'leg',      aerial: false, power: 0.5,  outcomeWeights: { dot: 24, single: 32, two: 10, four: 26, six: 2,  wicket: 6  } },
-    reverse_sweep:   { zone: 'off',      aerial: false, power: 0.5,  outcomeWeights: { dot: 26, single: 26, two: 8,  four: 24, six: 3,  wicket: 13 } },
+    reverse_sweep:   { zone: 'off',      aerial: false, power: 0.47, outcomeWeights: { dot: 26, single: 26, two: 8,  four: 24, six: 3,  wicket: 13 } },
     slog_sweep:      { zone: 'leg',      aerial: true,  power: 0.78, outcomeWeights: { dot: 18, single: 8,  two: 2,  four: 22, six: 30, wicket: 20 } },
-    paddle_sweep:    { zone: 'behind',   aerial: false, power: 0.3,  outcomeWeights: { dot: 32, single: 38, two: 8,  four: 14, six: 0,  wicket: 8  } },
+    paddle_sweep:    { zone: 'behind',   aerial: false, power: 0.27, outcomeWeights: { dot: 32, single: 38, two: 8,  four: 14, six: 0,  wicket: 8  } },
     lofted_drive:    { zone: 'off',      aerial: true,  power: 0.75, outcomeWeights: { dot: 16, single: 10, two: 2,  four: 28, six: 26, wicket: 18 } },
     slog:            { zone: 'leg',      aerial: true,  power: 0.9,  outcomeWeights: { dot: 20, single: 6,  two: 2,  four: 18, six: 32, wicket: 22 } },
     defensive_block: { zone: 'straight', aerial: false, power: 0.08, outcomeWeights: { dot: 88, single: 9,  two: 0,  four: 0,  six: 0,  wicket: 3  } },
@@ -8201,7 +8197,8 @@
   function rollOutcome(shotId) {
     var w = (SHOT_TYPES[shotId] || SHOT_TYPES.defensive_block).outcomeWeights;
     var order = ['dot', 'single', 'two', 'four', 'six', 'wicket'];
-    var roll = Math.random() * 100;
+    var total = order.reduce(function (s, k) { return s + w[k]; }, 0);
+    var roll = Math.random() * total;
     for (var i = 0; i < order.length; i++) {
       roll -= w[order[i]];
       if (roll <= 0) return order[i];
@@ -8226,9 +8223,10 @@
     straight: [{ x: 320, y: 440 }, { x: 320, y: 565 }],
     off: [{ x: 605, y: 300 }, { x: 500, y: 115 }, { x: 560, y: 400 }],
     leg: [{ x: 35, y: 340 }, { x: 80, y: 115 }, { x: 110, y: 490 }],
-    behind: [{ x: 560, y: 320 }, { x: 90, y: 320 }, { x: 368, y: 228 }]
+    behind: [{ x: 560, y: 190 }, { x: 90, y: 190 }, { x: 368, y: 228 }]
   };
-  function composeLegs(deliveryId, shotId, outcome, pitchLineOffset) {
+  function composeLegs(deliveryId, shotId, outcome, pitchLineOffset, paceTier) {
+    var tier = paceTier || 1;
     var delivery = DELIVERY_TYPES[deliveryId] || DELIVERY_TYPES.off_break;
     var shot = SHOT_TYPES[shotId] || SHOT_TYPES.defensive_block;
     var bowlerPt = { x: 320, y: 432 };
@@ -8237,14 +8235,32 @@
     var points = [bowlerPt, pitchPt, batPt];
     var bows = [delivery.leg1Bow, delivery.leg2Bow];
     var msArr = [Math.round(260 * delivery.durMul), Math.round((delivery.family === 'spin' ? 260 : 210) * delivery.durMul)];
+    if (delivery.family === 'pace') {
+      // The pace tier scales how fast the BOWLER got it down (the
+      // release->pitch and pitch->bat legs) - it previously only ever
+      // reached the run-up, never the ball itself. The shot-outcome leg
+      // below is left untouched on purpose: that's the BATTER's own
+      // reaction speed, a different thing from the bowler's pace. Spin
+      // deliveries never scale here - pace tiers don't apply to spin.
+      msArr[0] = Math.round(msArr[0] * tier);
+      msArr[1] = Math.round(msArr[1] * tier);
+    }
     if (outcome !== 'wicket' && shotId !== 'leave' && shotId !== 'defensive_block') {
       var zoneTargets = LIVE_ZONE_TARGETS_BY_ZONE[shot.zone] || LIVE_ZONE_TARGETS_BY_ZONE.straight;
       var target = zoneTargets[Math.floor(Math.random() * zoneTargets.length)];
       points.push(target);
       var shotBow = 8 + shot.power * 44;
       var shotMs = 260 + shot.power * 340;
+      if (shot.aerial) { shotBow += 10; shotMs += 60; }
       bows.push(shotBow);
       msArr.push(Math.round(shotMs));
+    } else if (shotId === 'leave') {
+      // A genuine leave continues past the stumps to the keeper - the
+      // ball's path must not stop dead at the bat point when nothing
+      // was actually played at it.
+      var keeperPt = { x: 320, y: 195 };
+      points.push(keeperPt);
+      bows.push(3); msArr.push(180);
     } else if (shotId === 'defensive_block') {
       var blockPt = { x: batPt.x + 6, y: batPt.y + 14 };
       points.push(blockPt);
@@ -8270,6 +8286,11 @@
   }
 
   var PACE_TIER_MULTIPLIER = { Fast: 0.78, FastMedium: 0.9, MediumFast: 1.05, Medium: 1.22 };
+  // Real domain-grounded run-up geometry per bowler: a spinner's is short
+  // and nearly straight in; a quick's is long and comes in at a real angle
+  // (over the wicket, right-arm) - the concrete visual difference the user
+  // asked for between bowling actions, not one generic straight line for
+  // everyone.
   var BOWLER_RUNUP = {
     'field-iqbal': { from: { x: 320, y: 476 }, bow: 5, ms: 480, style: 'spin' },
     'field-awan': { from: { x: 284, y: 558 }, bow: -26, ms: 780, style: 'pace', paceTier: 'FastMedium' }
@@ -8318,10 +8339,11 @@
     var runup = BOWLER_RUNUP[wrap.id] || BOWLER_RUNUP['field-iqbal'];
     var deliveryId = pickDeliveryType(wrap.id);
     var shotId = pickShot(deliveryId);
+    var shotAerial = !!(SHOT_TYPES[shotId] || SHOT_TYPES.defensive_block).aerial;
     var outcome = rollOutcome(shotId);
     var pitchLineOffset = Math.round(Math.random() * 16 - 8);
     var mirrorX = false; // no left-arm/left-hand character in today's mockup data yet (spec S7/S8) - mirrorLegs is real and tested (task 5), wired here so the next bowler/batter added only needs to flip this flag, not touch the pipeline
-    var composed = mirrorLegs(composeLegs(deliveryId, shotId, outcome, pitchLineOffset), mirrorX);
+    var composed = mirrorLegs(composeLegs(deliveryId, shotId, outcome, pitchLineOffset, paceTierFor(wrap.id)), mirrorX);
     var legs = composed.legs;
     var points = composed.points;
     var bowlerPt = points[0], pitchPt = points[1], batPt = points[2];
@@ -8401,11 +8423,11 @@
       ball.setAttribute('r', 5);
 
       var bouncedYet = false, batContactYet = false, strikerReactedYet = false;
-      var pitchLegIndex = 0, batLegIndex = 1, finalLegIndex = 2;
+      var pitchLegIndex = 0, batLegIndex = 1, finalLegIndex = legs.length - 1;
 
       tweenLegs(ball, legs, function (pt, li, t, elapsed, totalMs) {
         trail.style.strokeDashoffset = trailLen * (1 - elapsed / totalMs);
-        if (outcome === 'six' && li === finalLegIndex) {
+        if ((outcome === 'six' || shotAerial) && li === finalLegIndex) {
           shadow.classList.add('airborne');
           var shadowLeg = buildLegs([legs[finalLegIndex].from, legs[finalLegIndex].to], [legs[finalLegIndex].control ? 14 : 10], [1], [easeInOutQuad])[0];
           var sp = bezierPoint(shadowLeg.from, shadowLeg.control, shadowLeg.to, t);
@@ -8415,9 +8437,10 @@
         if (!bouncedYet && li >= pitchLegIndex + 1) {
           bouncedYet = true;
           bouncePulse.setAttribute('cx', pitchPt.x); bouncePulse.setAttribute('cy', pitchPt.y);
+          bouncePulse.classList.toggle('big', deliveryId === 'bouncer');
           bouncePulse.classList.remove('pulsing'); void bouncePulse.offsetWidth; bouncePulse.classList.add('pulsing');
         }
-        if (!batContactYet && li >= batLegIndex + (outcome === 'wicket' ? 0 : 1)) {
+        if (!batContactYet && shotId !== 'leave' && li >= batLegIndex + (outcome === 'wicket' ? 0 : 1)) {
           batContactYet = true;
           impactFlash.setAttribute('cx', batPt.x); impactFlash.setAttribute('cy', batPt.y);
           impactFlash.classList.toggle('wicket-flash', outcome === 'wicket');
