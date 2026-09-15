@@ -1226,7 +1226,7 @@
 <div class="topbar">
   <div class="topbar-inner">
     <div class="crest" onclick="enterOnboardingMode()" style="cursor:pointer" title="Main menu &middot; new career, load career">II</div>
-    <div class="wordmark">
+    <div class="wordmark" onclick="openManagerProfile()" style="cursor:pointer" title="Your own Manager Profile">
       <span class="name">Cover Point</span>
       <span class="club" id="wordmark-club">Islamabad Icons &middot; Pakistan T20 Cup 2027</span>
     </div>
@@ -4319,7 +4319,76 @@
     </div>
   </section>
 
-  <!-- ================= INBOX ================= -->
+<!-- ================= MANAGER PROFILE ================= -->
+  <section class="panel" id="panel-manager-profile" role="tabpanel" hidden>
+    <div class="breadcrumb"><a onclick="navigateBack()">&larr; Back</a></div>
+    <div class="player-header">
+      <div class="player-photo"></div>
+      <div class="player-id-block">
+        <h1>Junaid Aslam</h1>
+        <div class="role-line">Head Coach &middot; Islamabad Icons</div>
+        <div class="player-header-meta"><span class="player-club-crest-sm"></span>Pakistan &middot; Age 41 &middot; Head coach since Feb 2024</div>
+      </div>
+    </div>
+    <div class="tactics-grid">
+      <div class="analysis-card">
+        <span class="eyebrow"><svg class="icon sm"><use href="#i-user"/></svg> Biography</span>
+        <div class="bio-line"><span class="k">Nationality</span><span>Pakistan</span></div>
+        <div class="bio-line"><span class="k">Playing background</span><span>Former domestic professional</span></div>
+        <div class="bio-line"><span class="k">Coaching license</span><span>Basic</span></div>
+        <div class="bio-line"><span class="k">Current post</span><span>Islamabad Icons, Head Coach</span></div>
+        <div class="role-hint" style="margin-top:8px">A steady domestic playing career, mostly as a middle-order batter, before moving into coaching straight after retiring &mdash; no representative honours of his own, which is exactly the story the board's own expectations of him have been shaped by.</div>
+      </div>
+      <div class="analysis-card">
+        <span class="eyebrow"><svg class="icon sm"><use href="#i-star-fill"/></svg> Reputation</span>
+        <div class="bio-line"><span class="k">Domestic</span><span style="color:var(--gold);font-weight:700">Known</span></div>
+        <div class="bio-line"><span class="k">Continental</span><span style="color:var(--ink-dim)">Not yet known</span></div>
+        <div class="bio-line"><span class="k">Worldwide</span><span style="color:var(--ink-dim)">Not yet known</span></div>
+        <div class="role-hint" style="margin-top:8px">Built from three real things, not one number: your own playing career, your record in the job so far, and the coaching badges you hold. A quiet playing career and a Basic license both genuinely cap how far this can move until the record in the dugout does the rest.</div>
+      </div>
+      <div class="analysis-card">
+        <span class="eyebrow"><svg class="icon sm"><use href="#i-trophy"/></svg> Career record</span>
+        <div class="bio-line"><span class="k">Seasons coached</span><span>3</span></div>
+        <div class="bio-line"><span class="k">Titles won</span><span>1 &middot; Pakistan T20 Cup 2023</span></div>
+        <div class="bio-line"><span class="k">Major titles</span><span>0</span></div>
+        <div class="bio-line"><span class="k">Board trust</span><span style="color:var(--turf-strong);font-weight:700">Steady</span></div>
+        <div class="bio-line"><span class="k">Authority in the dressing room</span><span>Solid, not yet total</span></div>
+      </div>
+      <div class="analysis-card">
+        <span class="eyebrow"><svg class="icon sm"><use href="#i-cash"/></svg> Earnings &amp; circuit standing</span>
+        <div class="bio-line"><span class="k">Domestic coaching income</span><span>$58,000/yr</span></div>
+        <div class="bio-line"><span class="k">Franchise campaign fees</span><span>&mdash;</span></div>
+        <div class="bio-line"><span class="k">Career earnings to date</span><span>$164,000</span></div>
+        <div class="bio-line"><span class="k">Franchise circuit reputation</span><span style="color:var(--ink-dim)">Unproven</span></div>
+        <div class="role-hint" style="margin-top:8px">No franchise campaign on the CV yet &mdash; a genuine circuit reputation only builds by actually coaching one.</div>
+      </div>
+      <div class="figures-card" style="grid-column:1/-1">
+        <span class="eyebrow"><svg class="icon sm"><use href="#i-shield"/></svg> Coaching attributes</span>
+        <div class="attr-grid">
+          <div class="attr-group">
+            <h3>Tactical</h3>
+            <div class="attr-row"><span class="aname">Tactical Knowledge</span><span class="attr-num strong">14</span></div>
+            <div class="attr-row"><span class="aname">Match Reading</span><span class="attr-num strong">13</span></div>
+            <div class="attr-row"><span class="aname">Adaptability</span><span class="attr-num solid">11</span></div>
+          </div>
+          <div class="attr-group">
+            <h3>People management</h3>
+            <div class="attr-row"><span class="aname">Man-Management</span><span class="attr-num strong">15</span></div>
+            <div class="attr-row"><span class="aname">Media Handling</span><span class="attr-num solid">10</span></div>
+            <div class="attr-row"><span class="aname">Discipline</span><span class="attr-num strong">13</span></div>
+          </div>
+          <div class="attr-group">
+            <h3>Development</h3>
+            <div class="attr-row"><span class="aname">Working with Youngsters</span><span class="attr-num elite">16</span></div>
+            <div class="attr-row"><span class="aname">Determination</span><span class="attr-num strong">14</span></div>
+          </div>
+        </div>
+        <div class="role-hint" style="margin-top:10px">A real strength with young players and a genuinely good read of the dressing room &mdash; media handling is the softest part of the profile right now, and it shows whenever a press conference gets confrontational.</div>
+      </div>
+    </div>
+  </section>
+
+    <!-- ================= INBOX ================= -->
   <section class="panel" id="panel-inbox" role="tabpanel" hidden>
     <div class="panel-head"><h1>Inbox</h1><div class="sub">This week&rsquo;s digest</div></div>
 
@@ -5084,6 +5153,7 @@
   document.querySelectorAll('.tabs > .tabnav-inner > .tab-btn').forEach(function (btn) {
     btn.addEventListener('click', function () { showPanel(btn.dataset.tab); });
   });
+  function openManagerProfile() { showPanel('manager-profile'); }
   function toggleSidebar() {
     var sb = document.querySelector('.tabs');
     sb.classList.toggle('collapsed');

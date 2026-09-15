@@ -12047,6 +12047,45 @@ genuinely exhaustive FM26-comparison sweep of every remaining screen (Franchise'
 the Auction Room, Calendar, Onboarding) was not attempted and is a reasonable target for the next
 round, named here rather than implied finished.
 
+### Staff hiring redesign + Manager Profile screen (this pass)
+
+Two more items from the user's own escalated "job market, job center, manager's own profile, staff
+and head coach profiles" list, researched against FM26 PC and built.
+
+**Staff hiring: the auto-generated shortlist concept removed entirely, per direct instruction.**
+Renamed a real name collision (`Kamran Iqbal` the scout candidate &rarr; `Kamran Sheikh` - an
+already-employed Club &gt; Staff member was also named Kamran Iqbal). All 7 static "Recruit" button
+onclicks plus the one dynamic template inside `releaseStaff(roleKey)` now open the Recruitment &gt;
+Staff Database tab directly (`showPanel('recruitment');openRecruitTab('staffdb')`) instead of a
+per-role 3-candidate shortlist modal. The 5-row static Staff Database `<tbody>` was replaced with an
+empty `id="staffdb-body"`, filled by a new `renderStaffDatabase()` that merges the 5 originally-
+named people (`STAFFDB_KNOWN`) with every entry across all 14 `STAFF_VACANCY_CANDIDATES` role keys
+(47 rows total), each with a direct `onclick="openTargetOffer(...)"` Negotiate button - no
+pre-picked shortlist in between, browse-and-negotiate with anyone in the real database. The old
+`openStaffRecruit`/`closeStaffRecruit` functions and the `staff-recruit-backdrop` modal were removed
+entirely (confirmed dead - nothing else called them). Staff Profile gained an Actions dropdown
+(`.staff-actions-wrap`, a second distinct class from Player Profile's own `.player-actions-wrap`,
+needed because the existing outside-click-closer would otherwise only ever find the FIRST match on
+the page) offering "Negotiate new terms"/"Negotiate a contract" plus, for an employed staff member
+with a known `roleKey`, a "Release from post" action calling `releaseStaffFromProfile(roleKey)`.
+
+**Manager Profile - the player's own coach, researched against FM26 PC's "Managerial Home and
+Profile."** New `panel-manager-profile` section (confirmed properly nested inside `.shell`, unlike
+the pre-existing, already-documented `panel-staff-profile` nesting bug), opened via
+`onclick="openManagerProfile()"` on the topbar `.wordmark` (distinct from `.crest`'s existing
+onboarding-menu action). Uses "Junaid Aslam" - the exact name already established at the onboarding
+"New Career &gt; Manager Profile" step, not a new invented character - with a `.player-header`
+(Head Coach &middot; Islamabad Icons &middot; Pakistan &middot; Age 41 &middot; head coach since
+Feb 2024) and four `.analysis-card`s (Biography, Reputation - explicitly stating it's built from
+playing career + job record + coaching badges, per the real FM26 finding - Career record, Earnings
+&amp; circuit standing) plus a full-width Coaching Attributes `.figures-card` with 3 `.attr-group`s
+(Tactical/People management/Development). Verified in-browser via Playwright: header and
+Biography/Reputation cards render cleanly; the 3-group `.attr-grid` (a plain 2-column grid, Development
+wrapping to its own row since it only has 2 rows) renders acceptably with no layout breakage.
+
+Both items are additive, structurally verified (`verify.py`: tag balance, no duplicate ids,
+`node --check` on the extracted script - all clean), and ready to commit/publish.
+
 ---
 
 ## CONSOLIDATED DEFERRED-ITEMS REGISTER (maintained - the single source of truth)
