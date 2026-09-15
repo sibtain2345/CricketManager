@@ -140,7 +140,7 @@
   }
   .topbar-inner { position: relative; max-width: 1280px; margin: 0 auto; width: 100%; display: flex; align-items: center; gap: 20px; }
   .crest { width: 40px; height: 40px; border-radius: 9px; background: radial-gradient(circle at 32% 28%, var(--turf-strong), var(--turf-dim) 72%); border: 1px solid rgba(255,255,255,0.18); box-shadow: inset 0 1px 0 rgba(255,255,255,0.25); display: flex; align-items: center; justify-content: center; font-family: var(--font-display); font-weight: 700; font-size: var(--fs-subhead); color: #eaf4ec; flex-shrink: 0; }
-  .wordmark { display: flex; flex-direction: column; gap: 1px; }
+  .wordmark { display: flex; flex-direction: row; align-items: center; gap: 8px; }
   .wordmark .name { font-family: var(--font-display); font-weight: 700; font-size: var(--fs-subhead); }
   .wordmark .club { font-size: var(--fs-caption); color: var(--ink-dim); }
   .topbar-meta { margin-left: auto; display: flex; align-items: center; gap: 26px; }
@@ -208,6 +208,10 @@
   .context-switch { display: flex; gap: 2px; background: rgba(0,0,0,0.22); border: 1px solid rgba(255,255,255,0.08); border-radius: 999px; padding: 2px; margin-left: 14px; }
   .context-btn { appearance: none; border: none; background: transparent; color: var(--ink-dim); font: inherit; font-size: var(--fs-caption); font-weight: 700; padding: 6px 12px; border-radius: 999px; cursor: pointer; white-space: nowrap; }
   .context-btn[aria-selected="true"] { color: var(--ground-a); background: var(--gold); }
+  .wordmark { padding: 6px 10px; border-radius: 10px; border: 1px solid transparent; transition: background 0.15s, border-color 0.15s; }
+  .wordmark:hover { background: rgba(255,255,255,0.09); border-color: rgba(255,255,255,0.2); }
+  .wordmark-text { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
+  .wordmark-icon { opacity: 0.65; flex-shrink: 0; }
   .onboard-menu-wrap { max-width:420px; margin:64px auto; text-align:center; }
   .onboard-menu-crest { font-size:2.6rem; font-weight:800; color:var(--gold); letter-spacing:.04em; }
   .onboard-menu-tag { color:var(--ink-faint); margin:6px 0 32px; font-size:var(--fs-body); }
@@ -1226,9 +1230,12 @@
 <div class="topbar">
   <div class="topbar-inner">
     <div class="crest" onclick="enterOnboardingMode()" style="cursor:pointer" title="Main menu &middot; new career, load career">II</div>
-    <div class="wordmark" onclick="openManagerProfile()" style="cursor:pointer" title="Your own Manager Profile">
-      <span class="name">Cover Point</span>
-      <span class="club" id="wordmark-club">Islamabad Icons &middot; Pakistan T20 Cup 2027</span>
+    <div class="wordmark" onclick="openManagerProfile()" style="cursor:pointer" title="Your own Manager Profile - biography, reputation, career record, coaching attributes, and the job market">
+      <svg class="icon sm wordmark-icon"><use href="#i-user"/></svg>
+      <div class="wordmark-text">
+        <span class="name">Cover Point</span>
+        <span class="club" id="wordmark-club">Islamabad Icons &middot; Pakistan T20 Cup 2027</span>
+      </div>
     </div>
 
     <div class="context-switch" role="tablist" aria-label="Coaching identity" title="Which job are you looking at? A real coach holds one at a time - this switches between the three for review.">
@@ -2979,6 +2986,44 @@
           <div class="bio-line"><span class="k">Vacancies</span><span style="color:var(--gold)">Batting Coach, Mental Performance</span></div>
           <button class="view-more-btn" onclick="openClubTab('staff')">Open Staff</button>
         </div>
+        <div class="analysis-card">
+          <span class="eyebrow"><svg class="icon sm"><use href="#i-shield"/></svg> About the club</span>
+          <div class="bio-line"><span class="k">Reputation</span><span class="facility-tier-badge tier-good">Strong</span></div>
+          <div class="bio-line"><span class="k">Home ground</span><span>Jinnah Stadium, Rawalpindi</span></div>
+          <div class="bio-line"><span class="k">Ownership</span><span>Private owner, benefactor-backed</span></div>
+          <div class="bio-line"><span class="k">Founded</span><span>1985</span></div>
+          <button class="view-more-btn" onclick="openWorldProfile('club','islamabad')">Full club profile</button>
+        </div>
+        <div class="analysis-card">
+          <span class="eyebrow"><svg class="icon sm"><use href="#i-star-fill"/></svg> Key players</span>
+          <div class="staff-row clickable" onclick="openPlayerFromRow(this)"><div class="staff-row-main"><span class="staff-name">Hamza Malik</span><span class="staff-role-label">Captain &middot; Top order</span></div><div class="staff-row-meta"><span>1,842 runs @ 38.4</span></div></div>
+          <div class="staff-row clickable" onclick="openPlayerFromRow(this)"><div class="staff-row-main"><span class="staff-name">Zain Chaudhry</span><span class="staff-role-label">Vice-captain &middot; Middle order</span></div><div class="staff-row-meta"><span class="pill first">In form</span></div></div>
+          <div class="staff-row clickable" onclick="openPlayerFromRow(this)"><div class="staff-row-main"><span class="staff-name">Sarfraz Khan</span><span class="staff-role-label">Bowler</span></div><div class="staff-row-meta"><span>96 wkts @ 22.6</span></div></div>
+          <button class="view-more-btn" onclick="showPanel('squad')">Full squad</button>
+        </div>
+        <div class="analysis-card">
+          <span class="eyebrow"><svg class="icon sm"><use href="#i-news"/></svg> From the press</span>
+          <div class="notes-log">
+            <div class="notes-log-item" style="cursor:pointer" onclick="showPanel('inbox')"><span><strong>Chaudhry&rsquo;s rise has the dressing room talking</strong><br>Three fifties in four innings &mdash; the 21-year-old is forcing his way past a settled top order.</span></div>
+            <div class="notes-log-item" style="cursor:pointer;margin-top:8px" onclick="showPanel('inbox')"><span><strong>Icons ownership backs a &ldquo;youth-first&rdquo; rebuild</strong><br>A quiet trajectory shift after two seasons short of the knockouts.</span></div>
+          </div>
+          <button class="view-more-btn" onclick="showPanel('inbox')">All club news</button>
+        </div>
+        <div class="analysis-card">
+          <span class="eyebrow"><svg class="icon sm"><use href="#i-trophy"/></svg> Club history</span>
+          <div class="notes-log">
+            <div class="notes-log-item"><span>2023: Pakistan T20 Cup champions</span></div>
+            <div class="notes-log-item" style="margin-top:6px"><span>2021: Runners-up</span></div>
+            <div class="notes-log-item" style="margin-top:6px"><span>2019: Champions</span></div>
+          </div>
+          <button class="view-more-btn" onclick="showPanel('records')">Full trophy cabinet &amp; records</button>
+        </div>
+        <div class="analysis-card">
+          <span class="eyebrow"><svg class="icon sm"><use href="#i-cal-list"/></svg> Fixture schedule</span>
+          <div class="fixture-row" style="cursor:pointer" onclick="showPanel('fixtures')"><div class="vs-crest them"></div><div class="fixture-names">Lahore Lions<small>Home &middot; Sun 14:00 &middot; Jinnah Stadium &middot; T20</small></div></div>
+          <div class="fixture-row" style="cursor:pointer;margin-top:10px;padding-top:10px;border-top:1px solid var(--border-soft)" onclick="showPanel('fixtures')"><div class="vs-crest them"></div><div class="fixture-names">Karachi Kings<small>Away &middot; Mon 5 Apr</small></div></div>
+          <button class="view-more-btn" onclick="showPanel('fixtures')">Full schedule</button>
+        </div>
       </div>
       <div class="analysis-card" style="margin-top:16px">
         <span class="eyebrow"><svg class="icon sm"><use href="#i-alert"/></svg> Club facilities</span>
@@ -4330,6 +4375,9 @@
         <div class="player-header-meta"><span class="player-club-crest-sm"></span>Pakistan &middot; Age 41 &middot; Head coach since Feb 2024</div>
       </div>
     </div>
+    <div style="display:flex;gap:10px;margin:2px 0 16px">
+      <button class="view-more-btn" onclick="openJobCentre()">Job security &amp; the market <svg class="icon sm"><use href="#i-chevron-fwd"/></svg></button>
+    </div>
     <div class="tactics-grid">
       <div class="analysis-card">
         <span class="eyebrow"><svg class="icon sm"><use href="#i-user"/></svg> Biography</span>
@@ -4737,11 +4785,13 @@
     <div class="panel-head"><h1 id="cprofile-title">Competition</h1><div class="sub" id="cprofile-meta">&mdash;</div></div>
     <p id="cprofile-blurb" style="font-size:var(--fs-body);color:var(--ink-dim);line-height:1.5;max-width:820px"></p>
     <nav class="subnav" role="tablist" aria-label="Competition profile views">
-      <button class="subtab-btn" role="tab" aria-selected="true" data-subtab="rules">Rules</button>
+      <button class="subtab-btn" role="tab" aria-selected="true" data-subtab="overview">Overview</button>
+      <button class="subtab-btn" role="tab" aria-selected="false" data-subtab="rules">Rules</button>
       <button class="subtab-btn" role="tab" aria-selected="false" data-subtab="standings">Standings</button>
       <button class="subtab-btn" role="tab" aria-selected="false" data-subtab="fixtures">Fixtures</button>
     </nav>
-    <div class="subpanel" id="cprofile-rules"></div>
+    <div class="subpanel" id="cprofile-overview"></div>
+    <div class="subpanel" id="cprofile-rules" hidden></div>
     <div class="subpanel" id="cprofile-standings" hidden></div>
     <div class="subpanel" id="cprofile-fixtures" hidden></div>
   </section>
@@ -6009,12 +6059,50 @@
     document.getElementById('cprofile-fixtures').innerHTML =
       '<div class="analysis-card"><span class="eyebrow"><svg class="icon sm"><use href="#i-cal-list"/></svg> Recent results</span>' + recentHtml + '</div>' +
       '<div class="analysis-card" style="margin-top:16px"><span class="eyebrow"><svg class="icon sm"><use href="#i-cal-list"/></svg> Upcoming</span>' + upcomingHtml + '</div>';
+
+    var overviewStandingsHtml;
+    if (c.table) {
+      var ovHeadRow = '<tr>' + c.table.headers.map(function (h, i) {
+        return '<th' + (i >= 2 ? ' class="num"' : '') + '>' + h + '</th>';
+      }).join('') + '</tr>';
+      var ovBodyRows = c.table.rows.slice(0, 4).map(function (r) {
+        var isUs = r[0].indexOf('ic') !== -1;
+        var pos = isUs ? r[0].replace('ic', '') : r[0];
+        var rowStyle = isUs ? ' style="background:var(--turf-dim)"' : '';
+        var cellStyle = isUs ? ' style="color:var(--turf-strong);font-weight:700"' : '';
+        return '<tr' + rowStyle + '>' + r.map(function (v, i) {
+          var val = i === 0 ? pos : v;
+          return '<td' + (i >= 2 ? ' class="num"' : '') + cellStyle + '>' + val + '</td>';
+        }).join('') + '</tr>';
+      }).join('');
+      overviewStandingsHtml = '<div class="analysis-card"><span class="eyebrow"><svg class="icon sm"><use href="#i-trend-up"/></svg> Table</span>' +
+        '<div class="table-card"><div class="table-scroll-inner"><table class="career"><thead>' + ovHeadRow + '</thead><tbody>' + ovBodyRows + '</tbody></table></div></div>' +
+        '<button class="view-more-btn" style="margin-top:10px" onclick="document.querySelector(&quot;#panel-competition-profile .subtab-btn[data-subtab=standings]&quot;).click()">Full standings</button></div>';
+    } else {
+      overviewStandingsHtml = '<div class="analysis-card"><span class="eyebrow"><svg class="icon sm"><use href="#i-trend-up"/></svg> Standings</span>' +
+        '<div class="role-hint">' + c.standingsNote + '</div></div>';
+    }
+    var ovUpcoming = c.fixtures.upcoming.slice(0, 2);
+    var ovUpcomingHtml = ovUpcoming.length ? ovUpcoming.map(fixtureRowHtml).join('') : '<div class="role-hint">Nothing scheduled yet.</div>';
+    document.getElementById('cprofile-overview').innerHTML =
+      '<div class="tactics-grid">' +
+      overviewStandingsHtml +
+      '<div class="analysis-card"><span class="eyebrow"><svg class="icon sm"><use href="#i-trophy"/></svg> Recent champions</span>' +
+      '<div class="notes-log">' + c.champions.map(function (line) { return '<div class="notes-log-item"><span>' + line + '</span></div>'; }).join('') + '</div></div>' +
+      '<div class="analysis-card"><span class="eyebrow"><svg class="icon sm"><use href="#i-cal-list"/></svg> Upcoming fixtures</span>' + ovUpcomingHtml +
+      '<button class="view-more-btn" style="margin-top:10px" onclick="document.querySelector(&quot;#panel-competition-profile .subtab-btn[data-subtab=fixtures]&quot;).click()">Full fixture list</button></div>' +
+      '<div class="analysis-card"><span class="eyebrow"><svg class="icon sm"><use href="#i-shield"/></svg> At a glance</span>' +
+      '<div class="bio-line"><span class="k">Format</span><span>' + c.rules[0][1] + '</span></div>' +
+      '<div class="bio-line"><span class="k">Qualification</span><span style="max-width:60%;text-align:right">' + (c.rules[2] ? c.rules[2][1] : c.rules[1][1]) + '</span></div>' +
+      '<button class="view-more-btn" style="margin-top:10px" onclick="document.querySelector(&quot;#panel-competition-profile .subtab-btn[data-subtab=rules]&quot;).click()">Full rules</button></div>' +
+      '</div>';
   }
   function openCompetitionProfile(key) {
     renderCompetitionProfile(key);
     var nav = document.querySelector('#panel-competition-profile nav.subnav');
     nav.querySelectorAll('.subtab-btn').forEach(function (b, i) { b.setAttribute('aria-selected', i === 0 ? 'true' : 'false'); });
-    document.getElementById('cprofile-rules').hidden = false;
+    document.getElementById('cprofile-overview').hidden = false;
+    document.getElementById('cprofile-rules').hidden = true;
     document.getElementById('cprofile-standings').hidden = true;
     document.getElementById('cprofile-fixtures').hidden = true;
     showPanel('competition-profile');
