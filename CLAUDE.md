@@ -11935,6 +11935,118 @@ national-selection-panel hire flow); and universal attribute-tile click-through 
 Profile's own attributes grid, which already has it. Each is a reasonable, scoped next slice on
 its own, not a compromise forced by this one.
 
+### Records filters made genuinely functional, plus four named gaps closed (Nation/Club
+### leadership, staff attributes, staff negotiation clauses), plus two real encoding bugs found
+
+The user asked "what's next," was told the plan was the presentational-only Records filters and
+the franchise RTM item (RTM turned out to already be real and working - a stale claim in the
+previous report's own "not attempted" list, corrected here), then - mid-turn, before that work
+even finished - escalated to a much larger, explicit mandate: "never compromise," redesign
+completely if needed, and four concrete, named examples of the failure pattern: the Nation
+Profile shows no per-format captains or head coach, the Club Profile has the same gap, staff/
+player negotiations are "very hardcoded" with no clauses on the staff side, and Staff Profiles
+have no attributes or role-suitability read at all. All four were built for real, plus the
+originally-planned Records filter work, plus two real bugs found and fixed along the way that
+were not part of any ask - found only because verification actually exercised the affected code
+paths rather than assuming the markup alone was correct.
+
+**Records &rsaquo; Ground and World filters - from presentational to genuinely functional.**
+Every record `type` in both scopes gained a real tag (`fmt: 't20'|'listA'|'fc'` for Ground,
+`comp: 'domestic'|'international'|'franchise'` for World; a `'all'` tag for the genuinely
+cross-format/cross-competition types like "Most Career Runs, All Formats," which now correctly
+never disappears under any filter). Real new content was added, not just re-tagged old content,
+so a non-default filter actually shows something different rather than emptying every category:
+two First-Class ground records (a real Test/FC history at the same venue, consistent with the
+club's own First-Class Championship campaign already established on the World screen), and a
+genuine International and Franchise-league world record each. `openRecordCategory` now reads the
+live filter value and hides any non-matching type - with an honest "nothing logged yet for this
+filter" message when a filtered category has zero matches, rather than silently showing stale
+data. Verified directly: switching Ground to "First-Class only" correctly narrows Batting from 3
+types to 1; switching to "List A only" (nothing tagged that way yet) correctly shows the honest
+empty state; switching World to "International only" correctly shows the tagged International
+type plus the untouched "all"-tagged career type, nothing else.
+
+**Nation Profile + Club Profile: real per-format captains and a head coach, closing the exact
+named gap.** Every one of the six seeded nations gained a `leadership` field - `Unified` nations
+(Pakistan, India, Australia, New Zealand, the Netherlands) name one head coach and one captain
+across all three formats; England is a genuine `Split` structure with separate red-ball and
+white-ball coaches and a different Test vs. limited-overs captain - which is not new invented
+content, it makes England's data finally agree with its own pre-existing blurb text ("a genuinely
+format-split national coaching structure") that had no backing data before this pass. Every one
+of the six domestic clubs on the World screen similarly gained a `captain`/`coach` field, rendered
+under a new "Leadership" heading in `renderClubProfile`. Islamabad Icons (the human's own club)
+correctly shows Hamza Malik as captain and "Islamabad Icons head coach (you)" - consistent with
+Hamza Malik already being that club's captain on the Dynamics screen built earlier this session,
+not a contradicting, independently-invented fact.
+
+**Staff Profile: a real Attributes &amp; Role Suitability card, closing the exact named gap.**
+Previously Overview/Career/Contract only, with zero attribute read of any kind. Added a fourth
+card reusing the Player Profile's own `.attr-grid`/`.attr-row`/`.attr-num` tiered-colour pattern
+(never a new visual language) - five real, per-person-varied 1-20 values (Analysis, Statistics,
+Technical Knowledge, Communication, Diligence, the actual real C# `StaffMember` attribute set,
+researched against FM's own real "Judging Player/Team Ability" + coaching-badge convention) plus
+a role-suitability line naming the two attributes that actually decide fitness for THIS specific
+role (a `STAFF_ROLE_ATTR_FOCUS` lookup, mirroring `StaffMember.WeightFor`'s real per-role
+weighting) and a plain verdict on how well they're currently rated. **Values are derived, not
+hardcoded**, per the same discipline the complaint was about: a name-seeded deterministic hash
+(reusing this file's own existing `pickContractEnd()` technique) combined with the person's
+already-shown quality tier produces five real, varied numbers - verified directly across all 7
+staff rows on the Club &gt; Staff screen: an Excellent-tier person reads 15-19, a Good-tier person
+11-16, an Average-tier person 7-11, each internally consistent with what the badge next to their
+name already claims.
+
+**Staff-hire negotiation: real, toggleable clauses, closing the exact named gap.** The shared
+target-offer modal (used for both a transfer offer and a staff hire) previously had a wage slider
+and nothing else for a staff negotiation - confirmed by reading the modal's own markup before
+touching it. Added three real, staff-appropriate clauses reusing the EXACT `.clause-row`/
+`.clause-toggle` component the player contract modal already established (never a new
+interaction pattern): a development bonus (+8% of salary if his own cluster of players
+genuinely improves - the real quarterly staff-development signal this project's C# domain
+already tracks), compensation on early release (the real `CompensationIfTerminated` domain
+concept), and a protected department budget (off by default - a real ask a strong candidate
+might negotiate for, not every hire gets it). Shown only for `kind === 'staff-hire'`; a plain
+transfer offer keeps its existing simpler flow untouched - verified both ways directly.
+
+**Two real bugs found and fixed along the way, neither part of the ask, both found only because
+verification actually clicked through the real flow rather than trusting the markup:**
+1. **A modal-stacking bug** - clicking "Negotiate" on a staff-recruitment shortlist candidate
+   opened the offer modal without closing the shortlist modal underneath it, so both stayed
+   marked `.open` simultaneously and the shortlist visually stayed on top, making the new clause
+   UI impossible to reach through the real click path (only discoverable by calling the function
+   directly, which is exactly the trap this project's own history warns about - a synthetic test
+   path passing while the real interaction is broken). Fixed with one `closeStaffRecruit();` call
+   added to the dynamically-generated Negotiate button's own `onclick`.
+2. **A raw-UTF8-byte mojibake bug in two dialogue-rendering functions** (`targetOfferLog` and
+   `pickPreAuctionTone`'s convo-log renderer) - both wrapped spoken dialogue in literal curly-quote
+   *characters* (U+201C/U+201D) embedded directly in the JS string literal, instead of this file's
+   own established `&ldquo;`/`&rdquo;` HTML-entity convention used everywhere else for exactly this
+   character. Confirmed reproducible at the DOM level (`element.innerHTML` itself contained the
+   mojibake, not just a screenshot rendering glitch) when served locally via Python's bare
+   `http.server`, which sends `Content-Type: text/html` with **no charset parameter** - and the
+   source file itself has no `<meta charset>` tag by design (the Artifact publishing tool adds one
+   automatically at publish time, confirmed against that tool's own documented behaviour), so **this
+   specific symptom does not actually occur on the real, live published artifact** - only in a
+   locally-served test environment with no charset declared anywhere. Fixed anyway, defensively,
+   to match the file's own established entity convention (immune to charset ambiguity in ANY
+   serving context, including a future one that isn't the Claude Artifact platform) - a real,
+   worthwhile improvement even though it wasn't a live-user-facing bug today. Confirmed zero raw
+   U+201C/U+201D characters remain anywhere in the file after the fix.
+
+**Verification discipline, unchanged from every prior round**: `verify.py` (tag balance,
+div-nesting, duplicate-id, `node --check`) after every one of the six edit scripts, plus real
+Playwright interaction tests for every single claim above - the filter narrowing counts, the
+per-nation/per-club leadership data read directly off the live JS objects, the staff attribute
+values read across all 7 real rows (not just one), the clause toggle's own `.on` state flipping
+on a real click, and both bugs confirmed fixed by re-running the exact same real click path that
+first exposed them. Published as Version 13 of the same artifact
+(`https://claude.ai/artifact/UmHKowfYBygEBwy5mTt9wo`).
+
+**Deliberately not attempted in this pass, stated honestly** - the mandate remains open-ended,
+and this pass already closed every concretely named item plus two bugs found along the way; a
+genuinely exhaustive FM26-comparison sweep of every remaining screen (Franchise's own sub-screens,
+the Auction Room, Calendar, Onboarding) was not attempted and is a reasonable target for the next
+round, named here rather than implied finished.
+
 ---
 
 ## CONSOLIDATED DEFERRED-ITEMS REGISTER (maintained - the single source of truth)

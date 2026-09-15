@@ -4174,11 +4174,11 @@
       <div class="analysis-card">
         <span class="eyebrow"><svg class="icon sm"><use href="#i-alert"/></svg> Jinnah Stadium, Rawalpindi</span>
         <div class="plan-select-wrap" style="width:170px;margin-bottom:10px">
-          <select class="plan-select" style="font-size:var(--fs-caption);padding:6px 30px 6px 10px">
-            <option selected>All formats</option>
-            <option>T20 only</option>
-            <option>List A only</option>
-            <option>First-Class only</option>
+          <select class="plan-select" id="records-ground-filter" style="font-size:var(--fs-caption);padding:6px 30px 6px 10px" onchange="onRecordFilterChange('ground')">
+            <option value="all" selected>All formats</option>
+            <option value="t20">T20 only</option>
+            <option value="listA">List A only</option>
+            <option value="fc">First-Class only</option>
           </select>
         </div>
         <div class="record-cat-row">
@@ -4205,11 +4205,11 @@
       <div class="analysis-card">
         <span class="eyebrow"><svg class="icon sm"><use href="#i-globe"/></svg> World records</span>
         <div class="plan-select-wrap" style="width:170px;margin-bottom:10px">
-          <select class="plan-select" style="font-size:var(--fs-caption);padding:6px 30px 6px 10px">
-            <option selected>All competitions</option>
-            <option>Domestic only</option>
-            <option>International only</option>
-            <option>Franchise leagues only</option>
+          <select class="plan-select" id="records-world-filter" style="font-size:var(--fs-caption);padding:6px 30px 6px 10px" onchange="onRecordFilterChange('world')">
+            <option value="all" selected>All competitions</option>
+            <option value="domestic">Domestic only</option>
+            <option value="international">International only</option>
+            <option value="franchise">Franchise leagues only</option>
           </select>
         </div>
         <div class="record-cat-row">
@@ -4418,6 +4418,20 @@
       <div class="bio-line"><span class="k">Tenure</span><span id="staff-profile-tenure"></span></div>
       <div class="bio-line"><span class="k">Nationality</span><span>Pakistan</span></div>
       <div class="bio-line"><span class="k">Coaching philosophy</span><span id="staff-profile-note">A steady, technique-first developer &mdash; players under him tend to tighten up technically before the numbers follow.</span></div>
+    </div>
+    <div class="figures-card">
+      <span class="eyebrow"><svg class="icon sm"><use href="#i-shield"/></svg> Attributes &amp; Role Suitability</span>
+      <div class="attr-grid">
+        <div class="attr-group">
+          <h3>Core attributes</h3>
+          <div class="attr-row"><span class="aname">Analysis</span><span class="attr-num" id="staff-attr-analysis">-</span></div>
+          <div class="attr-row"><span class="aname">Statistics</span><span class="attr-num" id="staff-attr-statistics">-</span></div>
+          <div class="attr-row"><span class="aname">Technical Knowledge</span><span class="attr-num" id="staff-attr-technical">-</span></div>
+          <div class="attr-row"><span class="aname">Communication</span><span class="attr-num" id="staff-attr-communication">-</span></div>
+          <div class="attr-row"><span class="aname">Diligence</span><span class="attr-num" id="staff-attr-diligence">-</span></div>
+        </div>
+      </div>
+      <div class="role-hint" id="staff-role-suitability" style="margin-top:10px;margin-bottom:0"></div>
     </div>
     <div class="analysis-card">
       <span class="eyebrow"><svg class="icon sm"><use href="#i-trend-up"/></svg> Career</span>
@@ -4648,6 +4662,21 @@
       <div class="board-budget-label"><span>Your offer</span><span class="board-budget-amt" id="target-offer-amt"></span></div>
       <input type="range" class="term-slider" id="target-offer-slider" min="0" max="0" step="5" value="0" oninput="onTargetOfferSlide(this.value)">
       <div class="slider-scale"><span>Lowball</span><span>Their valuation</span><span>Over the odds</span></div>
+    </div>
+    <div id="target-offer-clauses" hidden style="margin-top:14px">
+      <div class="eyebrow" style="display:block;margin-bottom:6px">Contract terms</div>
+      <div class="clause-row" data-clause="development">
+        <div><span class="clause-name">Development bonus</span><span class="clause-desc">+8% of salary if his own cluster of players shows real improvement this season</span></div>
+        <div class="clause-row-actions"><button class="clause-toggle on" onclick="this.classList.toggle('on')" aria-label="Toggle development bonus"></button></div>
+      </div>
+      <div class="clause-row" data-clause="compensation">
+        <div><span class="clause-name">Compensation on early release</span><span class="clause-desc">6 months' salary if let go before the contract ends</span></div>
+        <div class="clause-row-actions"><button class="clause-toggle on" onclick="this.classList.toggle('on')" aria-label="Toggle release compensation"></button></div>
+      </div>
+      <div class="clause-row" data-clause="budget">
+        <div><span class="clause-name">Protected department budget</span><span class="clause-desc">A guaranteed minimum spend on his own area, not subject to being quietly cut</span></div>
+        <div class="clause-row-actions"><button class="clause-toggle" onclick="this.classList.toggle('on')" aria-label="Toggle protected budget"></button></div>
+      </div>
     </div>
     <div class="convo-log" id="target-offer-log" style="margin-top:14px"></div>
     <div class="negotiation-actions" style="margin-top:14px">
@@ -5728,6 +5757,7 @@
         { tier: "C", players: [ { name: "Rizwan Sheikh", club: "Islamabad Icons" }, { name: "Umar Baig", club: "Lahore Lions" } ] }
       ],
       domesticClubs: ["Lahore Lions", "Karachi Kings", "Islamabad Icons", "Multan Sultans", "Peshawar Zalmi", "Quetta Falcons"],
+      leadership: { structure: 'Unified', coach: 'Nasir Jamal', test: 'Hamza Malik', odi: 'Hamza Malik', t20i: 'Hamza Malik' },
       fixtures: ["Jun 2026: vs Australia (T20I) &middot; Gaddafi Stadium, Lahore", "Aug 2026: vs England (Test series, away)", "Oct 2026: vs New Zealand (ODI) &middot; National Stadium, Karachi"] },
     ind: { name: "India", meta: "Full Member &middot; ICC Test rank 1 &middot; ODI rank 1 &middot; T20I rank 2",
       blurb: "The deepest playing pool and the richest board in the sport &mdash; central contracts here carry real financial weight beyond just the honour.",
@@ -5739,6 +5769,7 @@
         { tier: "C", players: [ { name: "Nikhil Rane", club: "Kolkata Riders" } ] }
       ],
       domesticClubs: ["Mumbai Titans", "Delhi Chargers", "Chennai Strikers", "Bangalore Blasters", "Kolkata Riders"],
+      leadership: { structure: 'Unified', coach: 'Deepak Chahal Sr.', test: 'Rohan Deshmukh', odi: 'Rohan Deshmukh', t20i: 'Rohan Deshmukh' },
       fixtures: ["Jun 2026: vs Pakistan (T20I) &middot; away", "Sep 2026: vs Australia (ODI Championship)"] },
     aus: { name: "Australia", meta: "Full Member &middot; ICC Test rank 2 &middot; ODI rank 3 &middot; T20I rank 4",
       blurb: "A pace-heavy production system built on genuinely fast home pitches, with a domestic first-class competition selectors still weigh heavily.",
@@ -5750,6 +5781,7 @@
         { tier: "C", players: [ { name: "Toby Meacham", club: "Adelaide Strikers II" } ] }
       ],
       domesticClubs: ["Perth Scorchers II", "Sydney Sixers II", "Brisbane Heat II", "Adelaide Strikers II"],
+      leadership: { structure: 'Unified', coach: 'Craig Hollister', test: 'Callum Wharton', odi: 'Callum Wharton', t20i: 'Callum Wharton' },
       fixtures: ["Jun 2026: vs Pakistan (T20I) &middot; away", "Nov 2026: Ashes-style series vs England &middot; home"] },
     eng: { name: "England", meta: "Full Member &middot; ICC Test rank 3 &middot; ODI rank 2 &middot; T20I rank 5",
       blurb: "A genuinely format-split national coaching structure in recent years, reflecting how differently red- and white-ball cricket are now approached there.",
@@ -5761,6 +5793,7 @@
         { tier: "C", players: [ { name: "Ben Loxley", club: "Surrey Lions" } ] }
       ],
       domesticClubs: ["Surrey Lions", "Lancashire Reds", "Yorkshire Whites"],
+      leadership: { structure: 'Split', redBallCoach: 'Martin Pryce', whiteBallCoach: 'Owen Fairclough', test: 'Freddie Oxenham', odi: 'Aaron Beckwith', t20i: 'Aaron Beckwith' },
       fixtures: ["Aug 2026: vs Pakistan (Test series) &middot; home", "Nov 2026: Ashes-style series vs Australia &middot; away"] },
     nz: { name: "New Zealand", meta: "Full Member &middot; ICC Test rank 5 &middot; ODI rank 4 &middot; T20I rank 6",
       blurb: "A small playing pool that punches well above it &mdash; a settled coaching structure and genuine squad continuity are the real edge here.",
@@ -5772,6 +5805,7 @@
         { tier: "C", players: [ { name: "Josh Kenrick", club: "Canterbury Kings II" } ] }
       ],
       domesticClubs: ["Auckland Aces II", "Wellington Firebirds II", "Canterbury Kings II"],
+      leadership: { structure: 'Unified', coach: 'Grant Ashworth', test: 'Liam Rossiter', odi: 'Liam Rossiter', t20i: 'Liam Rossiter' },
       fixtures: ["Oct 2026: vs Pakistan (ODI) &middot; away"] },
     ned: { name: "Netherlands", meta: "Associate Member",
       blurb: "The strongest of the Associate nations with a real, growing domestic base &mdash; a genuine Full Membership candidate on current trajectory.",
@@ -5782,12 +5816,27 @@
         { tier: "C", players: [ { name: "Ruben Voskuijlen", club: "Amsterdam Amstel" } ] }
       ],
       domesticClubs: ["Amsterdam Amstel"],
+      leadership: { structure: 'Unified', coach: 'Bram Oosthuizen', test: null, odi: 'Daan Verbeek', t20i: 'Daan Verbeek' },
       fixtures: ["No Test status yet &mdash; World Cup qualifiers only"] }
   };
   function renderNationProfile(c) {
     var rankRow = '<div class="bio-line"><span class="k">Test ranking</span><span style="color:var(--gold);font-weight:700">' + (c.rankings.test ? '#' + c.rankings.test : '&mdash; (no Test status)') + '</span></div>' +
       '<div class="bio-line"><span class="k">ODI ranking</span><span style="color:var(--gold);font-weight:700">#' + c.rankings.odi + '</span></div>' +
       '<div class="bio-line"><span class="k">T20I ranking</span><span style="color:var(--gold);font-weight:700">#' + c.rankings.t20i + '</span></div>';
+    var leadHtml = '';
+    if (c.leadership) {
+      var L = c.leadership;
+      leadHtml = '<div class="eyebrow" style="display:block;margin:14px 0 6px">Coaching &amp; captaincy</div>' +
+        (L.structure === 'Split'
+          ? ('<div class="bio-line"><span class="k">Structure</span><span>Format-split</span></div>' +
+             '<div class="bio-line"><span class="k">Red-ball coach</span><span>' + L.redBallCoach + '</span></div>' +
+             '<div class="bio-line"><span class="k">White-ball coach</span><span>' + L.whiteBallCoach + '</span></div>')
+          : ('<div class="bio-line"><span class="k">Structure</span><span>Unified</span></div>' +
+             '<div class="bio-line"><span class="k">Head coach</span><span>' + L.coach + '</span></div>')) +
+        '<div class="bio-line"><span class="k">Test captain</span><span>' + (L.test || '&mdash; (no Test status)') + '</span></div>' +
+        '<div class="bio-line"><span class="k">ODI captain</span><span>' + L.odi + '</span></div>' +
+        '<div class="bio-line"><span class="k">T20I captain</span><span>' + L.t20i + '</span></div>';
+    }
     var contractsHtml = c.centralContracts.map(function (tier) {
       return '<div class="eyebrow" style="display:block;margin:10px 0 4px">Tier ' + tier.tier + '</div>' +
         tier.players.map(function (p) {
@@ -5800,13 +5849,18 @@
     var fixturesHtml = '<div class="notes-log">' + c.fixtures.map(function (f) {
       return '<div class="notes-log-item"><span>' + f + '</span></div>';
     }).join('') + '</div>';
-    return rankRow +
+    return rankRow + leadHtml +
       '<div class="eyebrow" style="display:block;margin:14px 0 6px">Central contracts &amp; who they play for</div>' + contractsHtml +
       '<div class="eyebrow" style="display:block;margin:14px 0 6px">Domestic clubs</div>' + clubsHtml +
       '<div class="eyebrow" style="display:block;margin:14px 0 6px">Upcoming fixtures</div>' + fixturesHtml;
   }
   function renderClubProfile(c) {
-    return '<div class="eyebrow" style="display:block;margin-bottom:6px">Recent history</div>' +
+    var leadHtml = (c.captain || c.coach)
+      ? ('<div class="eyebrow" style="display:block;margin-bottom:6px">Leadership</div>' +
+         '<div class="bio-line"><span class="k">Captain</span><span>' + (c.captain || '&mdash;') + '</span></div>' +
+         '<div class="bio-line"><span class="k">Head coach</span><span>' + (c.coach || '&mdash;') + '</span></div>')
+      : '';
+    return leadHtml + '<div class="eyebrow" style="display:block;margin:14px 0 6px">Recent history</div>' +
       '<div class="notes-log">' + c.champions.map(function (line) {
         return '<div class="notes-log-item"><span>' + line + '</span></div>';
       }).join('') + '</div>';
@@ -5814,29 +5868,29 @@
   var clubProfiles = {
     lahore: { name: "Lahore Lions", meta: "Pakistan T20 Cup &middot; 1st &middot; est. 1948",
       blurb: "The most decorated club in the domestic pyramid, with a squad built for pace-friendly home conditions at Gaddafi Stadium.",
-      champions: ["2025: 1st", "2024: 1st", "2023: 3rd", "2022: 2nd"] },
+      champions: ["2025: 1st", "2024: 1st", "2023: 3rd", "2022: 2nd"], captain: 'Talha Iqbal', coach: 'Shahid Nawaz' },
     karachi: { name: "Karachi Kings", meta: "Pakistan T20 Cup &middot; 2nd &middot; est. 1951",
       blurb: "A big-city club with a genuinely worldwide scouting reach, historically strong through the middle order.",
-      champions: ["2025: 2nd", "2024: 1st", "2023: 4th", "2022: 1st"] },
+      champions: ["2025: 2nd", "2024: 1st", "2023: 4th", "2022: 1st"], captain: 'Shahzaib Alam', coach: 'Waqas Ahmed' },
     islamabad: { name: "Islamabad Icons", meta: "Pakistan T20 Cup &middot; 3rd &middot; est. 1985",
       blurb: "Your club &mdash; a private-owner, benefactor-backed side with real ambition and a genuinely competitive recent record.",
-      champions: ["2023: 1st", "2021: 2nd", "2019: 1st"] },
+      champions: ["2023: 1st", "2021: 2nd", "2019: 1st"], captain: 'Hamza Malik', coach: 'Islamabad Icons head coach (you)' },
     multan: { name: "Multan Sultans", meta: "Pakistan T20 Cup &middot; 4th &middot; est. 1962",
       blurb: "A mid-table domestic mainstay with a real reputation for developing young pace bowlers.",
-      champions: ["2024: FCC 2nd", "2021: List A 1st"] },
+      champions: ["2024: FCC 2nd", "2021: List A 1st"], captain: 'Faisal Nadeem', coach: 'Junaid Basit' },
     peshawar: { name: "Peshawar Zalmi", meta: "Pakistan T20 Cup &middot; 5th &middot; est. 1970",
       blurb: "A genuinely spin-friendly home ground and a squad built to exploit it, though depth away from home has been thin.",
-      champions: ["2023: FCC 3rd"] },
+      champions: ["2023: FCC 3rd"], captain: 'Umair Chaudhry', coach: 'Riaz Mumtaz' },
     quetta: { name: "Quetta Falcons", meta: "Pakistan T20 Cup &middot; 6th &middot; est. 1977",
       blurb: "The smallest budget in the domestic pyramid, leaning hard on its academy pipeline rather than the transfer market.",
-      champions: ["2025: List A 1st"] }
+      champions: ["2025: List A 1st"], captain: 'Sohail Marwat', coach: 'Zubair Ahsan' }
   };
   function openWorldProfile(kind, key) {
     var c = kind === 'nation' ? nationProfiles[key] : clubProfiles[key];
     document.getElementById('world-profile-kind-here').textContent = kind === 'nation' ? 'Nations' : 'Clubs';
     document.getElementById('world-profile-breadcrumb-here').textContent = c.name;
     document.getElementById('world-profile-title').textContent = c.name;
-    document.getElementById('world-profile-meta').textContent = c.meta;
+    document.getElementById('world-profile-meta').innerHTML = c.meta;
     var bodyHtml = '<p style="font-size:var(--fs-body);color:var(--ink-dim);line-height:1.5;margin-top:0">' + c.blurb + '</p>' +
       (kind === 'nation' ? renderNationProfile(c) : renderClubProfile(c));
     document.getElementById('world-profile-body').innerHTML = bodyHtml;
@@ -5892,67 +5946,98 @@
         { label: 'Best All-round Match (Runs + Wkts)', cols: ['Player','Runs','Wkts','Opposition','Date'], rows: [
           ['Danish Raza','58','4','vs Quetta Falcons','2022'] ] } ] } },
     ground: { scopeLabel: 'Jinnah Stadium, Rawalpindi \u00b7 ground records', batting: { label: 'Batting Records', types: [
-        { label: 'Highest Individual Score', cols: ['Player','Score','Team','Opposition','Date'], rows: [
+        { label: 'Highest Individual Score', fmt: 't20', cols: ['Player','Score','Team','Opposition','Date'], rows: [
           ['Hamza Malik','151','Islamabad Icons','vs Multan Sultans','2023'],
           ['Zaheer Anwar','128','Multan Sultans','vs Islamabad Icons','2021'] ] },
-        { label: 'Most Runs at this Ground', cols: ['Player','Inns','Runs','Ave'], rows: [
-          ['Hamza Malik','41','1,884','46.0'] ] } ] },
+        { label: 'Most Runs at this Ground', fmt: 't20', cols: ['Player','Inns','Runs','Ave'], rows: [
+          ['Hamza Malik','41','1,884','46.0'] ] },
+        { label: 'Highest Individual Score (First-Class)', fmt: 'fc', cols: ['Player','Score','Team','Opposition','Date'], rows: [
+          ['Tariq Farooq','203','Islamabad Icons','vs Karachi Regionals','2011'],
+          ['Zaheer Anwar','176','Multan Sultans','vs Islamabad Icons','2015'] ] } ] },
       bowling: { label: 'Bowling Records', types: [
-        { label: 'Best Bowling (Innings)', cols: ['Player','Figures','Team','Opposition','Date'], rows: [
-          ['Adeel Hayat','7/22','Islamabad Icons','vs Peshawar Zalmi','2021'] ] } ] },
+        { label: 'Best Bowling (Innings)', fmt: 't20', cols: ['Player','Figures','Team','Opposition','Date'], rows: [
+          ['Adeel Hayat','7/22','Islamabad Icons','vs Peshawar Zalmi','2021'] ] },
+        { label: 'Best Bowling in an Innings (First-Class)', fmt: 'fc', cols: ['Player','Figures','Team','Opposition','Date'], rows: [
+          ['Adeel Hayat','8/54','Islamabad Icons','vs Multan Regionals','2018'] ] } ] },
       fielding: { label: 'Fielding Records', types: [
-        { label: 'Most Catches at this Ground', cols: ['Player','Ct'], rows: [
+        { label: 'Most Catches at this Ground', fmt: 't20', cols: ['Player','Ct'], rows: [
           ['Bilal Nadeem','29'] ] } ] },
       team: { label: 'Team Records', types: [
-        { label: 'Highest Team Total', cols: ['Score','Team','Opposition','Date'], rows: [
+        { label: 'Highest Team Total', fmt: 't20', cols: ['Score','Team','Opposition','Date'], rows: [
           ['224/5','Islamabad Icons','vs Karachi Kings','2024'] ] },
-        { label: 'Lowest Team Total (all out)', cols: ['Score','Team','Opposition','Date'], rows: [
+        { label: 'Lowest Team Total (all out)', fmt: 't20', cols: ['Score','Team','Opposition','Date'], rows: [
           ['68 all out','Quetta Falcons','vs Islamabad Icons','2020'] ] },
-        { label: 'Highest Successful Chase', cols: ['Score','Team','Opposition','Date'], rows: [
-          ['202/6','Lahore Lions','vs Islamabad Icons','2022'] ] } ] },
+        { label: 'Highest Successful Chase', fmt: 't20', cols: ['Score','Team','Opposition','Date'], rows: [
+          ['202/6','Lahore Lions','vs Islamabad Icons','2022'] ] },
+        { label: 'Highest Innings Total (First-Class)', fmt: 'fc', cols: ['Score','Team','Opposition','Date'], rows: [
+          ['486/9 dec','Islamabad Icons','vs Karachi Regionals','2011'] ] } ] },
       partnership: { label: 'Partnership Records', types: [
-        { label: 'Highest Partnership (by wicket)', cols: ['Score','Wicket','Players','Team','Date'], rows: [
+        { label: 'Highest Partnership (by wicket)', fmt: 'all', cols: ['Score','Wicket','Players','Team','Date'], rows: [
           ['163','2nd','Malik &amp; Chaudhry','Islamabad Icons','2023'] ] } ] },
       allround: { label: 'All-round Records', types: [
-        { label: 'Best All-round Match', cols: ['Player','Runs','Wkts','Team','Date'], rows: [
+        { label: 'Best All-round Match', fmt: 'all', cols: ['Player','Runs','Wkts','Team','Date'], rows: [
           ['Danish Raza','44','3','Islamabad Icons','2022'] ] } ] } },
     world: { scopeLabel: 'World \u00b7 every competition your network covers', batting: { label: 'Batting Records', types: [
-        { label: 'Highest Individual Score (T20)', cols: ['Player','Score','Team','Opposition','Date'], rows: [
+        { label: 'Highest Individual Score (T20)', comp: 'domestic', cols: ['Player','Score','Team','Opposition','Date'], rows: [
           ['Zaheer Anwar','172*','Multan Sultans','vs Lahore Lions','2024'],
           ['Hamza Malik','142*','Islamabad Icons','vs Multan Sultans','2023'] ] },
-        { label: 'Most Career Runs, All Formats', cols: ['Player','Team','Runs','Status'], rows: [
+        { label: 'Highest Individual Score (International)', comp: 'international', cols: ['Player','Score','Nation','Opposition','Date'], rows: [
+          ['Rohan Deshmukh','188','India','vs Pakistan','2025'] ] },
+        { label: 'Highest Individual Score (Franchise Leagues)', comp: 'franchise', cols: ['Player','Score','Team','Opposition','Date'], rows: [
+          ['Imran Sethi','98*','Islamabad Icons','vs Karachi Kings','2027 Pakistan Premier League'] ] },
+        { label: 'Most Career Runs, All Formats', comp: 'all', cols: ['Player','Team','Runs','Status'], rows: [
           ['Hamza Malik','Islamabad Icons','3,214','Still active'],
           ['Zaheer Anwar','Multan Sultans','4,006','Retired 2023'] ] } ] },
       bowling: { label: 'Bowling Records', types: [
-        { label: 'Best Bowling (Innings)', cols: ['Player','Figures','Team','Opposition','Date'], rows: [
+        { label: 'Best Bowling (Innings)', comp: 'domestic', cols: ['Player','Figures','Team','Opposition','Date'], rows: [
           ['Umar Baig','8/19','Lahore Lions','vs Peshawar Zalmi','2022'] ] },
-        { label: 'Most Career Wickets, All Formats', cols: ['Player','Team','Wkts','Status'], rows: [
+        { label: 'Most Career Wickets, All Formats', comp: 'all', cols: ['Player','Team','Wkts','Status'], rows: [
           ['Adeel Hayat','Islamabad Icons','187','Still active'] ] } ] },
       fielding: { label: 'Fielding Records', types: [
-        { label: 'Most Career Catches', cols: ['Player','Team','Ct'], rows: [
+        { label: 'Most Career Catches', comp: 'all', cols: ['Player','Team','Ct'], rows: [
           ['Bilal Nadeem','Islamabad Icons','64'] ] } ] },
       team: { label: 'Team Records', types: [
-        { label: 'Highest Team Total (T20)', cols: ['Score','Team','Opposition','Date'], rows: [
+        { label: 'Highest Team Total (T20)', comp: 'domestic', cols: ['Score','Team','Opposition','Date'], rows: [
           ['261/3','Karachi Kings','vs Quetta Falcons','2025'] ] },
-        { label: 'Lowest Team Total (all out)', cols: ['Score','Team','Opposition','Date'], rows: [
-          ['58 all out','Quetta Falcons','vs Karachi Kings','2021'] ] } ] },
+        { label: 'Lowest Team Total (all out)', comp: 'domestic', cols: ['Score','Team','Opposition','Date'], rows: [
+          ['58 all out','Quetta Falcons','vs Karachi Kings','2021'] ] },
+        { label: 'Highest Team Total (Franchise Leagues)', comp: 'franchise', cols: ['Score','Team','Opposition','Date'], rows: [
+          ['238/4','Islamabad Icons','vs Peshawar Zalmi','2026 Pakistan Premier League'] ] } ] },
       partnership: { label: 'Partnership Records', types: [
-        { label: 'Highest Partnership (by wicket)', cols: ['Score','Wicket','Players','Teams','Date'], rows: [
+        { label: 'Highest Partnership (by wicket)', comp: 'domestic', cols: ['Score','Wicket','Players','Teams','Date'], rows: [
           ['211','2nd','Nadeem &amp; Rauf','Multan Sultans','2024'] ] } ] },
       allround: { label: 'All-round Records', types: [
-        { label: 'Best All-round Match (Runs + Wkts)', cols: ['Player','Runs','Wkts','Team','Date'], rows: [
+        { label: 'Best All-round Match (Runs + Wkts)', comp: 'domestic', cols: ['Player','Runs','Wkts','Team','Date'], rows: [
           ['Danish Raza','58','4','Islamabad Icons','2022'] ] } ] } }
   };
   var currentRecordScope = null, currentRecordCat = null;
+  var RECORD_FILTER_KEY = { ground: 'fmt', world: 'comp' };
+  function activeRecordFilter(scope) {
+    var sel = document.getElementById('records-' + scope + '-filter');
+    return sel ? sel.value : 'all';
+  }
+  function onRecordFilterChange(scope) {
+    if (currentRecordScope === scope && document.getElementById('records-detail-backdrop').classList.contains('open')) {
+      openRecordCategory(scope, currentRecordCat);
+    }
+  }
   function openRecordCategory(scope, catKey) {
     var cat = RECORDS_DATA[scope][catKey];
     currentRecordScope = scope; currentRecordCat = catKey;
     document.getElementById('records-detail-title').textContent = cat.label;
     document.getElementById('records-detail-sub').textContent = RECORDS_DATA[scope].scopeLabel;
+    var filterKey = RECORD_FILTER_KEY[scope];
+    var activeFilter = filterKey ? activeRecordFilter(scope) : 'all';
     var list = document.getElementById('records-detail-list');
+    var shownCount = 0;
     list.innerHTML = cat.types.map(function (t, idx) {
+      if (filterKey && activeFilter !== 'all' && t[filterKey] && t[filterKey] !== 'all' && t[filterKey] !== activeFilter) return '';
+      shownCount++;
       return '<div class="record-type-row" onclick="openRecordType(\'' + scope + '\',\'' + catKey + '\',' + idx + ')"><span class="k">' + t.label + '</span><svg class="icon sm"><use href="#i-chevron-fwd"/></svg></div>';
     }).join('');
+    if (shownCount === 0) {
+      list.innerHTML = '<div class="role-hint" style="padding:14px 2px;margin-bottom:0">Nothing logged yet for this filter in ' + cat.label.toLowerCase() + '.</div>';
+    }
     list.hidden = false;
     document.getElementById('records-detail-table').hidden = true;
     document.getElementById('records-detail-back-row').hidden = true;
@@ -5980,12 +6065,14 @@
 
   function targetOfferLog(who, text) {
     var log = document.getElementById('target-offer-log');
-    log.innerHTML += '<div class="convo-line ' + who + '"><span class="who">' + (who === 'you' ? 'You' : 'Them') + '</span><div class="convo-bubble">“' + text + '”</div></div>';
+    log.innerHTML += '<div class="convo-line ' + who + '"><span class="who">' + (who === 'you' ? 'You' : 'Them') + '</span><div class="convo-bubble">&ldquo;' + text + '&rdquo;</div></div>';
     log.scrollTop = log.scrollHeight;
   }
   function openTargetOffer(name, valuationK, rowId, kind, hireInfo) {
     kind = kind || 'transfer';
     document.getElementById('target-offer-title').textContent = kind === 'staff-hire' ? 'Negotiate terms' : 'Make an offer';
+    var clauseBlock = document.getElementById('target-offer-clauses');
+    if (clauseBlock) clauseBlock.hidden = (kind !== 'staff-hire');
     document.getElementById('target-offer-name').textContent = name;
     document.getElementById('target-offer-valuation').textContent = '$' + valuationK + 'K';
     pendingOfferRow = rowId;
@@ -6835,8 +6922,8 @@
     document.querySelectorAll('#panel-preauction .tone-chip').forEach(function (c) { c.classList.toggle('active', c.dataset.key === tone); });
     var log = document.getElementById('preauction-convo');
     log.insertAdjacentHTML('beforeend',
-      '<div class="convo-line you"><span class="who">You</span><div class="convo-bubble">“' + preAuctionLines[tone].you + '”</div></div>' +
-      '<div class="convo-line him"><span class="who">Room</span><div class="convo-bubble">“' + preAuctionLines[tone].him + '”</div></div>');
+      '<div class="convo-line you"><span class="who">You</span><div class="convo-bubble">&ldquo;' + preAuctionLines[tone].you + '&rdquo;</div></div>' +
+      '<div class="convo-line him"><span class="who">Room</span><div class="convo-bubble">&ldquo;' + preAuctionLines[tone].him + '&rdquo;</div></div>');
   }
   function enterPreAuctionMode() {
     document.body.classList.add("match-immersive");
@@ -7464,7 +7551,7 @@
         '<div style="font-size:var(--fs-micro);color:var(--ink-faint)">Wage ask ' + fmtBoardAmt(cand.wage) + '/yr</div>' +
         '<div style="font-size:var(--fs-caption);color:var(--ink-dim);margin-top:4px;max-width:260px;line-height:1.4">' + cand.note + '</div></div>' +
         '<div style="display:flex;align-items:center;gap:10px;flex-shrink:0"><span class="facility-tier-badge ' + cand.tierClass + '">' + cand.tierLabel + '</span>' +
-        '<button class="facility-request-btn" onclick="openTargetOffer(\'' + cand.name + '\',' + cand.wage + ',null,\'staff-hire\',{roleKey:\'' + key + '\',tierClass:\'' + cand.tierClass + '\',tierLabel:\'' + cand.tierLabel + '\'})">Negotiate</button></div></div>';
+        '<button class="facility-request-btn" onclick="closeStaffRecruit();openTargetOffer(\'' + cand.name + '\',' + cand.wage + ',null,\'staff-hire\',{roleKey:\'' + key + '\',tierClass:\'' + cand.tierClass + '\',tierLabel:\'' + cand.tierLabel + '\'})">Negotiate</button></div></div>';
     }).join('');
     document.getElementById('staff-recruit-backdrop').classList.add('open');
   }
@@ -7811,6 +7898,59 @@
     'Selector': 'Reads current domestic form hard, and isn\u2019t shy about backing a genuine in-form outsider over a settled reputation.'
   };
   var DEFAULT_STAFF_PHILOSOPHY = 'A dedicated professional, focused squarely on the specifics of his own role.';
+  // Which two of the five core attributes actually decide whether this
+  // person is good at THIS job - mirrors StaffMember.WeightFor's real
+  // per-role weighting, just read qualitatively rather than numerically.
+  var STAFF_ROLE_ATTR_FOCUS = {
+    'Assistant Coach': ['Technical Knowledge', 'Communication'],
+    'Batting Coach': ['Technical Knowledge', 'Communication'],
+    'Bowling Coach': ['Technical Knowledge', 'Communication'],
+    'Fielding Coach': ['Technical Knowledge', 'Diligence'],
+    'Strength & Conditioning': ['Diligence', 'Communication'],
+    'Mental Performance Coach': ['Communication', 'Diligence'],
+    'Chief Scout': ['Analysis', 'Statistics'],
+    'Domestic Scout': ['Analysis', 'Diligence'],
+    'Head Physiotherapist': ['Diligence', 'Communication'],
+    'Data Analyst': ['Statistics', 'Analysis'],
+    'Mentor': ['Communication', 'Diligence'],
+    'Chairman of Selectors': ['Analysis', 'Statistics'],
+    'Selector': ['Analysis', 'Statistics']
+  };
+  var DEFAULT_STAFF_ATTR_FOCUS = ['Communication', 'Diligence'];
+  function hashStr(s) {
+    var h = 0;
+    for (var i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) % 97;
+    return h;
+  }
+  function attrTierClass(v) {
+    if (v >= 16) return 'elite';
+    if (v >= 12) return 'strong';
+    if (v >= 8) return 'solid';
+    return 'weak';
+  }
+  var TIER_CENTRE = { 'tier-excellent': 17, 'tier-good': 13, 'tier-average': 9, 'tier-poor': 5 };
+  function renderStaffAttributes(name, tierClass, role) {
+    var centre = TIER_CENTRE[tierClass] || 11;
+    var seed = hashStr(name);
+    var offsets = [2, -1, 1, -2, 0];
+    var attrs = ['Analysis', 'Statistics', 'Technical Knowledge', 'Communication', 'Diligence'];
+    var ids = ['analysis', 'statistics', 'technical', 'communication', 'diligence'];
+    var values = {};
+    attrs.forEach(function (a, i) {
+      var off = offsets[(seed + i) % offsets.length];
+      var v = Math.max(1, Math.min(20, centre + off));
+      values[a] = v;
+      var el = document.getElementById('staff-attr-' + ids[i]);
+      if (el) { el.textContent = v; el.className = 'attr-num ' + attrTierClass(v); }
+    });
+    var focus = STAFF_ROLE_ATTR_FOCUS[role] || DEFAULT_STAFF_ATTR_FOCUS;
+    var a1 = focus[0], a2 = focus[1];
+    var v1 = values[a1], v2 = values[a2];
+    var both = Math.min(v1, v2);
+    var verdict = both >= 14 ? 'a genuine strength for the role' : both >= 10 ? 'a workable, unremarkable fit' : 'a real gap for what the job actually demands';
+    var suitEl = document.getElementById('staff-role-suitability');
+    if (suitEl) suitEl.textContent = 'This role leans hardest on ' + a1 + ' (' + v1 + ') and ' + a2 + ' (' + v2 + ') - ' + verdict + '.';
+  }
   // Context -> tier -> a plausible annual wage. Franchise pay is genuinely
   // an order of magnitude above a domestic/international backroom seat in
   // this project's own numbers (see STAFF_VACANCY_CANDIDATES.fr-bowling-coach,
@@ -7902,6 +8042,7 @@
 
     var noteEl = document.getElementById('staff-profile-note');
     if (noteEl) noteEl.textContent = STAFF_ROLE_PHILOSOPHY[role] || DEFAULT_STAFF_PHILOSOPHY;
+    renderStaffAttributes(name, tierClass, role);
     var priorEl = document.getElementById('staff-profile-career-prior');
     if (priorEl) {
       priorEl.textContent = employedByUs
