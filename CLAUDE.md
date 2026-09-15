@@ -12086,6 +12086,46 @@ wrapping to its own row since it only has 2 rows) renders acceptably with no lay
 Both items are additive, structurally verified (`verify.py`: tag balance, no duplicate ids,
 `node --check` on the extracted script - all clean), and ready to commit/publish.
 
+### Job Centre / Managerial Vacancies screen (this pass)
+
+The next explicitly-named item from the user's escalated list, researched against FM26 PC's own
+real merge of "Job Security" into a single "Managerial Vacancies" screen. Reached via a click-through
+from a new "Job security & the market" card on Manager Profile (`openJobCentre()`), deliberately NOT
+added as a 12th sidebar tab - consistent with this mockup's own established anti-bloat discipline
+from the Major IA redesign pass earlier in this file.
+
+New `panel-jobcentre` section: "Your own position" card (club, board trust, this season's objective,
+contract end) and "Where you stand in the market" card (domestic reputation, coaching licence, which
+tier of job it currently qualifies for - a Basic licence and a still-building reputation genuinely
+cap what's even worth applying to, matching the real domain's `RoleFitService`/`JobMarketApplicationService`
+licence-gating), then a "Managerial vacancies" list: a genuine vacancy (Karachi Kings, Apply), an
+occupied-but-insecure post (Peshawar Zalmi, Declare Interest, security read "Under pressure"), and a
+licence-gated international post (Netherlands, disabled - "Needs Advanced licence"). `applyForJobCentre(btn,
+clubName)` disables the clicked button and logs a plain confirmation line.
+
+**A real bug caught by Playwright testing before it shipped, not after.** The first draft named its
+handler `applyForJob(btn, clubName)` - but a function of the SAME name, `applyForJob(id, ctx, label)`,
+already existed later in the script from the pre-existing onboarding Job Market flow (a genuinely
+different mechanism - it tracks a pending application against an "advance day" button rather than
+this screen's own instant, no-negotiation "note the interest" flow). Two function declarations sharing
+one name in one scope means the later one in file order silently wins, so the Job Centre's own button
+did nothing - clicking it left the button and log both unchanged. Caught immediately by testing the
+click in a real browser rather than trusting the markup, and fixed by renaming to `applyForJobCentre`
+(and its two `onclick` call sites) - a distinct name for a distinct mechanism, not a shared one.
+
+**A second real bug, also caught by testing rather than assumed**: the confirmation log's JS string
+literal embedded a raw UTF-8 em-dash character directly - the exact "raw-UTF8-byte mojibake" hazard
+this file's own earlier session already diagnosed and fixed twice (see "Two encoding bugs fixed"
+above), just recurring in a THIRD spot because it's easy to type an em-dash by habit and forget the
+rule applies to every new JS string, not just the ones already fixed. Confirmed reproducing via
+Playwright (`"...has been noted â€” you'll..."`) before fixing - not assumed from the earlier write-up
+alone. Fixed with `String.fromCharCode(8212)`, the same technique already established for single
+quotes in this file, generalised to any character that isn't safe to embed as a raw literal.
+
+Structurally verified clean (`verify.py`) and functionally verified in-browser via Playwright: the
+panel opens, both live vacancy rows respond correctly and independently, the licence-gated row stays
+disabled, and the confirmation log renders with a clean em-dash.
+
 ---
 
 ## CONSOLIDATED DEFERRED-ITEMS REGISTER (maintained - the single source of truth)

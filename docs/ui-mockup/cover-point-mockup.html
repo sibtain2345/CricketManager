@@ -4362,6 +4362,14 @@
         <div class="bio-line"><span class="k">Franchise circuit reputation</span><span style="color:var(--ink-dim)">Unproven</span></div>
         <div class="role-hint" style="margin-top:8px">No franchise campaign on the CV yet &mdash; a genuine circuit reputation only builds by actually coaching one.</div>
       </div>
+      <div class="analysis-card">
+        <span class="eyebrow"><svg class="icon sm"><use href="#i-briefcase"/></svg> Job security &amp; the market</span>
+        <div class="bio-line"><span class="k">Your own security</span><span class="facility-tier-badge tier-good">Steady</span></div>
+        <div class="bio-line"><span class="k">Contract expires</span><span>May 2028</span></div>
+        <div class="bio-line"><span class="k">Vacancies open</span><span>3 posts across the world</span></div>
+        <div class="role-hint" style="margin-top:8px">Board trust is currently the thing keeping you secure, not results alone &mdash; a real losing run would move this reading fast.</div>
+        <button class="view-more-btn" style="margin-top:10px" onclick="openJobCentre()">Open the Job Centre <svg class="icon sm"><use href="#i-chevron-fwd"/></svg></button>
+      </div>
       <div class="figures-card" style="grid-column:1/-1">
         <span class="eyebrow"><svg class="icon sm"><use href="#i-shield"/></svg> Coaching attributes</span>
         <div class="attr-grid">
@@ -4385,6 +4393,68 @@
         </div>
         <div class="role-hint" style="margin-top:10px">A real strength with young players and a genuinely good read of the dressing room &mdash; media handling is the softest part of the profile right now, and it shows whenever a press conference gets confrontational.</div>
       </div>
+    </div>
+  </section>
+
+  <!-- ================= JOB CENTRE ================= -->
+  <section class="panel" id="panel-jobcentre" role="tabpanel" hidden>
+    <div class="breadcrumb"><a onclick="showPanel('manager-profile')">&larr; Back to your profile</a></div>
+    <div class="tactics-grid">
+      <div class="analysis-card">
+        <span class="eyebrow"><svg class="icon sm"><use href="#i-shield"/></svg> Your own position</span>
+        <div class="bio-line"><span class="k">Club</span><span>Islamabad Icons</span></div>
+        <div class="bio-line"><span class="k">Board trust</span><span class="facility-tier-badge tier-good">Steady</span></div>
+        <div class="bio-line"><span class="k">This season's objective</span><span>Reach the playoffs</span></div>
+        <div class="bio-line"><span class="k">Contract</span><span>Runs to May 2028</span></div>
+        <div class="role-hint" style="margin-top:8px">A steady reading, not an untouchable one &mdash; the board judges every season against what your own squad and this club's own standing would predict, not a fixed bar.</div>
+      </div>
+      <div class="analysis-card">
+        <span class="eyebrow"><svg class="icon sm"><use href="#i-star-fill"/></svg> Where you stand in the market</span>
+        <div class="bio-line"><span class="k">Domestic reputation</span><span style="color:var(--gold);font-weight:700">Known</span></div>
+        <div class="bio-line"><span class="k">Coaching licence</span><span>Basic</span></div>
+        <div class="bio-line"><span class="k">Fits a post at</span><span>Domestic clubs of a similar or smaller standing</span></div>
+        <div class="role-hint" style="margin-top:8px">A Basic licence and a still-building reputation genuinely cap which jobs would even consider you &mdash; a top domestic post or a national vacancy needs a higher badge and a stronger CV first.</div>
+      </div>
+    </div>
+
+    <div class="analysis-card" style="margin-top:16px">
+    <span class="eyebrow"><svg class="icon sm"><use href="#i-badge"/></svg> Managerial vacancies</span>
+    <p class="role-hint" style="margin:2px 0 12px">Every open head-coach post the market currently has, with an honest read of how secure whoever holds it (or held it last) actually was. Applying costs you nothing &mdash; a club that wants you will come back with real terms; one that doesn't will simply not reply.</p>
+
+    <div class="standing-row" style="align-items:flex-start">
+      <div>
+        <div style="font-weight:700;color:var(--ink);font-size:var(--fs-small)">Head Coach &middot; Karachi Kings</div>
+        <div style="font-size:var(--fs-micro);color:var(--ink-faint)">Pakistan T20 Cup &middot; Domestic</div>
+        <div style="font-size:var(--fs-caption);color:var(--ink-dim);margin-top:4px;max-width:340px;line-height:1.4">Vacant since last month &mdash; the previous coach was let go after a run of five straight losses. The board wants a settled, defensively-minded appointment.</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;flex-shrink:0">
+        <span class="facility-tier-badge tier-average">Vacant</span>
+        <button class="facility-request-btn" onclick="applyForJobCentre(this,'Karachi Kings')">Apply</button>
+      </div>
+    </div>
+    <div class="standing-row" style="align-items:flex-start">
+      <div>
+        <div style="font-weight:700;color:var(--ink);font-size:var(--fs-small)">Head Coach &middot; Peshawar Zalmi</div>
+        <div style="font-size:var(--fs-micro);color:var(--ink-faint)">Pakistan T20 Cup &middot; Domestic</div>
+        <div style="font-size:var(--fs-caption);color:var(--ink-dim);margin-top:4px;max-width:340px;line-height:1.4">Occupied, but the incumbent's own security reads poorly &mdash; a real opening within a season if the board's patience runs out first.</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;flex-shrink:0">
+        <span class="facility-tier-badge tier-poor">Under pressure</span>
+        <button class="facility-request-btn" onclick="applyForJobCentre(this,'Peshawar Zalmi')">Declare Interest</button>
+      </div>
+    </div>
+    <div class="standing-row" style="align-items:flex-start">
+      <div>
+        <div style="font-weight:700;color:var(--ink);font-size:var(--fs-small)">Head Coach &middot; Netherlands</div>
+        <div style="font-size:var(--fs-micro);color:var(--ink-faint)">International &middot; Associate nation</div>
+        <div style="font-size:var(--fs-caption);color:var(--ink-dim);margin-top:4px;max-width:340px;line-height:1.4">A genuine national post, but the board's own licence requirement sits above what you currently hold.</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;flex-shrink:0">
+        <span class="facility-tier-badge tier-average">Not eligible yet</span>
+        <button class="facility-request-btn" disabled style="opacity:0.5;cursor:not-allowed">Needs Advanced licence</button>
+      </div>
+    </div>
+    <div id="job-apply-log" class="role-hint" style="margin-top:14px"></div>
     </div>
   </section>
 
@@ -5154,6 +5224,14 @@
     btn.addEventListener('click', function () { showPanel(btn.dataset.tab); });
   });
   function openManagerProfile() { showPanel('manager-profile'); }
+  function openJobCentre() { showPanel('jobcentre'); }
+  function applyForJobCentre(btn, clubName) {
+    btn.disabled = true;
+    btn.textContent = 'Application sent';
+    btn.style.opacity = '0.6';
+    var log = document.getElementById('job-apply-log');
+    log.textContent = 'Your interest in the ' + clubName + ' post has been noted' + String.fromCharCode(8212) + 'you\'ll hear back if they want to take it further.';
+  }
   function toggleSidebar() {
     var sb = document.querySelector('.tabs');
     sb.classList.toggle('collapsed');
