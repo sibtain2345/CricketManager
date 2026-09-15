@@ -12197,6 +12197,61 @@ Verified in-browser via Playwright across all six clubs (Islamabad's full render
 the other five checked for a clean, error-free render) - all six show the new Club identity card with
 no runtime errors. Structurally verified clean (`verify.py`).
 
+### Manager Profile / Job Centre discoverability + Club Overview densification + Competition
+### Overview tab - committed a genuine uncommitted diff found sitting in the working tree
+
+A real user bug report - "I never found the Manager Profile or the Job Centre anywhere" - traced
+to a pure discoverability problem: both screens always worked, but their sole entry point (the
+topbar `.wordmark`) rendered as plain text with a `cursor:pointer` and nothing else signalling it
+was clickable. This fix, and two related density improvements from the same reference-screenshot
+review (three real FM26 screens - Club Site, Competition, Nation - showing every tile clickable
+and dense, versus this project's own thinner Club/Competition screens at the time), had been
+built and Playwright-verified in an earlier turn but never actually committed - found this session
+as a genuine uncommitted diff sitting in the working tree, verified fresh (structural tag balance,
+`node --check`, and a full live Playwright pass) before committing, since a diff sitting
+uncommitted across many later, unrelated commits needed re-confirming it was still compatible with
+everything built on top of it in the meantime, not just trusted from an old summary.
+
+- **Wordmark restyled as an obvious button** - a small person icon + a padded, hover-highlighted
+  pill (`.wordmark:hover`), replacing plain unstyled text. Kept as a single flex ROW (icon + a
+  `.wordmark-text` column for the two lines of text) rather than adding a second, separate topbar
+  element - the topbar's `.topbar-inner` is a tightly-packed flex row where `.wordmark` is the
+  ONLY genuinely flexible child (every sibling is fixed-width or `flex-shrink:0`), so a second
+  fixed-width button was tried first and forced the wordmark's own text to wrap onto two lines,
+  breaking the topbar's height - reverted in favour of restyling the existing element instead of
+  adding a new one, confirmed by a direct DOM height check that the name text renders on a single
+  line (21px, not ~42px) after the fix.
+- **Manager Profile: the Job Centre link promoted to the top of the screen**, immediately below
+  the header and before any card - a second, later commit (the "Job Centre / Managerial Vacancies"
+  screen) independently added its own Job Centre entry further down inside a card; both buttons
+  now coexist by design (confirmed via grep: two real `onclick="openJobCentre()"` call sites, not
+  an accidental duplicate) - a prominent, no-scroll entry point plus the original contextual one.
+- **Club Overview densified from 3 to (now, with later passes layered on top) 10 tiles** - five
+  real, clickable tiles added this pass (About the club, Key players, From the press, Club
+  history, Fixture schedule), each reusing data already established elsewhere in the file
+  (`clubProfiles.islamabad`, the real Squad roster, Portal's own press items, the Fixtures
+  screen's real upcoming matches) rather than inventing new facts.
+- **Competition Profile: a new "Overview" tab as the default landing view**, added to the subnav
+  ahead of Rules/Standings/Fixtures - a Table/Standings excerpt (top 4 rows, or the honest
+  `standingsNote` for a non-table competition like the Crescent Trophy), Recent Champions, the
+  next two Upcoming Fixtures, and an At-a-Glance card, each with a "View full X" link that jumps
+  the subnav to the matching deep-dive tab - matching the Overview-first pattern already
+  established on Club and International, and verified across all 7 seeded competitions
+  (`t20cup`/`fcc`/`lista`/`ppl`/`crescent`/`imf`/`sbl`), including the cross-tab "Full standings"
+  jump landing on the right tab with the right `aria-selected` state.
+
+**Verified before committing**: `<div>`/`<table>`/`<tr>`/`<span>`/`<svg>`/`<nav>`/`<section>`/
+`<button>` tag-count parity (the pre-existing `<tr>` count carries a known, harmless 1-tag
+discrepancy already present at HEAD before this diff - traced to `<tr>`/`</tr>` pairs legitimately
+split across a multi-line `.map().join('')` table-row-building expression, the same pattern this
+file already uses successfully elsewhere; not a real HTML defect), zero duplicate ids, `node
+--check` on the extracted `<script>` block (`SYNTAX OK`), and a full live Playwright pass: no
+topbar wrap, both Job Centre entry points working, all five new Club Overview tiles rendering and
+click-through confirmed (including into the real Player Profile), and the Overview tab rendering
+correctly - both the real-table and `standingsNote` branches - across all 7 competitions with zero
+console errors beyond a harmless missing-favicon 404. Published as the latest version of the same
+artifact (`https://claude.ai/artifact/UmHKowfYBygEBwy5mTt9wo`) and committed to git.
+
 ---
 
 ## CONSOLIDATED DEFERRED-ITEMS REGISTER (maintained - the single source of truth)
