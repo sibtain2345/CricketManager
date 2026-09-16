@@ -2155,7 +2155,7 @@
           </div>
           <div class="staff-row vacant" data-role="fr-bowling-coach">
             <div class="staff-row-main"><span class="staff-name">Vacant</span><span class="staff-role-label">Bowling Coach</span></div>
-            <div class="staff-row-meta"><button class="facility-request-btn" onclick="showPanel('recruitment');openRecruitTab('staffdb')">Recruit</button></div>
+            <div class="staff-row-meta"><button class="facility-request-btn" onclick="postVacancy('fr-bowling-coach',this)">Advertise this role</button></div>
           </div>
         </div>
         <div>
@@ -2840,11 +2840,11 @@
         <span class="eyebrow"><svg class="icon sm"><use href="#i-users"/></svg> Player database &middot; worldwide</span>
         <div class="plan-desc">Every player your scouting network has a genuine read on &mdash; filtered here to the positions you actually need.</div>
         <div class="pitch-preset-row" style="margin-bottom:10px">
-          <button class="pitch-preset-btn active">All roles</button>
-          <button class="pitch-preset-btn">Batters</button>
-          <button class="pitch-preset-btn">Bowlers</button>
-          <button class="pitch-preset-btn">Allrounders</button>
-          <button class="pitch-preset-btn">Keepers</button>
+          <button class="pitch-preset-btn active" onclick="filterPlayerDatabase('all',this)">All roles</button>
+          <button class="pitch-preset-btn" onclick="filterPlayerDatabase('batters',this)">Batters</button>
+          <button class="pitch-preset-btn" onclick="filterPlayerDatabase('bowlers',this)">Bowlers</button>
+          <button class="pitch-preset-btn" onclick="filterPlayerDatabase('allrounders',this)">Allrounders</button>
+          <button class="pitch-preset-btn" onclick="filterPlayerDatabase('keepers',this)">Keepers</button>
         </div>
         <div class="table-card">
           <div class="table-scroll-inner">
@@ -2896,6 +2896,7 @@
           </div>
         </div>
         <div class="role-hint" style="margin-top:8px">A wider scouting domain (set in the Boardroom) widens this list and sharpens how close these estimates are to a player&rsquo;s real ability.</div>
+        <div class="role-hint" id="player-db-empty" hidden style="margin-top:8px">No genuine reads on this role group in the database right now.</div>
       </div>
     </div>
         <div class="subpanel" id="recruit-staffdb" hidden>
@@ -3139,7 +3140,7 @@
         </div>
         <div class="staff-row vacant" data-role="batting-coach">
           <div class="staff-row-main"><span class="staff-name">Vacant</span><span class="staff-role-label">Batting Coach</span></div>
-          <div class="staff-row-meta"><button class="facility-request-btn" onclick="showPanel('recruitment');openRecruitTab('staffdb')">Recruit</button></div>
+          <div class="staff-row-meta"><button class="facility-request-btn" onclick="postVacancy('batting-coach',this)">Advertise this role</button></div>
         </div>
         <div class="staff-row clickable" data-role="bowling-coach" onclick="openStaffProfile(this)">
           <div class="staff-row-main"><span class="staff-name">Imran Qureshi</span><span class="staff-role-label">Bowling Coach</span></div>
@@ -3155,7 +3156,7 @@
         </div>
         <div class="staff-row vacant" data-role="mental">
           <div class="staff-row-main"><span class="staff-name">Vacant</span><span class="staff-role-label">Mental Performance Coach</span></div>
-          <div class="staff-row-meta"><button class="facility-request-btn" onclick="showPanel('recruitment');openRecruitTab('staffdb')">Recruit</button></div>
+          <div class="staff-row-meta"><button class="facility-request-btn" onclick="postVacancy('mental',this)">Advertise this role</button></div>
         </div>
       </div>
       <div class="analysis-card">
@@ -3170,7 +3171,7 @@
         </div>
         <div class="staff-row vacant" data-role="analyst">
           <div class="staff-row-main"><span class="staff-name">Vacant</span><span class="staff-role-label">Data Analyst</span></div>
-          <div class="staff-row-meta"><button class="facility-request-btn" onclick="showPanel('recruitment');openRecruitTab('staffdb')">Recruit</button></div>
+          <div class="staff-row-meta"><button class="facility-request-btn" onclick="postVacancy('analyst',this)">Advertise this role</button></div>
         </div>
         <div class="staff-row clickable" data-role="physio" onclick="openStaffProfile(this)">
           <div class="staff-row-main"><span class="staff-name">Dr. Sana Malik</span><span class="staff-role-label">Head Physiotherapist</span></div>
@@ -3178,7 +3179,7 @@
         </div>
         <div class="staff-row vacant" data-role="mentor">
           <div class="staff-row-main"><span class="staff-name">Vacant</span><span class="staff-role-label">Mentor</span></div>
-          <div class="staff-row-meta"><button class="facility-request-btn" onclick="showPanel('recruitment');openRecruitTab('staffdb')">Recruit</button></div>
+          <div class="staff-row-meta"><button class="facility-request-btn" onclick="postVacancy('mentor',this)">Advertise this role</button></div>
         </div>
         <div class="role-hint" style="margin-top:10px">A Mentor doesn&rsquo;t coach directly &mdash; he strengthens the mentoring bonds already forming in the dressing room between your senior pros and your promising kids.</div>
       </div>
@@ -4042,7 +4043,7 @@
         </div>
         <div class="staff-row vacant" data-role="intl-bowling-coach">
           <div class="staff-row-main"><span class="staff-name">Vacant</span><span class="staff-role-label">Bowling Coach</span></div>
-          <div class="staff-row-meta"><button class="facility-request-btn" onclick="showPanel('recruitment');openRecruitTab('staffdb')">Recruit</button></div>
+          <div class="staff-row-meta"><button class="facility-request-btn" onclick="postVacancy('intl-bowling-coach',this)">Advertise this role</button></div>
         </div>
       </div>
       <div class="analysis-card">
@@ -4053,7 +4054,7 @@
         </div>
         <div class="staff-row vacant" data-role="intl-physio">
           <div class="staff-row-main"><span class="staff-name">Vacant</span><span class="staff-role-label">Head Physiotherapist</span></div>
-          <div class="staff-row-meta"><button class="facility-request-btn" onclick="showPanel('recruitment');openRecruitTab('staffdb')">Recruit</button></div>
+          <div class="staff-row-meta"><button class="facility-request-btn" onclick="postVacancy('intl-physio',this)">Advertise this role</button></div>
         </div>
         <div class="role-hint" style="margin-top:10px">Held on the same real, year-round contracts a domestic club's staff carry &mdash; a national job is not campaign-bound the way a franchise coaching seat is.</div>
       </div>
@@ -7907,6 +7908,29 @@
     ]
   };
   var staffCommitted = 375;
+  // The real advertise -> wait -> applicants-arrive pipeline (as distinct from
+  // direct negotiation with an already-known person, which stays available at
+  // any time via the Staff Database below - both are genuine real-world hiring
+  // paths, not one replacing the other). Empty until a role is advertised.
+  var VACANCY_STATUS = {};
+  function postVacancy(roleKey, btn) {
+    VACANCY_STATUS[roleKey] = 'open';
+    var row = btn.closest('.staff-row');
+    if (!row) return;
+    row.querySelector('.staff-row-meta').innerHTML =
+      '<span class="role-hint" style="margin:0;padding:0;border:none;font-size:var(--fs-caption);display:inline-block">Advertised &middot; closes in ~45 days</span>' +
+      '<button class="facility-request-btn" onclick="closeVacancyWindow(' + String.fromCharCode(39) + roleKey + String.fromCharCode(39) + ',this)">Advance to closing day</button>';
+  }
+  function closeVacancyWindow(roleKey, btn) {
+    VACANCY_STATUS[roleKey] = 'closed';
+    var row = btn.closest('.staff-row');
+    var n = (STAFF_VACANCY_CANDIDATES[roleKey] || []).length;
+    if (row) {
+      row.querySelector('.staff-row-meta').innerHTML =
+        '<button class="facility-request-btn" onclick="showPanel(' + String.fromCharCode(39) + 'recruitment' + String.fromCharCode(39) + ');openRecruitTab(' + String.fromCharCode(39) + 'staffdb' + String.fromCharCode(39) + ')">' + n + ' applicant' + (n === 1 ? '' : 's') + ' &mdash; view</button>';
+    }
+    renderStaffDatabase();
+  }
   // The 5 individually-authored people this database always named, kept as
   // real entries (not discarded) now that the whole database - not a
   // per-role shortlist - is where every one of them is found and hired.
@@ -7923,8 +7947,9 @@
   function renderStaffDatabase() {
     var rows = STAFFDB_KNOWN.slice();
     Object.keys(STAFF_VACANCY_CANDIDATES).forEach(function (key) {
+      if (VACANCY_STATUS[key] !== 'closed') return;
       STAFF_VACANCY_CANDIDATES[key].forEach(function (c) {
-        rows.push({ name: c.name, roleKey: key, club: 'Available', tierClass: c.tierClass, tierLabel: c.tierLabel, wage: c.wage });
+        rows.push({ name: c.name, roleKey: key, club: 'Available', tierClass: c.tierClass, tierLabel: c.tierLabel, wage: c.wage, applicant: true });
       });
     });
     var body = document.getElementById('staffdb-body');
@@ -7932,14 +7957,36 @@
     body.innerHTML = rows.map(function (r) {
       return '<tr data-role="' + r.roleKey + '"><td><div class="player-cell clickable" onclick="openStaffProfile(this.closest(' + String.fromCharCode(39) + 'tr' + String.fromCharCode(39) + '))"><div class="player-avatar">' + staffInitials(r.name) + '</div><span class="staff-name" style="display:none">' + r.name + '</span><div class="player-name">' + r.name + '</div></div></td>' +
         '<td><span class="role-cell staff-role-label" style="display:inline-flex">' + STAFF_ROLE_LABELS[r.roleKey] + '</span></td>' +
-        '<td>' + r.club + '</td>' +
+        '<td>' + r.club + (r.applicant ? ' <span class="pill first" style="margin-left:4px">New applicant</span>' : '') + '</td>' +
         '<td><span class="facility-tier-badge ' + r.tierClass + '">' + r.tierLabel + '</span></td>' +
         '<td class="num">$' + (r.wage * 1000).toLocaleString() + '</td>' +
         '<td><button class="academy-action-btn" onclick="event.stopPropagation();openTargetOffer(' + String.fromCharCode(39) + r.name + String.fromCharCode(39) + ',' + r.wage + ',null,' + String.fromCharCode(39) + 'staff-hire' + String.fromCharCode(39) + ',{roleKey:' + String.fromCharCode(39) + r.roleKey + String.fromCharCode(39) + ',tierClass:' + String.fromCharCode(39) + r.tierClass + String.fromCharCode(39) + ',tierLabel:' + String.fromCharCode(39) + r.tierLabel + String.fromCharCode(39) + '})">Negotiate</button></td></tr>';
     }).join('');
   }
   renderStaffDatabase();
-  
+  var PLAYER_DB_ROLE_GROUP = {
+    'Fast Bowler': 'bowlers', 'Spin Bowler': 'bowlers', 'Medium Bowler': 'bowlers',
+    'Wicketkeeper': 'keepers',
+    'Top-order Batter': 'batters', 'Middle-order Batter': 'batters', 'Opening Batter': 'batters',
+    'Allrounder': 'allrounders'
+  };
+  function filterPlayerDatabase(group, btn) {
+    document.querySelectorAll('#recruit-database .pitch-preset-btn').forEach(function (b) { b.classList.remove('active'); });
+    btn.classList.add('active');
+    var rows = document.querySelectorAll('#recruit-database table.squad tbody tr');
+    var shown = 0;
+    rows.forEach(function (row) {
+      var roleCell = row.querySelector('.role-cell');
+      var roleText = roleCell ? roleCell.textContent.trim() : '';
+      var roleGroup = PLAYER_DB_ROLE_GROUP[roleText] || 'other';
+      var match = group === 'all' || roleGroup === group;
+      row.style.display = match ? '' : 'none';
+      if (match) shown++;
+    });
+    var empty = document.getElementById('player-db-empty');
+    if (empty) empty.hidden = shown > 0;
+  }
+
   // ---- National squad announcement: format-scoped, call-up/drop, submit-with-diff ----
   // Grounded in the real domain: a real 40-day announcement window before a competition's own
   // staging date (AiClubManagementService.SquadLeadTimeDays), one SquadAnnouncement per
@@ -8562,7 +8609,6 @@
     }
     staffCommitted += wage;
     updateStaffBudgetReadout();
-    closeStaffRecruit();
   }
   function releaseStaff(roleKey) {
     var row = document.querySelector('.staff-row[data-role="' + roleKey + '"]');
@@ -8572,7 +8618,8 @@
     row.classList.remove('clickable');
     row.removeAttribute('onclick');
     row.querySelector('.staff-row-main').innerHTML = '<span class="staff-name">Vacant</span><span class="staff-role-label">' + STAFF_ROLE_LABELS[roleKey] + '</span>';
-    row.querySelector('.staff-row-meta').innerHTML = '<button class="facility-request-btn" onclick="showPanel(&quot;recruitment&quot;);openRecruitTab(&quot;staffdb&quot;)">Recruit</button>';
+    delete VACANCY_STATUS[roleKey];
+    row.querySelector('.staff-row-meta').innerHTML = '<button class="facility-request-btn" onclick="postVacancy(&quot;' + roleKey + '&quot;,this)">Advertise this role</button>';
   }
   function updateStaffBudgetReadout() {
     var el = document.getElementById('staff-budget-readout');
