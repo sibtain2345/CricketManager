@@ -12577,6 +12577,95 @@ resolution flow, all three new vitals-strips' render + click-through, both new a
 click-through with real per-person values, and the mojibake fix. No stray test artifacts
 (screenshots, extracted `.js` files, `.playwright-mcp/` output) were committed.
 
+### 2026-09-16 (continued further still): a real FM26-comparison audit pass - Dynamics
+### click-through + six dead/half-wired filters closed
+
+The user picked "Full FM26-comparison re-audit" as the next priority from an open menu (the
+active UI-mockup backlog had otherwise been fully closed out). Worked as: a background Explore
+agent catalogued every sidebar screen's actual current markup for real interaction density and
+any presentational-only filter, run alongside direct FM26 research (WebSearch, used only for
+structure per this sub-track's own standing Principle 1/2 - never literal content). The audit
+found one screen with **zero** click-through anywhere and six filter/select elements with no
+working `onchange`/`onclick` at all - both genuine, confirmed defects against this file's own
+established conventions, not new features invented from the research.
+
+**Dynamics had no click-through anywhere - the only screen in the whole file like this.** Every
+other screen wires a player/staff name to `openPlayerFromRow`/`openStaffProfile`; Dynamics'
+Hierarchy/Relationships/Issues subtabs had none. Fixed properly rather than uniformly: single-
+name rows (Team Leaders tile, two of the three Issues rows) got the standard `staff-row
+clickable` + `onclick="openPlayerFromRow(this)"` treatment. Several rows genuinely name TWO
+players in one field - a pecking-order tier's comma list, a relationship's "X & Y"/"X -> Y" pair
+- which a single whole-row click can't resolve to one person, so a new **`openPlayerByName(name)`**
+(a direct-string sibling of the existing `openPlayerFromRow`, added right next to it) lets each
+name become its own inline `<span class="who clickable">` (reusing the identical cursor/underline
+styling `.who.clickable` already has elsewhere in the file, just without the ancestor-scoped rules
+that don't apply here). "Everyone else" (Issues) is deliberately left non-clickable - not a real
+player, the same precedent Records' Hall of Fame already established for a name with nothing
+behind it. Three of the eight names involved (Sarfraz Khan, Danish Iqbal, Bilal Nasir) have no
+entry in `PLAYER_PROFILES` - confirmed this degrades to the existing, already-built graceful
+fallback (a generic meta line, no crash) rather than needing new handling.
+
+**Six presentational-only filters, each fixed to match what it's actually claiming to do:**
+- **Tactics' 5 role-preview `<select>`s** (Captain/VC/Keeper/Opening bowler 1/2) had no `onchange`
+  at all - a second, entirely disconnected picture of the exact state the Lineup table's drag/
+  right-click role tags already own (identical `data-role` values, identical one-holder-per-table
+  rule). New `setRoleFromSelect(selectEl, role)` reuses the pre-existing `findRowByName` +
+  `applyRoleFromMenu`'s own clear-then-set logic, so choosing from a dropdown now genuinely moves
+  the role tag in the Lineup table - verified live: reassigning Captain via the select correctly
+  clears Hamza Malik's tag and sets it on the newly-chosen player (and, matching
+  `applyRoleFromMenu`'s own existing, unchanged behaviour, overwrites whatever OTHER role that
+  player already held - proven, not assumed, since Zain Chaudhry already held VC).
+- **Recruitment > Transfer Activity's season-picker** had no `onchange`. Tagged every row with a
+  real `data-season`, added two genuinely older rows (2025/26, 2024/25 - new, clearly-inconsequential
+  names checked for zero collision with any established character first) so a non-default season
+  shows different content rather than the same four rows regardless, wired `filterTransferHistory`
+  with the same honest-empty-state pattern Player Database's own role filter already uses.
+- **International > Overview's ICC-rankings format `<select>`** (Test/ODI/T20I) had no `onchange` -
+  always showed the identical T20I table. The 9 already-embedded flag images were extracted ONCE
+  into a shared `FLAG_ICONS` JS lookup (never duplicated 3x in the HTML - the fix is a ~200-byte
+  net delta despite touching a rankings table backed by ~30KB of embedded base64), with real
+  per-format orders authored for the fictional game world (Test rewards the five-day strongholds
+  more; ODI sits between the two) and rendered via a new `renderIccRankings(format)`.
+- **Player Profile's individual Training-focus `<select>`** was only ever enabled/disabled by its
+  delegate checkbox - an explicit choice, once made, was never read or confirmed anywhere,
+  indistinguishable from doing nothing. New `confirmTrainingFocus(sel)` shows a visible
+  acknowledgement matching the card's own "never overwritten once you set it" copy, cleared again
+  the moment delegation is switched back on.
+
+**A real mojibake bug, caught live rather than assumed correct from source - the third
+recurrence of this exact file's own documented hazard.** The training-focus confirmation string
+was first written with `'—'`/`'’'` as ordinary Python string-literal escapes inside the
+fix script - which Python converts to the real Unicode characters at WRITE time, producing raw
+multi-byte UTF-8 bytes in the file instead of the literal backslash-u-XXXX TEXT this file's own
+`<script>` convention needs (the file declares no `<meta charset>` anywhere - by design, the
+Artifact publishing tool adds one automatically - so a raw multi-byte character mojibakes the
+moment it's served without an explicit charset, exactly what a bare `python -m http.server` test
+does). Caught by literally reading the rendered `textContent` in a live Playwright session
+("Danish Iqbalâ€™s explicit focus...") rather than trusting the source, and fixed to the file's
+own established literal-escape convention - re-verified live afterward, correct em-dash and
+apostrophe render.
+
+**Verification**: tag-count parity, a div-nesting stack scan (0 unclosed, 0 extra closes), a
+duplicate-id scan (0), and `node --check` on the extracted `<script>` block (`SYNTAX OK`) after
+every script. The file's own pre-existing `tr` (2-tag) and script-paren (2-count) discrepancies
+were confirmed, by diffing against the committed baseline at HEAD, to be byte-for-byte identical
+in magnitude before and after this pass - genuinely pre-existing, not introduced. Every fix was
+then exercised live in a real browser via Playwright against a local `python -m http.server`
+instance: all four Dynamics subtab click-through paths (including the two profile-less names'
+graceful fallback and the "Everyone else" negative case), the Tactics role-select reassignment
+reaching the real Lineup table, the transfer-history filter's row counts across all three
+seasons, the ICC-rankings filter's real per-format reordering with working flag images, and the
+training-focus confirm/clear cycle including the mojibake fix. No stray test artifacts were
+committed.
+
+**Deliberately not attempted in this pass** - the audit surfaced a much longer list of thinner
+screens (Training's Camps subtab has zero interaction; Fixtures has almost no per-fixture
+drill-in; World's Nations/Clubs lists are only ~6 items deep with no search) and one concrete,
+FM26-informed addition worth a dedicated follow-up (a live Match Momentum graph on Match Day,
+directly analogous to FM26's own Touchline Tablet feature and grounded in this project's real,
+already-built `MatchMomentum` domain concept) - named here as the natural next slice rather than
+squeezed into this one.
+
 ---
 
 ## CONSOLIDATED DEFERRED-ITEMS REGISTER (maintained - the single source of truth)
