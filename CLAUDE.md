@@ -12252,6 +12252,84 @@ correctly - both the real-table and `standingsNote` branches - across all 7 comp
 console errors beyond a harmless missing-favicon 404. Published as the latest version of the same
 artifact (`https://claude.ai/artifact/UmHKowfYBygEBwy5mTt9wo`) and committed to git.
 
+### 2026-09-16: staff-hiring pipeline, Player Database filters, a dead-code bug fix - and two
+### stale-register corrections (the franchise calendar and Records filters were already done)
+
+The user's own selection from a menu of next-track options named three concrete gaps: the
+staff-hire shortlist should grow from a posted vacancy over time instead of being a fixed,
+always-fully-populated list; the franchise action button's calendar cycling should cover the full
+EOI -> Pre-Auction -> Auction -> Trade sequence, not just Franchise-vs-not; and the Records
+Ground/World filter dropdowns should actually filter rather than sit presentational.
+
+**Investigation, before writing any code, per this project's own standing "verify before
+building" discipline: two of the three were already fully built in earlier, undocumented-as-such
+sessions.** Reading the actual code (`franchiseButtonStage`/`jumpToFranchiseStage`/
+`CALENDAR_EVENTS` for the calendar item; `onRecordFilterChange`/`RECORD_FILTER_KEY`/
+`openRecordCategory` for the Records-filter item) confirmed both are real, working mechanisms -
+the deferred-register note calling them open had simply gone stale, the same "register goes
+stale before the code" pattern this project's C# side names explicitly. **Corrected here rather
+than silently re-done.** The genuinely open item was the staff-hire pipeline, plus a real,
+previously undetected bug found while tracing the hire-completion code path before building on
+top of it.
+
+**A real bug, found by investigation, not user-reported: `hireStaff()` called a dead
+`closeStaffRecruit()` function.** Confirmed via grep that `closeStaffRecruit` appeared nowhere
+else in the file - the modal and its open/close functions were fully removed in the earlier
+"Staff hiring redesign + Manager Profile screen" pass, but this one trailing call site was
+missed. Every completed staff-hire-via-negotiation was throwing a silent `ReferenceError` in the
+browser console on every hire (harmless in practice, since nothing executed after that line, but
+a real defect). **Fixed**: the dead call removed. **Verified fixed** via a live Playwright
+negotiate-and-hire flow - `browser_console_messages` showed only the pre-existing harmless
+favicon 404, no `ReferenceError`.
+
+**The advertise -> wait -> applicants pipeline, coexisting with (not replacing) direct
+negotiation.** The project's standing dual-mechanism principle - direct negotiation with any
+already-known person (`STAFFDB_KNOWN`, a poach or free agent) must always work with no
+vacancy-posting prerequisite; advertise-then-wait applies specifically to filling *your own*
+vacant seat - is preserved and extended, not disturbed. New `VACANCY_STATUS` state +
+`postVacancy(roleKey, btn)`/`closeVacancyWindow(roleKey, btn)`: a vacant role's row now shows
+"Advertise this role" instead of jumping straight to the Staff Database; clicking it posts the
+vacancy (`VACANCY_STATUS[roleKey] = 'open'`) and shows "Advertised &middot; closes in ~45 days" +
+an "Advance to closing day" button; advancing closes the window (`'closed'`) and reveals an
+"N applicants - view" link into the Staff Database. `renderStaffDatabase()`'s per-role candidate
+loop now gates on `VACANCY_STATUS[key] === 'closed'` (candidates are invisible while the vacancy
+is still open) and tags each pushed row `applicant: true`, rendered as a "New applicant" pill next
+to the club cell. All 7 static vacant-role rows (`fr-bowling-coach`, `batting-coach`, `mental`,
+`analyst`, `mentor`, `intl-bowling-coach`, `intl-physio`) were converted from the old
+`onclick="showPanel('recruitment');openRecruitTab('staffdb')"` jump to
+`onclick="postVacancy('ROLEKEY',this)"`, verified by a build-time assertion that the old shared
+string's count dropped to exactly 0. `releaseStaff(roleKey)` now rebuilds the freed row with the
+same "Advertise this role" button (`delete VACANCY_STATUS[roleKey]` first) instead of a static
+"Recruit" jump, closing the loop for a second full lifecycle on the same role.
+
+**Player Database filters wired for real.** The 5 role-preset buttons in Recruitment > Player
+Database (`#recruit-database`) gained `onclick="filterPlayerDatabase('GROUP',this)"`. New
+`PLAYER_DB_ROLE_GROUP` maps each on-screen role label to a filter group (batters/bowlers/
+allrounders/keepers); `filterPlayerDatabase` toggles `.active` on the clicked preset (reusing the
+existing `.pitch-preset-btn`/`.pitch-preset-row` component, the same one Tactics' pitch-prep
+presets already use - no new component invented), shows/hides `table.squad` rows by their
+`.role-cell` text, and reveals a new honest empty-state message (`#player-db-empty`, the same
+`.role-hint` convention Records' "Nothing logged yet for this filter" already established) when a
+filter matches nothing.
+
+**Verified live end to end via Playwright** (a local `python3 -m http.server` instance, port
+8952): the full postVacancy -> closeVacancyWindow -> applicant-appears-in-database ->
+negotiate -> hire pipeline for one role (batting-coach) including the "New applicant" pill and the
+staff row correctly transitioning from vacant to filled; the bug fix confirmed via
+`browser_console_messages`; a `releaseStaff` -> `postVacancy` second-lifecycle reset on the same
+role, confirming the row rebuilds with "Advertise this role" (not the old dead "Recruit" string)
+and `VACANCY_STATUS[roleKey]` is genuinely cleared; all 7 vacant-role rows confirmed wired to
+`postVacancy` with the correct role key each; and all 5 Player Database filters, including the
+honest empty state for "Allrounders" (the static table's 4 rows are Fast Bowler/Wicketkeeper/
+Spin Bowler/Top-order Batter - correctly none match).
+
+**Structurally verified** before committing: `div`/`table`/`tr`/`span`/`svg`/`nav`/`section`/
+`button`/`g` tag-count parity (all balanced, `tr` at 176/176 with no discrepancy this time),
+zero duplicate ids (410 total), a div-nesting scan (0 unclosed, 0 extra closes), and `node
+--check` on the extracted `<script>` block (`SYNTAX OK`). Published as the latest version of the
+same artifact (`https://claude.ai/artifact/UmHKowfYBygEBwy5mTt9wo`, Version 20) and committed to
+git.
+
 ---
 
 ## CONSOLIDATED DEFERRED-ITEMS REGISTER (maintained - the single source of truth)
