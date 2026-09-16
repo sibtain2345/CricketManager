@@ -825,6 +825,9 @@
 
   /* ---------- Global search (always available, opens any profile in the database) ---------- */
   .global-search { position: relative; width: 260px; flex-shrink: 0; }
+  .world-filter-input { width: 100%; max-width: 320px; padding: 8px 12px; border: 1px solid var(--border); border-radius: 8px; background: var(--surface-2); color: var(--ink); font: inherit; font-size: var(--fs-small); margin-bottom: 10px; }
+  .world-filter-input::placeholder { color: var(--ink-faint); }
+  .world-filter-input:focus { outline: none; border-color: var(--turf); background: var(--surface-3); }
   .global-search svg { position: absolute; left: 11px; top: 50%; transform: translateY(-50%); width: 14px; height: 14px; stroke: var(--ink-faint); }
   .global-search input {
     width: 100%; font: inherit; font-size: var(--fs-body); color: var(--ink);
@@ -4464,6 +4467,8 @@
       <div class="analysis-card">
         <span class="eyebrow"><svg class="icon sm"><use href="#i-globe"/></svg> Nations</span>
         <div class="plan-desc">Every Full Member and Associate nation your network covers &mdash; browsable, not just the ones you play.</div>
+        <input type="text" class="world-filter-input" placeholder="Filter nations by name&hellip;" oninput="filterWorldList('world-nations-list', this.value)">
+        <div id="world-nations-list">
         <div class="staff-row clickable" onclick="openWorldProfile('nation','pak')">
           <div class="staff-row-main"><span class="staff-name">Pakistan</span><span class="staff-role-label">Full Member &middot; ICC Test rank 4</span></div>
           <div class="staff-row-meta"><span class="pill first">Your nation</span></div>
@@ -4483,12 +4488,16 @@
         <div class="staff-row clickable" onclick="openWorldProfile('nation','ned')">
           <div class="staff-row-main"><span class="staff-name">Netherlands</span><span class="staff-role-label">Associate Member</span></div>
         </div>
+        </div>
+        <div class="role-hint" id="world-nations-list-empty" hidden>No nation matches that filter.</div>
       </div>
     </div>
     <div class="subpanel" id="world-clubs" hidden>
       <div class="analysis-card">
         <span class="eyebrow"><svg class="icon sm"><use href="#i-users"/></svg> Clubs &middot; Pakistan T20 Cup</span>
         <div class="plan-desc">Every club in the world your network covers, starting with your own domestic pyramid.</div>
+        <input type="text" class="world-filter-input" placeholder="Filter clubs by name&hellip;" oninput="filterWorldList('world-clubs-list', this.value)">
+        <div id="world-clubs-list">
         <div class="staff-row clickable" onclick="openWorldProfile('club','lahore')">
           <div class="staff-row-main"><span class="staff-name">Lahore Lions</span><span class="staff-role-label">1st &middot; Pakistan T20 Cup</span></div>
           <div class="staff-row-meta"><span class="facility-tier-badge tier-excellent">Excellent</span></div>
@@ -4513,6 +4522,8 @@
           <div class="staff-row-main"><span class="staff-name">Quetta Falcons</span><span class="staff-role-label">6th &middot; Pakistan T20 Cup</span></div>
           <div class="staff-row-meta"><span class="facility-tier-badge tier-poor">Below Average</span></div>
         </div>
+        </div>
+        <div class="role-hint" id="world-clubs-list-empty" hidden>No club matches that filter.</div>
       </div>
     </div>
   </section>
@@ -6773,6 +6784,7 @@
     { id: 'n1', kicker: 'Board', headline: 'Icons ownership backs a \u201cyouth-first\u201d rebuild', dek: 'Expect academy graduates to get more of the shop window.', isNew: true, read: false },
     { id: 'n2', kicker: 'Contract', headline: 'Sarfraz Khan open to a new deal, agent says', dek: 'Current terms run out in April.', isNew: true, read: false },
     { id: 'n3', kicker: 'Milestone', headline: 'Hamza Malik named Player of the Round', dek: 'A run of low-30s scores at a strike rate that pulled every chase back into range.', isNew: true, read: false },
+    { id: 'n3b', kicker: 'Milestone', headline: 'Hamza Malik six matches from his 100th T20 appearance', dek: "A guard of honour is being planned for the milestone if it falls at home.", isNew: false, read: true, click: "openPlayerByName('Hamza Malik')" },
     { id: 'n4', kicker: 'Discipline', headline: 'Board files a \u201cno distractions\u201d note ahead of derby week', dek: 'A quiet word before Sunday\u2019s trip to Lahore.', isNew: false, read: true },
     { id: 'n5', kicker: 'Squad', headline: 'Medical centre clears Adeel Hayat for full training', dek: 'Back in full training this week, available for selection from Sunday.', isNew: false, read: true },
     { id: 'n6', kicker: 'Academy', headline: 'Academy graduate included in senior squad for the first time', dek: 'A first involvement with the senior set-up after a strong intake year.', isNew: false, read: true },
@@ -8306,6 +8318,21 @@
   }
   function closeFixtureSummary() {
     document.getElementById('fixture-summary-backdrop').classList.remove('open');
+  }
+  function filterWorldList(listId, query) {
+    var list = document.getElementById(listId);
+    if (!list) return;
+    var q = query.trim().toLowerCase();
+    var rows = list.querySelectorAll('.staff-row');
+    var shown = 0;
+    rows.forEach(function (r) {
+      var name = (r.querySelector('.staff-name') || {}).textContent || '';
+      var match = !q || name.toLowerCase().indexOf(q) !== -1;
+      r.hidden = !match;
+      if (match) shown++;
+    });
+    var empty = document.getElementById(listId + '-empty');
+    if (empty) empty.hidden = shown > 0;
   }
   function filterTransferHistory(season) {
     var rows = document.querySelectorAll('#transfer-history-body tr');

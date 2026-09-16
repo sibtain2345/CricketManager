@@ -12739,6 +12739,45 @@ no search) remain the one item from the prior pass's list not picked up this tim
 larger-effort item (building real search/filter over a small, mostly-illustrative list) than the
 other four, and reasonably left for whenever the World screen is next revisited in its own right.
 
+### 2026-09-16 (yet further): closing the last named item - World search, plus a real
+### CeremonyService-grounded milestone news item
+
+The user asked to keep going. Two small, well-scoped additions closed out this whole run of
+FM26-comparison work rather than leaving genuine loose threads.
+
+**World's Nations/Clubs search - the one item explicitly deferred last pass.** Reconsidered on
+reflection: the topbar's own `.global-search` (with its dropdown results panel) would be
+disproportionate machinery for a 6-item list, so this is a small, locally-scoped plain-text
+filter instead (`.world-filter-input`, a new minimal CSS rule, not a reuse of the heavier
+component) - one input above each list, a `filterWorldList(listId, query)` doing a case-
+insensitive substring match against `.staff-name`, and the same honest empty-state convention
+already established for Player Database/transfer-history filters ("No nation/club matches that
+filter."). Verified live: filtering to "ind" leaves only India visible, a no-match query shows
+the empty state, clearing resets to all 6, and a still-visible row after filtering still opens
+the real Nation/Club profile correctly.
+
+**A real `CeremonyService`-grounded milestone, added to the Inbox.** `CeremonyService` (Phase 16)
+is a genuine, already-built domain feature - a 100th-cap-style landmark producing a real
+guard-of-honour news moment, deliberately news-only by design (no morale/reputation effect, per
+that phase's own writeup, to keep it out of the competitiveness loop) - with zero representation
+anywhere in the mockup. Rather than invent a new fact, this reads one already sitting in the file:
+Hamza Malik's own T20 career figure shown on Match Day's live rail (`Mat 94`) sits six matches
+short of his 100th appearance. New Inbox news card, clickable through to his profile
+(`openPlayerByName`), framed exactly the way the real domain feature works - a guard of honour
+being planned, not a stat bump.
+
+**Verification**: the same structural discipline as every prior pass in this run (tag-count
+parity, div-nesting scan, duplicate-id scan, `node --check`) - the file's pre-existing `tr`/
+script-paren discrepancies again confirmed unchanged in magnitude. Both fixes exercised live via
+Playwright with zero console errors: the milestone item's click-through, and the full nations/
+clubs filter cycle (all-shown -> filtered -> empty-state -> reset -> still-clickable) for both
+lists independently.
+
+This closes every item named across this run's three passes (Dynamics + 6 dead filters; Treatment
+Room + Match Momentum + Fixtures drill-in + Camps links; World search + the milestone item) with
+nothing left deliberately dangling - the next FM26-comparison pass, whenever it happens, starts
+from a genuinely clean slate rather than a list of "still owed" items.
+
 ---
 
 ## CONSOLIDATED DEFERRED-ITEMS REGISTER (maintained - the single source of truth)
