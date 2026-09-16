@@ -12330,6 +12330,109 @@ zero duplicate ids (410 total), a div-nesting scan (0 unclosed, 0 extra closes),
 same artifact (`https://claude.ai/artifact/UmHKowfYBygEBwy5mTt9wo`, Version 20) and committed to
 git.
 
+### 2026-09-16 (continued): FM26 sidebar grouping + Portal dashboard redesign - and a real,
+### previously-invisible domain-switcher bug found and fixed
+
+The user's next directive, given as an open-ended mandate: sweep the remaining FM26-informed
+work, re-review what's already shipped, and specifically redesign the sidebar and Portal to
+match FM26 more closely. Scoped this pass to the two named, highest-leverage pieces - the
+sidebar's own structure and the Portal home dashboard - rather than attempting a simultaneous
+rewrite of all ~20 remaining screens in one pass, which this project's own history already
+warns against (the "do everything at once" failure mode named explicitly in the Phase B
+rectification write-up above). The rest of the sweep is scoped as a follow-up, listed at the
+end of this entry.
+
+**Sidebar: FM26's own real left-rail groups its destinations into labelled sections rather than
+one flat list.** The 13 sidebar tabs are now grouped into five labelled sections - **Overview**
+(Portal), **Squad** (Squad/Training/Tactics), **Club Affairs** (Recruitment/Club/Dynamics/
+Franchise), **Competition** (Fixtures/International/Records/World), **Communications** (Inbox) -
+via a new `.tab-group-label` inserted once per section, placed exactly where that section's
+first member already sat in the DOM. **Zero buttons were reordered** - every `data-tab`,
+`aria-controls`, and JS selector (`.tabs > .tabnav-inner > .tab-btn`) is untouched, so nothing
+that reads sidebar order or count needed to change. Every group happens to contain at least one
+context-independent member, so no dynamic show/hide logic was needed for the labels themselves -
+a group is never left with a visible label and zero visible children. The active/hover states
+also got a small polish pass (a smoothing `transition`, a subtle inset ring on the selected tab)
+and the collapsed-sidebar state renders each group label as a thin divider line rather than
+disappearing outright, so the section boundaries stay legible even collapsed.
+
+**A real, previously-invisible bug found while testing the sidebar, not assumed fixed from the
+markup alone.** Confirmed via direct Playwright evaluation, not eyeballing: `setContext()` (the
+multi-domain identity switcher built in an earlier session specifically so a franchise/
+international identity never sees the wrong screens in its own sidebar) correctly sets
+`b.hidden = !show` on every domain-exclusive `.tab-btn` - but `.tab-btn`'s own CSS rule sets an
+unconditional `display: flex`, an AUTHOR stylesheet rule that silently overrides the browser's
+own default `[hidden] { display: none }` UA-stylesheet rule (author styles always beat UA
+styles, regardless of selector specificity). The practical effect: **the entire domain-exclusive
+sidebar-hiding mechanic has never actually worked since it was built** - switching to Franchise
+or International context set the `hidden` attribute correctly on Recruitment/Club/Franchise/
+International, but the buttons never actually disappeared from the sidebar. Every OTHER
+`.hidden = ...` target in this file was checked too (a full grep of every `X.hidden = ` call
+site) - `section.panel`, `.subpanel`, `.match-stage`, `.auction-stage`, `.search-results`, and
+`.rtm-prompt` all already carry their own explicit `[hidden] { display: none }` override, and
+the remaining plain `<div>`/`<button>` targets (including `.subtab-btn`, checked directly)
+have no competing `display` rule at all, so the UA default correctly applies to them - `.tab-btn`
+was the one, genuinely isolated case. Fixed with one added rule, `.tab-btn[hidden] { display:
+none; }` (higher specificity than the bare `.tab-btn` rule since it's a compound selector, so
+placement order doesn't matter). Verified directly, both ways: Recruitment/Club/International
+now genuinely vanish from the sidebar under Franchise context (and the "Club Affairs" group
+correctly shrinks to just Dynamics + Franchise), and the reverse for Club/International context -
+confirmed via `offsetParent`/`getComputedStyle` checks in the live browser, not just the `hidden`
+attribute value, since that attribute alone was exactly what looked right while doing nothing.
+
+**Portal: a compact FM26-style vitals row added above the existing tile grid**, plus two new
+tiles. FM26's own home screen leads with compact KPI cards (position, form, budget, progress)
+before the wider news/tasks grid; this mockup's Portal previously opened straight onto the
+5-tile grid with no such summary row. Added a `.vitals-strip` of four clickable cards - **League
+position** (3rd, Pakistan T20 Cup, redirects to World), **Recent form** (the same `pill`
+W/L convention Fixtures already established, redirects to Fixtures), **Season budget** ($2.4M,
+redirects to Club), **Season progress** (6 of 14 played, redirects to Fixtures) - each reusing
+already-established data points from elsewhere in the file rather than inventing new facts.
+Two new tiles were added to the main grid: **Development Watch** (a real academy prospect,
+Bilal Nasir - already established on the Squad &gt; Academy &amp; Youth subtab from an earlier
+pass - redirecting there on click) and **Form &amp; Momentum** (team form momentum + the next-5-
+opponents difficulty read Fixtures already computes, redirecting to Fixtures) - both reusing the
+existing `.squad-alert-row`/`.pill` components rather than a new visual pattern.
+
+**Verified**: `div`/`table`/`tr`/`span`/`svg`/`nav`/`section`/`button`/`g` tag-count parity (all
+balanced), zero duplicate ids, a div-nesting scan (0 unclosed, 0 extra closes), `node --check` on
+the extracted `<script>` block (`SYNTAX OK`); a live Playwright pass confirming the collapse
+toggle still works, the vitals-strip and two new tiles render and click through correctly, and -
+the load-bearing check - the domain-switcher bug fix genuinely holds across all three contexts
+(club/franchise/international), each showing exactly the right sidebar subset. Published as the
+latest version of the same artifact (`https://claude.ai/artifact/UmHKowfYBygEBwy5mTt9wo`,
+Version 21) and committed to git.
+
+**A real process note, worth keeping**: the first version of the redesign script called
+`must_replace` for four edits in sequence before writing the file once at the end - the third
+call failed on a whitespace mismatch (a line with two trailing spaces the script's `old_string`
+had typed as a bare blank line) and the script exited via `sys.exit(1)` **before ever reaching
+the write**, so the first two edits, though computed correctly in memory, were silently
+discarded. The failure was caught immediately (the sidebar simply didn't show the new groups in
+the very first Playwright screenshot), traced by checking `document.querySelectorAll('.tab-group-
+label')` and finding zero elements despite the script's own "OK" print for that step, and
+re-applied in a follow-up script against the file's real current state. Worth remembering for any
+future multi-edit script in this file: a `must_replace` failure anywhere in the middle silently
+discards every edit before it, not just the one that failed - confirming the file actually
+changed (not just trusting the script's exit code) is the only reliable check.
+
+**Deliberately not attempted this pass, per the "one coherent slice, not everything at once"
+call above - a scoped follow-up list, not silently dropped:**
+- A full FM26-comparison re-review of every remaining screen (Squad, Tactics, Recruitment, Club,
+  Franchise, International, Records, World, Training, Dynamics, Fixtures, Inbox, Match Day,
+  Auction Room, Calendar, Onboarding) - each was reviewed and enhanced across several earlier
+  passes already documented above, but a fresh, systematic re-audit against the FM26 structural
+  notes gathered this session (grid-dashboard density, breadcrumb consistency, dual-toggle views)
+  has not been done end to end.
+- Applying the same `.tile`-style vitals-row pattern the Portal now has to other screens that
+  could benefit from a compact summary strip (Club, Franchise, International all currently open
+  straight onto their own subnav with no such row).
+- The still-open items named honestly in earlier passes (presentational-only filter dropdowns on
+  Records Ground/World and Recruitment's Player Database; a dedicated RTM live-exercise
+  interaction in the Auction Room's Bidding stage; a second franchise league's own UI; universal
+  attribute-tile click-through beyond the Player Profile's own attributes grid) remain exactly as
+  scoped before - none of them were touched this pass.
+
 ---
 
 ## CONSOLIDATED DEFERRED-ITEMS REGISTER (maintained - the single source of truth)
