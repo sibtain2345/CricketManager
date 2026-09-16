@@ -294,6 +294,8 @@
   @media (max-width: 900px) { .vitals-strip { grid-template-columns: repeat(2, 1fr); } }
 
   .fixture-row { display: flex; align-items: center; justify-content: space-between; padding-top: 6px; }
+  .fixture-row.clickable { cursor: pointer; border-radius: 8px; transition: background .12s; }
+  .fixture-row.clickable:hover { background: var(--surface-2); }
   .fixture-teams { display: flex; align-items: center; gap: 12px; }
   .vs-crest { width: 28px; height: 28px; border-radius: 7px; flex-shrink: 0; }
   .vs-crest.us { background: radial-gradient(circle at 30% 25%, var(--turf-strong), var(--turf-dim) 75%); }
@@ -1789,6 +1791,16 @@
             <button class="view-more-btn" style="margin-top:6px" onclick="openDrsReview()">Call for a review</button>
           </div>
           <div class="figures-card">
+            <span class="eyebrow"><svg class="icon sm"><use href="#i-trend-up"/></svg> Match momentum</span>
+            <svg viewBox="0 0 260 76" style="margin-top:6px" role="img" aria-label="Momentum swing over the innings so far, from the batting side's own perspective. Currently reading strongly in Islamabad Icons' favour, after a four and a six in the last over.">
+              <line x1="0" y1="38" x2="260" y2="38" stroke="var(--border-soft)" stroke-width="1" stroke-dasharray="3,3"/>
+              <polyline points="4,42 26,46 48,52 70,58 92,50 114,40 136,44 158,36 180,30 202,26 224,16 246,6" fill="none" stroke="var(--turf-strong)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+              <circle cx="92" cy="50" r="3" fill="var(--ball)"/>
+              <circle cx="246" cy="6" r="4" fill="var(--turf-strong)"/>
+            </svg>
+            <div class="ring-caption" style="text-align:left;margin-top:2px">Swung hard to Islamabad Icons in the last over &mdash; the wicket at 9.0 ov briefly tipped it toward Lions before the partnership took over.</div>
+          </div>
+          <div class="figures-card">
             <span class="eyebrow"><svg class="icon sm"><use href="#i-user"/></svg> Next man in</span>
             <div class="next-batsman-row">
               <span class="nb-name" id="next-batsman-name">Sarfraz Khan</span>
@@ -2544,6 +2556,12 @@
         </div>
       </div>
       <div class="analysis-card" style="margin-top:14px">
+        <span class="eyebrow"><svg class="icon sm"><use href="#i-medical"/></svg> Treatment room</span>
+        <div class="role-hint" style="margin-bottom:10px">Every player currently unavailable through injury, and what actually brings him back &mdash; a real medical department cuts both the length and the recurrence risk of what's here.</div>
+        <div class="staff-row clickable" onclick="openPlayerFromRow(this)"><div class="player-cell"><div class="player-avatar">DR</div><div class="staff-row-main"><span class="staff-name">Danish Raza</span><span class="staff-role-label">Hamstring strain (Minor) &middot; physio-managed, no specialist referral needed</span></div></div><span class="facility-tier-badge tier-average">Back in ~9 days</span></div>
+        <div class="role-hint" style="margin-top:8px">Everyone else in the squad is genuinely fit &mdash; a clean bill across the rest of the first team.</div>
+      </div>
+      <div class="analysis-card" style="margin-top:14px">
         <span class="eyebrow"><svg class="icon sm"><use href="#i-users"/></svg> Squad depth by role</span>
         <div class="role-hint" style="margin-bottom:10px">Who you can actually call on for each job right now, ranked by current ability - not who you're missing (that's Recruitment &rsaquo; Squad Planner).</div>
         <div class="staff-row"><div class="staff-row-main"><span class="staff-name">Opening batting</span><span class="staff-role-label">Hamza Malik, Umar Baig</span></div><span class="facility-tier-badge tier-good">Covered</span></div>
@@ -2618,11 +2636,11 @@
         <span class="eyebrow"><svg class="icon sm"><use href="#i-cal-list"/></svg> Club pre-season camp</span>
         <div class="role-hint" style="margin-bottom:10px">Due in 6 days &mdash; a genuine development boost for the squad's under-26s, plus a real lift to dressing-room harmony for a squad that has churned this off-season.</div>
         <div class="staff-row"><div class="staff-row-main"><span class="staff-name">Eligible</span><span class="staff-role-label">Every contracted player not on national or franchise duty during the window</span></div><span class="pill first">14 of 18</span></div>
-        <div class="staff-row"><div class="staff-row-main"><span class="staff-name">Excused</span><span class="staff-role-label">Danish Iqbal &mdash; still contracted to the Pakistan Premier League until its window closes</span></div><span class="pill">1</span></div>
+        <div class="staff-row clickable" onclick="openPlayerByName('Danish Iqbal')"><div class="staff-row-main"><span class="staff-name">Excused</span><span class="staff-role-label">Danish Iqbal &mdash; still contracted to the Pakistan Premier League until its window closes</span></div><span class="pill">1</span></div>
       </div>
       <div class="analysis-card">
         <span class="eyebrow"><svg class="icon sm"><use href="#i-alert"/></svg> Workload &amp; overtraining watch</span>
-        <div class="staff-row"><div class="staff-row-main"><span class="staff-name">Danish Raza</span><span class="staff-role-label">4 consecutive intensive blocks &mdash; two more and his injury proneness takes a permanent step up</span></div><span class="facility-tier-badge tier-average">Watch</span></div>
+        <div class="staff-row clickable" onclick="openPlayerByName('Danish Raza')"><div class="staff-row-main"><span class="staff-name">Danish Raza</span><span class="staff-role-label">4 consecutive intensive blocks &mdash; two more and his injury proneness takes a permanent step up</span></div><span class="facility-tier-badge tier-average">Watch</span></div>
         <div class="staff-row"><div class="staff-row-main"><span class="staff-name">Rest of the squad</span><span class="staff-role-label">No player currently past 2 consecutive intensive blocks</span></div><span class="facility-tier-badge tier-good">Clear</span></div>
       </div>
     </div>
@@ -3654,8 +3672,8 @@
       <div class="widget-strip">
         <div class="widget-card">
           <div class="w-eyebrow"><svg class="icon xs"><use href="#i-medical"/></svg>Fitness</div>
-          <div class="w-value" style="color:var(--turf-strong)">Peak</div>
-          <div class="w-sub">Match fit &middot; no knocks</div>
+          <div class="w-value" id="player-fitness-value" style="color:var(--turf-strong)">Peak</div>
+          <div class="w-sub" id="player-fitness-sub">Match fit &middot; no knocks</div>
         </div>
         <div class="widget-card">
           <div class="w-eyebrow"><svg class="icon xs"><use href="#i-star-fill"/></svg>Happiness</div>
@@ -3909,16 +3927,16 @@
 
     <div class="analysis-card" style="margin-top:16px">
       <span class="eyebrow"><svg class="icon sm"><use href="#i-cal-list"/></svg> Season schedule</span>
-      <div class="fixture-row"><div class="vs-crest them"></div><div class="fixture-names">Karachi Kings<small>Home &middot; Tue 2 Mar</small></div><div class="fixture-meta"><span class="pill first">W</span> by 18 runs</div></div>
-      <div class="fixture-row" style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border-soft)"><div class="vs-crest them"></div><div class="fixture-names">Multan Sultans<small>Away &middot; Sat 6 Mar</small></div><div class="fixture-meta"><span class="pill first">W</span> by 4 wickets</div></div>
-      <div class="fixture-row" style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border-soft)"><div class="vs-crest them"></div><div class="fixture-names">Quetta Falcons<small>Home &middot; Wed 10 Mar</small></div><div class="fixture-meta"><span class="pill injury">L</span> by 22 runs</div></div>
-      <div class="fixture-row" style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border-soft)"><div class="vs-crest them"></div><div class="fixture-names">Peshawar Zalmi<small>Away &middot; Sun 14 Mar</small></div><div class="fixture-meta"><span class="pill first">W</span> by 7 wickets</div></div>
-      <div class="fixture-row" style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border-soft)"><div class="vs-crest them"></div><div class="fixture-names">Lahore Lions<small>Home &middot; Thu 18 Mar</small></div><div class="fixture-meta"><span class="pill injury">L</span> by 9 runs</div></div>
-      <div class="fixture-row" style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border-soft)"><div class="vs-crest them"></div><div class="fixture-names">Peshawar Zalmi<small>Home &middot; Tue 23 Mar</small></div><div class="fixture-meta"><span class="pill first">W</span> by 6 wickets</div></div>
-      <div class="fixture-row" style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border-soft);background:var(--turf-dim);margin-left:-14px;margin-right:-14px;padding-left:14px;padding-right:14px"><div class="vs-crest them"></div><div class="fixture-names">Lahore Lions<small>Away &middot; Sun 28 Mar &middot; 14:00 &middot; Jinnah Stadium</small></div><div class="fixture-meta"><span class="pill fringe"><svg class="icon sm"><use href="#i-clock"/></svg>Next</span></div></div>
-      <div class="fixture-row" style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border-soft)"><div class="vs-crest them"></div><div class="fixture-names">Multan Sultans<small>Away &middot; Thu 1 Apr &middot; 19:00 &middot; Multan Cricket Stadium</small></div><div class="fixture-meta">6 days</div></div>
-      <div class="fixture-row" style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border-soft)"><div class="vs-crest them"></div><div class="fixture-names">Karachi Kings<small>Away &middot; Mon 5 Apr</small></div><div class="fixture-meta">10 days</div></div>
-      <div class="fixture-row" style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border-soft)"><div class="vs-crest them"></div><div class="fixture-names">Quetta Falcons<small>Away &middot; Fri 9 Apr</small></div><div class="fixture-meta">14 days</div></div>
+      <div class="fixture-row clickable" onclick="openFixtureSummary('f1')"><div class="vs-crest them"></div><div class="fixture-names">Karachi Kings<small>Home &middot; Tue 2 Mar</small></div><div class="fixture-meta"><span class="pill first">W</span> by 18 runs</div></div>
+      <div class="fixture-row clickable" onclick="openFixtureSummary('f2')" style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border-soft)"><div class="vs-crest them"></div><div class="fixture-names">Multan Sultans<small>Away &middot; Sat 6 Mar</small></div><div class="fixture-meta"><span class="pill first">W</span> by 4 wickets</div></div>
+      <div class="fixture-row clickable" onclick="openFixtureSummary('f3')" style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border-soft)"><div class="vs-crest them"></div><div class="fixture-names">Quetta Falcons<small>Home &middot; Wed 10 Mar</small></div><div class="fixture-meta"><span class="pill injury">L</span> by 22 runs</div></div>
+      <div class="fixture-row clickable" onclick="openFixtureSummary('f4')" style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border-soft)"><div class="vs-crest them"></div><div class="fixture-names">Peshawar Zalmi<small>Away &middot; Sun 14 Mar</small></div><div class="fixture-meta"><span class="pill first">W</span> by 7 wickets</div></div>
+      <div class="fixture-row clickable" onclick="openFixtureSummary('f5')" style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border-soft)"><div class="vs-crest them"></div><div class="fixture-names">Lahore Lions<small>Home &middot; Thu 18 Mar</small></div><div class="fixture-meta"><span class="pill injury">L</span> by 9 runs</div></div>
+      <div class="fixture-row clickable" onclick="openFixtureSummary('f6')" style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border-soft)"><div class="vs-crest them"></div><div class="fixture-names">Peshawar Zalmi<small>Home &middot; Tue 23 Mar</small></div><div class="fixture-meta"><span class="pill first">W</span> by 6 wickets</div></div>
+      <div class="fixture-row clickable" onclick="openFixtureSummary('f7')" style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border-soft);background:var(--turf-dim);margin-left:-14px;margin-right:-14px;padding-left:14px;padding-right:14px"><div class="vs-crest them"></div><div class="fixture-names">Lahore Lions<small>Away &middot; Sun 28 Mar &middot; 14:00 &middot; Jinnah Stadium</small></div><div class="fixture-meta"><span class="pill fringe"><svg class="icon sm"><use href="#i-clock"/></svg>Next</span></div></div>
+      <div class="fixture-row clickable" onclick="openFixtureSummary('f8')" style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border-soft)"><div class="vs-crest them"></div><div class="fixture-names">Multan Sultans<small>Away &middot; Thu 1 Apr &middot; 19:00 &middot; Multan Cricket Stadium</small></div><div class="fixture-meta">6 days</div></div>
+      <div class="fixture-row clickable" onclick="openFixtureSummary('f9')" style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border-soft)"><div class="vs-crest them"></div><div class="fixture-names">Karachi Kings<small>Away &middot; Mon 5 Apr</small></div><div class="fixture-meta">10 days</div></div>
+      <div class="fixture-row clickable" onclick="openFixtureSummary('f10')" style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border-soft)"><div class="vs-crest them"></div><div class="fixture-names">Quetta Falcons<small>Away &middot; Fri 9 Apr</small></div><div class="fixture-meta">14 days</div></div>
     </div>
   </section>
 
@@ -5052,6 +5070,14 @@
   </div>
 </div>
 
+<div class="modal-backdrop" id="fixture-summary-backdrop">
+  <div class="negotiation-modal" style="max-width:420px">
+    <div class="panel-head" style="margin-bottom:10px"><h1 id="fixture-summary-title" style="font-size:var(--fs-subhead)">Fixture</h1><div class="sub" id="fixture-summary-meta"></div></div>
+    <span class="pill" id="fixture-summary-result" style="margin-bottom:10px;display:inline-flex"></span>
+    <div class="role-hint" id="fixture-summary-headline" style="margin-bottom:0"></div>
+    <button class="view-more-btn" style="margin-top:14px" onclick="closeFixtureSummary()">Close</button>
+  </div>
+</div>
 <div class="role-context-menu" id="role-context-menu">
   <div class="rcm-header">Assign role</div>
   <button onclick="applyRoleFromMenu('C')">Make captain</button>
@@ -8255,6 +8281,32 @@
   }
 
   renderIccRankings('t20i');
+  var FIXTURE_SUMMARIES = {
+    f1: { opp: 'Karachi Kings', meta: 'Home &middot; Tue 2 Mar', result: 'Won by 18 runs', cls: 'first', headline: "Hamza Malik's 68 set the platform, and Fahad Sultan's three-for at the death shut the chase down before it ever threatened." },
+    f2: { opp: 'Multan Sultans', meta: 'Away &middot; Sat 6 Mar', result: 'Won by 4 wickets', cls: 'first', headline: "A tense chase in the end, steadied by Zain Chaudhry's unbeaten 41 from number three." },
+    f3: { opp: 'Quetta Falcons', meta: 'Home &middot; Wed 10 Mar', result: 'Lost by 22 runs', cls: 'injury', headline: "Never got away from a slow start with the bat - the middle order couldn't find the boundaries a chase of that size needed." },
+    f4: { opp: 'Peshawar Zalmi', meta: 'Away &middot; Sun 14 Mar', result: 'Won by 7 wickets', cls: 'first', headline: "Umar Baig's quickfire 33 finished the chase inside 17 overs, with wickets in hand to spare." },
+    f5: { opp: 'Lahore Lions', meta: 'Home &middot; Thu 18 Mar', result: 'Lost by 9 runs', cls: 'injury', headline: "Led for long stretches, but a costly final over at the death proved the difference in a genuinely tight finish." },
+    f6: { opp: 'Peshawar Zalmi', meta: 'Home &middot; Tue 23 Mar', result: 'Won by 6 wickets', cls: 'first', headline: "Sarfraz Khan's three wickets through the middle overs broke the chase open early." },
+    f7: { opp: 'Lahore Lions', meta: 'Away &middot; Sun 28 Mar &middot; 14:00 &middot; Jinnah Stadium', result: 'Next fixture', cls: 'fringe', headline: 'Won 3 of the last 5 meetings. Their form: W W L W L over the last 5. Key duel: Talha Iqbal has dismissed Hamza Malik 3 times in this fixture.' },
+    f8: { opp: 'Multan Sultans', meta: 'Away &middot; Thu 1 Apr &middot; 19:00 &middot; Multan Cricket Stadium', result: 'In 6 days', cls: '', headline: 'A rematch of the March meeting Islamabad Icons won by 4 wickets, chasing.' },
+    f9: { opp: 'Karachi Kings', meta: 'Away &middot; Mon 5 Apr', result: 'In 10 days', cls: '', headline: 'The league leaders, and the genuinely hard away trip worth protecting the strike bowlers\' workload for.' },
+    f10: { opp: 'Quetta Falcons', meta: 'Away &middot; Fri 9 Apr', result: 'In 14 days', cls: '', headline: 'A chance to avenge the 22-run defeat at home back in March.' }
+  };
+  function openFixtureSummary(key) {
+    var f = FIXTURE_SUMMARIES[key];
+    if (!f) return;
+    document.getElementById('fixture-summary-title').textContent = 'Islamabad Icons vs ' + f.opp;
+    document.getElementById('fixture-summary-meta').innerHTML = f.meta;
+    var resultEl = document.getElementById('fixture-summary-result');
+    resultEl.textContent = f.result;
+    resultEl.className = 'pill' + (f.cls ? ' ' + f.cls : '');
+    document.getElementById('fixture-summary-headline').innerHTML = f.headline;
+    document.getElementById('fixture-summary-backdrop').classList.add('open');
+  }
+  function closeFixtureSummary() {
+    document.getElementById('fixture-summary-backdrop').classList.remove('open');
+  }
   function filterTransferHistory(season) {
     var rows = document.querySelectorAll('#transfer-history-body tr');
     var shown = 0;
@@ -8830,7 +8882,7 @@
     'Faisal Nadeem': { hand: 'Off-spin', nat: 'Pakistan', team: 'Multan Sultans', caps: 'Tier B central contract', ca: 3.5, pa: [3, 4], value: '$255K', wage: '$3,100/wk', until: 'until Jan 2028', status: { text: 'First choice', cls: 'first' }, interest: 'A trusted first-change option' },
     'Umar Baig': { hand: 'RHB', nat: 'Pakistan', team: 'Islamabad Icons', caps: 'Tier A central contract', ca: 3, pa: [3, 4.5], value: '$195K', wage: '$2,400/wk', until: 'until May 2027', status: { text: 'Second choice', cls: 'second' }, interest: 'Franchise form has him overdue a look' },
     'Rizwan Sheikh': { hand: 'RAF', nat: 'Pakistan', team: 'Islamabad Icons', caps: 'Tier A central contract', ca: 3, pa: [3, 4] , value: '$165K', wage: '$2,100/wk', until: 'until Sep 2027', status: { text: 'Fringe', cls: 'fringe' }, interest: 'A real contender, not yet settled' },
-    'Danish Raza': { hand: 'RHB', nat: 'Pakistan', team: 'Islamabad Icons', caps: 'Tier B central contract', ca: 3, pa: [2.5, 4], value: '$140K', wage: '$1,850/wk', until: 'until Feb 2027', status: { text: 'Second choice', cls: 'second' }, interest: 'None on record' },
+    'Danish Raza': { hand: 'RHB', nat: 'Pakistan', team: 'Islamabad Icons', caps: 'Tier B central contract', ca: 3, pa: [2.5, 4], value: '$140K', wage: '$1,850/wk', until: 'until Feb 2027', status: { text: 'Second choice', cls: 'second' }, interest: 'None on record', injury: { text: 'Hamstring strain (Minor)', sub: 'Physio-managed &middot; back in ~9 days' } },
     'Bilal Nadeem': { hand: 'Fast Bowler', nat: 'Pakistan', team: 'Islamabad Icons', caps: 'Tier B central contract', ca: 2.5, pa: [2.5, 4], value: '$95K', wage: '$1,400/wk', until: 'until Apr 2027', status: { text: 'Fringe', cls: 'fringe' }, interest: 'None on record' }
   };
   function renderStarRow(el, rating, isRange, rangeEnd) {
@@ -8868,6 +8920,19 @@
     if (wageEl) wageEl.innerHTML = p.wage + '<span class="vitals-sub">' + p.until + '</span>';
     if (statusEl) { statusEl.className = 'pill ' + p.status.cls; statusEl.innerHTML = '<svg class="icon sm"><use href="#i-check-circle"/></svg>' + p.status.text; }
     if (interestEl) interestEl.innerHTML = '<svg class="icon sm"><use href="#i-star-line"/></svg>' + p.interest;
+    var fitVal = document.getElementById('player-fitness-value');
+    var fitSub = document.getElementById('player-fitness-sub');
+    if (fitVal && fitSub) {
+      if (p.injury) {
+        fitVal.textContent = 'Injured';
+        fitVal.style.color = 'var(--ball)';
+        fitSub.textContent = p.injury.text;
+      } else {
+        fitVal.textContent = 'Peak';
+        fitVal.style.color = 'var(--turf-strong)';
+        fitSub.textContent = 'Match fit \u2014 no knocks';
+      }
+    }
   }
 
   var PLAYER_HAND_DESC = {

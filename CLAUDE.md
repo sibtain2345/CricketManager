@@ -12666,6 +12666,79 @@ directly analogous to FM26's own Touchline Tablet feature and grounded in this p
 already-built `MatchMomentum` domain concept) - named here as the natural next slice rather than
 squeezed into this one.
 
+### 2026-09-16 (continued once more): the Match Momentum graph, a real Medical Centre /
+### Treatment Room, Fixtures drill-in, and Camps click-through - closing four of the five items
+### the previous pass named as follow-up work
+
+The user asked to keep going, explicitly widening the brief to also cross-check this project's
+own C# domain feature set (not just re-compare screen-by-screen against FM26) for anything real
+and built that has no representation anywhere in the mockup yet. More FM26 research (Touchline
+Tablet's Match Momentum graph in more detail, press conferences, and the real Medical Centre
+screen) plus a direct grep of the mockup for any existing injury/medical representation - which
+found exactly one, a bare "Injured" status word on Danish Raza's Squad-table row with no detail
+behind it anywhere - fed straight into four concrete builds, closing four of the five items the
+previous entry's own "deliberately not attempted" list named.
+
+**A real Medical Centre / Treatment Room - genuinely missing, not previously flagged.** FM26's
+Medical Centre categorises injuries by severity with a real treatment type (Physio/Specialist/
+Injection/None) and an expected return - this project's own domain already models exactly this
+(`Injury`, `InjurySeverity`, `PlayerAvailabilityService`, `MedicalEffectivenessService`), but
+nothing in the mockup ever said what Danish Raza's "Injured" status actually WAS. New "Treatment
+room" card on Squad > First Team (`Hamstring strain (Minor) · physio-managed, no specialist
+referral needed · Back in ~9 days`), clickable through to his profile. His `PLAYER_PROFILES`
+entry gained a real `injury` object, and the Player Profile's own Fitness widget (previously a
+flat, shared "Peak / Match fit" reading for every single player regardless of who was open) now
+reflects it - `applyPlayerProfileData` sets the widget to "Injured / Hamstring strain (Minor)"
+for Danish Raza specifically and resets cleanly to the default reading for anyone else, verified
+both directions live.
+
+**The Match Momentum graph - the item explicitly named last pass.** A new "Match momentum" card
+on Match Day's live rail (between "At the crease" and "Next man in"), reusing the exact
+polyline+circle SVG technique the Player Profile's own "Form, last 10 innings" chart already
+established rather than a new charting pattern - a per-over momentum line from the batting
+side's own perspective, a marked dip at the over-9 wicket, and a sharp late swing matching the
+four-then-six the live commentary feed was already showing at the point this graph sits next to.
+Directly analogous to FM26's real Touchline Tablet Match Momentum graph, and grounded in this
+project's own already-built `InningsState.MatchMomentum` domain concept (Post-16-B sweep, Wave
+6) - a real mechanic this mockup had never given a visual to before.
+
+**Fixtures drill-in - the other item named last pass.** All 10 Season Schedule rows are now
+clickable (`.fixture-row.clickable`, a new small cursor/hover CSS rule next to the existing bare
+`.fixture-row`), opening a real match-summary modal (`FIXTURE_SUMMARIES` + `openFixtureSummary`/
+`closeFixtureSummary`, reusing the established `.modal-backdrop`/`.negotiation-modal` shell - no
+new modal chrome invented) with a one-line result headline per completed match, grounded in
+already-established squad names (Hamza Malik, Zain Chaudhry, Fahad Sultan, Umar Baig, Sarfraz
+Khan) rather than inventing new ones, and never crediting a result to a specific NAMED opposition
+bowler unless that name was already established for that exact fixture (Talha Iqbal only appears
+against Lahore Lions, matching the Tactics screen's own pre-existing "dismissed Hamza Malik 3
+times in this fixture" fact). The "Next" row's summary deliberately reuses the SAME head-to-head/
+key-duel text the Upcoming Opposition Report card already states for that identical match,
+rather than authoring a second version that could quietly disagree with it.
+
+**Training > Camps click-through.** The audit's smallest finding: zero interaction anywhere on
+this subtab. The real domain (`TrainingCampService`) is confirmed a fully automatic mechanism
+with no settable camp focus (established in an earlier pass) - so the honest fix was NOT
+inventing a fake interactive camp-selection flow, just making the two already-named players
+(Danish Iqbal, Danish Raza) clickable through to their profiles, the one thing every other screen
+in the file already does and this one, alone, didn't.
+
+**Verification**: the same structural discipline as every prior pass (tag-count parity, a
+div-nesting stack scan, a duplicate-id scan, `node --check` on the extracted `<script>` block) -
+the file's pre-existing `tr` and script-paren discrepancies stayed byte-for-byte unchanged in
+magnitude, confirmed not introduced by this pass. Every fix was exercised live via Playwright:
+the Treatment Room card's click-through and the Fitness widget correctly switching between
+"Injured" and "Peak" as different profiles are opened; the Match Momentum graph's real polyline
+data (isolated correctly from the eyebrow icon's own decorative `<svg>`, which a naive
+`querySelector('svg')` picks up first); all 10 Fixtures rows opening the modal with the right
+per-fixture content, including the Next-fixture row's reused head-to-head text, and the modal
+closing cleanly; and both Training Camps rows. Zero console errors across the entire verification
+pass (not even the usual harmless favicon 404 this time).
+
+**Left for a genuine follow-up, stated honestly**: World's Nations/Clubs lists (~6 items each,
+no search) remain the one item from the prior pass's list not picked up this time - a lower-value,
+larger-effort item (building real search/filter over a small, mostly-illustrative list) than the
+other four, and reasonably left for whenever the World screen is next revisited in its own right.
+
 ---
 
 ## CONSOLIDATED DEFERRED-ITEMS REGISTER (maintained - the single source of truth)
