@@ -12433,6 +12433,150 @@ call above - a scoped follow-up list, not silently dropped:**
   attribute-tile click-through beyond the Player Profile's own attributes grid) remain exactly as
   scoped before - none of them were touched this pass.
 
+### 2026-09-16 (continued further): sidebar-to-navbar conversion + a persistent, filter-driven,
+### blocking-task Inbox rail (the user's explicit directive) - then a register-verification pass
+### that closed the vitals-strip and universal attribute-click-through backlog items
+
+The user's own explicit, large directive (Roman Urdu/English, given verbatim): convert the
+left sidebar back into a horizontal top navbar matching FM26's real navigation, and replace the
+sidebar's old physical slot with a persistent **Inbox** panel that never disappears when the
+active screen changes - with **All/New/Unread/Tasks** filters, and real **blocking tasks**
+(squad announcement deadline, registration deadline, retention/trade deadline) that must be
+resolved before the coach can proceed ("you cannot move forward"), removing Inbox from the
+top-nav tab buttons entirely since it becomes the persistent rail, not a separate screen. A
+mid-turn follow-up made the operating instruction explicit: work through this AND the
+already-known "planned" backlog non-stop, without pausing for confirmation between stages,
+reporting only once everything is done.
+
+**The sidebar -> navbar conversion.** `.tabs` (previously a `flex-direction:column` vertical
+rail, 186px wide, with a collapse button) is now a full-width `flex-direction:row` bar sitting
+ABOVE `.app-body` rather than inside it - `.app-body` was already a row-flex container
+(`.tabs` + `.main-content` as its two children), so turning it into `[inbox-rail,
+main-content]` needed **zero changes to `.app-body`'s own CSS**, and every existing JS selector
+built on `.tabs > .tabnav-inner > .tab-btn` (DOM-structure-relative, not
+document-position-relative) kept working unchanged. `.tab-group-label` dividers (previously
+uppercase section headers, a leftover from an even earlier vertical-sidebar design already
+documented above) became thin 1px vertical dividers between nav groups. The now-dead
+`toggleSidebar()` function and its collapse button were removed entirely (confirmed via a live
+`typeof window.toggleSidebar === 'function'` check: `false`, and a full-file grep for any
+remaining call site: none). The Inbox tab-button and the "Communications" nav-group label were
+both removed from the navbar itself, and the 3 pre-existing `showPanel('inbox')` cross-links on
+the Dynamics screen were repointed at a new `focusInboxRail()` (a brief gold flash + scroll-into-
+view on the persistent rail, rather than navigating to a now-nonexistent screen).
+
+**The persistent Inbox rail.** A new `<aside id="inbox-rail">` occupies the sidebar's exact old
+physical slot - a head (title + a live unread-count badge), a 4-button filter row
+(`setInboxFilter('all'|'new'|'unread'|'tasks')`), and a scrollable list. `INBOX_NEWS` (17 items,
+converted verbatim from the old `panel-inbox` For You/Club/World subtab content, each with a
+`read`/`isNew` flag and an optional `click` handler string reusing the pre-existing
+`openSquadNewsModal(...)` calls) and `INBOX_TASKS` (3 tasks, one per context, gating on real
+existing domain state already modelled elsewhere in the file rather than invented state:
+`NATIONAL_SQUADS.test.players.length` for the squad-announcement task, `eoiRegistrationConfirmed`
+for the registration task, `retentionSubmitted` for the retention/trade task) drive
+`renderInboxRail()`, called from `setContext()` (so switching Club/Franchise/International
+identity shows that identity's own tasks/news, verified live), `submitNationalSquad()`, and
+`submitRetentionList()`.
+
+**The genuine blocking mechanism.** `attemptAdvance(fnName)` is the gate: it checks
+`INBOX_TASKS` for the current context's unresolved items and, if any remain, opens a real
+`#inbox-block-backdrop` modal (reusing the file's own established `.modal-backdrop`/
+`.negotiation-modal` shell, the same pattern every other modal in this file already uses) naming
+every pending task with its own "Resolve" button, and refuses to call the underlying function at
+all. `renderActionButton()` now routes the franchise "Enter Auction Room" button through
+`attemptAdvance('enterAuctionMode')` and the "Play Match" button through
+`attemptAdvance('enterMatchMode')` instead of calling them directly. **A real deadlock was
+avoided by design, not caught by luck**: the retention task's own `go()` callback calls
+`enterAuctionMode()` DIRECTLY (bypassing `attemptAdvance`) rather than routing back through the
+same gate that made the task appear in the first place - retention is only submittable INSIDE
+the auction room's own War Room stage, so gating entry into that same room on retention being
+already submitted would make the task permanently unreachable.
+
+**Verified live end to end via Playwright** (not just structurally): the blocking modal
+genuinely prevents the underlying function from being called while tasks are pending, lists
+every pending task by name, and lets the real function through the instant all tasks resolve;
+filter switching; the rail persisting across `showPanel()` navigation to an unrelated screen;
+context-switching correctly changing which tasks/news show; and the full real resolution flow
+for the squad-announcement task (call up players via the existing National Pool &amp; Squad UI,
+submit, confirm the task now reads resolved) - deliberately NOT auto-resolved by `go()`, which
+only navigates (consistent with the other two tasks' own `go()` callbacks, which likewise only
+navigate rather than silently completing the action for the coach).
+
+**Then the "planned" backlog** - re-verified against the actual live file rather than trusted
+from the stale "still-open" list immediately above this entry (which, per this project's own
+repeatedly-documented pattern, had gone stale before the code did):
+- **RTM live-exercise interaction, Records/Recruitment filters** - confirmed, by reading the
+  actual functions (`rtmInvoke`/`rtmMatch`/`rtmDecline`, `onRecordFilterChange`,
+  `filterPlayerDatabase`) and by a direct live check, **already fully built** in earlier passes
+  documented above ("Phase C, 11-point directive: slice 1" and the "staff-hiring pipeline, Player
+  Database filters" entry) - the closing list at the bottom of this file simply hadn't been
+  corrected after those passes landed. Not rebuilt.
+- **Vitals-strip pattern applied to Club, Franchise and International** (§CONSOLIDATED
+  DEFERRED-ITEMS REGISTER's own item) - all three previously opened straight onto a subnav or a
+  flat card grid with no glanceable top-level summary. Each now has a 4-card `.vitals-strip`
+  (the exact CSS/markup Portal's own strip already established, no new component) reusing each
+  screen's own already-shown data rather than inventing new facts: Club (league position,
+  season budget, board confidence, staff vacancies - each a real `onclick` into the matching
+  subtab); Franchise (identity/dynasty rating, central pool, campaign stage, circuit reputation -
+  each opening the Auction Room or Manager Profile); International (ICC ranking, the live
+  "squad required" alert, central-contract tier counts, coaching structure - each opening the
+  matching subtab). Verified live: all three render 4 cards and click through to the right
+  subtab/screen.
+- **Universal attribute-tile click-through beyond the Player Profile's own grid** - Player
+  Profile already had it (`openAttributeDetail`/`ATTRIBUTE_INFO`); Manager Profile's 8-row
+  Coaching Attributes grid and Staff Profile's 5-row Attributes &amp; Role Suitability grid did
+  not. Both wired to the exact same shared `openAttributeDetail()`/`attribute-detail-backdrop`
+  modal (it already reads generically from whatever row it's given - no new pattern needed), with
+  13 new `ATTRIBUTE_INFO` entries grounded in this project's own real C# domain mechanics rather
+  than invented flavour text: the 4-attribute blend `CaptaincyService.CoachTacticalQuality`
+  actually reads (Tactical Knowledge/Match Reading/Adaptability), `GrowFromMilestone`'s
+  tenure-based growth (not weekly), `PressConferenceService`'s real MediaHandling-driven outcome,
+  and `StaffMember.WeightFor`'s real per-role attribute weighting for the 5 staff attributes
+  (Analysis/Statistics/Technical Knowledge/Communication/Diligence). Staff Profile's values are
+  filled in dynamically by `openStaffProfile()` before the row is ever shown, and
+  `openAttributeDetail` reads the row's live `.attr-num` text, so a real per-person value (not a
+  placeholder) is what the detail modal shows. Verified live for both Manager and Staff.
+- **A real mojibake bug introduced and caught in the SAME pass, not a follow-up.** The first
+  draft of the 13 new `ATTRIBUTE_INFO` entries embedded raw multi-byte UTF-8 em-dash/apostrophe
+  characters directly in the Python source, which Python's own string-escape handling silently
+  converted from my intended `—`/`’` (meant as literal JS-source text) into the actual
+  Unicode characters before writing the file - producing exactly the "âÂ€Â™"-style mojibake this
+  file's own history already diagnosed and fixed twice before (the local `http.server`-without-
+  charset hazard). Caught immediately by a live Playwright check reading the rendered
+  `attr-detail-desc` text (`"partnershipâ€™s"`) rather than assumed correct from the source, and
+  fixed by counting the file's own established convention first (108 literal `—`/`’`
+  JS-escape-sequence occurrences already in the file vs. only 17-35 raw-byte ones, confirming
+  literal-escape-as-text is the real, dominant convention here) before writing a targeted
+  replacement script that swapped every one of my new raw characters for the literal escape-
+  sequence text instead - re-verified live afterward, correct real em-dash/apostrophe characters
+  now render.
+- **"A second franchise league's own dedicated UI"** - reconsidered rather than built as
+  originally scoped. A human coach manages exactly one franchise at a time (the same one-team
+  assumption every other screen in this mockup already makes), so a second, fully-duplicated
+  Auction Room/War Room/Trade Centre for a league the coach isn't actually part of would have no
+  real action the coach could take in it - the auction/retention/trade mechanics are already
+  genuinely franchise-agnostic (nothing in `FranchiseAuctionService`'s real C# domain model is
+  PPL-specific), so duplicating the screen for IMF/SBL would be a copy with no new capability
+  behind it. What those two leagues' own depth actually needed - Rules/Standings/Fixtures via a
+  real Competition Profile - was already delivered in an earlier pass this session
+  ("Competition Profile depth: real Rules/Standings/Fixtures sub-screens"), which is the correct
+  level of detail for a league the coach is not managing a team in (exactly how the domestic T20
+  Cup's other five clubs are represented too - via World/Competition Profile, not a personal
+  Club screen each). Left as a deliberate scope call, not rebuilt, with the reasoning recorded
+  here so a future session doesn't rediscover the same "why not just duplicate it" question from
+  scratch.
+
+**Verified**: `div`/`table`/`span`/`svg`/`nav`/`section`/`button`/`g` tag-count parity after every
+script (the `tr` count carries the same pre-existing 2-tag discrepancy this file's own history
+already documents as a harmless artifact of JS-string-concatenation-built table rows, confirmed
+unchanged before and after this pass's edits - not a new regression), a div-nesting stack scan (0
+unclosed, 0 extra closes throughout), a duplicate-id scan (0 throughout), and `node --check` on
+the extracted `<script>` block (`SYNTAX OK` after every script). Live Playwright verification
+covered the full blocking-gate mechanism (pending -> blocked -> resolved -> proceeds), filter
+switching, context switching, rail persistence across navigation, the real squad-announcement
+resolution flow, all three new vitals-strips' render + click-through, both new attribute grids'
+click-through with real per-person values, and the mojibake fix. No stray test artifacts
+(screenshots, extracted `.js` files, `.playwright-mcp/` output) were committed.
+
 ---
 
 ## CONSOLIDATED DEFERRED-ITEMS REGISTER (maintained - the single source of truth)

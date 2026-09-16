@@ -156,28 +156,42 @@
   .topbar { flex-shrink: 0; }
   .app-body { display: flex; flex: 1 1 auto; min-height: 0; overflow: hidden; }
   .tabs {
-    flex-shrink: 0; width: 186px; padding: 12px 8px;
-    background: var(--surface); border-right: 1px solid var(--border);
-    display: flex; flex-direction: column; overflow-y: auto;
-    transition: width 0.15s ease, padding 0.15s ease;
+    flex-shrink: 0; width: 100%; padding: 0 20px;
+    background: var(--surface); border-bottom: 1px solid var(--border);
+    display: flex; flex-direction: row; align-items: stretch; overflow-x: auto; overflow-y: hidden;
   }
-  .tabs.collapsed { width: 60px; padding: 12px 8px; }
-  .sidebar-collapse-btn {
-    appearance: none; border: 1px solid var(--border); background: var(--surface-2); color: var(--ink-dim);
-    width: 32px; height: 32px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center;
-    margin-bottom: 10px; flex-shrink: 0;
-  }
-  .sidebar-collapse-btn svg { width: 16px; height: 16px; transition: transform 0.15s ease; transform: scaleX(-1); }
-  .tabs.collapsed .sidebar-collapse-btn svg { transform: scaleX(1); }
-  nav.tabs .tabnav-inner { display: flex; flex-direction: column; gap: 3px; }
-  .tabs.collapsed .tab-label { display: none; }
-  .tabs.collapsed .tab-btn { justify-content: center; padding-left: 0; padding-right: 0; }
+  nav.tabs .tabnav-inner { display: flex; flex-direction: row; align-items: stretch; gap: 2px; }
   .main-content { flex: 1; min-width: 0; min-height: 0; overflow-y: auto; overflow-x: hidden; -webkit-overflow-scrolling: touch; }
-  /* FM's own real left-rail navigation pattern (Principle 2's "FM supplies structure") -
-     a flat highlighted block + accent bar reads correctly for a vertical list; CC2014's real
-     tab chrome (gui/std/Header/*.bmp) is real end-cap pill art built for a HORIZONTAL bar and
-     does not translate to a full-width vertical item, so it stays reserved for the sub-nav
-     tabs (Match Day / Player) below, which are still genuinely horizontal. */
+  /* the sidebar's old slot, replaced with a persistent Inbox rail (FM26 navbar redesign) -
+     it never hides when the top nav's active screen changes, and it is where the real
+     "you cannot move forward" blocking-task gate lives. */
+  .inbox-rail { flex-shrink: 0; width: 300px; background: var(--surface); border-right: 1px solid var(--border); display: flex; flex-direction: column; overflow: hidden; }
+  .inbox-rail-head { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; padding: 14px 16px 10px; border-bottom: 1px solid var(--border-soft); flex-shrink: 0; }
+  .inbox-rail-head h2 { margin: 0; font-family: var(--font-display); font-size: var(--fs-subhead); }
+  .inbox-unread-badge { font-size: var(--fs-micro); font-weight: 700; color: var(--gold); background: var(--gold-dim); padding: 2px 9px; border-radius: 999px; white-space: nowrap; }
+  .inbox-filter-row { display: flex; gap: 6px; padding: 10px 14px; flex-shrink: 0; border-bottom: 1px solid var(--border-soft); flex-wrap: wrap; }
+  .inbox-filter-btn { appearance: none; border: 1px solid var(--border-soft); background: transparent; color: var(--ink-faint); font: inherit; font-size: var(--fs-micro); font-weight: 700; padding: 4px 11px; border-radius: 999px; cursor: pointer; }
+  .inbox-filter-btn[aria-selected="true"] { color: var(--ink); background: var(--surface-2); border-color: var(--border); }
+  .inbox-rail-list { flex: 1; overflow-y: auto; padding: 10px 12px 24px; }
+  .inbox-item { padding: 9px 10px; border-radius: 9px; margin-bottom: 5px; cursor: pointer; border: 1px solid transparent; }
+  .inbox-item:hover { background: var(--surface-2); }
+  .inbox-item.unread { background: var(--surface-2); border-color: var(--border-soft); }
+  .inbox-item .inbox-item-kicker { font-size: var(--fs-micro); font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink-faint); display: flex; align-items: center; gap: 6px; }
+  .inbox-item .inbox-item-kicker .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--gold); flex-shrink: 0; }
+  .inbox-item .inbox-item-headline { font-size: var(--fs-small); font-weight: 600; margin-top: 2px; line-height: 1.3; }
+  .inbox-item .inbox-item-dek { font-size: var(--fs-micro); color: var(--ink-dim); margin-top: 2px; line-height: 1.35; }
+  .inbox-rail-empty { padding: 20px 8px; color: var(--ink-faint); font-size: var(--fs-small); text-align: center; }
+  .inbox-task-card { padding: 12px 12px 10px; border-radius: 10px; margin-bottom: 9px; background: var(--gold-dim); border: 1px solid var(--gold); }
+  .inbox-task-card .inbox-task-title { font-weight: 700; font-size: var(--fs-small); color: var(--gold); }
+  .inbox-task-card .inbox-task-detail { font-size: var(--fs-micro); color: var(--ink-dim); margin: 5px 0 9px; line-height: 1.4; }
+  .inbox-task-card button { appearance: none; border: none; background: var(--gold); color: #241a00; font: inherit; font-weight: 700; font-size: var(--fs-micro); padding: 5px 13px; border-radius: 999px; cursor: pointer; }
+  .inbox-task-card.resolved { background: var(--turf-dim); border-color: var(--turf-strong); }
+  .inbox-task-card.resolved .inbox-task-title { color: var(--turf-strong); }
+  .inbox-rail.inbox-rail-flash { box-shadow: inset 0 0 0 2px var(--gold); }
+  /* FM26's own real top navbar (Principle 2's "FM supplies structure") - the sidebar
+     is gone; this is the primary navigation now, and the sidebar's old slot holds the
+     persistent Inbox rail instead. .tabs/.tab-btn markup is unchanged from the sidebar
+     era - only the CSS below (row layout, bottom-border active state) turns it horizontal. */
   .tab-btn {
     appearance: none; border: none; border-left: 3px solid transparent; cursor: pointer;
     color: var(--ink-dim); font: inherit; font-size: var(--fs-body); font-weight: 600;
@@ -203,14 +217,15 @@
   .tab-btn { transition: background 0.12s ease, color 0.12s ease, border-color 0.12s ease; }
   .tab-btn[aria-selected="true"] { box-shadow: inset 0 0 0 1px var(--turf-dim); }
   .tab-btn[data-live="true"][aria-selected="true"] { box-shadow: inset 0 0 0 1px var(--gold-dim); }
+  .tabs .tab-btn { width: auto; flex-shrink: 0; border-left: none; border-bottom: 3px solid transparent; border-radius: 8px 8px 0 0; padding: 10px 14px; }
+  .tabs .tab-btn[aria-selected="true"] { border-bottom-color: var(--turf-strong); }
+  .tabs .tab-btn[data-live="true"][aria-selected="true"] { border-bottom-color: var(--gold); }
   /* FM26's own real left-rail groups its destinations into small labelled
      sections rather than one flat list - the group label is purely a visual
      divider (no JS role), placed once per section at whichever button
      already sits first in that section's existing DOM order. */
-  .tab-group-label { font-size: 10px; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; color: var(--ink-faint); padding: 14px 12px 5px; }
-  .tab-group-label:first-child { padding-top: 2px; }
-  .tabs.collapsed .tab-group-label { height: 1px; padding: 10px 0 0; margin: 0 6px; border-top: 1px solid var(--border-soft); overflow: hidden; text-indent: -9999px; }
-  .tabs.collapsed .tab-group-label:first-child { border-top: none; padding-top: 0; }
+  .tab-group-label { width: 1px; align-self: stretch; margin: 8px 8px; padding: 0; background: var(--border-soft); font-size: 0; line-height: 0; overflow: hidden; text-indent: -9999px; flex-shrink: 0; }
+  .tab-group-label:first-child { margin-left: 0; }
 
   /* sub-nav, used inside Match Day and Player screens */
   .subnav { display: flex; gap: 6px; margin-bottom: 18px; border-bottom: 1px solid var(--border-soft); padding-bottom: 0; }
@@ -1304,11 +1319,7 @@
   </div>
 </div>
 
-<div class="app-body">
 <nav class="tabs" role="tablist" aria-label="Primary">
-  <button class="sidebar-collapse-btn" onclick="toggleSidebar()" title="Collapse sidebar" id="sidebar-collapse-btn">
-    <svg class="icon"><use href="#i-chevron-fwd"/></svg>
-  </button>
   <div class="tabnav-inner">
     <div class="tab-group-label">Overview</div>
     <button class="tab-btn" role="tab" aria-selected="true" aria-controls="panel-portal" data-tab="portal" title="Portal"><svg class="icon"><use href="#i-home"/></svg><span class="tab-label">Portal</span></button>
@@ -1326,10 +1337,22 @@
     <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-international" data-tab="international" data-context="international" title="International"><svg class="icon"><use href="#i-plane"/></svg><span class="tab-label">International</span></button>
     <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-records" data-tab="records" title="Records"><svg class="icon"><use href="#i-trophy"/></svg><span class="tab-label">Records</span></button>
     <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-world" data-tab="world" title="World"><svg class="icon"><use href="#i-globe"/></svg><span class="tab-label">World</span></button>
-    <div class="tab-group-label">Communications</div>
-    <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-inbox" data-tab="inbox" title="Inbox"><svg class="icon"><use href="#i-inbox"/></svg><span class="tab-label">Inbox</span></button>
   </div>
 </nav>
+<div class="app-body">
+<aside class="inbox-rail" id="inbox-rail">
+  <div class="inbox-rail-head">
+    <h2>Inbox</h2>
+    <span class="inbox-unread-badge" id="inbox-unread-badge"></span>
+  </div>
+  <div class="inbox-filter-row" role="tablist" aria-label="Inbox filters">
+    <button class="inbox-filter-btn" data-filter="all" aria-selected="true" onclick="setInboxFilter('all')">All</button>
+    <button class="inbox-filter-btn" data-filter="new" aria-selected="false" onclick="setInboxFilter('new')">New</button>
+    <button class="inbox-filter-btn" data-filter="unread" aria-selected="false" onclick="setInboxFilter('unread')">Unread</button>
+    <button class="inbox-filter-btn" data-filter="tasks" aria-selected="false" onclick="setInboxFilter('tasks')">Tasks</button>
+  </div>
+  <div class="inbox-rail-list" id="inbox-rail-list"></div>
+</aside>
 <div class="main-content">
 <p style="max-width:1280px;margin:8px auto 0;padding:0 24px;font-size:var(--fs-caption);color:var(--ink-faint)">
   <strong style="color:var(--gold)">&#9679; Match Day</strong> only lights up like this while a match is actually being played - on any other day it drops out of the sidebar entirely, the same way neither Cricket Coach nor FM26 keeps a "match" screen sitting there with nothing happening on it.
@@ -2178,6 +2201,24 @@
   <!-- ================= FRANCHISE ================= -->
   <section class="panel" id="panel-franchise" role="tabpanel" hidden>
     <div class="panel-head"><h1>Islamabad Icons &middot; Pakistan Premier League</h1><div class="sub">A campaign-bound franchise, not a year-round club &mdash; real, distinct rules apply here</div></div>
+    <div class="vitals-strip">
+      <div class="vitals-card clickable" onclick="enterAuctionMode()" style="cursor:pointer" title="The auction window has opened today">
+        <div class="icon-wrap"><svg class="icon"><use href="#i-badge"/></svg></div>
+        <div class="vitals-body"><div class="vitals-label">Franchise identity</div><div class="vitals-value" style="font-size:var(--fs-body)">Balanced</div><div class="vitals-sub">Dynasty rating 58 / 100</div></div>
+      </div>
+      <div class="vitals-card clickable" onclick="enterAuctionMode()" style="cursor:pointer">
+        <div class="icon-wrap"><svg class="icon"><use href="#i-cash"/></svg></div>
+        <div class="vitals-body"><div class="vitals-label">Central pool this campaign</div><div class="vitals-value">18.4cr</div><div class="vitals-sub">Operating costs -6.2cr</div></div>
+      </div>
+      <div class="vitals-card clickable" onclick="enterAuctionMode()" style="cursor:pointer" title="The auction window has opened today">
+        <div class="icon-wrap"><svg class="icon"><use href="#i-cal-list"/></svg></div>
+        <div class="vitals-body"><div class="vitals-label">Campaign stage</div><div class="vitals-value" style="color:var(--gold);font-size:var(--fs-body)">War Room &amp; Auction</div><div class="vitals-sub">Window opens today</div></div>
+      </div>
+      <div class="vitals-card clickable" onclick="openManagerProfile()" style="cursor:pointer">
+        <div class="icon-wrap"><svg class="icon"><use href="#i-briefcase"/></svg></div>
+        <div class="vitals-body"><div class="vitals-label">Circuit reputation</div><div class="vitals-value" style="font-size:var(--fs-body)">Building</div><div class="vitals-sub">Real, multi-year contract</div></div>
+      </div>
+    </div>
     <div class="tactics-grid">
       <div class="analysis-card">
         <span class="eyebrow"><svg class="icon sm"><use href="#i-badge"/></svg> Franchise identity</span>
@@ -2288,7 +2329,7 @@
         </div>
       </div>
     </div>
-    <div class="stage-actions"><button class="stage-continue-btn" onclick="exitEoiMode()">Return to Franchise <svg class="icon sm"><use href="#i-chevron-fwd"/></svg></button></div>
+    <div class="stage-actions"><button class="stage-continue-btn" id="eoi-confirm-registration-btn" onclick="confirmEoiRegistration()">Confirm registration list</button><button class="stage-continue-btn" onclick="exitEoiMode()">Return to Franchise <svg class="icon sm"><use href="#i-chevron-fwd"/></svg></button></div>
   </section>
 
   <!-- ================= PRE-AUCTION MEETING (its own, separately-dated event) ================= -->
@@ -3029,6 +3070,24 @@
   <!-- ================= CLUB ================= -->
   <section class="panel" id="panel-club" role="tabpanel" hidden>
     <div class="panel-head"><h1>Club</h1><div class="sub">Islamabad Icons &middot; season 2026/27</div></div>
+    <div class="vitals-strip">
+      <div class="vitals-card clickable" onclick="showPanel('world')" style="cursor:pointer">
+        <div class="icon-wrap"><svg class="icon"><use href="#i-trend-up"/></svg></div>
+        <div class="vitals-body"><div class="vitals-label">League position</div><div class="vitals-value">3rd</div><div class="vitals-sub">Pakistan T20 Cup &middot; 8 pts</div></div>
+      </div>
+      <div class="vitals-card clickable" onclick="openClubTab('finances')" style="cursor:pointer">
+        <div class="icon-wrap"><svg class="icon"><use href="#i-cash"/></svg></div>
+        <div class="vitals-body"><div class="vitals-label">Season budget</div><div class="vitals-value">$2.4M</div><div class="vitals-sub">+$255K net this season</div></div>
+      </div>
+      <div class="vitals-card clickable" onclick="openClubTab('boardroom')" style="cursor:pointer">
+        <div class="icon-wrap"><svg class="icon"><use href="#i-shield"/></svg></div>
+        <div class="vitals-body"><div class="vitals-label">Board confidence</div><div class="vitals-value" style="color:var(--turf-strong)">Steady</div><div class="vitals-sub">2 years left on your deal</div></div>
+      </div>
+      <div class="vitals-card clickable" onclick="openClubTab('staff')" style="cursor:pointer">
+        <div class="icon-wrap"><svg class="icon"><use href="#i-users"/></svg></div>
+        <div class="vitals-body"><div class="vitals-label">Staff roles filled</div><div class="vitals-value">9 of 11</div><div class="vitals-sub">2 vacancies open</div></div>
+      </div>
+    </div>
     <nav class="subnav" role="tablist" aria-label="Club views">
       <button class="subtab-btn" role="tab" aria-selected="true" data-subtab="overview">Overview</button>
       <button class="subtab-btn" role="tab" aria-selected="false" data-subtab="finances">Finances</button>
@@ -3076,10 +3135,10 @@
         <div class="analysis-card">
           <span class="eyebrow"><svg class="icon sm"><use href="#i-news"/></svg> From the press</span>
           <div class="notes-log">
-            <div class="notes-log-item" style="cursor:pointer" onclick="showPanel('inbox')"><span><strong>Chaudhry&rsquo;s rise has the dressing room talking</strong><br>Three fifties in four innings &mdash; the 21-year-old is forcing his way past a settled top order.</span></div>
-            <div class="notes-log-item" style="cursor:pointer;margin-top:8px" onclick="showPanel('inbox')"><span><strong>Icons ownership backs a &ldquo;youth-first&rdquo; rebuild</strong><br>A quiet trajectory shift after two seasons short of the knockouts.</span></div>
+            <div class="notes-log-item" style="cursor:pointer" onclick="focusInboxRail()"><span><strong>Chaudhry&rsquo;s rise has the dressing room talking</strong><br>Three fifties in four innings &mdash; the 21-year-old is forcing his way past a settled top order.</span></div>
+            <div class="notes-log-item" style="cursor:pointer;margin-top:8px" onclick="focusInboxRail()"><span><strong>Icons ownership backs a &ldquo;youth-first&rdquo; rebuild</strong><br>A quiet trajectory shift after two seasons short of the knockouts.</span></div>
           </div>
-          <button class="view-more-btn" onclick="showPanel('inbox')">All club news</button>
+          <button class="view-more-btn" onclick="focusInboxRail()">All club news</button>
         </div>
         <div class="analysis-card">
           <span class="eyebrow"><svg class="icon sm"><use href="#i-trophy"/></svg> Club history</span>
@@ -3861,6 +3920,24 @@
   <!-- ================= INTERNATIONAL ================= -->
   <section class="panel" id="panel-international" role="tabpanel" hidden>
     <div class="panel-head"><h1>International Cricket</h1><div class="sub">ICC World T20 Championship cycle &middot; next global event in 14 months</div></div>
+    <div class="vitals-strip">
+      <div class="vitals-card clickable" onclick="showPanel('international');document.querySelector('#panel-international .subtab-btn[data-subtab=&quot;overview&quot;]').click()" style="cursor:pointer">
+        <div class="icon-wrap"><svg class="icon"><use href="#i-trophy"/></svg></div>
+        <div class="vitals-body"><div class="vitals-label">ICC T20I ranking</div><div class="vitals-value">4th</div><div class="vitals-sub">251 pts &middot; behind India</div></div>
+      </div>
+      <div class="vitals-card clickable" onclick="showPanel('international');document.querySelector('#panel-international .subtab-btn[data-subtab=&quot;poolsquad&quot;]').click()" style="cursor:pointer">
+        <div class="icon-wrap"><svg class="icon"><use href="#i-alert"/></svg></div>
+        <div class="vitals-body"><div class="vitals-label">Squad required</div><div class="vitals-value" style="color:var(--gold);font-size:var(--fs-body)">Test squad due</div><div class="vitals-sub">Series in 26 days</div></div>
+      </div>
+      <div class="vitals-card clickable" onclick="showPanel('international');document.querySelector('#panel-international .subtab-btn[data-subtab=&quot;contracts&quot;]').click()" style="cursor:pointer">
+        <div class="icon-wrap"><svg class="icon"><use href="#i-cash"/></svg></div>
+        <div class="vitals-body"><div class="vitals-label">Central contracts</div><div class="vitals-value">29</div><div class="vitals-sub">6 Tier A &middot; 9 Tier B &middot; 14 Tier C</div></div>
+      </div>
+      <div class="vitals-card clickable" onclick="showPanel('international');document.querySelector('#panel-international .subtab-btn[data-subtab=&quot;staffboard&quot;]').click()" style="cursor:pointer">
+        <div class="icon-wrap"><svg class="icon"><use href="#i-shield"/></svg></div>
+        <div class="vitals-body"><div class="vitals-label">Coaching structure</div><div class="vitals-value" style="font-size:var(--fs-body)">Unified</div><div class="vitals-sub">Low coordination friction</div></div>
+      </div>
+    </div>
     <nav class="subnav" role="tablist" aria-label="International views">
       <button class="subtab-btn" role="tab" aria-selected="true" data-subtab="overview">Overview</button>
       <button class="subtab-btn" role="tab" aria-selected="false" data-subtab="poolsquad">National Pool &amp; Squad</button>
@@ -4495,20 +4572,20 @@
         <div class="attr-grid">
           <div class="attr-group">
             <h3>Tactical</h3>
-            <div class="attr-row"><span class="aname">Tactical Knowledge</span><span class="attr-num strong">14</span></div>
-            <div class="attr-row"><span class="aname">Match Reading</span><span class="attr-num strong">13</span></div>
-            <div class="attr-row"><span class="aname">Adaptability</span><span class="attr-num solid">11</span></div>
+            <div class="attr-row clickable" onclick="openAttributeDetail(this)"><span class="aname">Tactical Knowledge</span><span class="attr-num strong">14</span></div>
+            <div class="attr-row clickable" onclick="openAttributeDetail(this)"><span class="aname">Match Reading</span><span class="attr-num strong">13</span></div>
+            <div class="attr-row clickable" onclick="openAttributeDetail(this)"><span class="aname">Adaptability</span><span class="attr-num solid">11</span></div>
           </div>
           <div class="attr-group">
             <h3>People management</h3>
-            <div class="attr-row"><span class="aname">Man-Management</span><span class="attr-num strong">15</span></div>
-            <div class="attr-row"><span class="aname">Media Handling</span><span class="attr-num solid">10</span></div>
-            <div class="attr-row"><span class="aname">Discipline</span><span class="attr-num strong">13</span></div>
+            <div class="attr-row clickable" onclick="openAttributeDetail(this)"><span class="aname">Man-Management</span><span class="attr-num strong">15</span></div>
+            <div class="attr-row clickable" onclick="openAttributeDetail(this)"><span class="aname">Media Handling</span><span class="attr-num solid">10</span></div>
+            <div class="attr-row clickable" onclick="openAttributeDetail(this)"><span class="aname">Discipline</span><span class="attr-num strong">13</span></div>
           </div>
           <div class="attr-group">
             <h3>Development</h3>
-            <div class="attr-row"><span class="aname">Working with Youngsters</span><span class="attr-num elite">16</span></div>
-            <div class="attr-row"><span class="aname">Determination</span><span class="attr-num strong">14</span></div>
+            <div class="attr-row clickable" onclick="openAttributeDetail(this)"><span class="aname">Working with Youngsters</span><span class="attr-num elite">16</span></div>
+            <div class="attr-row clickable" onclick="openAttributeDetail(this)"><span class="aname">Determination</span><span class="attr-num strong">14</span></div>
           </div>
         </div>
         <div class="role-hint" style="margin-top:10px">A real strength with young players and a genuinely good read of the dressing room &mdash; media handling is the softest part of the profile right now, and it shows whenever a press conference gets confrontational.</div>
@@ -4579,45 +4656,16 @@
   </section>
 
     <!-- ================= INBOX ================= -->
-  <section class="panel" id="panel-inbox" role="tabpanel" hidden>
-    <div class="panel-head"><h1>Inbox</h1><div class="sub">This week&rsquo;s digest</div></div>
-
-    <nav class="subnav" role="tablist" aria-label="Inbox sections">
-      <button class="subtab-btn" role="tab" aria-selected="true" aria-controls="inbox-foryou" data-subtab="foryou">For You</button>
-      <button class="subtab-btn" role="tab" aria-selected="false" aria-controls="inbox-club" data-subtab="club">Club</button>
-      <button class="subtab-btn" role="tab" aria-selected="false" aria-controls="inbox-world" data-subtab="world">World</button>
-    </nav>
-
-    <div class="subpanel" id="inbox-foryou">
-      <div class="tile-grid">
-      <div class="tile" style="grid-column: span 7"><div class="news-item" style="border-top:none;padding-top:0"><div class="news-kicker">Board</div><div class="news-headline">Icons ownership backs a &ldquo;youth-first&rdquo; rebuild</div><div class="news-dek">Expect academy graduates to get more of the shop window.</div></div></div>
-      <div class="tile" style="grid-column: span 5"><div class="news-item" style="border-top:none;padding-top:0"><div class="news-kicker">Contract</div><div class="news-headline">Sarfraz Khan open to a new deal, agent says</div><div class="news-dek">Current terms run out in April.</div></div></div>
-      <div class="tile" style="grid-column: span 4"><div class="news-item" style="border-top:none;padding-top:0"><div class="news-kicker">Milestone</div><div class="news-headline">Hamza Malik named Player of the Round</div><div class="news-dek">A run of low-30s scores at a strike rate that pulled every chase back into range.</div></div></div>
-      <div class="tile" style="grid-column: span 4"><div class="news-item" style="border-top:none;padding-top:0"><div class="news-kicker">Discipline</div><div class="news-headline">Board files a &ldquo;no distractions&rdquo; note ahead of derby week</div><div class="news-dek">A quiet word before Sunday&rsquo;s trip to Lahore.</div></div></div>
-      <div class="tile" style="grid-column: span 4"><div class="news-item" style="border-top:none;padding-top:0"><div class="news-kicker">Squad</div><div class="news-headline">Medical centre clears Adeel Hayat for full training</div><div class="news-dek">Back in full training this week, available for selection from Sunday.</div></div></div>
+  <div class="modal-backdrop" id="inbox-block-backdrop" onclick="if(event.target===this) closeInboxBlock()">
+    <div class="negotiation-modal" role="dialog" aria-modal="true" aria-labelledby="inbox-block-title" style="max-width:460px">
+      <div class="negotiation-head">
+        <h2 id="inbox-block-title" style="margin:0">Action required before you continue</h2>
+        <button class="modal-close" onclick="closeInboxBlock()" aria-label="Close">&times;</button>
       </div>
+      <div class="role-hint" style="margin-bottom:10px">The Inbox has pending tasks that need resolving first &mdash; the same block FM26 itself puts in front of a genuine deadline day.</div>
+      <div id="inbox-block-list"></div>
     </div>
-    <div class="subpanel" id="inbox-club" hidden>
-      <div class="tile-grid">
-      <div class="tile" style="grid-column: span 6"><div class="news-item" style="border-top:none;padding-top:0"><div class="news-kicker">Academy</div><div class="news-headline">Academy graduate included in senior squad for the first time</div><div class="news-dek">A first involvement with the senior set-up after a strong intake year.</div></div></div>
-      <div class="tile" style="grid-column: span 6"><div class="news-item" style="border-top:none;padding-top:0"><div class="news-kicker">Staff</div><div class="news-headline">Aamir Sohail praises squad depth ahead of the run-in</div><div class="news-dek">&ldquo;We can rotate without losing anything &mdash; that&rsquo;s new for this club.&rdquo;</div></div></div>
-      <div class="tile" style="grid-column: span 4"><div class="news-item" style="border-top:none;padding-top:0"><div class="news-kicker">Facilities</div><div class="news-headline">Training-ground resurfacing signed off by the board</div><div class="news-dek">Work begins in the close season, funded from this year&rsquo;s surplus.</div></div></div>
-      <div class="tile" style="grid-column: span 4"><div class="news-item" style="border-top:none;padding-top:0"><div class="news-kicker">Supporters</div><div class="news-headline">Season-ticket renewals open next week</div><div class="news-dek">Early-bird pricing runs for the first ten days.</div></div></div>
-      <div class="tile" style="grid-column: span 4"><div class="news-item" style="border-top:none;padding-top:0"><div class="news-kicker">Youth</div><div class="news-headline">Under-19s through to the regional final</div><div class="news-dek">A third final in four seasons for the youth setup.</div></div></div>
-      <div class="tile clickable" style="grid-column: span 4" onclick="openSquadNewsModal('Pakistan','T20I series vs Sri Lanka',['Kamran Hussain (c)','Talha Iqbal','Hamza Malik','Zain Chaudhry','Adeel Hayat','Umar Baig'],'IN: Umar Baig &middot; OUT: Rizwan Sheikh')"><div class="news-item" style="border-top:none;padding-top:0"><div class="news-kicker">Squad</div><div class="news-headline">Pakistan name their T20I squad vs Sri Lanka</div><div class="news-dek">One change from the last squad &mdash; Umar Baig in for Rizwan Sheikh.</div></div></div>
-      </div>
-    </div>
-    <div class="subpanel" id="inbox-world" hidden>
-      <div class="tile-grid">
-      <div class="tile" style="grid-column: span 6"><div class="news-item" style="border-top:none;padding-top:0"><div class="news-kicker">Transfer</div><div class="news-headline">Lahore Lions confirm new overseas signing ahead of PPL auction</div><div class="news-dek">A statement of intent from the group stage&rsquo;s form side.</div></div></div>
-      <div class="tile" style="grid-column: span 6"><div class="news-item" style="border-top:none;padding-top:0"><div class="news-kicker">Pakistan T20 Cup</div><div class="news-headline">Title race tightens after Karachi Kings&rsquo; win</div><div class="news-dek">Three points now separate the top four with a third of the season left.</div></div></div>
-      <div class="tile" style="grid-column: span 4"><div class="news-item" style="border-top:none;padding-top:0"><div class="news-kicker">Franchise cricket</div><div class="news-headline">Crescent Trophy hosting rights confirmed for next cycle</div><div class="news-dek">The tournament returns on its usual biennial slot.</div></div></div>
-      <div class="tile" style="grid-column: span 4"><div class="news-item" style="border-top:none;padding-top:0"><div class="news-kicker">International</div><div class="news-headline">World T20 Championship qualifying places decided this month</div><div class="news-dek">Two associate berths still up for grabs.</div></div></div>
-      <div class="tile" style="grid-column: span 4"><div class="news-item" style="border-top:none;padding-top:0"><div class="news-kicker">Rankings</div><div class="news-headline">Pakistan climb to third in the T20I table</div><div class="news-dek">A string of bilateral wins moves the board&rsquo;s central-contract calculus.</div></div></div>
-      <div class="tile clickable" style="grid-column: span 5" onclick="openSquadNewsModal('India','ODI squad vs New Zealand',['Rohan Deshmukh (c)','Karan Bhosle','Vikram Solanki Jr.','Arjun Mehra','Suresh Pillai','Deepak Chahal'],'IN: Suresh Pillai, Deepak Chahal &middot; OUT: Manoj Tiwari, Rahul Bakshi')"><div class="news-item" style="border-top:none;padding-top:0"><div class="news-kicker">International</div><div class="news-headline">India name their ODI squad for the home series vs New Zealand</div><div class="news-dek">Two changes from their last white-ball squad.</div></div></div>
-      </div>
-    </div>
-  </section>
+  </div>
 
 <section class="panel" id="panel-staff-profile" role="tabpanel" hidden>
   <div class="breadcrumb"><a id="staff-profile-crumb-parent" onclick="showPanel('club')">Club</a><span class="sep">&rsaquo;</span><a id="staff-profile-crumb-section" onclick="openClubTab('staff')">Staff</a><span class="sep">&rsaquo;</span><span class="here" id="staff-profile-breadcrumb-here">Staff member</span></div>
@@ -4649,11 +4697,11 @@
       <div class="attr-grid">
         <div class="attr-group">
           <h3>Core attributes</h3>
-          <div class="attr-row"><span class="aname">Analysis</span><span class="attr-num" id="staff-attr-analysis">-</span></div>
-          <div class="attr-row"><span class="aname">Statistics</span><span class="attr-num" id="staff-attr-statistics">-</span></div>
-          <div class="attr-row"><span class="aname">Technical Knowledge</span><span class="attr-num" id="staff-attr-technical">-</span></div>
-          <div class="attr-row"><span class="aname">Communication</span><span class="attr-num" id="staff-attr-communication">-</span></div>
-          <div class="attr-row"><span class="aname">Diligence</span><span class="attr-num" id="staff-attr-diligence">-</span></div>
+          <div class="attr-row clickable" onclick="openAttributeDetail(this)"><span class="aname">Analysis</span><span class="attr-num" id="staff-attr-analysis">-</span></div>
+          <div class="attr-row clickable" onclick="openAttributeDetail(this)"><span class="aname">Statistics</span><span class="attr-num" id="staff-attr-statistics">-</span></div>
+          <div class="attr-row clickable" onclick="openAttributeDetail(this)"><span class="aname">Technical Knowledge</span><span class="attr-num" id="staff-attr-technical">-</span></div>
+          <div class="attr-row clickable" onclick="openAttributeDetail(this)"><span class="aname">Communication</span><span class="attr-num" id="staff-attr-communication">-</span></div>
+          <div class="attr-row clickable" onclick="openAttributeDetail(this)"><span class="aname">Diligence</span><span class="attr-num" id="staff-attr-diligence">-</span></div>
         </div>
       </div>
       <div class="role-hint" id="staff-role-suitability" style="margin-top:10px;margin-bottom:0"></div>
@@ -5360,11 +5408,6 @@
     var log = document.getElementById('job-apply-log');
     log.textContent = 'Your interest in the ' + clubName + ' post has been noted' + String.fromCharCode(8212) + 'you\'ll hear back if they want to take it further.';
   }
-  function toggleSidebar() {
-    var sb = document.querySelector('.tabs');
-    sb.classList.toggle('collapsed');
-    document.getElementById('sidebar-collapse-btn').title = sb.classList.contains('collapsed') ? 'Expand sidebar' : 'Collapse sidebar';
-  }
   // ---------- Player Actions dropdown + Negotiation modal ----------
   var DIALOGUE_MODES = {
     transfer: {
@@ -5749,7 +5792,20 @@
     'Game awareness': { desc: 'Reading the situation itself &mdash; feeds directly into how well he reads a bowler\u2019s pattern and adapts mid-innings.', trend: 'A real strength already, and it only tends to keep rising with experience.' },
     'Fitness': { desc: 'Physical attributes peak mid-20s and go first &mdash; this is the attribute that most directly ends a career.', trend: 'Currently well managed by a real training programme.' },
     'Running between wickets': { desc: 'Partly an individual attribute, partly a genuine partnership with whoever is at the other end &mdash; a poor pairing raises real run-out risk.', trend: 'A real asset &mdash; converts hesitant singles into twos.' },
-    'Strength': { desc: 'The physical base everything else is built on &mdash; ages the hardest of any attribute once the mid-20s peak passes.', trend: 'Unchanged.' }
+    'Strength': { desc: 'The physical base everything else is built on &mdash; ages the hardest of any attribute once the mid-20s peak passes.', trend: 'Unchanged.' },
+    'Tactical Knowledge': { desc: 'One of the four attributes a captain-coach partnership\u2019s in-match calls are actually judged on, alongside Match Reading, Adaptability and Decision Making.', trend: 'Grows on real milestones \u2014 a completed tour or campaign \u2014 not week to week. Steady since his last renewal.' },
+    'Match Reading': { desc: 'Reading the game as it happens \u2014 the attribute a captain leans on most when a plan needs to change mid-match, not before it.', trend: 'Sharpened by a run of tactically demanding fixtures this season.' },
+    'Adaptability': { desc: 'How readily he reshapes a plan once conditions or the scoreline change \u2014 the fourth attribute in the same tactical-quality blend.', trend: 'Unchanged \u2014 his approach has stayed settled this campaign.' },
+    'Man-Management': { desc: 'Talks a restless player round before a transfer request is ever filed \u2014 the harder the room, the more this is worth.', trend: 'A real asset this season \u2014 two contract disputes handled quietly rather than going public.' },
+    'Media Handling': { desc: 'Decides how a press conference actually lands \u2014 a well-handled bold answer lifts the dressing room; a botched one from a poor reading here costs him on every axis.', trend: 'Tested for real in a post-match conference after last week\u2019s heavy loss.' },
+    'Discipline': { desc: 'How firmly he holds a squad to standards \u2014 feeds directly into whether a code-of-conduct charge against one of his players ever needed to happen at all.', trend: 'Unchanged.' },
+    'Working with Youngsters': { desc: 'The read a board with a youth-first agenda judges him against directly \u2014 also what a promising academy graduate benefits from the moment he joins first-team training.', trend: 'A genuine strength \u2014 two academy graduates have progressed under his watch this year.' },
+    'Determination': { desc: 'His own resolve under pressure \u2014 the same underlying trait a coach\u2019s satisfaction and resignation decisions lean on when a job gets hard.', trend: 'Being tested by a run of results below what the board expected coming into the season.' },
+    'Statistics': { desc: 'Turning a raw record into a genuine signal \u2014 without it, a report leans on reputation and recent headlines instead of the real numbers behind them.', trend: 'Feeds directly into how confidently a report can actually be trusted.' },
+    'Technical Knowledge': { desc: 'The coaching-craft half of the role \u2014 what actually gets worked on in a one-to-one session, not just what ends up written in a report.', trend: 'The attribute a specialist coaching role weighs most heavily of all.' },
+    'Communication': { desc: 'Whether a plan built in a meeting room actually lands as an instruction a player can use \u2014 a brilliant read that never gets through is worth less than it looks.', trend: 'Unchanged.' },
+    'Diligence': { desc: 'Whether the whole squad or opposition gets covered, or just the famous names \u2014 a lazy read here leaves the tail as guesswork.', trend: 'A genuine strength \u2014 nothing about this department\u2019s coverage looks thin.' },
+    'Analysis': { desc: 'Reading an opposition\u2019s real weaknesses \u2014 a strong reading here is what makes a scouting report or a pre-match plan worth trusting instead of guessing.', trend: 'The single heaviest-weighted attribute for an Analyst or Chief Scout in this role.' }
   };
   function openAttributeDetail(rowEl) {
     var nameEl = rowEl.querySelector('.aname');
@@ -6637,6 +6693,7 @@
     var wm = document.getElementById("wordmark-club");
     if (wm) wm.innerHTML = CONTEXT_WORDMARK[ctx];
     renderActionButton();
+    renderInboxRail();
     // If the panel on screen belongs to a domain we just switched away from,
     // fall back to Portal rather than leave a now-hidden tab looking selected.
     if (currentTabWasHidden) showPanel("portal");
@@ -6664,13 +6721,136 @@
     if (CURRENT_CONTEXT === "franchise") {
       var s = FRANCHISE_STAGE_BUTTON[franchiseButtonStage] || FRANCHISE_STAGE_BUTTON.auction;
       btn.innerHTML = s.label + ' <svg class="icon sm"><use href="#i-chevron-fwd"/></svg>';
-      btn.setAttribute("onclick", s.action);
+      btn.setAttribute("onclick", franchiseButtonStage === "auction" ? "attemptAdvance('enterAuctionMode')" : s.action);
       btn.title = s.title;
     } else {
       btn.innerHTML = 'Play Match <svg class="icon sm"><use href="#i-chevron-fwd"/></svg>';
-      btn.setAttribute("onclick", "enterMatchMode()");
+      btn.setAttribute("onclick", "attemptAdvance('enterMatchMode')");
       btn.title = "A fixture is scheduled today";
     }
+  }
+
+  // ---------- Persistent Inbox rail (FM26 navbar redesign) ----------
+  // The sidebar is gone - the horizontal navbar above is primary navigation now, and its
+  // old slot holds a real inbox that never disappears when the active screen changes, with
+  // the four filters FM26 itself uses (All/New/Unread/Tasks) and genuine blocking TASKS for
+  // three real calendar-gated deadlines this mockup already models - a national squad
+  // announcement, the franchise EOI registration list, and the retention/trade window.
+  // attemptAdvance() is the gate: exactly like FM26 itself, the topbar's own action button
+  // refuses to proceed while an unresolved task sits in the inbox.
+  var eoiRegistrationConfirmed = false;
+  var INBOX_NEWS = [
+    { id: 'n1', kicker: 'Board', headline: 'Icons ownership backs a \u201cyouth-first\u201d rebuild', dek: 'Expect academy graduates to get more of the shop window.', isNew: true, read: false },
+    { id: 'n2', kicker: 'Contract', headline: 'Sarfraz Khan open to a new deal, agent says', dek: 'Current terms run out in April.', isNew: true, read: false },
+    { id: 'n3', kicker: 'Milestone', headline: 'Hamza Malik named Player of the Round', dek: 'A run of low-30s scores at a strike rate that pulled every chase back into range.', isNew: true, read: false },
+    { id: 'n4', kicker: 'Discipline', headline: 'Board files a \u201cno distractions\u201d note ahead of derby week', dek: 'A quiet word before Sunday\u2019s trip to Lahore.', isNew: false, read: true },
+    { id: 'n5', kicker: 'Squad', headline: 'Medical centre clears Adeel Hayat for full training', dek: 'Back in full training this week, available for selection from Sunday.', isNew: false, read: true },
+    { id: 'n6', kicker: 'Academy', headline: 'Academy graduate included in senior squad for the first time', dek: 'A first involvement with the senior set-up after a strong intake year.', isNew: false, read: true },
+    { id: 'n7', kicker: 'Staff', headline: 'Aamir Sohail praises squad depth ahead of the run-in', dek: '\u201cWe can rotate without losing anything \u2014 that\u2019s new for this club.\u201d', isNew: false, read: true },
+    { id: 'n8', kicker: 'Facilities', headline: 'Training-ground resurfacing signed off by the board', dek: 'Work begins in the close season, funded from this year\u2019s surplus.', isNew: false, read: true },
+    { id: 'n9', kicker: 'Supporters', headline: 'Season-ticket renewals open next week', dek: 'Early-bird pricing runs for the first ten days.', isNew: false, read: true },
+    { id: 'n10', kicker: 'Youth', headline: 'Under-19s through to the regional final', dek: 'A third final in four seasons for the youth setup.', isNew: false, read: true },
+    { id: 'n11', kicker: 'Squad', headline: 'Pakistan name their T20I squad vs Sri Lanka', dek: 'One change from the last squad \u2014 Umar Baig in for Rizwan Sheikh.', isNew: false, read: false, click: "openSquadNewsModal('Pakistan','T20I series vs Sri Lanka',['Kamran Hussain (c)','Talha Iqbal','Hamza Malik','Zain Chaudhry','Adeel Hayat','Umar Baig'],'IN: Umar Baig &middot; OUT: Rizwan Sheikh')" },
+    { id: 'n12', kicker: 'Transfer', headline: 'Lahore Lions confirm new overseas signing ahead of PPL auction', dek: 'A statement of intent from the group stage\u2019s form side.', isNew: false, read: true },
+    { id: 'n13', kicker: 'Pakistan T20 Cup', headline: 'Title race tightens after Karachi Kings\u2019 win', dek: 'Three points now separate the top four with a third of the season left.', isNew: false, read: true },
+    { id: 'n14', kicker: 'Franchise cricket', headline: 'Crescent Trophy hosting rights confirmed for next cycle', dek: 'The tournament returns on its usual biennial slot.', isNew: false, read: true },
+    { id: 'n15', kicker: 'International', headline: 'World T20 Championship qualifying places decided this month', dek: 'Two associate berths still up for grabs.', isNew: false, read: true },
+    { id: 'n16', kicker: 'Rankings', headline: 'Pakistan climb to third in the T20I table', dek: 'A string of bilateral wins moves the board\u2019s central-contract calculus.', isNew: false, read: true },
+    { id: 'n17', kicker: 'International', headline: 'India name their ODI squad for the home series vs New Zealand', dek: 'Two changes from their last white-ball squad.', isNew: false, read: false, click: "openSquadNewsModal('India','ODI squad vs New Zealand',['Rohan Deshmukh (c)','Karan Bhosle','Vikram Solanki Jr.','Arjun Mehra','Suresh Pillai','Deepak Chahal'],'IN: Suresh Pillai, Deepak Chahal &middot; OUT: Manoj Tiwari, Rahul Bakshi')" }
+  ];
+  var INBOX_TASKS = [
+    {
+      id: 'task-squad', context: 'international',
+      title: 'Test squad vs Australia \u2014 announcement due',
+      detail: 'This format has not been announced yet. The tour party cannot be confirmed until you submit it.',
+      resolved: function () { return NATIONAL_SQUADS.test.players.length > 0; },
+      go: function () { closeInboxBlock(); showPanel('international'); var b = document.querySelector('#panel-international .subtab-btn[data-subtab="poolsquad"]'); if (b) b.click(); switchSquadFormat('test'); }
+    },
+    {
+      id: 'task-registration', context: 'franchise',
+      title: 'Auction registration & EOI list due',
+      detail: 'Confirm the club\u2019s interest before the EOI meeting closes the auction shortlist.',
+      resolved: function () { return eoiRegistrationConfirmed; },
+      go: function () { closeInboxBlock(); enterEoiMode(); }
+    },
+    {
+      id: 'task-retention', context: 'franchise',
+      title: 'Retention & Trade window closes today',
+      detail: 'Lock in the retained core before the auction opens \u2014 RTM cards and purse both depend on it.',
+      resolved: function () { return retentionSubmitted; },
+      go: function () { closeInboxBlock(); enterAuctionMode(); }
+    }
+  ];
+  var inboxFilter = 'all';
+  function setInboxFilter(f) {
+    inboxFilter = f;
+    document.querySelectorAll('.inbox-filter-btn').forEach(function (b) { b.setAttribute('aria-selected', b.dataset.filter === f ? 'true' : 'false'); });
+    renderInboxRail();
+  }
+  function openInboxItem(id) {
+    var item = INBOX_NEWS.filter(function (n) { return n.id === id; })[0];
+    if (!item) return;
+    item.read = true;
+    if (item.click) { try { (new Function(item.click))(); } catch (e) {} }
+    renderInboxRail();
+  }
+  function renderInboxRail() {
+    var list = document.getElementById('inbox-rail-list');
+    if (!list) return;
+    var tasks = (typeof INBOX_TASKS !== 'undefined' && typeof NATIONAL_SQUADS !== 'undefined' && typeof retentionSubmitted !== 'undefined')
+      ? INBOX_TASKS.filter(function (t) { return t.context === CURRENT_CONTEXT; }) : [];
+    var news = INBOX_NEWS.filter(function (n) {
+      if (inboxFilter === 'new') return n.isNew;
+      if (inboxFilter === 'unread') return !n.read;
+      if (inboxFilter === 'tasks') return false;
+      return true;
+    });
+    var taskHtml = (inboxFilter === 'all' || inboxFilter === 'tasks') ? tasks.map(function (t) {
+      var done = t.resolved();
+      return '<div class="inbox-task-card' + (done ? ' resolved' : '') + '">'
+        + '<div class="inbox-task-title">' + (done ? '\u2713 ' : '\u26a0 ') + t.title + '</div>'
+        + '<div class="inbox-task-detail">' + t.detail + '</div>'
+        + (done ? '' : '<button onclick="INBOX_TASKS.filter(function(x){return x.id===\'' + t.id + '\'})[0].go()">Resolve now</button>')
+        + '</div>';
+    }).join('') : '';
+    var newsHtml = news.map(function (n) {
+      return '<div class="inbox-item' + (!n.read ? ' unread' : '') + '" onclick="openInboxItem(\'' + n.id + '\')">'
+        + '<div class="inbox-item-kicker">' + (!n.read ? '<span class="dot"></span>' : '') + n.kicker + '</div>'
+        + '<div class="inbox-item-headline">' + n.headline + '</div>'
+        + '<div class="inbox-item-dek">' + n.dek + '</div>'
+        + '</div>';
+    }).join('');
+    var body = taskHtml + newsHtml;
+    list.innerHTML = body || '<div class="inbox-rail-empty">Nothing here right now.</div>';
+    var unreadCount = INBOX_NEWS.filter(function (n) { return !n.read; }).length + tasks.filter(function (t) { return !t.resolved(); }).length;
+    var badge = document.getElementById('inbox-unread-badge');
+    if (badge) badge.textContent = unreadCount ? (unreadCount + ' new') : '';
+  }
+  function focusInboxRail() {
+    var rail = document.getElementById('inbox-rail');
+    if (!rail) return;
+    rail.classList.add('inbox-rail-flash');
+    setTimeout(function () { rail.classList.remove('inbox-rail-flash'); }, 900);
+    rail.scrollIntoView({ block: 'nearest' });
+  }
+  function attemptAdvance(fnName) {
+    var pending = INBOX_TASKS.filter(function (t) { return t.context === CURRENT_CONTEXT && !t.resolved(); });
+    if (pending.length) { openInboxBlock(pending); return; }
+    window[fnName]();
+  }
+  function openInboxBlock(pending) {
+    document.getElementById('inbox-block-list').innerHTML = pending.map(function (t) {
+      return '<div class="staff-row" style="margin-bottom:8px"><div class="staff-row-main"><div><b>' + t.title + '</b><div class="role-hint" style="margin:2px 0 0">' + t.detail + '</div></div>'
+        + '<button class="view-more-btn" onclick="INBOX_TASKS.filter(function(x){return x.id===\'' + t.id + '\'})[0].go()">Resolve</button></div></div>';
+    }).join('');
+    document.getElementById('inbox-block-backdrop').classList.add('open');
+  }
+  function closeInboxBlock() { document.getElementById('inbox-block-backdrop').classList.remove('open'); }
+  function confirmEoiRegistration() {
+    eoiRegistrationConfirmed = true;
+    var btn = document.getElementById('eoi-confirm-registration-btn');
+    if (btn) { btn.disabled = true; btn.textContent = 'Registration confirmed'; }
+    renderInboxRail();
   }
 
   wireTabs('#panel-squad .subtab-btn', 'squad-');
@@ -6680,7 +6860,6 @@
   wireTabs('#panel-competition-profile .subtab-btn', 'cprofile-');
   wireTabs('#panel-matchday .subtab-btn', 'sub-');
   wireTabs('#panel-player .subtab-btn', 'psub-');
-  wireTabs('#panel-inbox .subtab-btn', 'inbox-');
   wireTabs('#panel-international .subtab-btn', 'intl-');
   wireTabs('#panel-training .subtab-btn', 'training-');
   wireTabs('#panel-dynamics .subtab-btn', 'dynamics-');
@@ -8221,6 +8400,7 @@
     banner.hidden = false;
     banner.innerHTML = 'Squad announced. ' + diffText;
     renderNationalSquad(fmt);
+    renderInboxRail();
   }
 
 
@@ -8280,7 +8460,11 @@
     banner.hidden = false;
     var kept = FRANCHISE_FULL_SQUAD.filter(function (p) { return p.retained; }).map(function (p) { return p.name; });
     banner.innerHTML = 'Retention locked in: ' + kept.join(', ') + '. On to the auction.';
+    renderInboxRail();
   }
+  // Everything the inbox rail's tasks read (NATIONAL_SQUADS, retentionSubmitted) now
+  // exists - this is the first safe point to render it for real.
+  renderInboxRail();
 
 
   // ---- Calendar: every dated event this mockup already establishes elsewhere, in one clickable
