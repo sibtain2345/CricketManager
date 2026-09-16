@@ -186,6 +186,12 @@
     background: transparent;
   }
   .tab-btn:hover { background: var(--surface-2); color: var(--ink); }
+  /* A real, confirmed bug found while testing the sidebar redesign: .tab-btn's own
+     unconditional `display: flex` (an author-stylesheet rule) silently overrode the
+     browser's default `[hidden] { display: none }` UA rule, so setContext()'s domain-
+     exclusive hiding of Recruitment/Club/Franchise/International never actually worked -
+     the `hidden` attribute was set correctly, the element just never disappeared. */
+  .tab-btn[hidden] { display: none; }
   .tab-btn[aria-selected="true"] {
     background: var(--turf-dim); color: var(--turf-strong); border-left-color: var(--turf-strong);
   }
@@ -194,6 +200,17 @@
   .tab-btn[data-live="true"][aria-selected="true"] { color: var(--gold); border-left-color: var(--gold); background: var(--gold-dim); }
   .tab-btn[data-live="true"][aria-selected="true"] .icon { color: var(--gold); }
   .tab-btn:focus-visible { outline: 2px solid var(--turf); outline-offset: 2px; }
+  .tab-btn { transition: background 0.12s ease, color 0.12s ease, border-color 0.12s ease; }
+  .tab-btn[aria-selected="true"] { box-shadow: inset 0 0 0 1px var(--turf-dim); }
+  .tab-btn[data-live="true"][aria-selected="true"] { box-shadow: inset 0 0 0 1px var(--gold-dim); }
+  /* FM26's own real left-rail groups its destinations into small labelled
+     sections rather than one flat list - the group label is purely a visual
+     divider (no JS role), placed once per section at whichever button
+     already sits first in that section's existing DOM order. */
+  .tab-group-label { font-size: 10px; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; color: var(--ink-faint); padding: 14px 12px 5px; }
+  .tab-group-label:first-child { padding-top: 2px; }
+  .tabs.collapsed .tab-group-label { height: 1px; padding: 10px 0 0; margin: 0 6px; border-top: 1px solid var(--border-soft); overflow: hidden; text-indent: -9999px; }
+  .tabs.collapsed .tab-group-label:first-child { border-top: none; padding-top: 0; }
 
   /* sub-nav, used inside Match Day and Player screens */
   .subnav { display: flex; gap: 6px; margin-bottom: 18px; border-bottom: 1px solid var(--border-soft); padding-bottom: 0; }
@@ -247,9 +264,19 @@
   /* ---------- Tiles (Portal) ---------- */
   .tile-grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 16px; }
   .tile { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 17px 19px; box-shadow: var(--shadow); }
-  
+
   .tile .tile-eyebrow { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
-  .tile.next-fixture { grid-column: span 5; } .tile.board-mood { grid-column: span 3; } .tile.tasks { grid-column: span 4; } .tile.news { grid-column: span 7; } .tile.squad-alert { grid-column: span 5; } .tile.training-week { grid-column: span 6; } .tile.training-delegate { grid-column: span 6; } .tile.team-leaders { grid-column: span 9; }
+  .tile.next-fixture { grid-column: span 5; } .tile.board-mood { grid-column: span 3; } .tile.tasks { grid-column: span 4; } .tile.news { grid-column: span 7; } .tile.squad-alert { grid-column: span 5; } .tile.training-week { grid-column: span 6; } .tile.training-delegate { grid-column: span 6; } .tile.team-leaders { grid-column: span 9; } .tile.dev-watch { grid-column: span 6; } .tile.form-momentum { grid-column: span 6; }
+
+  /* ---------- Portal: the FM26-style vitals row above the main tile grid ---------- */
+  .vitals-strip { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 16px; }
+  .vitals-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 12px 15px; display: flex; align-items: center; gap: 11px; }
+  .vitals-card .icon-wrap { width: 34px; height: 34px; border-radius: 9px; background: var(--turf-dim); color: var(--turf-strong); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .vitals-card .vitals-body { min-width: 0; }
+  .vitals-card .vitals-label { font-size: var(--fs-micro); letter-spacing: 0.05em; text-transform: uppercase; color: var(--ink-faint); font-weight: 700; }
+  .vitals-card .vitals-value { font-family: var(--font-display); font-size: var(--fs-subhead); font-weight: 700; line-height: 1.2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .vitals-card .vitals-sub { font-size: var(--fs-caption); color: var(--ink-dim); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  @media (max-width: 900px) { .vitals-strip { grid-template-columns: repeat(2, 1fr); } }
 
   .fixture-row { display: flex; align-items: center; justify-content: space-between; padding-top: 6px; }
   .fixture-teams { display: flex; align-items: center; gap: 12px; }
@@ -1283,18 +1310,23 @@
     <svg class="icon"><use href="#i-chevron-fwd"/></svg>
   </button>
   <div class="tabnav-inner">
+    <div class="tab-group-label">Overview</div>
     <button class="tab-btn" role="tab" aria-selected="true" aria-controls="panel-portal" data-tab="portal" title="Portal"><svg class="icon"><use href="#i-home"/></svg><span class="tab-label">Portal</span></button>
+    <div class="tab-group-label">Squad</div>
     <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-squad" data-tab="squad" title="Squad"><svg class="icon"><use href="#i-users"/></svg><span class="tab-label">Squad</span></button>
     <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-training" data-tab="training" title="Training"><svg class="icon"><use href="#i-target"/></svg><span class="tab-label">Training</span></button>
     <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-tactics" data-tab="tactics" title="Tactics"><svg class="icon"><use href="#i-shield"/></svg><span class="tab-label">Tactics</span></button>
+    <div class="tab-group-label">Club Affairs</div>
     <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-recruitment" data-tab="recruitment" data-context="club" title="Recruitment"><svg class="icon"><use href="#i-swap"/></svg><span class="tab-label">Recruitment</span></button>
     <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-club" data-tab="club" data-context="club" title="Club"><svg class="icon"><use href="#i-briefcase"/></svg><span class="tab-label">Club</span></button>
     <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-dynamics" data-tab="dynamics" title="Dynamics"><svg class="icon"><use href="#i-user"/></svg><span class="tab-label">Dynamics</span></button>
     <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-franchise" data-tab="franchise" data-context="franchise" title="Franchise"><svg class="icon"><use href="#i-badge"/></svg><span class="tab-label">Franchise</span></button>
+    <div class="tab-group-label">Competition</div>
     <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-fixtures" data-tab="fixtures" title="Fixtures"><svg class="icon"><use href="#i-cal-list"/></svg><span class="tab-label">Fixtures</span></button>
     <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-international" data-tab="international" data-context="international" title="International"><svg class="icon"><use href="#i-plane"/></svg><span class="tab-label">International</span></button>
     <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-records" data-tab="records" title="Records"><svg class="icon"><use href="#i-trophy"/></svg><span class="tab-label">Records</span></button>
     <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-world" data-tab="world" title="World"><svg class="icon"><use href="#i-globe"/></svg><span class="tab-label">World</span></button>
+    <div class="tab-group-label">Communications</div>
     <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-inbox" data-tab="inbox" title="Inbox"><svg class="icon"><use href="#i-inbox"/></svg><span class="tab-label">Inbox</span></button>
   </div>
 </nav>
@@ -1308,6 +1340,26 @@
   <!-- ================= PORTAL ================= -->
   <section class="panel" id="panel-portal" role="tabpanel">
     <div class="panel-head"><h1>Good morning, skip.</h1><div class="sub">Here's what needs you today</div></div>
+
+    <div class="vitals-strip">
+      <div class="vitals-card clickable" onclick="showPanel('world')" style="cursor:pointer">
+        <div class="icon-wrap"><svg class="icon"><use href="#i-trend-up"/></svg></div>
+        <div class="vitals-body"><div class="vitals-label">League position</div><div class="vitals-value">3rd</div><div class="vitals-sub">Pakistan T20 Cup &middot; 8 pts</div></div>
+      </div>
+      <div class="vitals-card clickable" onclick="showPanel('fixtures')" style="cursor:pointer">
+        <div class="icon-wrap"><svg class="icon"><use href="#i-star-fill"/></svg></div>
+        <div class="vitals-body"><div class="vitals-label">Recent form</div><div class="vitals-value" style="font-size:var(--fs-body);letter-spacing:.04em">W&nbsp;W&nbsp;L&nbsp;W&nbsp;W</div><div class="vitals-sub">4 wins from the last 5</div></div>
+      </div>
+      <div class="vitals-card clickable" onclick="showPanel('club')" style="cursor:pointer">
+        <div class="icon-wrap"><svg class="icon"><use href="#i-cash"/></svg></div>
+        <div class="vitals-body"><div class="vitals-label">Season budget</div><div class="vitals-value">$2.4M</div><div class="vitals-sub">$680K committed so far</div></div>
+      </div>
+      <div class="vitals-card clickable" onclick="showPanel('fixtures')" style="cursor:pointer">
+        <div class="icon-wrap"><svg class="icon"><use href="#i-cal-list"/></svg></div>
+        <div class="vitals-body"><div class="vitals-label">Season progress</div><div class="vitals-value">6 of 14</div><div class="vitals-sub">Played &middot; group stage</div></div>
+      </div>
+    </div>
+
     <div class="tile-grid">
       <div class="tile next-fixture">
         <div class="tile-eyebrow"><span class="eyebrow">Next fixture</span><span class="pill first">Home</span></div>
@@ -1357,6 +1409,25 @@
         <div class="squad-alert-row"><div><div class="squad-alert-name">Danish Raza</div><div class="squad-alert-role">Opening bowler</div></div><span class="pill injury"><img class="icon sm" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABEAAAAOCAYAAADJ7fe0AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAEISURBVDhPpdO9ioNAFAXg+8q+QMo0voQQCKQQBAtBgkUEC1kQf4oQUCJIAglYKCgqejaTRZkNN0V2Bz4YnHMPYzEkFv6xngXTNEEYx/FPTqcTaBgG9H3P+npccsadC/v9HtR1Hdq2ZcklWZaxGdu2QU3ToK5rllwirs1lLMsCVVWFsiwX8uA7ct40TZDY3G63BTf0KoqiJW8YBuh+v+NyuSy4oVdBECx5XddB1+sVeZ7/4vv+kzw4f5vN2d1uByqKAmmasuQSz/PYzHa7BZ3PZxyPR5Zccjgc2MxmswGJtiRJ3nIcZ8Gda5oGiuMYrusiDMOPiV9Zr9c/70dVVaxWq48pivIoIPoGBEvyCayinf4AAAAASUVORK5CYII=" alt="">Returning &middot; 6 days</span></div>
         <div class="squad-alert-row"><div><div class="squad-alert-name">Umar Baig</div><div class="squad-alert-role">Middle order</div></div><span class="pill fringe"><svg class="icon sm"><use href="#i-alert"/></svg>3 low scores</span></div>
         <div class="squad-alert-row"><div><div class="squad-alert-name">Zain Chaudhry</div><div class="squad-alert-role">Middle order</div></div><span class="pill first"><svg class="icon sm"><use href="#i-trend-up"/></svg>In form</span></div>
+      </div>
+      <div class="tile dev-watch clickable" onclick="showPanel('squad');document.querySelector('#panel-squad .subtab-btn[data-subtab=&quot;youth&quot;]').click()" style="cursor:pointer">
+        <span class="eyebrow"><svg class="icon sm"><use href="#i-cap"/></svg> Development watch</span>
+        <div class="squad-alert-row" style="border-top:none;padding-top:2px">
+          <div><div class="squad-alert-name">Bilal Nasir <span class="pill fringe" style="margin-left:4px">Academy</span></div><div class="squad-alert-role">Middle order &middot; age 17</div></div>
+          <span class="pill first"><svg class="icon sm"><use href="#i-star-fill"/></svg>2 centuries this month</span>
+        </div>
+        <div class="role-hint" style="margin-top:8px;margin-bottom:0">Scouted potential has him rated among the academy's best this intake &mdash; a real case for blooding him early.</div>
+      </div>
+      <div class="tile form-momentum clickable" onclick="showPanel('fixtures')" style="cursor:pointer">
+        <span class="eyebrow"><svg class="icon sm"><use href="#i-trend-up"/></svg> Form &amp; momentum</span>
+        <div class="squad-alert-row" style="border-top:none;padding-top:2px">
+          <div><div class="squad-alert-name">Team form momentum</div><div class="squad-alert-role">Building on the back of two dominant wins</div></div>
+          <span class="pill first">Rising</span>
+        </div>
+        <div class="squad-alert-row">
+          <div><div class="squad-alert-name">Next 5 opponents</div><div class="squad-alert-role">Two genuinely tough away trips inside the run</div></div>
+          <span class="pill" style="background:var(--gold-dim);color:var(--gold)">Mixed</span>
+        </div>
       </div>
     </div>
   </section>
