@@ -128,14 +128,13 @@
   /* ---------- App shell ---------- */
   .shell { max-width: 1280px; margin: 0 auto; padding: 0 24px 64px; }
 
-  /* the header banner from gui/std/Panels/header.png: a royal-blue band with a warm glow at one
-     edge (the real asset uses a maroon ball graphic there) and player silhouettes at the other */
-  /* the ACTUAL header banner from Cricket Coach 2014's own graphics/gui/std/Panels/header.png -
-     the real blue band with its own ball-graphic glow and player silhouettes, embedded directly */
+  /* FM26 reference: a genuinely flat, minimal topbar - no bitmap texture, a single
+     dark surface with a thin accent-lit bottom edge. Replaces the literal Cricket
+     Coach 2014 header.png banner this block used to embed. */
   .topbar {
-    position: relative; display: flex; align-items: center; gap: 20px; padding: 14px 24px;
-    border-bottom: 1px solid var(--chrome-deep);
-    background: var(--chrome-deep) url("data:image/png;base64,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") left center / cover no-repeat;
+    position: relative; display: flex; align-items: center; gap: 16px; padding: 10px 20px;
+    border-bottom: 1px solid var(--border);
+    background: linear-gradient(180deg, var(--surface-2), var(--surface));
     box-shadow: 0 3px 18px rgba(0,0,0,0.4);
   }
   .topbar-inner { position: relative; max-width: 1280px; margin: 0 auto; width: 100%; display: flex; align-items: center; gap: 20px; }
@@ -165,7 +164,7 @@
   /* the sidebar's old slot, replaced with a persistent Inbox rail (FM26 navbar redesign) -
      it never hides when the top nav's active screen changes, and it is where the real
      "you cannot move forward" blocking-task gate lives. */
-  .inbox-rail { flex-shrink: 0; width: 300px; background: var(--surface); border-right: 1px solid var(--border); display: flex; flex-direction: column; overflow: hidden; }
+  .messages-list-pane { flex-shrink: 0; width: 320px; background: var(--surface); border-right: 1px solid var(--border); display: flex; flex-direction: column; overflow: hidden; }
   .inbox-rail-head { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; padding: 14px 16px 10px; border-bottom: 1px solid var(--border-soft); flex-shrink: 0; }
   .inbox-rail-head h2 { margin: 0; font-family: var(--font-display); font-size: var(--fs-subhead); }
   .inbox-unread-badge { font-size: var(--fs-micro); font-weight: 700; color: var(--gold); background: var(--gold-dim); padding: 2px 9px; border-radius: 999px; white-space: nowrap; }
@@ -187,7 +186,122 @@
   .inbox-task-card button { appearance: none; border: none; background: var(--gold); color: #241a00; font: inherit; font-weight: 700; font-size: var(--fs-micro); padding: 5px 13px; border-radius: 999px; cursor: pointer; }
   .inbox-task-card.resolved { background: var(--turf-dim); border-color: var(--turf-strong); }
   .inbox-task-card.resolved .inbox-task-title { color: var(--turf-strong); }
-  .inbox-rail.inbox-rail-flash { box-shadow: inset 0 0 0 2px var(--gold); }
+  .messages-list-item.selected { background: var(--surface-3); border-left: 3px solid var(--gold); }
+  /* ---------- FM26 reference: mega-menu top nav + persistent subnav strip + breadcrumb ----------
+     Six real top-level menus (Portal / Squad / Recruitment / Match Day / Club / Career), each a
+     dropdown of its own real sub-pages. The existing .tabs/.tab-btn elements are NOT replaced -
+     they are re-used as the row-2 "subnav strip" (grouped by data-group, one group visible at a
+     time) so showPanel() and every existing deep-link into it needed zero changes. */
+  .mega-menu-bar { display: flex; align-items: center; gap: 2px; }
+  /* only the active mega-group's own .tab-btn elements render in the row-2 strip;
+     :not([hidden]) means identity-context hiding (setContext) still wins over this */
+  .tabs .tab-btn { display: none; }
+  .tabs[data-active-group="portal"] .tab-btn[data-group="portal"]:not([hidden]) { display: inline-flex; }
+  .tabs[data-active-group="squad"] .tab-btn[data-group="squad"]:not([hidden]) { display: inline-flex; }
+  .tabs[data-active-group="recruitment"] .tab-btn[data-group="recruitment"]:not([hidden]) { display: inline-flex; }
+  .tabs[data-active-group="club"] .tab-btn[data-group="club"]:not([hidden]) { display: inline-flex; }
+  .tabs[data-active-group="career"] .tab-btn[data-group="career"]:not([hidden]) { display: inline-flex; }
+  .mega-btn {
+    appearance: none; border: none; background: none; color: var(--ink-dim); font: inherit;
+    font-size: var(--fs-body); font-weight: 600; padding: 8px 12px; border-radius: 7px;
+    cursor: pointer; display: inline-flex; align-items: center; gap: 5px; position: relative;
+  }
+  .mega-btn:hover { color: var(--ink); background: var(--surface-2); }
+  .mega-btn.active { color: var(--gold); }
+  .mega-btn .chev { width: 10px; height: 10px; transition: transform 0.12s ease; }
+  .mega-btn[aria-expanded="true"] .chev { transform: rotate(180deg); }
+  .mega-dropdown {
+    position: absolute; top: calc(100% + 6px); left: 0; min-width: 200px; z-index: 60;
+    background: var(--surface-2); border: 1px solid var(--border); border-radius: 10px;
+    box-shadow: 0 12px 28px rgba(0,0,0,0.45); padding: 6px; display: none;
+  }
+  .mega-dropdown.open { display: block; }
+  .mega-dropdown-item {
+    display: block; width: 100%; text-align: left; appearance: none; border: none; background: none;
+    color: var(--ink-dim); font: inherit; font-size: var(--fs-small); font-weight: 600;
+    padding: 8px 10px; border-radius: 6px; cursor: pointer;
+  }
+  .mega-dropdown-item:hover { background: var(--surface-3); color: var(--ink); }
+  .mega-dropdown-item[aria-current="true"] { color: var(--gold); }
+  .subnav-strip-row { background: var(--surface); border-bottom: 1px solid var(--border-soft); padding: 0 20px; }
+  .breadcrumb-strip { font-size: var(--fs-micro); color: var(--ink-faint); padding: 6px 20px; background: var(--surface); border-bottom: 1px solid var(--border-soft); }
+  .breadcrumb-strip b { color: var(--ink-dim); font-weight: 700; }
+  .team-report-head { display: flex; align-items: center; gap: 16px; padding: 16px 0 20px; flex-wrap: wrap; }
+  .team-report-head .crest { width: 64px; height: 64px; border-radius: 10px; font-size: var(--fs-headline); flex-shrink: 0; }
+  .team-report-identity h1 { margin: 0; font-family: var(--font-display); font-size: var(--fs-title); }
+  .team-report-identity .sub { color: var(--ink-faint); font-size: var(--fs-caption); margin-top: 2px; }
+  .team-report-stats { display: flex; gap: 28px; margin-left: auto; flex-wrap: wrap; }
+  .team-report-stats .trs-item .label { font-size: var(--fs-micro); color: var(--ink-faint); text-transform: uppercase; letter-spacing: 0.06em; }
+  .team-report-stats .trs-item .value { font-size: var(--fs-body); font-weight: 700; margin-top: 3px; }
+  .team-report-toggle-row { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
+  .tr-toggle-btn { appearance: none; border: 1px solid var(--border); background: var(--surface-2); color: var(--ink-dim); font: inherit; font-size: var(--fs-small); font-weight: 700; padding: 7px 16px; border-radius: 999px; cursor: pointer; }
+  .tr-toggle-btn[aria-selected="true"] { background: var(--gold); color: #241a00; border-color: var(--gold); }
+  .overview-hub { display: flex; gap: 16px; align-items: flex-start; }
+  .ov-col-messages { flex-shrink: 0; width: 320px; }
+  .ov-col-main { flex: 1.4; min-width: 0; display: flex; flex-direction: column; gap: 16px; }
+  .ov-col-side { flex: 1; min-width: 260px; display: flex; flex-direction: column; gap: 16px; }
+  .ov-messages-card { border: 1px solid var(--border); border-radius: 12px; background: var(--surface-2); overflow: hidden; display: flex; flex-direction: column; max-height: 640px; }
+  .ov-messages-card .inbox-rail-list { overflow-y: auto; }
+  .news-hero { position: relative; border-radius: 12px; overflow: hidden; background: var(--surface-2); border: 1px solid var(--border); padding: 20px; min-height: 120px; }
+  .news-hero .see-all { display: flex; align-items: center; gap: 6px; color: var(--gold); font-size: var(--fs-caption); font-weight: 700; cursor: pointer; margin-bottom: 10px; }
+  .news-hero h2 { margin: 0 0 6px; font-family: var(--font-display); font-size: var(--fs-subhead); }
+  .news-hero .dek { color: var(--ink-dim); font-size: var(--fs-small); max-width: 70%; }
+  .news-hero-dots { display: flex; gap: 5px; margin-top: 14px; }
+  .news-hero-dots span { width: 20px; height: 3px; border-radius: 2px; background: var(--surface-3); }
+  .news-hero-dots span.active { background: var(--gold); }
+  .mini-list-card, .mini-table-card { border: 1px solid var(--border); border-radius: 12px; background: var(--surface-2); padding: 16px; }
+  .mini-list-card .eyebrow, .mini-table-card .eyebrow { display: block; margin-bottom: 10px; }
+  @media (max-width: 900px) { .overview-hub { flex-direction: column; } .ov-col-messages { width: 100%; } .ov-messages-card { max-height: 360px; } }
+
+
+  /* click-to-open search pill, replacing an always-open input sitting in the topbar */
+  .search-pill {
+    appearance: none; border: 1px solid var(--border); background: var(--surface-3); color: var(--ink-dim);
+    font: inherit; font-size: var(--fs-small); font-weight: 600; padding: 7px 14px; border-radius: 999px;
+    cursor: pointer; display: inline-flex; align-items: center; gap: 7px; white-space: nowrap;
+  }
+  .search-pill:hover { color: var(--ink); border-color: var(--chrome-strong); }
+  .search-pill svg { width: 14px; height: 14px; }
+  .search-pill-wrap { position: relative; }
+  .search-pill-wrap .global-search { display: none; }
+  .search-pill-wrap.open .global-search {
+    display: block; position: absolute; top: calc(100% + 8px); right: 0; z-index: 55;
+    background: var(--surface-2); border: 1px solid var(--border); border-radius: 10px;
+    padding: 10px; box-shadow: 0 12px 28px rgba(0,0,0,0.45);
+  }
+  .topbar-icon-btn {
+    appearance: none; border: none; background: none; color: var(--ink-faint); width: 30px; height: 30px;
+    border-radius: 7px; cursor: pointer; display: inline-flex; align-items: center; justify-content: center;
+  }
+  .topbar-icon-btn:hover { color: var(--ink); background: var(--surface-2); }
+  .topbar-icon-btn svg { width: 16px; height: 16px; }
+
+  /* ---------- FM26 reference: Messages (Portal's real inbox) - list pane + detail pane,
+     replacing the old always-visible sidebar rail with a genuine navigable page. ---------- */
+  .messages-layout { display: flex; height: calc(100vh - 190px); min-height: 420px; border: 1px solid var(--border); border-radius: 12px; overflow: hidden; background: var(--surface-2); }
+  .messages-detail-pane { flex: 1; min-width: 0; overflow-y: auto; padding: 22px 26px; }
+  .messages-detail-empty { display: flex; align-items: center; justify-content: center; height: 100%; color: var(--ink-faint); font-size: var(--fs-body); }
+  .messages-detail-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; padding-bottom: 14px; border-bottom: 1px solid var(--border-soft); margin-bottom: 16px; }
+  .messages-detail-title { font-family: var(--font-display); font-size: var(--fs-headline); font-weight: 700; line-height: 1.25; }
+  .messages-detail-from { font-size: var(--fs-caption); color: var(--ink-faint); margin-bottom: 3px; }
+  .messages-detail-time { font-size: var(--fs-caption); color: var(--ink-faint); white-space: nowrap; flex-shrink: 0; }
+  .messages-detail-body { font-size: var(--fs-body); color: var(--ink-dim); line-height: 1.55; }
+  .messages-response-bar {
+    margin: 20px -26px -22px; padding: 16px 26px; background: linear-gradient(90deg, var(--ball-dim), var(--surface-2));
+    border-top: 1px solid var(--ball);
+  }
+  .messages-response-bar.info { background: linear-gradient(90deg, var(--turf-dim), var(--surface-2)); border-top-color: var(--turf-strong); }
+  .messages-response-title { font-weight: 700; font-size: var(--fs-body); display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+  .messages-response-bar.info .messages-response-title { color: var(--turf-strong); }
+  .messages-response-bar:not(.info) .messages-response-title { color: var(--ball); }
+  .messages-response-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+  .messages-response-btn {
+    appearance: none; border: 1px solid var(--border); background: var(--surface-3); color: var(--ink);
+    font: inherit; font-size: var(--fs-small); font-weight: 700; padding: 8px 16px; border-radius: 8px; cursor: pointer;
+  }
+  .messages-response-btn.primary { background: var(--gold); color: #241a00; border-color: var(--gold); }
+  .messages-response-btn:hover { filter: brightness(1.08); }
+
   /* FM26's own real top navbar (Principle 2's "FM supplies structure") - the sidebar
      is gone; this is the primary navigation now, and the sidebar's old slot holds the
      persistent Inbox rail instead. .tabs/.tab-btn markup is unchanged from the sidebar
@@ -854,39 +968,19 @@
   .calendar-date-btn { appearance: none; border: none; background: none; color: var(--ink-dim); font: inherit; font-family: var(--font-mono); font-size: var(--fs-small); padding: 7px 13px; cursor: pointer; display: flex; align-items: center; gap: 7px; }
   .calendar-date-btn:hover { color: var(--ink); }
   .calendar-date-btn svg { width: 13px; height: 13px; stroke: var(--ink-faint); }
-  /* the glossy blue "Continue" pill from gui/std/Buttons/cont_normal.bmp - the one button CC2014's
-     own asset set names for exactly this job (stepping the world forward) - reproduced as a real
-     gradient/highlight/emboss rather than a flat fill, which is what actually reads as a game
-     control rather than a web form button */
-  /* The real glossy pill button from gui/std/Buttons/general_left|middle|right.bmp, its actual
-     rounded end-caps layered as real images either side of the real sampled middle-fill colour -
-     not a CSS gradient standing in for it. */
-  .next-day-btn {
-    appearance: none; border: none; border-left: 1px solid var(--chrome-deep);
-    background-color: rgb(20,38,84);
-    background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAXCAYAAAAyet74AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAC9SURBVDhPY0AGImoh/3FhqBKIIr3A9v/B/eexYrgiLf/2/55d53FisCI1n9b/Ds1n8GKwQsuakwQxWKFh+XGCGKxQo/AwQQxRmH+AIIYozN1LEEMUZu8iiCEKM7YRxBCFqZsIYojCpLUEMURh/AqCGKIwZjFBDFEYMY8ghigMmUkQQxQGTiaIIQp9eglisEJZs+z/Gl4deDE0hYf+lzFO/6/m0ogTgxWCANhk44z/mm6tWDFUGQSAFGPHIf8BKd7O5LJALU8AAAAASUVORK5CYII="), url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAXCAYAAAAyet74AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAADISURBVDhPhdKxBwJxGMbx+yMau/VUQ+SItoZEOXK6aIiIdJykqaUlOSXS0NTS0tLS0tAQEQ2JuD/p6bqnuLjrffgMP77e6ackNAtxlPDqKw9RsubsN64sPMTJ1EJxcfrEP5rhMi6MH5AEYW50hyQIU8MbJAwHV0gY9i+QMHTOkDC0T5Aw7B4hYdg5QMKwvYeEYWsHCcPmFhKG1gYShuYaEobGEhKG1Tn+UfMOQ600QZyk3vOjBn94uuwiiqrbvPTd+xHnk/hTlBcY8c7klDyASgAAAABJRU5ErkJggg==");
-    background-repeat: no-repeat, no-repeat;
-    background-position: left center, right center;
-    background-size: 10px 23px, 10px 23px;
-    color: #eef6ff; text-shadow: 0 1px 2px rgba(0,0,0,0.55);
-    font: inherit; font-size: var(--fs-small); font-weight: 700; padding: 7px 16px 7px 16px; cursor: pointer; white-space: nowrap;
-    display: inline-flex; align-items: center; gap: 5px;
+  /* FM26 reference: a flat solid pill, two real states (urgent vs clear) - no bitmap
+     end-caps. .action-pill is the base; .urgent/.clear pick the colour. */
+  .action-pill {
+    appearance: none; border: none; border-radius: 999px; cursor: pointer; white-space: nowrap;
+    font: inherit; font-size: var(--fs-small); font-weight: 700; padding: 8px 18px;
+    display: inline-flex; align-items: center; gap: 6px; color: #fff;
+    transition: filter 0.12s ease;
   }
-  .next-day-btn:hover {
-    background-color: rgb(35,58,112);
-    background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAXCAYAAAAyet74AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAALESURBVDhPddJpU5JRGMbxPkR9hYJwKCjFlBZFalwy9y0UEVcUccEV13RMy7UstUwtETSyzSzRcc/RMlMWP8+/xx6a6UXdM9eb+/zOPWfOOaf+rtNnU/hfAkREmuz7dLk8dM4d0e48pE1Iq+OQlplDEZ6gqJweuuZ9dLh8tM95aZn10uT0YHN4aJzx8BtFZPfQ9vqYplk/9Q4/NXYfVa98VL70YpnyUj7pFWG985jqaT/lU35MEz6Kxr3kP/NiGPOQO+pBPxKYaJrwCws+oeEla9hD2pCH5IEjEvuPiO8T0iuc8QTmDB+RMXhIUu9PbvccEN11gLbzB5H39olo3+d6274Ik3sPiOveR9vxXWh+I7x5D5Vtj8sNuyjrd1HU7YowtmuPqPZdrjbvoGr4irJ2mwvWbWRVW5yv3EJSsRmAnTtoWrdRN26iqttAaV1HXrmGzLKGtHwViXk1ANs20NjWUdetElK9gsKyjNzsRlbqRmpaQlKyJMKYphUi69yEV30hxPIZReki8pJPyIoWkBZ+RFLwMTCxYRGNdQG15QMhpe9QFL9FXjCPzPgGaZ4LicEVgDXv0VTMoy51EVI4h9LoRJ7rQJYzgzTbjkRnF2Fc1Rxas5NrxXZCja+4pJ/iYvYkQVkTyDJfIM0YF2G8xc5N00tu5E8SljtOsO4Ziswx5OkjBKWOIEt9KsKEsgmiC58TaRhFrXtCaOZjLqcOoUge5GLSAPLEAREmmUaJzX+CVj/EjawBwtJ6USU/JDjxAco73Sjiu0WYbh4noXiMWONTbuqHibj7iKsZg4Sn9XMlpV/Y1CfC4BgbOusb0itek1Q2S3yJg9jCGaLz7dwyTqPNmxZ/+JlzaahiWjE2fEFf+xld9SKZlZ9ItyyQal4gpUy48D91MlkV3UKxbYWC+mXyat0YrEvoq5fIEV4swMQ6wf9OCr8A1K32JeQXmzEAAAAASUVORK5CYII="), url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAXCAYAAAAyet74AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAK+SURBVDhPddLpUpJhGMZxD6JOoSIaClKppFyIGqUoxT0UFTUFERdcMcVyzMpcyj1zSQSVbHE3xzZrtMzgBTqefzQvTfWha+b68Mz87vvLc0cdOpLO/xr1d1pnfbS5fTg9PtrD7Zj30+kVUOfd/Rc3zwo43AItHoHWuQDt8wHueIN0Lga5mH/vD66cDGCbClA9HaDmWZA6V5BGd4iWuRDOhR8k5kWwcVigYESgcFSgeCzAzfEA5okglVMhamdCNHp+iFDX7UP30E9qjx99r5/MfoHcAQHjcCA8GAwPhUQY79wnsX2fpNv7aDq+kdx5wNV7B6R1fye7z0f+gF+E8oZdFI27RDftonTsEXdrj3jnFzR3vnKlax9994EIj1V94Hj1R6Q1Hzlp30FRv4Oy6RPnb33mYvsu2s69CLRuI6ncRmp7i6z6LQr7O5QN71E1f0DdtoO243MElm8gMW8gtWwis24it70htnYLVcM2asc7tM73EViyhKR0CenNZWTlK8gtq8Ta1oirWSepYZOUlq0ILPQiKfIiNT1HVrKIvOwFsZaXqGyvUduX0TatRqDBhSTPhTR/FlmBG4XJQ2zpPCqLF3XVItq6VyKUZI8jzXnKidwJTuVNcto4xRnTMy6UudBYPVypmRehNGOIExnDyLKGkeeMEmMY41zBOAnFk1wyT6OzuUQoS+3lVFovcn0f0Rn9nMl5jMowSFLhCMmlT7heMSFCua4LxbUuYlLvo9Q/4FxmNwm5vWiM/WiLB0kzj4hQqX/I2fQe4jJ7OJ/dR+KNR1wyDqA1DXG9bJQs67gINUUzXDbNkFzsQls6i67cTVrFHFlVCxjsz4lJcYgwvWKJDOsyWbZlcqpXMNSuYqxfw9S0jjKljcNHM8ULzw//gLF2g0L7BkX1m5Q0vqHMsYUyuVXc9Du/Hv9rhIQTFfUTycT2JS/OGhoAAAAASUVORK5CYII=");
-    background-repeat: no-repeat, no-repeat;
-    background-position: left center, right center;
-    background-size: 10px 23px, 10px 23px;
-  }
-  .next-day-btn:active {
-    background-color: rgb(12,24,58);
-    background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAXCAYAAAAyet74AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAFySURBVDhPddLbSgJRGIbhLiF3AzUl6eiaFUGkRVEpEcTYRkljCsFKqdzVFXgi7YmwCEMkogjEqIOI9tTNfY1riTTk+uA5e/mP/o6/sxMdIs2kGXlDcHhG2mpFNiOyKiNCPPKEYFFGYfWMw0YmYVMDhqAJCzuVCVjVKdgHNDgGFyANRSD5Fk1YaOmfgX0oCmksga7AFrqn8oZtEx76luEIZNGlFSCHD9ETPUVvrGTCQimYhzy/C6dehitxA/d6De5k3YSF8lwRfSsVKKl7eNPPINk3kNy7CQudsXMoxhWSeYWa/wLd+Tb8mLDQtVyBN/UANfMGmvswfP7DQvdKFST1CJp+Mby2xUO9ArJWB914EuLh0gVI4g40+SDEw8USSPwadLUmxMPwCYheBY3fCvFw9gAkWgbVr4R4qBVBIiXQ2KUQD6cLILPHoOEzIRZ2+zdBQvug8ydCrQ+X/WmQmT0hFjbWiHuHc+jXjtpqZnyNuD0dv7OSmkH8Fc9eAAAAAElFTkSuQmCC"), url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAXCAYAAAAyet74AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAFrSURBVDhPddDbSgJRGIZhLyEdFdSUnNFlEoSaFJUigaiZosYogpVSuasr8CTaI2ERhkhEEUhhBxHZjrq5r5FZkkOuD56DgZcf1qi0RASLang6mxejaO1hZawRvGDhhmPO4YeSDxxZhMY2D7UwC85GY707AQVXHLrpFWinQtA4AhgTFuTQGNiBUhUG3zb0czloXUmonUE5NKcaGDaePIMpdgxDqAadrwy1Oy2HfP4BChsdWHO3sIhNmKL70Purckgq71Aov8FefIFQeMREpgXT8p4cTu7+QOkbjuoXSKkHQbpuSV3QsPKJ/z7gKEmXC11Y0y0aFnsY7RWk8AQ+06bh5jNYyLr0OHFwMd8FC8ndg1+9pOFaBywkewM+0aBh9g4sRGyDj9VpKF6DhSSb4CNHNExdgYXEG+BDgx8eOwcLiZyCX6rRMFoHCwkfwujZkkMSPACLyVOUo/6coROMYp6p/EX99T9YaCJNpfoF2aKaQXkEKGEAAAAASUVORK5CYII=");
-    background-repeat: no-repeat, no-repeat;
-    background-position: left center, right center;
-    background-size: 10px 23px, 10px 23px;
-    filter: brightness(0.92);
-  }
+  .action-pill:hover { filter: brightness(1.08); }
+  .action-pill:active { filter: brightness(0.92); }
+  .action-pill.clear { background: var(--turf-strong); }
+  .action-pill.urgent { background: var(--ball); }
+  .next-day-btn { appearance: none; border: none; }
 
   /* ---------- Match Day tab: only lit up while a match is actually live ---------- */
   .live-dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--ball); margin-right: 5px; animation: livepulse 1.6s ease-in-out infinite; }
@@ -894,6 +988,8 @@
   .tab-btn[data-live="true"] { color: var(--gold); }
   .tab-btn[data-live="true"][aria-selected="true"] { border-bottom-color: var(--gold); }
   .tab-btn[disabled] { color: var(--ink-faint); opacity: 0.45; cursor: not-allowed; }
+  .tab-badge { font-size: var(--fs-micro); font-weight: 700; color: #241a00; background: var(--gold); padding: 1px 7px; border-radius: 999px; margin-left: 2px; }
+  .mega-dropdown-item .tab-badge { margin-left: 6px; }
 
   /* ---------- Player Actions dropdown + Negotiation modal ---------- */
   .player-actions-wrap { position: relative; }
@@ -1285,6 +1381,14 @@
 
 <div class="topbar">
   <div class="topbar-inner">
+    <div class="nav-history-controls">
+      <button class="nav-hist-btn" id="nav-back-btn" onclick="navigateBack()" disabled title="Back" aria-label="Back">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+      </button>
+      <button class="nav-hist-btn" id="nav-forward-btn" onclick="navigateForward()" disabled title="Forward" aria-label="Forward">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+      </button>
+    </div>
     <div class="crest" onclick="enterOnboardingMode()" style="cursor:pointer" title="Main menu &middot; new career, load career">II</div>
     <div class="wordmark" onclick="openManagerProfile()" style="cursor:pointer" title="Your own Manager Profile - biography, reputation, career record, coaching attributes, and the job market">
       <svg class="icon sm wordmark-icon"><use href="#i-user"/></svg>
@@ -1294,82 +1398,65 @@
       </div>
     </div>
 
-    <div class="context-switch" role="tablist" aria-label="Coaching identity" title="Which job are you looking at? A real coach holds one at a time - this switches between the three for review.">
-      <button class="context-btn" role="tab" aria-selected="true" data-context="club" onclick="setContext('club')">Club</button>
-      <button class="context-btn" role="tab" aria-selected="false" data-context="franchise" onclick="setContext('franchise')">Franchise</button>
-      <button class="context-btn" role="tab" aria-selected="false" data-context="international" onclick="setContext('international')">International</button>
-    </div>
-
-    <div class="nav-history-controls">
-      <button class="nav-hist-btn" id="nav-back-btn" onclick="navigateBack()" disabled title="Back" aria-label="Back">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
-      </button>
-      <button class="nav-hist-btn" id="nav-forward-btn" onclick="navigateForward()" disabled title="Forward" aria-label="Forward">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
-      </button>
-    </div>
-
-    <div class="global-search">
-      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-      <input type="text" placeholder="Search any player, team, staff&hellip;" id="global-search-input" autocomplete="off">
-      <div class="search-results" id="global-search-results" hidden>
-        <div class="search-result-row"><div class="sr-avatar"></div><span>Hamza Malik</span><span class="sr-meta">Islamabad Icons</span></div>
-        <div class="search-result-row"><div class="sr-avatar"></div><span>Hamza Sheikh</span><span class="sr-meta">Multan Monarchs</span></div>
-      </div>
-    </div>
+    <nav class="mega-menu-bar" aria-label="Main menu" id="mega-menu-bar"></nav>
 
     <div class="topbar-meta">
-      <div class="meta-item"><div class="label">Board confidence</div><div class="value">Steady</div><div class="meter"><span style="width:71%"></span></div></div>
-      <div class="meta-item"><div class="label">Budget</div><div class="value num">$2.4M</div></div>
-      <div class="calendar-control">
-        <button class="calendar-date-btn" title="Open the calendar" onclick="openCalendarView()">
-          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-          Sat 27 Mar 2027
+      <div class="search-pill-wrap" id="search-pill-wrap">
+        <button class="search-pill" onclick="toggleSearchPill()" type="button">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          Search
         </button>
-        <!-- On an ordinary day this button reads 'Next Day' (advance one day, no auto-play). This mockup is frozen on a day where, for the ACTIVE identity, a real dated event is due - a fixture for Club/International, the auction window for Franchise - so the button's own label and action change with the context switcher above, the same "frozen on the day it's true" convention Play Match and the auction's calendar gate already use. -->
-        <button class="next-day-btn" id="play-match-btn" onclick="enterMatchMode()" title="A fixture is scheduled today">Play Match <svg class="icon sm"><use href="#i-chevron-fwd"/></svg></button>
+        <div class="global-search">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="text" placeholder="Search any player, team, staff&hellip;" id="global-search-input" autocomplete="off">
+          <div class="search-results" id="global-search-results" hidden>
+            <div class="search-result-row"><div class="sr-avatar"></div><span>Hamza Malik</span><span class="sr-meta">Islamabad Icons</span></div>
+            <div class="search-result-row"><div class="sr-avatar"></div><span>Hamza Sheikh</span><span class="sr-meta">Multan Monarchs</span></div>
+          </div>
+        </div>
       </div>
+      <button class="topbar-icon-btn" title="Settings" type="button">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+      </button>
+      <button class="calendar-date-btn" title="Open the calendar" onclick="openCalendarView()">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        Sat 27 Mar 2027
+      </button>
+      <!-- On an ordinary day this button reads 'Next Day' (advance one day, no auto-play). This mockup is frozen on a day where, for the ACTIVE identity, a real dated event is due - a fixture for Club/International, the auction window for Franchise - so the button's own label and action change with the context switcher above, the same "frozen on the day it's true" convention Play Match and the auction's calendar gate already use. It flips to a red "Response Required" pill exactly like FM26's own topbar whenever a real inbox task is pending for the active identity - see updateActionPillUrgency(). -->
+      <button class="action-pill clear" id="play-match-btn" onclick="attemptAdvance('enterMatchMode')" title="A fixture is scheduled today">Play Match <svg class="icon sm"><use href="#i-chevron-fwd"/></svg></button>
     </div>
   </div>
 </div>
 
+<div class="subnav-strip-row">
 <nav class="tabs" role="tablist" aria-label="Primary">
   <div class="tabnav-inner">
-    <div class="tab-group-label">Overview</div>
-    <button class="tab-btn" role="tab" aria-selected="true" aria-controls="panel-portal" data-tab="portal" title="Portal"><svg class="icon"><use href="#i-home"/></svg><span class="tab-label">Portal</span></button>
-    <div class="tab-group-label">Squad</div>
-    <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-squad" data-tab="squad" title="Squad"><svg class="icon"><use href="#i-users"/></svg><span class="tab-label">Squad</span></button>
-    <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-training" data-tab="training" title="Training"><svg class="icon"><use href="#i-target"/></svg><span class="tab-label">Training</span></button>
-    <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-tactics" data-tab="tactics" title="Tactics"><svg class="icon"><use href="#i-shield"/></svg><span class="tab-label">Tactics</span></button>
-    <div class="tab-group-label">Club Affairs</div>
-    <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-recruitment" data-tab="recruitment" data-context="club" title="Recruitment"><svg class="icon"><use href="#i-swap"/></svg><span class="tab-label">Recruitment</span></button>
-    <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-club" data-tab="club" data-context="club" title="Club"><svg class="icon"><use href="#i-briefcase"/></svg><span class="tab-label">Club</span></button>
-    <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-franchise" data-tab="franchise" data-context="franchise" title="Franchise"><svg class="icon"><use href="#i-badge"/></svg><span class="tab-label">Franchise</span></button>
-    <div class="tab-group-label">Competition</div>
-    <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-fixtures" data-tab="fixtures" title="Fixtures"><svg class="icon"><use href="#i-cal-list"/></svg><span class="tab-label">Fixtures</span></button>
-    <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-international" data-tab="international" data-context="international" title="International"><svg class="icon"><use href="#i-plane"/></svg><span class="tab-label">International</span></button>
-    <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-records" data-tab="records" title="Records"><svg class="icon"><use href="#i-trophy"/></svg><span class="tab-label">Records</span></button>
-    <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-world" data-tab="world" title="World"><svg class="icon"><use href="#i-globe"/></svg><span class="tab-label">World</span></button>
+    <button class="tab-btn" role="tab" aria-selected="true" aria-controls="panel-portal" data-tab="portal" data-group="portal" title="Overview"><svg class="icon"><use href="#i-home"/></svg><span class="tab-label">Overview</span></button>
+    <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-messages" data-tab="messages" data-group="portal" title="Messages"><svg class="icon"><use href="#i-inbox"/></svg><span class="tab-label">Messages</span><span class="tab-badge" id="messages-tab-badge" hidden></span></button>
+    <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-fixtures" data-tab="fixtures" data-group="portal" title="Fixture Schedule"><svg class="icon"><use href="#i-cal-list"/></svg><span class="tab-label">Fixture Schedule</span></button>
+    <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-stages" data-tab="stages" data-group="portal" title="Stages"><svg class="icon"><use href="#i-trophy"/></svg><span class="tab-label">Stages</span></button>
+    <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-records" data-tab="records" data-group="portal" title="Records"><svg class="icon"><use href="#i-trophy"/></svg><span class="tab-label">Records</span></button>
+    <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-world" data-tab="world" data-group="portal" title="World"><svg class="icon"><use href="#i-globe"/></svg><span class="tab-label">World</span></button>
+    <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-team-report" data-tab="team-report" data-group="portal" title="Opposition Report"><svg class="icon"><use href="#i-alert"/></svg><span class="tab-label">Opposition Report</span></button>
+
+    <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-squad" data-tab="squad" data-group="squad" title="Squad"><svg class="icon"><use href="#i-users"/></svg><span class="tab-label">Squad</span></button>
+    <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-training" data-tab="training" data-group="squad" title="Training"><svg class="icon"><use href="#i-target"/></svg><span class="tab-label">Training</span></button>
+    <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-tactics" data-tab="tactics" data-group="squad" title="Tactics"><svg class="icon"><use href="#i-shield"/></svg><span class="tab-label">Tactics</span></button>
+
+    <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-recruitment" data-tab="recruitment" data-group="recruitment" data-context="club" title="Recruitment"><svg class="icon"><use href="#i-swap"/></svg><span class="tab-label">Recruitment</span></button>
+
+    <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-club" data-tab="club" data-group="club" data-context="club" title="Club"><svg class="icon"><use href="#i-briefcase"/></svg><span class="tab-label">Club</span></button>
+    <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-franchise" data-tab="franchise" data-group="club" data-context="franchise" title="Franchise"><svg class="icon"><use href="#i-badge"/></svg><span class="tab-label">Franchise</span></button>
+
+    <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-manager-profile" data-tab="manager-profile" data-group="career" title="Manager Profile"><svg class="icon"><use href="#i-user"/></svg><span class="tab-label">Manager Profile</span></button>
+    <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-jobcentre" data-tab="jobcentre" data-group="career" title="Job Centre"><svg class="icon"><use href="#i-briefcase"/></svg><span class="tab-label">Job Centre</span></button>
+    <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-international" data-tab="international" data-group="career" data-context="international" title="International"><svg class="icon"><use href="#i-plane"/></svg><span class="tab-label">International</span></button>
   </div>
 </nav>
+</div>
+<div class="breadcrumb-strip" id="breadcrumb-strip"><b>Portal</b> &rsaquo; Overview</div>
 <div class="app-body">
-<aside class="inbox-rail" id="inbox-rail">
-  <div class="inbox-rail-head">
-    <h2>Inbox</h2>
-    <span class="inbox-unread-badge" id="inbox-unread-badge"></span>
-  </div>
-  <div class="inbox-filter-row" role="tablist" aria-label="Inbox filters">
-    <button class="inbox-filter-btn" data-filter="all" aria-selected="true" onclick="setInboxFilter('all')">All</button>
-    <button class="inbox-filter-btn" data-filter="new" aria-selected="false" onclick="setInboxFilter('new')">New</button>
-    <button class="inbox-filter-btn" data-filter="unread" aria-selected="false" onclick="setInboxFilter('unread')">Unread</button>
-    <button class="inbox-filter-btn" data-filter="tasks" aria-selected="false" onclick="setInboxFilter('tasks')">Tasks</button>
-  </div>
-  <div class="inbox-rail-list" id="inbox-rail-list"></div>
-</aside>
 <div class="main-content">
-<p style="max-width:1280px;margin:8px auto 0;padding:0 24px;font-size:var(--fs-caption);color:var(--ink-faint)">
-  <strong style="color:var(--gold)">&#9679; Match Day</strong> only lights up like this while a match is actually being played - on any other day it drops out of the sidebar entirely, the same way neither Cricket Coach nor FM26 keeps a "match" screen sitting there with nothing happening on it.
-</p>
 
 <div class="shell">
 
@@ -1396,16 +1483,74 @@
       </div>
     </div>
 
-    <div class="tile-grid">
-      <div class="tile next-fixture">
-        <div class="tile-eyebrow"><span class="eyebrow">Next fixture</span><span class="pill first">Home</span></div>
-        <div class="fixture-row">
-          <div class="fixture-teams"><div class="vs-crest us"></div><div class="fixture-names">Islamabad Icons<small>vs Lahore Lions</small></div></div>
-          <div class="fixture-meta"><div class="when">Sun &middot; 14:00</div>Jinnah Stadium &middot; T20</div>
+    <div class="overview-hub">
+      <div class="ov-col-messages">
+        <div class="ov-messages-card">
+          <div class="inbox-rail-head">
+            <h2>Messages</h2>
+            <span class="inbox-unread-badge" id="overview-unread-badge"></span>
+          </div>
+          <div class="inbox-filter-row" role="tablist" aria-label="Message filters">
+            <button class="inbox-filter-btn" data-filter="all" aria-selected="true" onclick="setInboxFilter('all')">All</button>
+            <button class="inbox-filter-btn" data-filter="new" aria-selected="false" onclick="setInboxFilter('new')">New</button>
+            <button class="inbox-filter-btn" data-filter="unread" aria-selected="false" onclick="setInboxFilter('unread')">Unread</button>
+            <button class="inbox-filter-btn" data-filter="tasks" aria-selected="false" onclick="setInboxFilter('tasks')">Tasks</button>
+          </div>
+          <div class="inbox-rail-list" id="overview-messages-list"></div>
         </div>
-        <div class="stage-actions" style="margin-top:10px">
-          <button class="tactic-change" onclick="showPanel('tactics')">Set lineup &amp; tactics</button>
+      </div>
+      <div class="ov-col-main">
+        <div class="news-hero">
+          <div class="see-all" onclick="showPanel('messages')">&#127760; See All News <svg class="icon sm"><use href="#i-chevron-fwd"/></svg></div>
+          <div id="overview-news-hero"></div>
+          <div class="news-hero-dots" id="overview-news-dots"></div>
         </div>
+        <div class="mini-list-card clickable" onclick="showPanel('team-report')" style="cursor:pointer">
+          <span class="eyebrow"><svg class="icon sm"><use href="#i-alert"/></svg> Next Opposition Report</span>
+          <div class="fixture-row" style="padding-top:2px">
+            <div class="vs-crest them"></div><div class="fixture-names">Lahore Lions (A)<small>In 5 days</small></div>
+          </div>
+          <div class="role-hint" style="margin-top:6px;margin-bottom:0">1st in Pakistan T20 Cup</div>
+        </div>
+        <div class="tile next-fixture" style="margin:0">
+          <div class="tile-eyebrow"><span class="eyebrow">Next fixture</span><span class="pill first">Home</span></div>
+          <div class="fixture-row">
+            <div class="fixture-teams"><div class="vs-crest us"></div><div class="fixture-names">Islamabad Icons<small>vs Lahore Lions</small></div></div>
+            <div class="fixture-meta"><div class="when">Sun &middot; 14:00</div>Jinnah Stadium &middot; T20</div>
+          </div>
+          <div class="stage-actions" style="margin-top:10px">
+            <button class="tactic-change" onclick="showPanel('tactics')">Set lineup &amp; tactics</button>
+          </div>
+        </div>
+      </div>
+      <div class="ov-col-side">
+        <div class="mini-list-card">
+          <span class="eyebrow"><svg class="icon sm"><use href="#i-cal-list"/></svg> Fixture Schedule</span>
+          <div class="fixture-row" style="padding-top:0"><div class="vs-crest them"></div><div class="fixture-names">Lahore Lions<small>Sun 28 Mar &middot; Away</small></div></div>
+          <div class="fixture-row" style="margin-top:8px;padding-top:8px;border-top:1px solid var(--border-soft)"><div class="vs-crest them"></div><div class="fixture-names">Multan Sultans<small>Thu 1 Apr &middot; Away</small></div></div>
+          <div class="fixture-row" style="margin-top:8px;padding-top:8px;border-top:1px solid var(--border-soft)"><div class="vs-crest them"></div><div class="fixture-names">Karachi Kings<small>Mon 5 Apr &middot; Away</small></div></div>
+          <button class="view-more-btn" style="margin-top:10px" onclick="showPanel('fixtures')">Full schedule</button>
+        </div>
+        <div class="mini-table-card">
+          <span class="eyebrow"><svg class="icon sm"><use href="#i-trophy"/></svg> Stages &middot; Pakistan T20 Cup</span>
+          <table class="career" style="font-size:var(--fs-small)">
+            <thead><tr><th>Pos</th><th>Team</th><th class="num">Pts</th></tr></thead>
+            <tbody>
+              <tr><td>1</td><td>Lahore Lions</td><td class="num">16</td></tr>
+              <tr><td>2</td><td>Karachi Kings</td><td class="num">14</td></tr>
+              <tr style="background:var(--turf-dim)"><td style="color:var(--turf-strong);font-weight:700">3</td><td style="color:var(--turf-strong);font-weight:700">Islamabad Icons</td><td class="num" style="color:var(--turf-strong);font-weight:700">12</td></tr>
+              <tr><td>4</td><td>Multan Sultans</td><td class="num">10</td></tr>
+            </tbody>
+          </table>
+          <button class="view-more-btn" style="margin-top:10px" onclick="showPanel('stages')">Full table</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="tile-grid" style="margin-top:16px">
+      <div class="tile tasks">
+        <span class="eyebrow">Needs your attention</span>
+        <div id="overview-attention-list"></div>
       </div>
       <div class="tile board-mood">
         <span class="eyebrow">Board mood</span>
@@ -1418,29 +1563,7 @@
         </div>
         <div class="ring-caption">Backed since last win</div>
       </div>
-      <div class="tile tasks">
-        <span class="eyebrow">Needs your attention</span>
-        <div class="task-item clickable" onclick="openPlayerByName('Hamza Malik');openNegotiation('contract')"><span class="task-dot urgent"></span><div><div class="task-title">Renew Hamza Malik's contract</div><div class="task-sub">Expires in 34 days &middot; below market wage</div></div></div>
-        <div class="task-item clickable" onclick="openPressConference()"><span class="task-dot normal"></span><div><div class="task-title">Press conference &middot; pre-match</div><div class="task-sub">Tomorrow, 11:00 &middot; expect a fitness question</div></div></div>
-        <div class="task-item clickable" onclick="showPanel('tactics')"><span class="task-dot normal"></span><div><div class="task-title">Confirm squad for Lions fixture</div><div class="task-sub">Selection meeting recommends 2 changes</div></div></div>
-      </div>
-      <div class="tile news">
-        <div class="tile-eyebrow"><span class="eyebrow">From the press</span>
-          <div class="press-filter" role="tablist" aria-label="Press filter">
-            <button class="press-filter-btn" role="tab" aria-selected="true" aria-controls="press-club" data-pfilter="club" onclick="filterPress(this)">Club</button>
-            <button class="press-filter-btn" role="tab" aria-selected="false" aria-controls="press-world" data-pfilter="world" onclick="filterPress(this)">World</button>
-          </div>
-        </div>
-        <div id="press-club">
-          <div class="news-item" style="border-top:none;padding-top:0"><div class="news-kicker">Breakout Star</div><div class="news-headline" style="font-size:var(--fs-subhead)">Chaudhry's rise has the dressing room talking</div><div class="news-dek">Three fifties in four innings &mdash; the 21-year-old is forcing his way past a settled top order.</div></div>
-          <div class="news-item"><div class="news-kicker">Board</div><div class="news-headline">Icons ownership backs a "youth-first" rebuild</div><div class="news-dek">A quiet trajectory shift after two seasons short of the knockouts.</div></div>
-        </div>
-        <div id="press-world" hidden>
-          <div class="news-item" style="border-top:none;padding-top:0"><div class="news-kicker">Pakistan T20 Cup</div><div class="news-headline" style="font-size:var(--fs-subhead)">Title race tightens after Karachi Kings&rsquo; win</div><div class="news-dek">Three points now separate the top four with a third of the season left.</div></div>
-          <div class="news-item"><div class="news-kicker">Transfer</div><div class="news-headline">Lahore Lions confirm overseas signing ahead of PPL auction</div><div class="news-dek">A statement of intent from the group stage&rsquo;s form side.</div></div>
-        </div>
-      </div>
-      <div class="tile squad-alert">
+      <div class="tile squad-alert" style="grid-column:span 12">
         <span class="eyebrow">Squad status</span>
         <div class="squad-alert-row"><div><div class="squad-alert-name">Danish Raza</div><div class="squad-alert-role">Opening bowler</div></div><span class="pill injury"><img class="icon sm" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABEAAAAOCAYAAADJ7fe0AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAEISURBVDhPpdO9ioNAFAXg+8q+QMo0voQQCKQQBAtBgkUEC1kQf4oQUCJIAglYKCgqejaTRZkNN0V2Bz4YnHMPYzEkFv6xngXTNEEYx/FPTqcTaBgG9H3P+npccsadC/v9HtR1Hdq2ZcklWZaxGdu2QU3ToK5rllwirs1lLMsCVVWFsiwX8uA7ct40TZDY3G63BTf0KoqiJW8YBuh+v+NyuSy4oVdBECx5XddB1+sVeZ7/4vv+kzw4f5vN2d1uByqKAmmasuQSz/PYzHa7BZ3PZxyPR5Zccjgc2MxmswGJtiRJ3nIcZ8Gda5oGiuMYrusiDMOPiV9Zr9c/70dVVaxWq48pivIoIPoGBEvyCayinf4AAAAASUVORK5CYII=" alt="">Returning &middot; 6 days</span></div>
         <div class="squad-alert-row"><div><div class="squad-alert-name">Umar Baig</div><div class="squad-alert-role">Middle order</div></div><span class="pill fringe"><svg class="icon sm"><use href="#i-alert"/></svg>3 low scores</span></div>
@@ -2392,6 +2515,214 @@
   </section>
 
   <!-- ================= SQUAD ================= -->
+  <section class="panel" id="panel-messages" role="tabpanel" hidden>
+    <div class="panel-head"><span class="eyebrow"><svg class="icon sm"><use href="#i-inbox"/></svg> Messages</span></div>
+    <div class="messages-layout">
+      <div class="messages-list-pane">
+        <div class="inbox-rail-head">
+          <h2>Messages</h2>
+          <span class="inbox-unread-badge" id="inbox-unread-badge"></span>
+        </div>
+        <div class="inbox-filter-row" role="tablist" aria-label="Message filters">
+          <button class="inbox-filter-btn" data-filter="all" aria-selected="true" onclick="setInboxFilter('all')">All</button>
+          <button class="inbox-filter-btn" data-filter="new" aria-selected="false" onclick="setInboxFilter('new')">New</button>
+          <button class="inbox-filter-btn" data-filter="unread" aria-selected="false" onclick="setInboxFilter('unread')">Unread</button>
+          <button class="inbox-filter-btn" data-filter="tasks" aria-selected="false" onclick="setInboxFilter('tasks')">Tasks</button>
+        </div>
+        <div class="inbox-rail-list" id="inbox-rail-list"></div>
+      </div>
+      <div class="messages-detail-pane" id="messages-detail-pane">
+        <div class="messages-detail-empty">Select a message on the left to read it.</div>
+      </div>
+    </div>
+    <div class="role-hint" style="margin-top:12px">Portal &rsaquo; Messages - the real inbox, reached like any other page rather than pinned open over everything else. A pending task here is what turns the topbar's action pill into &ldquo;Response Required.&rdquo;</div>
+  </section>
+  <section class="panel" id="panel-team-report" role="tabpanel" hidden>
+    <div class="team-report-head">
+      <div class="crest" style="background: radial-gradient(circle at 32% 28%, #c0392b, #7a231a 72%)">LL</div>
+      <div class="team-report-identity">
+        <h1>Lahore Lions</h1>
+        <div class="sub">Pakistan &middot; Pakistan T20 Cup</div>
+      </div>
+      <div class="team-report-stats">
+        <div class="trs-item"><div class="label">Current Competition</div><div class="value">Pakistan T20 Cup (1st)</div></div>
+        <div class="trs-item"><div class="label">Team Reputation</div><div class="value"><span class="tier-badge a">Elite</span></div></div>
+        <div class="trs-item"><div class="label">Reported by</div><div class="value">Sohail Raza &middot; Scout</div></div>
+        <div class="trs-item"><div class="label">Analysis Rating</div><div class="value">Thorough</div></div>
+      </div>
+    </div>
+
+    <nav class="subnav" role="tablist" aria-label="Team report views">
+      <button class="subtab-btn" role="tab" aria-selected="true" data-subtab="overview">Overview</button>
+      <button class="subtab-btn" role="tab" aria-selected="false" data-subtab="batting">Batting Analysis</button>
+      <button class="subtab-btn" role="tab" aria-selected="false" data-subtab="scoring">Scoring Analysis</button>
+      <button class="subtab-btn" role="tab" aria-selected="false" data-subtab="bowling-plans">Bowling Plans</button>
+      <button class="subtab-btn" role="tab" aria-selected="false" data-subtab="team-analysis">Team Analysis</button>
+      <button class="subtab-btn" role="tab" aria-selected="false" data-subtab="squad-depth">Squad Depth</button>
+    </nav>
+
+    <div class="subpanel" id="tr-overview">
+      <div class="tactics-grid">
+        <div class="analysis-card">
+          <span class="eyebrow"><svg class="icon sm"><use href="#i-cal-list"/></svg> Upcoming Fixture</span>
+          <div class="fixture-row" style="padding-top:2px">
+            <div class="vs-crest them"></div><div class="fixture-names">Lahore Lions<small>Away &middot; Sun 28 Mar &middot; 14:00 &middot; Jinnah Stadium</small></div>
+          </div>
+          <div class="analysis-preview-row"><span>Competition</span><span>Pakistan T20 Cup</span></div>
+          <div class="analysis-preview-row"><span>Previous meetings</span><span>Won 3 of the last 5</span></div>
+          <div class="analysis-preview-row"><span>Their recent form</span><span>W&nbsp;W&nbsp;L&nbsp;W&nbsp;L over the last 5</span></div>
+          <div class="role-hint" style="margin-top:10px;margin-bottom:0">A genuinely close fixture historically &mdash; expect Talha Iqbal to be held back for a crack at Hamza Malik specifically, the one duel this record actually turns on.</div>
+        </div>
+        <div class="analysis-card">
+          <span class="eyebrow"><svg class="icon sm"><use href="#i-user"/></svg> Coach Information</span>
+          <div class="staff-row"><div class="staff-row-main"><span class="staff-name">Aamer Nazir</span><span class="staff-role-label">Head Coach &middot; Pakistan</span></div><span class="tier-badge a">&#9733;&#9733;&#9733;&#9734;&#9734;</span></div>
+          <div class="analysis-preview-row" style="margin-top:10px"><span>Days in charge</span><span>612</span></div>
+          <div class="analysis-preview-row"><span>Win rate</span><span>58%</span></div>
+          <hr style="border-color:var(--border-soft);margin:12px 0">
+          <div class="analysis-preview-row"><span>Batting approach</span><span>Aggressive</span></div>
+          <div class="analysis-preview-row"><span>Bowling approach</span><span>Attacking</span></div>
+          <div class="analysis-preview-row"><span>Fielding setup</span><span>Balanced</span></div>
+        </div>
+      </div>
+      <div class="analysis-card" style="margin-top:16px">
+        <span class="eyebrow"><svg class="icon sm"><use href="#i-star-fill"/></svg> Notable Players</span>
+        <div class="tactics-grid">
+          <div class="staff-row"><div class="staff-row-main"><span class="staff-name">Kamran Hussain (c)</span><span class="staff-role-label">Leading run-scorer</span></div><span>412 runs</span></div>
+          <div class="staff-row"><div class="staff-row-main"><span class="staff-name">Talha Iqbal</span><span class="staff-role-label">Leading wicket-taker</span></div><span>18 wkts</span></div>
+          <div class="staff-row"><div class="staff-row-main"><span class="staff-name">Kamran Hussain (c)</span><span class="staff-role-label">Highest average rating</span></div><span>7.4</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="subpanel" id="tr-batting" hidden>
+      <div class="team-report-toggle-row" role="tablist" aria-label="Batting view">
+        <button class="tr-toggle-btn" aria-selected="true">Expected XI</button>
+        <button class="tr-toggle-btn" aria-selected="false">Recent Approach</button>
+        <button class="tr-toggle-btn" aria-selected="false">Batting Style</button>
+      </div>
+      <div class="analysis-card">
+        <span class="eyebrow"><svg class="icon sm"><use href="#i-users"/></svg> Expected Batting Order</span>
+        <div class="table-card"><div class="table-scroll-inner" style="max-height:none">
+        <table class="squad">
+          <thead><tr><th>#</th><th>Player</th><th>Role</th><th>Batting Style</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td>Zeeshan Rafiq</td><td>Opener</td><td>Right-hand, attacking</td></tr>
+            <tr><td>2</td><td>Kamran Hussain (c)</td><td>Opener</td><td>Right-hand, anchor</td></tr>
+            <tr><td>3</td><td>Danish Aslam</td><td>Top order</td><td>Left-hand</td></tr>
+            <tr><td>4</td><td>Farooq Iqbal</td><td>Middle order</td><td>Right-hand</td></tr>
+            <tr><td>5</td><td>Saad Yousuf</td><td>Finisher</td><td>Right-hand, power</td></tr>
+            <tr><td>6</td><td>Bilal Rasheed (wk)</td><td>Wicketkeeper</td><td>Left-hand</td></tr>
+            <tr><td>7</td><td>Junaid Butt</td><td>Allrounder</td><td>Right-hand</td></tr>
+            <tr><td>8</td><td>Talha Iqbal</td><td>Bowler</td><td>Right-hand</td></tr>
+          </tbody>
+        </table>
+        </div></div>
+        <div class="role-hint" style="margin-top:10px;margin-bottom:0">Not enough data exists to break this down by batting-first vs chasing yet &mdash; the scouting department&rsquo;s own honest limit at &ldquo;Thorough&rdquo; rather than &ldquo;Excellent.&rdquo;</div>
+      </div>
+    </div>
+
+    <div class="subpanel" id="tr-scoring" hidden>
+      <div class="team-report-toggle-row" role="tablist" aria-label="Scoring view">
+        <button class="tr-toggle-btn" aria-selected="true">Runs</button>
+        <button class="tr-toggle-btn" aria-selected="false">Wickets</button>
+        <button class="tr-toggle-btn" aria-selected="false">By Batting Position</button>
+      </div>
+      <div class="tactics-grid">
+        <div class="analysis-card">
+          <span class="eyebrow">Scoring &mdash; where they hurt you</span>
+          <div class="analysis-preview-row"><span>Cover / Extra cover</span><span>29%</span></div>
+          <div class="analysis-preview-row"><span>Straight down the ground</span><span>21%</span></div>
+          <div class="analysis-preview-row"><span>Square leg / Mid-wicket</span><span>26%</span></div>
+          <div class="analysis-preview-row"><span>Fine leg / Third man</span><span>14%</span></div>
+          <div class="analysis-preview-row"><span>Behind square, off side</span><span>10%</span></div>
+          <hr style="border-color:var(--border-soft);margin:12px 0">
+          <div class="analysis-preview-row"><span>Powerplay (1&ndash;6)</span><span>7.8 RPO</span></div>
+          <div class="analysis-preview-row"><span>Middle overs (7&ndash;15)</span><span>6.9 RPO</span></div>
+          <div class="analysis-preview-row"><span>Death overs (16&ndash;20)</span><span>10.4 RPO</span></div>
+        </div>
+        <div class="analysis-card">
+          <span class="eyebrow">Wickets conceded &mdash; where they&rsquo;re vulnerable</span>
+          <div class="analysis-preview-row"><span>Bowled / LBW</span><span>34%</span></div>
+          <div class="analysis-preview-row"><span>Caught behind / slips</span><span>21%</span></div>
+          <div class="analysis-preview-row"><span>Caught in the deep</span><span>31%</span></div>
+          <div class="analysis-preview-row"><span>Run out / Stumped</span><span>14%</span></div>
+          <hr style="border-color:var(--border-soft);margin:12px 0">
+          <div class="analysis-preview-row"><span>Powerplay (1&ndash;6)</span><span>0.9 wkts/inns</span></div>
+          <div class="analysis-preview-row"><span>Middle overs (7&ndash;15)</span><span>2.1 wkts/inns</span></div>
+          <div class="analysis-preview-row"><span>Death overs (16&ndash;20)</span><span>2.8 wkts/inns</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="subpanel" id="tr-bowling-plans" hidden>
+      <div class="analysis-card">
+        <span class="eyebrow"><svg class="icon sm"><use href="#i-target"/></svg> Bowling Preferences</span>
+        <div class="staff-row"><div class="staff-row-main"><span class="staff-name">Talha Iqbal</span><span class="staff-role-label">Off-spin</span></div></div>
+        <div class="tactics-grid" style="margin-top:8px">
+          <div><div class="label" style="font-size:var(--fs-micro);color:var(--ink-faint);text-transform:uppercase">Preferred Line</div><div style="font-weight:700;margin-top:2px">Fourth Stump</div></div>
+          <div><div class="label" style="font-size:var(--fs-micro);color:var(--ink-faint);text-transform:uppercase">Preferred Length</div><div style="font-weight:700;margin-top:2px">Good Length</div></div>
+          <div><div class="label" style="font-size:var(--fs-micro);color:var(--ink-faint);text-transform:uppercase">Go-to Variation</div><div style="font-weight:700;margin-top:2px">Arm Ball</div></div>
+          <div><div class="label" style="font-size:var(--fs-micro);color:var(--ink-faint);text-transform:uppercase">Field Setting</div><div style="font-weight:700;margin-top:2px">Attacking, ring in</div></div>
+        </div>
+      </div>
+      <div class="analysis-card" style="margin-top:16px">
+        <span class="eyebrow"><svg class="icon sm"><use href="#i-target"/></svg> Data Insights</span>
+        <div class="role-hint" style="margin-bottom:0">No observations recorded yet for the rest of the attack &mdash; a genuinely fresh pairing at the new ball this season, still building a book on them.</div>
+      </div>
+    </div>
+
+    <div class="subpanel" id="tr-team-analysis" hidden>
+      <div class="analysis-card">
+        <span class="eyebrow"><svg class="icon sm"><use href="#i-trend-up"/></svg> Team Tendencies</span>
+        <div class="analysis-preview-row"><span>Home record this season</span><span>4W &ndash; 1L</span></div>
+        <div class="analysis-preview-row"><span>Away record this season</span><span>2W &ndash; 3L</span></div>
+        <div class="analysis-preview-row"><span>When batting first</span><span>Win 71% of the time</span></div>
+        <div class="analysis-preview-row"><span>When chasing</span><span>Win 44% of the time</span></div>
+        <div class="role-hint" style="margin-top:10px;margin-bottom:0">A side built to set a total, not chase one &mdash; winning the toss and batting first at Jinnah Stadium is a real, evidenced advantage for them specifically.</div>
+      </div>
+    </div>
+
+    <div class="subpanel" id="tr-squad-depth" hidden>
+      <div class="analysis-card">
+        <span class="eyebrow"><svg class="icon sm"><use href="#i-users"/></svg> Squad Depth by Role</span>
+        <div class="table-card"><div class="table-scroll-inner" style="max-height:none">
+        <table class="squad">
+          <thead><tr><th>Role</th><th>1st choice</th><th>2nd choice</th><th>3rd choice</th></tr></thead>
+          <tbody>
+            <tr><td>Opener</td><td>Zeeshan Rafiq</td><td>Kamran Hussain</td><td>&mdash;</td></tr>
+            <tr><td>Wicketkeeper</td><td>Bilal Rasheed</td><td>&mdash;</td><td>&mdash;</td></tr>
+            <tr><td>Finisher</td><td>Saad Yousuf</td><td>Junaid Butt</td><td>&mdash;</td></tr>
+            <tr><td>Front-line spin</td><td>Talha Iqbal</td><td>&mdash;</td><td>&mdash;</td></tr>
+            <tr><td>Death bowling</td><td>&mdash;</td><td>&mdash;</td><td>&mdash;</td></tr>
+          </tbody>
+        </table>
+        </div></div>
+        <div class="role-hint" style="margin-top:10px;margin-bottom:0">A genuine gap at the death &mdash; no specialist death bowler on the books this season, which is exactly why their trade-window priority is death-overs bowling.</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel" id="panel-stages" role="tabpanel" hidden>
+    <div class="panel-head"><h1>Stages</h1><div class="sub">Pakistan T20 Cup &middot; standings</div></div>
+    <div class="analysis-card">
+      <span class="eyebrow"><svg class="icon sm"><use href="#i-trend-up"/></svg> Pakistan T20 Cup &middot; table</span>
+      <div class="table-card">
+        <table class="career">
+          <thead><tr><th>Pos</th><th>Team</th><th class="num">Pld</th><th class="num">W</th><th class="num">L</th><th class="num">NR</th><th class="num">NRR</th><th class="num">Pts</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td><span class="who clickable" onclick="openWorldProfile('club','lahore')">Lahore Lions</span></td><td class="num">10</td><td class="num">8</td><td class="num">2</td><td class="num">0</td><td class="num">+0.842</td><td class="num">16</td></tr>
+            <tr><td>2</td><td><span class="who clickable" onclick="openWorldProfile('club','karachi')">Karachi Kings</span></td><td class="num">10</td><td class="num">7</td><td class="num">3</td><td class="num">0</td><td class="num">+0.512</td><td class="num">14</td></tr>
+            <tr style="background:var(--turf-dim)"><td style="color:var(--turf-strong);font-weight:700">3</td><td style="color:var(--turf-strong);font-weight:700"><span class="who clickable" onclick="openWorldProfile('club','islamabad')" style="color:inherit">Islamabad Icons</span></td><td class="num" style="color:var(--turf-strong);font-weight:700">10</td><td class="num" style="color:var(--turf-strong);font-weight:700">6</td><td class="num" style="color:var(--turf-strong);font-weight:700">4</td><td class="num" style="color:var(--turf-strong);font-weight:700">0</td><td class="num" style="color:var(--turf-strong);font-weight:700">+0.203</td><td class="num" style="color:var(--turf-strong);font-weight:700">12</td></tr>
+            <tr><td>4</td><td><span class="who clickable" onclick="openWorldProfile('club','multan')">Multan Sultans</span></td><td class="num">10</td><td class="num">5</td><td class="num">5</td><td class="num">0</td><td class="num">&minus;0.088</td><td class="num">10</td></tr>
+            <tr><td>5</td><td><span class="who clickable" onclick="openWorldProfile('club','peshawar')">Peshawar Zalmi</span></td><td class="num">10</td><td class="num">4</td><td class="num">5</td><td class="num">1</td><td class="num">&minus;0.310</td><td class="num">9</td></tr>
+            <tr><td>6</td><td><span class="who clickable" onclick="openWorldProfile('club','quetta')">Quetta Falcons</span></td><td class="num">10</td><td class="num">2</td><td class="num">7</td><td class="num">1</td><td class="num">&minus;0.940</td><td class="num">5</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="role-hint" style="margin-top:10px">Top 4 qualify for the playoffs. Points, then net run rate, settle the order.</div>
+    </div>
+  </section>
+
   <section class="panel" id="panel-squad" role="tabpanel" hidden>
     <div class="panel-head"><h1>First-team squad</h1><div class="sub">18 players &middot; 2 unavailable</div></div>
     <nav class="subnav" role="tablist" aria-label="Squad views">
@@ -3236,10 +3567,7 @@
         </div>
         <div class="analysis-card">
           <span class="eyebrow"><svg class="icon sm"><use href="#i-news"/></svg> From the press</span>
-          <div class="notes-log">
-            <div class="notes-log-item" style="cursor:pointer" onclick="focusInboxRail()"><span><strong>Chaudhry&rsquo;s rise has the dressing room talking</strong><br>Three fifties in four innings &mdash; the 21-year-old is forcing his way past a settled top order.</span></div>
-            <div class="notes-log-item" style="cursor:pointer;margin-top:8px" onclick="focusInboxRail()"><span><strong>Icons ownership backs a &ldquo;youth-first&rdquo; rebuild</strong><br>A quiet trajectory shift after two seasons short of the knockouts.</span></div>
-          </div>
+          <div class="notes-log" id="dynamics-press-list"></div>
           <button class="view-more-btn" onclick="focusInboxRail()">All club news</button>
         </div>
         <div class="analysis-card">
@@ -5521,14 +5849,6 @@
     describePlan('batting');
     document.getElementById('field-phase-suffix').textContent = '· ' + plan.field;
   }
-  function filterPress(btn) {
-    var group = btn.closest('.press-filter');
-    group.querySelectorAll('.press-filter-btn').forEach(function (b) { b.setAttribute('aria-selected', 'false'); });
-    btn.setAttribute('aria-selected', 'true');
-    var tile = btn.closest('.tile');
-    tile.querySelectorAll(':scope > div[id^="press-"]').forEach(function (p) { p.hidden = true; });
-    document.getElementById('press-' + btn.dataset.pfilter).hidden = false;
-  }
   function openClubTab(name) {
     var btn = document.querySelector('#panel-club .subtab-btn[data-subtab="' + name + '"]');
     if (btn) btn.click();
@@ -5572,6 +5892,14 @@
       navIndex = navHistory.length - 1;
     }
     updateNavHistButtons();
+    // A real coach's "identity" isn't a manual toggle - it's implied by what he's
+    // actually navigating into. Only panels that are genuinely domain-exclusive carry
+    // a data-context (recruitment/club -> club, franchise -> franchise, international ->
+    // international); everything else is common ground and leaves CURRENT_CONTEXT alone.
+    var targetBtn = document.querySelector('.tab-btn[data-tab="' + name + '"]');
+    var targetCtx = targetBtn && targetBtn.dataset.context;
+    if (targetCtx && targetCtx !== CURRENT_CONTEXT) setContext(targetCtx);
+    syncMegaMenuToPanel(name);
   }
   function navigateBack() {
     if (navIndex <= 0) return;
@@ -5589,6 +5917,141 @@
     if (backBtn) backBtn.disabled = navIndex <= 0;
     if (fwdBtn) fwdBtn.disabled = navIndex >= navHistory.length - 1;
   }
+
+  // ---------- FM26 reference: mega-menu top nav (6 real menus, each a dropdown of its
+  // own sub-pages) + a persistent row-2 subnav strip (the existing .tab-btn elements,
+  // regrouped via data-group - showPanel()/click wiring is completely unchanged) + a
+  // breadcrumb. Replaces the old flat 11-item tab row. ----------
+  var MEGA_GROUPS = {
+    portal: { label: 'Portal', items: [
+      { tab: 'portal', label: 'Overview' },
+      { tab: 'messages', label: 'Messages' },
+      { tab: 'fixtures', label: 'Fixture Schedule' },
+      { tab: 'stages', label: 'Stages' },
+      { tab: 'records', label: 'Records' },
+      { tab: 'world', label: 'World' },
+      { tab: 'team-report', label: 'Opposition Report' }
+    ] },
+    squad: { label: 'Squad', items: [
+      { tab: 'squad', label: 'Squad' },
+      { tab: 'training', label: 'Training' },
+      { tab: 'tactics', label: 'Tactics' }
+    ] },
+    recruitment: { label: 'Recruitment', items: [
+      { tab: 'recruitment', label: 'Recruitment' }
+    ] },
+    matchday: { label: 'Match Day', items: [] },
+    club: { label: 'Club', items: [
+      { tab: 'club', label: 'Club' },
+      { tab: 'franchise', label: 'Franchise' }
+    ] },
+    career: { label: 'Career', items: [
+      { tab: 'manager-profile', label: 'Manager Profile' },
+      { tab: 'jobcentre', label: 'Job Centre' },
+      { tab: 'international', label: 'International' }
+    ] }
+  };
+  var TAB_TO_GROUP = {};
+  Object.keys(MEGA_GROUPS).forEach(function (g) {
+    MEGA_GROUPS[g].items.forEach(function (it) { TAB_TO_GROUP[it.tab] = g; });
+  });
+  var activeMegaGroup = 'portal';
+  // ---------- Renders the "needs your attention" tasks and Dynamics' own press card
+  // straight from INBOX_NEWS, so this is the only place any of that wording lives -
+  // Messages (the real inbox) reads the exact same array. ----------
+  var newsHeroIndex = 0;
+  var newsHeroTimer = null;
+  function renderNewsHero() {
+    var slides = INBOX_NEWS.slice(0, 8);
+    if (!slides.length) return;
+    var hero = document.getElementById('overview-news-hero');
+    var dots = document.getElementById('overview-news-dots');
+    if (!hero || !dots) return;
+    var n = slides[newsHeroIndex % slides.length];
+    hero.innerHTML = '<h2>' + n.headline + '</h2><div class="dek">' + n.dek + '</div>';
+    dots.innerHTML = slides.map(function (s, i) { return '<span class="' + (i === (newsHeroIndex % slides.length) ? 'active' : '') + '"></span>'; }).join('');
+  }
+  function advanceNewsHero() { newsHeroIndex++; renderNewsHero(); }
+  function startNewsHeroCarousel() {
+    renderNewsHero();
+    if (newsHeroTimer) clearInterval(newsHeroTimer);
+    newsHeroTimer = setInterval(advanceNewsHero, 6000);
+  }
+  function renderOverviewWidgets() {
+    var attnEl = document.getElementById('overview-attention-list');
+    if (attnEl) {
+      attnEl.innerHTML = INBOX_NEWS.filter(function (n) { return n.attention; }).map(function (n) {
+        return '<div class="task-item clickable" onclick="' + (n.click || '').replace(/"/g, '&quot;') + '">'
+          + '<span class="task-dot ' + (n.urgent ? 'urgent' : 'normal') + '"></span>'
+          + '<div><div class="task-title">' + n.headline + '</div><div class="task-sub">' + n.dek + '</div></div></div>';
+      }).join('');
+    }
+    var dynEl = document.getElementById('dynamics-press-list');
+    if (dynEl) {
+      dynEl.innerHTML = ['n1c', 'n1'].map(function (id, i) {
+        var n = INBOX_NEWS.filter(function (x) { return x.id === id; })[0];
+        if (!n) return '';
+        return '<div class="notes-log-item" style="cursor:pointer' + (i > 0 ? ';margin-top:8px' : '') + '" onclick="focusInboxRail()"><span><strong>' + n.headline + '</strong><br>' + n.dek + '</span></div>';
+      }).join('');
+    }
+
+    startNewsHeroCarousel();
+  }
+  function renderMegaMenuBar() {
+    var bar = document.getElementById('mega-menu-bar');
+    if (!bar) return;
+    var order = ['portal', 'squad', 'recruitment', 'matchday', 'club', 'career'];
+    bar.innerHTML = order.map(function (key) {
+      var g = MEGA_GROUPS[key];
+      var hasItems = g.items.length > 0;
+      var dropdown = hasItems ? ('<div class="mega-dropdown" id="mega-dropdown-' + key + '">'
+        + g.items.map(function (it) {
+          return '<button type="button" class="mega-dropdown-item" data-tab="' + it.tab + '" onclick="closeAllMegaMenus();showPanel(\'' + it.tab + '\')">' + it.label + '</button>';
+        }).join('') + '</div>') : '';
+      var onclick = hasItems ? ("toggleMegaMenu('" + key + "')") : "closeAllMegaMenus();attemptAdvance('enterMatchMode')";
+      return '<button type="button" class="mega-btn" id="mega-btn-' + key + '" aria-expanded="false" onclick="' + onclick + '">'
+        + g.label
+        + (hasItems ? ' <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>' : '')
+        + '</button>' + dropdown;
+    }).join('');
+  }
+  function closeAllMegaMenus() {
+    document.querySelectorAll('.mega-dropdown.open').forEach(function (d) { d.classList.remove('open'); });
+    document.querySelectorAll('.mega-btn[aria-expanded="true"]').forEach(function (b) { b.setAttribute('aria-expanded', 'false'); });
+  }
+  function toggleMegaMenu(key) {
+    var dd = document.getElementById('mega-dropdown-' + key);
+    var btn = document.getElementById('mega-btn-' + key);
+    var wasOpen = dd && dd.classList.contains('open');
+    closeAllMegaMenus();
+    if (dd && !wasOpen) { dd.classList.add('open'); if (btn) btn.setAttribute('aria-expanded', 'true'); }
+  }
+  document.addEventListener('click', function (e) {
+    if (!e.target.closest('.mega-btn') && !e.target.closest('.mega-dropdown')) closeAllMegaMenus();
+    if (!e.target.closest('.search-pill-wrap')) { var w = document.getElementById('search-pill-wrap'); if (w) w.classList.remove('open'); }
+  });
+  function syncMegaMenuToPanel(name) {
+    var group = TAB_TO_GROUP[name] || activeMegaGroup;
+    activeMegaGroup = group;
+    var tabsNav = document.querySelector('.tabs');
+    if (tabsNav) tabsNav.setAttribute('data-active-group', group);
+    document.querySelectorAll('.mega-btn').forEach(function (b) {
+      b.classList.toggle('active', b.id === 'mega-btn-' + group);
+    });
+    var crumb = document.getElementById('breadcrumb-strip');
+    if (crumb && MEGA_GROUPS[group]) {
+      var item = MEGA_GROUPS[group].items.filter(function (it) { return it.tab === name; })[0];
+      crumb.innerHTML = '<b>' + MEGA_GROUPS[group].label + '</b>' + (item ? (' \u203a ' + item.label) : '');
+    }
+  }
+  function toggleSearchPill() {
+    var w = document.getElementById('search-pill-wrap');
+    if (!w) return;
+    var opening = !w.classList.contains('open');
+    w.classList.toggle('open');
+    if (opening) { var inp = document.getElementById('global-search-input'); if (inp) inp.focus(); }
+  }
+
   document.querySelectorAll('.tabs > .tabnav-inner > .tab-btn').forEach(function (btn) {
     btn.addEventListener('click', function () { showPanel(btn.dataset.tab); });
   });
@@ -7148,6 +7611,10 @@
   var eoiRegistrationConfirmed = false;
   var INBOX_NEWS = [
     { id: 'n1', kicker: 'Board', headline: 'Icons ownership backs a \u201cyouth-first\u201d rebuild', dek: 'Expect academy graduates to get more of the shop window.', isNew: true, read: false },
+    { id: 'n1c', kicker: 'Breakout Star', headline: 'Chaudhry\u2019s rise has the dressing room talking', dek: 'Three fifties in four innings \u2014 the 21-year-old is forcing his way past a settled top order.', isNew: true, read: false, click: "openPlayerByName('Zain Chaudhry')" },
+    { id: 'a1', kicker: 'Contract', headline: 'Renew Hamza Malik\u2019s contract', dek: 'Expires in 34 days \u2014 below market wage.', isNew: false, read: true, attention: true, urgent: true, click: "openPlayerByName('Hamza Malik');openNegotiation('contract')" },
+    { id: 'a2', kicker: 'Press', headline: 'Press conference \u2014 pre-match', dek: 'Tomorrow, 11:00 \u2014 expect a fitness question.', isNew: false, read: true, attention: true, click: "openPressConference()" },
+    { id: 'a3', kicker: 'Squad', headline: 'Confirm squad for Lions fixture', dek: 'Selection meeting recommends 2 changes.', isNew: false, read: true, attention: true, click: "showPanel('tactics')" },
     { id: 'n1b', kicker: 'Pundit', headline: '\u201cThis board is playing a dangerous game\u201d', dek: 'A former international\u2019s column takes issue with the youth-first rebuild, questioning whether it costs results this season.', isNew: true, read: false },
     { id: 'n0a', kicker: 'Record', headline: 'Adeel Hayat\u2019s 7/22 becomes the best bowling figures ever recorded at Jinnah Stadium', dek: 'The old mark had stood since 2019 - broken in front of a home crowd against Peshawar Zalmi.', isNew: true, read: false, click: "openPlayerByName('Adeel Hayat')" },
     { id: 'n0b', kicker: 'Narrative', headline: 'A breakout campaign is taking real shape for Umar Baig', dek: 'Three matches running of genuine impact, off a franchise form spike nobody predicted at the start of the season - the kind of run a season\u2019s own story gets built around.', isNew: true, read: false, click: "openPlayerByName('Umar Baig')" },
@@ -7202,18 +7669,52 @@
     document.querySelectorAll('.inbox-filter-btn').forEach(function (b) { b.setAttribute('aria-selected', b.dataset.filter === f ? 'true' : 'false'); });
     renderInboxRail();
   }
+  var selectedMessageId = null;
   function openInboxItem(id) {
     var item = INBOX_NEWS.filter(function (n) { return n.id === id; })[0];
     if (!item) return;
     item.read = true;
+    selectedMessageId = 'news:' + id;
     if (item.click) { try { (new Function(item.click))(); } catch (e) {} }
     renderInboxRail();
+  }
+  function openInboxTask(id) {
+    selectedMessageId = 'task:' + id;
+    renderInboxRail();
+  }
+  function currentContextTasks() {
+    return (typeof INBOX_TASKS !== 'undefined' && typeof NATIONAL_SQUADS !== 'undefined' && typeof retentionSubmitted !== 'undefined')
+      ? INBOX_TASKS.filter(function (t) { return t.context === CURRENT_CONTEXT; }) : [];
+  }
+  function renderMessageDetail(tasks) {
+    var pane = document.getElementById('messages-detail-pane');
+    if (!pane) return;
+    if (!selectedMessageId) { pane.innerHTML = '<div class="messages-detail-empty">Select a message on the left to read it.</div>'; return; }
+    var kind = selectedMessageId.split(':')[0];
+    var id = selectedMessageId.slice(kind.length + 1);
+    if (kind === 'task') {
+      var t = tasks.filter(function (x) { return x.id === id; })[0];
+      if (!t) { pane.innerHTML = '<div class="messages-detail-empty">Select a message on the left to read it.</div>'; return; }
+      var done = t.resolved();
+      pane.innerHTML = '<div class="messages-detail-header"><div><div class="messages-detail-from">Board &amp; Operations</div>'
+        + '<div class="messages-detail-title">' + t.title + '</div></div></div>'
+        + '<div class="messages-detail-body">' + t.detail + '</div>'
+        + (done
+          ? '<div class="messages-response-bar info"><div class="messages-response-title">\u2713 Resolved</div></div>'
+          : '<div class="messages-response-bar"><div class="messages-response-title">\u26a0 Response Required</div>'
+            + '<div class="messages-response-actions"><button class="messages-response-btn primary" onclick="INBOX_TASKS.filter(function(x){return x.id===\'' + t.id + '\'})[0].go()">Resolve now</button></div></div>');
+    } else {
+      var n = INBOX_NEWS.filter(function (x) { return x.id === id; })[0];
+      if (!n) { pane.innerHTML = '<div class="messages-detail-empty">Select a message on the left to read it.</div>'; return; }
+      pane.innerHTML = '<div class="messages-detail-header"><div><div class="messages-detail-from">' + n.kicker + '</div>'
+        + '<div class="messages-detail-title">' + n.headline + '</div></div></div>'
+        + '<div class="messages-detail-body">' + n.dek + '</div>';
+    }
   }
   function renderInboxRail() {
     var list = document.getElementById('inbox-rail-list');
     if (!list) return;
-    var tasks = (typeof INBOX_TASKS !== 'undefined' && typeof NATIONAL_SQUADS !== 'undefined' && typeof retentionSubmitted !== 'undefined')
-      ? INBOX_TASKS.filter(function (t) { return t.context === CURRENT_CONTEXT; }) : [];
+    var tasks = currentContextTasks();
     var news = INBOX_NEWS.filter(function (n) {
       if (inboxFilter === 'new') return n.isNew;
       if (inboxFilter === 'unread') return !n.read;
@@ -7222,31 +7723,58 @@
     });
     var taskHtml = (inboxFilter === 'all' || inboxFilter === 'tasks') ? tasks.map(function (t) {
       var done = t.resolved();
-      return '<div class="inbox-task-card' + (done ? ' resolved' : '') + '">'
+      var sel = selectedMessageId === ('task:' + t.id) ? ' selected' : '';
+      return '<div class="inbox-task-card' + (done ? ' resolved' : '') + sel + '" style="cursor:pointer" onclick="openInboxTask(\'' + t.id + '\')">'
         + '<div class="inbox-task-title">' + (done ? '\u2713 ' : '\u26a0 ') + t.title + '</div>'
         + '<div class="inbox-task-detail">' + t.detail + '</div>'
-        + (done ? '' : '<button onclick="INBOX_TASKS.filter(function(x){return x.id===\'' + t.id + '\'})[0].go()">Resolve now</button>')
+        + (done ? '' : '<button onclick="event.stopPropagation();INBOX_TASKS.filter(function(x){return x.id===\'' + t.id + '\'})[0].go()">Resolve now</button>')
         + '</div>';
     }).join('') : '';
     var newsHtml = news.map(function (n) {
-      return '<div class="inbox-item' + (!n.read ? ' unread' : '') + '" onclick="openInboxItem(\'' + n.id + '\')">'
+      var sel = selectedMessageId === ('news:' + n.id) ? ' selected' : '';
+      return '<div class="inbox-item' + (!n.read ? ' unread' : '') + sel + '" onclick="openInboxItem(\'' + n.id + '\')">'
         + '<div class="inbox-item-kicker">' + (!n.read ? '<span class="dot"></span>' : '') + n.kicker + '</div>'
         + '<div class="inbox-item-headline">' + n.headline + '</div>'
         + '<div class="inbox-item-dek">' + n.dek + '</div>'
         + '</div>';
     }).join('');
     var body = taskHtml + newsHtml;
-    list.innerHTML = body || '<div class="inbox-rail-empty">Nothing here right now.</div>';
+    var emptyHtml = '<div class="inbox-rail-empty">Nothing here right now.</div>';
+    list.innerHTML = body || emptyHtml;
+    var overviewList = document.getElementById('overview-messages-list');
+    if (overviewList) overviewList.innerHTML = body || emptyHtml;
     var unreadCount = INBOX_NEWS.filter(function (n) { return !n.read; }).length + tasks.filter(function (t) { return !t.resolved(); }).length;
     var badge = document.getElementById('inbox-unread-badge');
     if (badge) badge.textContent = unreadCount ? (unreadCount + ' new') : '';
+    var overviewBadge = document.getElementById('overview-unread-badge');
+    if (overviewBadge) overviewBadge.textContent = unreadCount ? (unreadCount + ' new') : '';
+    var tabBadge = document.getElementById('messages-tab-badge');
+    if (tabBadge) { tabBadge.hidden = !unreadCount; tabBadge.textContent = unreadCount; }
+    var dropdownItem = document.querySelector('.mega-dropdown-item[data-tab="messages"]');
+    if (dropdownItem) {
+      var existing = dropdownItem.querySelector('.tab-badge');
+      if (unreadCount) {
+        if (!existing) { existing = document.createElement('span'); existing.className = 'tab-badge'; dropdownItem.appendChild(existing); }
+        existing.textContent = unreadCount;
+      } else if (existing) { existing.remove(); }
+    }
+    renderMessageDetail(tasks);
+    updateActionPillUrgency(tasks);
   }
-  function focusInboxRail() {
-    var rail = document.getElementById('inbox-rail');
-    if (!rail) return;
-    rail.classList.add('inbox-rail-flash');
-    setTimeout(function () { rail.classList.remove('inbox-rail-flash'); }, 900);
-    rail.scrollIntoView({ block: 'nearest' });
+  function focusInboxRail() { showPanel('messages'); }
+  function updateActionPillUrgency(tasks) {
+    var pill = document.getElementById('play-match-btn');
+    if (!pill) return;
+    var pending = (tasks || currentContextTasks()).filter(function (t) { return !t.resolved(); });
+    if (pending.length) {
+      pill.classList.remove('clear');
+      pill.classList.add('urgent');
+      pill.innerHTML = '\u26a0 Response Required';
+    } else {
+      pill.classList.remove('urgent');
+      pill.classList.add('clear');
+      if (typeof renderActionButton === 'function') renderActionButton();
+    }
   }
   function attemptAdvance(fnName) {
     var pending = INBOX_TASKS.filter(function (t) { return t.context === CURRENT_CONTEXT && !t.resolved(); });
@@ -7274,6 +7802,7 @@
   wireTabs('#panel-fixtures .subtab-btn', 'fixtures-');
   wireTabs('#panel-recruitment .subtab-btn', 'recruit-');
   wireTabs('#panel-world .subtab-btn', 'world-');
+  wireTabs('#panel-team-report .subtab-btn', 'tr-');
   wireTabs('#panel-competition-profile .subtab-btn', 'cprofile-');
   wireTabs('#panel-matchday .subtab-btn', 'sub-');
   wireTabs('#panel-player .subtab-btn', 'psub-');
@@ -9163,7 +9692,10 @@
   }
   // Everything the inbox rail's tasks read (NATIONAL_SQUADS, retentionSubmitted) now
   // exists - this is the first safe point to render it for real.
+  renderMegaMenuBar();
+  syncMegaMenuToPanel('portal');
   renderInboxRail();
+  renderOverviewWidgets();
 
 
   // ---- Calendar: every dated event this mockup already establishes elsewhere, in one clickable
