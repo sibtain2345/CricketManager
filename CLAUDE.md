@@ -13000,6 +13000,299 @@ executed end to end.
 
 ---
 
+### 2026-09-17: PLAN ONLY - Portal re-study findings + the corrected Overview design +
+### a world-wide Matches hub - this is the ABSOLUTE NEXT WORK. No code has been written
+### against this plan yet, per the user's explicit hard instruction ("code tumne nae krna
+### phly rigourously plan banao" - no code, a rigorous plan first). This section is that
+### plan, to be implemented in the next work session, then reviewed against the FM26
+### reference video one more time before shipping.
+
+**Why this entry exists.** The user gave a long, repeated, increasingly specific correction
+across several messages this session: my prior two passes at rebuilding Portal's Overview
+screen (see the two "FM26 alignment pass 6/7" scratchpad-script entries referenced earlier in
+this session, and the git history around them) were built from an incomplete read of the real
+FM26 Portal video - I had correctly identified that Overview is a live HUB (not a place to
+either delete content from or duplicate it with drifted wording), but I had NOT correctly
+identified (a) that several Overview tiles have no real purpose on Overview and belong
+somewhere else entirely, (b) that there are TWO distinct click-behaviours in the video, not
+one, and (c) - raised in a message that landed while this plan was being written - that FM26
+also has a genuine, world-wide **Matches** hub reachable both as its own destination and as a
+live-filtered Overview tile, which nothing in the current mockup represents at all. The user's
+own final instruction was unambiguous: re-watch the Portal video "aik baar phir dkeho aur chk
+kro" (once more, and check), build a plan - not code - covering all of it, explicitly fold in
+the things I had ALREADY correctly identified as valid (so a future session doesn't re-derive
+or accidentally undo them), list the other FM26 reference videos still unwatched, and state the
+current honest state of the UI - then commit and push the plan alone.
+
+#### 1. What the video re-review actually confirmed (frames `r3_8`, `r3_268`, `r3_276` -
+     directly examined at full resolution this session; `r3_12/16/20/270/272/274/278/280`
+     extracted but not yet individually reviewed - see "still to do" at the end)
+
+- **Frame `r3_8`** - a genuine Messages-DETAIL view with a real attachment/document card
+  ("Squad Selection Rules" - a Team Registration / squad-size / Squad Planner card sitting
+  inline inside the opened message, not just plain body text). Confirms Messages is a real,
+  rich document reader, not a flat list+preview - our current `panel-messages`/
+  `renderMessageDetail()` only ever renders a task's Resolve-bar or plain news body text today,
+  never a structured attachment card. **Gap, not yet fixed.**
+- **Frame `r3_268`` - the single most important frame this session.** A news STORY ("Kobel
+  headlines Premier League transfer rumors") open as a **centered POPUP/modal overlay**, with
+  its OWN internal breadcrumb ("Portal > News") and its own close/X button, while the
+  surrounding screen stays visible and merely dimmed behind it - the Messages list is still
+  readable on the left, the News-hero card is still visible (dimmed) at the top, and the
+  Fixture Schedule card is still visible (partially obscured) on the right. This is pattern
+  (b) below, confirmed unambiguously by direct visual inspection, not inferred.
+- **Frame `r3_276`** - the real, dedicated **News Site** page (reached via genuine navigation,
+  not a popup - a full-page destination with its own breadcrumb, not an overlay). Real,
+  specific structure: a "Homepage" title + "Worldwide" subtitle + a small globe icon at the
+  top; directly below it a real tab strip - "For You | Around the World | Premier League |
+  Sky Bet Championship | Sky Bet League One | Sky Bet League Two | More Sites v"; below that a
+  masonry/bento card grid (a large trending hero card + several smaller story cards) plus two
+  side cards - "Today's Top Fixtures" and "Stages" (i.e. a mini standings table). We have
+  **zero** representation of this page today - `showPanel('messages')` is currently used as a
+  deliberate, stated simplification for "See All News", and that simplification is now
+  confirmed wrong: News Site is its own real destination, structurally distinct from Messages.
+
+**The two click-interaction patterns, now confirmed and named precisely (this was the user's
+own repeated, specific correction - "kuch navigate krte hain... but kuch aise hain jo popup me
+khulte hain with other tiles as well"):**
+
+1. **Pattern A - full navigation, the active subtab genuinely changes.** Clicking a NAV-LEVEL
+   destination (the "Messages" mega-dropdown item, "Fixture Schedule", "Stages", "News Site" as
+   a destination, "Opposition Report", presumably "Calendar" once it's a real subtab) causes a
+   real navigation: the breadcrumb updates, and - critically - the SUBNAV STRIP'S OWN active
+   highlight moves to that destination, exactly the way our existing `showPanel()` +
+   `syncMegaMenuToPanel()` already behave. **This pattern is what we already built correctly**
+   for every top-level Portal destination we have today (Overview/Messages/Fixture Schedule/
+   Stages/Records/World/Opposition Report) - keep it exactly as it is.
+2. **Pattern B - a rich POPUP/modal overlay, other tiles stay visible/dimmed behind it.**
+   Clicking an individual CONTENT ITEM inside a hub tile - specifically, an individual news
+   STORY inside the News-hero carousel (confirmed by `r3_268` above) - opens a modal dialog
+   with its own breadcrumb and close button, layered on top of the CURRENT screen (Overview, in
+   the confirmed frame), which stays visible/dimmed underneath rather than being navigated away
+   from. **We have never built this pattern anywhere in the mockup.** Every "click a tile"
+   interaction we have today either does nothing, or calls `showPanel(...)` (Pattern A), even
+   for things that the video says should be Pattern B.
+
+**Which existing/planned tiles use which pattern - inferred from the frames directly examined
+plus the video's own general logic (a destination with its own dedicated full page uses
+Pattern A; a single piece of "content" with nothing else to show alongside it uses Pattern B) -
+to be RE-VERIFIED against the still-unreviewed frames before implementing, per the checklist at
+the end of this entry, not assumed final:**
+
+| Tile / element | Pattern | Destination / component |
+|---|---|---|
+| Messages preview card (Overview) -> clicking the card header/"See all" | A | navigates to Messages, active subtab becomes Messages |
+| An individual message row inside that card | A (tentative - `r3_8`'s rich detail view is consistent with Messages being real page content, not a popup; needs one more frame check) | opens Messages with that item pre-selected |
+| News-hero carousel -> "See All News" | A | navigates to the real News Site page (not `showPanel('messages')` any more) |
+| An individual news-hero STORY (the carousel's own current slide) | **B - confirmed** | a popup: breadcrumb "Portal > News", close button, other Overview tiles stay dimmed-visible behind it |
+| "Next Opposition Report" mini-card | A | navigates to Opposition Report / Team Report |
+| Fixture Schedule mini-list | A | navigates to Fixture Schedule |
+| Stages mini-table | A | navigates to Stages |
+| **A "Matches" tile (NEW - see section 3 below)** | A for the destination itself; **individual match rows inside it should very likely open a scorecard as Pattern B**, matching the news-story precedent exactly (a scorecard is a single piece of content you want to glance at without losing your place, just like a news story) - to be confirmed on the next video pass, not assumed |
+
+#### 2. The corrected Overview tile set (the user's own detailed message, verbatim
+     paraphrase, now finalized as the plan)
+
+Remove from Overview entirely, and relocate each piece of content to its real home instead of
+discarding it (nothing here is "delete the feature" - it's "delete the WRONG PLACEMENT of the
+feature"):
+
+- **Board Mood** - "koi maqsad nae" (no purpose on Portal/Overview). Real home: **Club >
+  Boardroom** already has (per this file's own Phase 12/13 writeups) a much fuller board-
+  confidence/objectives/ambition model - `ClubBoard.Agenda`/`Trajectory`/`BoardUnity`,
+  `BoardObjective`s, the takeover mechanic. Boardroom is where a board-mood reading belongs;
+  Overview showing a thin ring-gauge duplicate of it is the exact "content on Overview that
+  has nowhere else to point to" anti-pattern already fixed once for News.
+- **Season Budget** (the vitals-strip tile) - "yhn pe useless h" (useless here). Real home:
+  **Club > Finances** already has the real income/expenditure/board-budget-allocation content
+  this project built in an earlier pass - remove the Overview vitals-strip tile, keep Finances
+  as the one real place this number lives (Portal's own vitals-strip already links through to
+  Club when clicked, per the "Portal: a compact FM26-style vitals row" entry earlier this
+  session - that link stays, the REDUNDANT flat number sitting on Overview itself goes).
+- **Recent Form** - "fixture schedule k andar ana chahiye" (should move inside Fixture
+  Schedule). Real home: the **Fixtures screen**, which per this file's own "Fixtures drill-in"
+  work already has a real "Season Schedule" table and an "Upcoming Opposition Report" card -
+  Recent Form (the W/L pill strip already built and used in several other places this session,
+  e.g. Portal's own "Form & Momentum" tile, Club Profile's history-derived reputation) becomes
+  a real card on Fixtures instead of living on Overview's vitals strip.
+- **"Needs your attention" (the tasks tile)** - should not be a separate Overview tile at all;
+  those items should simply BE part of Messages/Inbox, discoverable the same way every other
+  message is. This is **already substantially true in the current data model** - `INBOX_NEWS`
+  entries `a1`/`a2`/`a3` were added earlier this session specifically with `attention:true`/
+  `urgent:true` flags so Overview and Messages read from the SAME canonical source rather than
+  drifting - but the Overview `#overview-attention-list` tile is still a SEPARATE, disconnected
+  render call rendering the same 3 items into its own tile. **Fix**: delete the separate
+  `#overview-attention-list` tile outright; the attention items simply appear in the real,
+  already-live Overview Messages-preview list (`#overview-messages-list`) like any other
+  message, with their existing urgent styling (red "Response Required" bar) doing the work of
+  making them stand out - exactly the "no separate tile, it's just Messages" instruction.
+- **Development Watch** (second-row tile) - "koi fayda nae" (no benefit here). Real home:
+  **Squad > Academy & Youth** subtab, which already has this exact content (the tiered intake
+  list, "academy squad already developing" table) from an earlier pass - remove Overview's
+  duplicate.
+- **Squad Status** (second-row tile) - same verdict, same fix. Real home: **Squad > First
+  Team**, which already has the real squad table + the "Squad depth by role" card.
+- **Opposition Report + Next Fixture** - "aik h me group ho skte hain" (can be grouped into
+  one unit). Already effectively true in the current build (both sit in the Overview hub's
+  middle column, stacked) - the plan is to make this explicit: wrap both in one shared
+  `.analysis-card`-style container with a single eyebrow ("Next Fixture & Opposition"), rather
+  than two visually separate cards that happen to sit next to each other, so the grouping the
+  user asked for is a real, intentional visual unit, not an accident of layout order.
+
+**What survives on Overview, once the above is removed - genuinely a hub of LIVE previews of
+other subtabs, nothing else:** the live Messages-preview column (unchanged, already correct);
+the News-hero carousel (unchanged, already correct, but "See All News" now correctly targets
+the real News Site page once built, per section 1); the grouped Next-Fixture/Opposition-Report
+card (new, per above); the Fixture-Schedule mini-list (unchanged); the Stages mini-table
+(unchanged); **the new Matches tile** (section 3, below).
+
+#### 3. NEW requirement, given mid-session while this plan was being written - a world-wide
+     Matches hub, filterable, reachable from Overview AND as its own destination
+
+The user's own message, translated: there is also a **Matches** section/column with its own
+filter - by default it shows today's matches - and from there you can open ANY match's
+scorecard. There is ALSO a tile for this on Overview showing today's matches, filterable, and
+clicking through from there reaches the same wider destination - which shows **upcoming
+matches and every match, not just the user's own team's, but any club's, any franchise's, any
+international fixture** - i.e. a genuine world-wide live-scores/fixture-list hub, the direct
+cricket-management equivalent of FM's own "Matches" screen (which shows every fixture in the
+game world across every league/competition your scouting network covers, not just your own
+club's). **Confirm the exact FM26 structure of this against the reference video before
+building it** - not yet examined frame-by-frame for this specific screen; the user says "vidoe
+me dkehna" (look in the video), so the next session's first job for this feature is a targeted
+frame pull on whichever portion of the video shows it, before writing any markup.
+
+**What this project already has to build on, so this is additive, not invented from nothing:**
+- The **World screen** (`panel-world`) already has a real Competitions/Nations/Clubs subnav
+  with genuine multi-competition, multi-club browsing (the T20 Cup table, the First-Class
+  Championship / List A Cup / Premier League / Crescent Trophy directory, six Pakistan T20 Cup
+  clubs, six seeded nations) - the data substrate for "every competition, every club" already
+  exists and is real, just not organized around "what's playing TODAY."
+- The **Fixtures screen** already has a real "Season Schedule" (10 rows, W/L history, opponent
+  difficulty) but it is scoped to the human's own club only.
+- The **Fixture Summary modal** (`FIXTURE_SUMMARIES`/`openFixtureSummary`) already exists and
+  already renders a real per-match result headline - this is very likely the right component
+  to reuse for "click a match row -> see its scorecard", rather than inventing a second modal.
+- The **Auction Room's own calendar-gating convention** (a tile/button that reads differently
+  depending on whether today is a due date) is the right pattern for "today's matches" - a
+  Matches tile that defaults to today's date and offers a date/competition filter is a natural
+  extension of a pattern already used elsewhere in this file (Fixtures' own form/difficulty
+  ribbon, the Calendar screen's own event-dot system).
+
+**Planned shape (subject to the video-verification checklist below before it is built):**
+1. **New top-level "Matches" destination** (context-independent - visible in every coaching
+   identity's sidebar/navbar, since match results are a world-wide fact, not identity-scoped) -
+   a filter row (Today / This Week / a competition picker / a club picker) above a real
+   fixture-row list spanning every seeded competition (domestic T20 Cup, First-Class
+   Championship, List A Cup, the three franchise leagues, the Crescent Trophy, plus
+   international fixtures once the International screen's own fixture data is reused here
+   rather than duplicated).
+2. **Overview gains a "Today's Matches" tile** (Pattern A into the full Matches destination,
+   per the table in section 1) showing a short, live-filtered ("today") slice of the same real
+   data the full Matches screen shows - never a second, independently-authored data set.
+3. **Clicking an individual match row** opens its scorecard - almost certainly Pattern B (a
+   popup, matching the news-story precedent) so a user can glance at one result and return to
+   browsing the match list without losing their place, though this is the one specific
+   interaction to re-verify on the next video pass before committing to Pattern B over Pattern A
+   for this particular case.
+4. Reuse `FIXTURE_SUMMARIES` and the existing `.modal-backdrop`/`.negotiation-modal` shell for
+   the scorecard popup rather than a new component; extend the underlying data model (whichever
+   JS array currently backs Fixtures' own Season Schedule) to be genuinely world-wide rather
+   than club-scoped, reusing the same six-club/competition names already established everywhere
+   else in this file for continuity.
+
+#### 4. What I had ALREADY correctly identified as valid, per the user's own explicit
+     follow-up instruction to fold this in too ("jo cheezen tumne khud bola ha rhti hain wo
+     bhi is me add kr dena") - PRESERVE, do not re-derive or undo any of this:
+
+- **The mega-menu shell architecture** - a 6-item top mega-menu (Portal/Squad/Recruitment/
+  Match Day/Club/Career) + a persistent second-row subnav strip showing the active group's own
+  real sub-pages as flat tabs + a breadcrumb line. This IS the real FM26 structure, confirmed
+  by direct video review earlier this session, and IS what the mockup now has (`renderMegaMenuBar`/
+  `MEGA_GROUPS`/`.tabs[data-active-group]`/`.breadcrumb-strip`). Correct - keep exactly as is.
+- **Retiring the persistent `#inbox-rail` sidebar** was the correct root-cause fix for the
+  original "inbox shows during immersive modes" complaint - FM26 genuinely has no such
+  always-visible rail; Messages is an ordinary page like any other. Keep this; do not
+  reintroduce a persistent sidebar for messages.
+- **Single-source `INBOX_NEWS`/`INBOX_TASKS` discipline** - Messages, Overview, and Dynamics
+  must all read from the SAME canonical array, never independently-worded copies. This was
+  hard-won across two rounds of user correction this session and must not regress when the
+  Overview tile removals/relocations above are implemented - the removed tiles' underlying
+  DATA (attention items, board mood, season budget, etc.) should still exist wherever it truly
+  lives (Boardroom, Finances, Squad), it just should not ALSO be duplicated onto Overview.
+- **The Team Report / Opposition Report page** (6 real sub-tabs: Overview, Batting Analysis,
+  Scoring Analysis, Bowling Plans, Team Analysis, Squad Depth, built for Lahore Lions with real,
+  already-established facts) and the **Stages page** (reusing the exact T20 Cup table from
+  World, not a drifted duplicate) are both real, correct, already-shipped destinations - keep
+  as is; just make sure "Next Opposition Report" and "Stages" on the corrected Overview still
+  link to them via Pattern A, unchanged.
+- **CC2014 bitmap removal from the topbar** and the **context-switch removal** (auto-derived
+  from navigation instead of a manual 3-button switcher) are both settled, correct, and
+  unrelated to this plan - nothing here touches them.
+
+#### 5. Honest current state of the UI mockup, stated plainly (per the user's own request)
+
+**Built and correct, per the above:** the mega-menu/subnav/breadcrumb shell; Messages as a real
+page (list + detail, task Resolve-bar, news body) fed by the single canonical `INBOX_NEWS`/
+`INBOX_TASKS` source; Overview as a genuine live-preview hub for Messages/News/Fixture-Schedule/
+Stages (structure correct, but STILL CARRYING the 6 tiles this plan removes/relocates); Team
+Report and Stages as real destinations; the CC2014-bitmap-free topbar; auto-derived context.
+
+**Confirmed wrong, not yet fixed (this plan's own scope for the next session):** Board Mood,
+Season Budget, the separate attention-list tile, Development Watch, and Squad Status are all
+still physically present on Overview and need removing per section 2; "See All News" still
+points at `showPanel('messages')` as a stated simplification instead of a real News Site page;
+there is no popup/modal component anywhere for an individual news story (Pattern B is entirely
+unbuilt); "Calendar" is still only reachable via the special immersive `openCalendarView()`
+takeover rather than being a genuine ordinary Portal subtab the way the video shows it (a small
+training-calendar grid embedded in Overview's own column, presumably plus a fuller dedicated
+page) - this remains an open gap this plan does not yet resolve, flagged again here rather than
+silently dropped; there is no Matches hub anywhere (section 3, brand new this session).
+
+**FM26 reference videos still unwatched, per the user's own explicit instruction to keep this
+list honest and not move on to them until Portal is properly finished:** club screen.mp4,
+competition/staff/player/profile.mp4, manager profile & job center.mp4, matchday screen.mp4,
+recruitment screen.mp4, squad screen.mp4, search bar and everything.mp4. **Do not start any of
+these until this Portal plan is implemented and re-verified against the video** - this is the
+user's own standing instruction repeated multiple times this session ("baaki videos na dekho,
+isi ko sahi trh se improve kro").
+
+#### 6. Ordered next steps for the next work session (still no code until this plan is
+     reviewed/approved - this is the checklist to execute once it is)
+
+1. **Finish the frame review** - `r3_12`, `r3_16`, `r3_20`, `r3_270`, `r3_272`, `r3_274`,
+   `r3_278`, `r3_280` (extracted this session, not yet individually examined) plus a fresh,
+   targeted frame pull specifically for whatever portion of the video shows the Matches
+   hub/filter/scorecard-popup interaction named in section 3 - confirm or correct every
+   "tentative"/"to be re-verified" note flagged throughout sections 1-3 above before writing
+   any markup.
+2. Remove Board Mood, the vitals-strip Season Budget tile, and the separate attention-list
+   tile from Overview; confirm/relocate their real content to Boardroom, Finances, and
+   Messages respectively (data already mostly lives in the right places - this is largely a
+   deletion + a confirmation pass, not new data authoring).
+3. Remove Development Watch and Squad Status from Overview's second tile-row; confirm their
+   content already exists on Squad's Academy & Youth / First Team subtabs (it does, per earlier
+   passes this session) and needs no new authoring, only the Overview duplicates deleted.
+4. Group "Next Fixture" + "Opposition Report" into one visually explicit shared card.
+5. Move "Recent Form" onto the Fixtures screen; remove it from Overview's vitals strip.
+6. Build the real News Site destination page (Homepage/Worldwide header, the real tab strip,
+   the masonry card grid, the "Today's Top Fixtures"/"Stages" side cards) and repoint "See All
+   News" at it instead of `showPanel('messages')`.
+7. Build the Pattern-B popup component for an individual news story (breadcrumb-in-popup,
+   close button, background dimmed-not-hidden) and wire the News-hero carousel's current slide
+   to open it, rather than doing nothing or navigating away.
+8. Build the Matches hub - the filterable world-wide match list as its own destination, the
+   Overview "Today's Matches" tile reading from the same data, and the scorecard popup/modal
+   for an individual match row (Pattern B, tentatively, pending step 1's confirmation).
+9. Re-run the full structural verification suite (tag-count parity, div-nesting scan,
+   duplicate-id scan, `node --check` on the extracted `<script>` block) after every script, per
+   this file's own established discipline for this sub-track.
+10. Report back to the user and get explicit sign-off before publishing/committing the
+    resulting mockup changes, matching the standing end-of-slice ritual already established for
+    this sub-track ("commit hoga jb tum review kr lo gay").
+
+---
+
 ## CONSOLIDATED DEFERRED-ITEMS REGISTER (maintained - the single source of truth)
 
 This table is the index. Every item is either NOW (the wiring & tech-debt pass above), a
