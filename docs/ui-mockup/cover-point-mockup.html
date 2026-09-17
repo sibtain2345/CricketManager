@@ -309,6 +309,8 @@
   .ring-caption { text-align: center; font-size: var(--fs-caption); color: var(--ink-dim); margin-top: 2px; }
 
   .task-item { display: flex; align-items: flex-start; gap: 10px; padding: 8px 0; border-top: 1px solid var(--border-soft); }
+  .task-item.clickable { cursor: pointer; }
+  .task-item.clickable:hover .task-title { color: var(--gold); }
   .task-item:first-of-type { border-top: none; padding-top: 2px; }
   .task-dot { width: 7px; height: 7px; border-radius: 50%; margin-top: 6px; flex-shrink: 0; }
   .task-dot.urgent { background: var(--ball); } .task-dot.normal { background: var(--gold); }
@@ -980,11 +982,16 @@
   .add-clause-empty { padding: 8px 10px; font-size: var(--fs-caption); color: var(--ink-faint); }
 
   .tone-row { display: flex; gap: 8px; flex-wrap: wrap; }
+  .stage-pip { flex: 1; text-align: center; font-size: var(--fs-micro); font-weight: 700; padding: 7px 6px; border-radius: 7px; background: var(--surface-3); color: var(--ink-faint); cursor: pointer; }
+  .stage-pip.active { background: var(--gold-dim); color: var(--gold); }
+  .stage-pip.done { color: var(--turf-strong); }
   .tone-chip { appearance: none; flex: 1; min-width: 120px; background: var(--surface-3); border: 1px solid var(--border); color: var(--ink); font: inherit; font-size: var(--fs-small); font-weight: 700; padding: 10px 10px; border-radius: 9px; cursor: pointer; text-align: center; }
   .tone-chip:hover { border-color: var(--chrome-strong); }
   .tone-chip.active { border-color: var(--gold); background: var(--gold-dim); color: var(--gold); }
   .tone-chip .tone-hint { display: block; font-size: var(--fs-micro); font-weight: 400; color: var(--ink-faint); margin-top: 2px; }
   .tone-chip.active .tone-hint { color: var(--gold); opacity: 0.8; }
+  .tone-chip.recommended { border-color: var(--turf); }
+  .tone-chip.recommended::after { content: 'Assistant\2019s pick'; display: block; font-size: var(--fs-micro); font-weight: 400; color: var(--turf-strong); margin-top: 2px; }
 
   .convo-log { display: flex; flex-direction: column; gap: 10px; }
   .convo-placeholder { font-size: var(--fs-small); color: var(--ink-faint); font-style: italic; text-align: center; padding: 10px 0; }
@@ -1038,6 +1045,8 @@
   .trophy-side { display: flex; flex-direction: column; align-items: center; gap: 6px; }
   .trophy-side .flag-icon { width: 44px; height: 20px; }
   .trophy-side span { font-size: var(--fs-caption); font-weight: 600; color: var(--ink-dim); }
+  .trophy-side.clickable { cursor: pointer; }
+  .trophy-side.clickable:hover span { color: var(--gold); }
   .trophy-mid { text-align: center; }
   .trophy-name { font-family: var(--font-display); font-weight: 700; font-size: var(--fs-body-lg); color: var(--gold); }
   .trophy-holder { font-size: var(--fs-caption); color: var(--ink-faint); margin-top: 3px; }
@@ -1335,7 +1344,6 @@
     <div class="tab-group-label">Club Affairs</div>
     <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-recruitment" data-tab="recruitment" data-context="club" title="Recruitment"><svg class="icon"><use href="#i-swap"/></svg><span class="tab-label">Recruitment</span></button>
     <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-club" data-tab="club" data-context="club" title="Club"><svg class="icon"><use href="#i-briefcase"/></svg><span class="tab-label">Club</span></button>
-    <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-dynamics" data-tab="dynamics" title="Dynamics"><svg class="icon"><use href="#i-user"/></svg><span class="tab-label">Dynamics</span></button>
     <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-franchise" data-tab="franchise" data-context="franchise" title="Franchise"><svg class="icon"><use href="#i-badge"/></svg><span class="tab-label">Franchise</span></button>
     <div class="tab-group-label">Competition</div>
     <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-fixtures" data-tab="fixtures" title="Fixtures"><svg class="icon"><use href="#i-cal-list"/></svg><span class="tab-label">Fixtures</span></button>
@@ -1404,17 +1412,17 @@
         <div class="ring-wrap">
           <svg width="82" height="82" viewBox="0 0 86 86">
             <circle cx="43" cy="43" r="36" fill="none" stroke="var(--surface-3)" stroke-width="8"/>
-            <circle cx="43" cy="43" r="36" fill="none" stroke="var(--turf)" stroke-width="8" stroke-linecap="round" stroke-dasharray="226.2" stroke-dashoffset="65.6" transform="rotate(-90 43 43)"/>
-            <text x="43" y="49" text-anchor="middle" font-family="Barlow Condensed" font-weight="700" font-size="15" fill="var(--ink)">Steady</text>
+            <circle id="board-mood-ring-fill" cx="43" cy="43" r="36" fill="none" stroke="var(--turf)" stroke-width="8" stroke-linecap="round" stroke-dasharray="226.2" stroke-dashoffset="65.6" transform="rotate(-90 43 43)"/>
+            <text id="board-mood-ring-label" x="43" y="49" text-anchor="middle" font-family="Barlow Condensed" font-weight="700" font-size="15" fill="var(--ink)">Steady</text>
           </svg>
         </div>
         <div class="ring-caption">Backed since last win</div>
       </div>
       <div class="tile tasks">
         <span class="eyebrow">Needs your attention</span>
-        <div class="task-item"><span class="task-dot urgent"></span><div><div class="task-title">Renew Hamza Malik's contract</div><div class="task-sub">Expires in 34 days &middot; below market wage</div></div></div>
-        <div class="task-item"><span class="task-dot normal"></span><div><div class="task-title">Press conference &middot; pre-match</div><div class="task-sub">Tomorrow, 11:00 &middot; expect a fitness question</div></div></div>
-        <div class="task-item"><span class="task-dot normal"></span><div><div class="task-title">Confirm squad for Lions fixture</div><div class="task-sub">Selection meeting recommends 2 changes</div></div></div>
+        <div class="task-item clickable" onclick="openPlayerByName('Hamza Malik');openNegotiation('contract')"><span class="task-dot urgent"></span><div><div class="task-title">Renew Hamza Malik's contract</div><div class="task-sub">Expires in 34 days &middot; below market wage</div></div></div>
+        <div class="task-item clickable" onclick="openPressConference()"><span class="task-dot normal"></span><div><div class="task-title">Press conference &middot; pre-match</div><div class="task-sub">Tomorrow, 11:00 &middot; expect a fitness question</div></div></div>
+        <div class="task-item clickable" onclick="showPanel('tactics')"><span class="task-dot normal"></span><div><div class="task-title">Confirm squad for Lions fixture</div><div class="task-sub">Selection meeting recommends 2 changes</div></div></div>
       </div>
       <div class="tile news">
         <div class="tile-eyebrow"><span class="eyebrow">From the press</span>
@@ -1594,25 +1602,25 @@
       <div class="convo-log" id="talk-log-batting">
         <div class="convo-placeholder" id="talk-placeholder-batting">Choose how you want to address the batting group.</div>
       </div>
-      <div style="display:flex;gap:8px;margin-top:12px"><button class="tone-chip" onclick="pickTeamTalkTone('batting', 'assured')">Assured</button><button class="tone-chip" onclick="pickTeamTalkTone('batting', 'demanding')">Demanding</button><button class="tone-chip" onclick="pickTeamTalkTone('batting', 'calm')">Calm</button></div>
+      <div class="role-hint" style="margin-top:10px;margin-bottom:0"><svg class="icon sm"><use href="#i-user"/></svg> Assistant recommends <b>Assured</b> &mdash; The top order has been in real form these last few matches &mdash; back that confidence rather than pile more onto it.</div><div style="display:flex;gap:8px;margin-top:10px"><button class="tone-chip recommended" onclick="pickTeamTalkTone('batting', 'assured')">Assured</button><button class="tone-chip" onclick="pickTeamTalkTone('batting', 'demanding')">Demanding</button><button class="tone-chip" onclick="pickTeamTalkTone('batting', 'calm')">Calm</button></div>
     </div>
     <div class="subpanel" id="talk-bowling" hidden>
       <div class="convo-log" id="talk-log-bowling">
         <div class="convo-placeholder" id="talk-placeholder-bowling">Choose how you want to address the bowling attack.</div>
       </div>
-      <div style="display:flex;gap:8px;margin-top:12px"><button class="tone-chip" onclick="pickTeamTalkTone('bowling', 'assured')">Assured</button><button class="tone-chip" onclick="pickTeamTalkTone('bowling', 'demanding')">Demanding</button><button class="tone-chip" onclick="pickTeamTalkTone('bowling', 'calm')">Calm</button></div>
+      <div class="role-hint" style="margin-top:10px;margin-bottom:0"><svg class="icon sm"><use href="#i-user"/></svg> Assistant recommends <b>Demanding</b> &mdash; This attack has looked comfortable rather than sharp of late &mdash; a firmer word will do it good.</div><div style="display:flex;gap:8px;margin-top:10px"><button class="tone-chip" onclick="pickTeamTalkTone('bowling', 'assured')">Assured</button><button class="tone-chip recommended" onclick="pickTeamTalkTone('bowling', 'demanding')">Demanding</button><button class="tone-chip" onclick="pickTeamTalkTone('bowling', 'calm')">Calm</button></div>
     </div>
     <div class="subpanel" id="talk-fielding" hidden>
       <div class="convo-log" id="talk-log-fielding">
         <div class="convo-placeholder" id="talk-placeholder-fielding">Choose how you want to address the fielding unit.</div>
       </div>
-      <div style="display:flex;gap:8px;margin-top:12px"><button class="tone-chip" onclick="pickTeamTalkTone('fielding', 'assured')">Assured</button><button class="tone-chip" onclick="pickTeamTalkTone('fielding', 'demanding')">Demanding</button><button class="tone-chip" onclick="pickTeamTalkTone('fielding', 'calm')">Calm</button></div>
+      <div class="role-hint" style="margin-top:10px;margin-bottom:0"><svg class="icon sm"><use href="#i-user"/></svg> Assistant recommends <b>Calm</b> &mdash; Sloppy in the field the last two matches out &mdash; more pressure now would only make the drops worse.</div><div style="display:flex;gap:8px;margin-top:10px"><button class="tone-chip" onclick="pickTeamTalkTone('fielding', 'assured')">Assured</button><button class="tone-chip" onclick="pickTeamTalkTone('fielding', 'demanding')">Demanding</button><button class="tone-chip recommended" onclick="pickTeamTalkTone('fielding', 'calm')">Calm</button></div>
     </div>
     <div class="subpanel" id="talk-individual" hidden>
       <div class="convo-log" id="talk-log-individual">
         <div class="convo-placeholder" id="talk-placeholder-individual">Choose how you want to address the one player, by name.</div>
       </div>
-      <div style="display:flex;gap:8px;margin-top:12px"><button class="tone-chip" onclick="pickTeamTalkTone('individual', 'assured')">Assured</button><button class="tone-chip" onclick="pickTeamTalkTone('individual', 'demanding')">Demanding</button><button class="tone-chip" onclick="pickTeamTalkTone('individual', 'calm')">Calm</button></div>
+      <div class="role-hint" style="margin-top:10px;margin-bottom:0"><svg class="icon sm"><use href="#i-user"/></svg> Assistant recommends <b>Assured</b> &mdash; He's due a big return and knows it &mdash; back his own game rather than adding weight to the occasion.</div><div style="display:flex;gap:8px;margin-top:10px"><button class="tone-chip recommended" onclick="pickTeamTalkTone('individual', 'assured')">Assured</button><button class="tone-chip" onclick="pickTeamTalkTone('individual', 'demanding')">Demanding</button><button class="tone-chip" onclick="pickTeamTalkTone('individual', 'calm')">Calm</button></div>
     </div>
       <div class="stage-actions" style="margin-top:16px"><button class="stage-continue-btn" onclick="enterLiveMatch()">Play <svg class="icon sm"><use href="#i-chevron-fwd"/></svg></button></div>
     </div>
@@ -1640,11 +1648,11 @@
     <div class="subpanel" id="sub-live">
       <div class="view-filter">
         <span class="view-filter-label">Show me</span>
-        <label class="view-check"><input type="checkbox" checked> Fours</label>
-        <label class="view-check"><input type="checkbox" checked> Sixes</label>
-        <label class="view-check"><input type="checkbox" checked> Wickets</label>
-        <label class="view-check"><input type="checkbox"> Every dot ball</label>
-        <label class="view-check"><input type="checkbox" checked> Milestones</label>
+        <label class="view-check"><input type="checkbox" id="filter-fours" checked onchange="applyCommentaryFilter()"> Fours</label>
+        <label class="view-check"><input type="checkbox" id="filter-sixes" checked onchange="applyCommentaryFilter()"> Sixes</label>
+        <label class="view-check"><input type="checkbox" id="filter-wickets" checked onchange="applyCommentaryFilter()"> Wickets</label>
+        <label class="view-check"><input type="checkbox" id="filter-dots" onchange="applyCommentaryFilter()"> Every dot ball</label>
+        <label class="view-check" title="Not tracked in this live delivery model - there's no running batter score to detect a milestone crossing against"><input type="checkbox" disabled> Milestones</label>
       </div>
       <div class="conditions-strip">
         <span class="conditions-chip"><svg class="icon sm chip-icon"><use href="#i-clock"/></svg>Ball age <b>14 overs</b></span>
@@ -1659,11 +1667,11 @@
       <div class="delivery-focus-backdrop" id="delivery-focus-backdrop"></div>
       <div class="audio-credit">Real audio extracted from Cricket Coach 2014 &mdash; a crowd-ambience loop and a delivery-reaction cue. The game's own sound files carry no readable labels, so exact per-outcome sounds (four vs. six vs. wicket) could not be verified and are not claimed here; this is one real cue, honestly.</div>
       <div class="playback-bar">
-        <button class="pb-btn" title="Previous ball">&#9198;</button>
-        <button class="pb-btn play" title="Pause">&#9208;</button>
-        <button class="pb-btn" title="Skip to next over">&#9197;</button>
-        <div class="pb-scrub"><div class="pb-track"><span></span></div><span class="pb-pos">14.2 / 20.0 ov</span></div>
-        <select class="pb-speed" title="Playback speed"><option>1&times; ball-by-ball</option><option>2&times;</option><option>Jump to next over</option><option selected>Autoplay &middot; fast</option></select>
+        <button class="pb-btn" title="Not available - deliveries are generated live, with no ball-by-ball log to rewind" disabled>&#9198;</button>
+        <button class="pb-btn play" id="pb-play-btn" title="Autoplay" onclick="togglePlaybackAutoplay(this)">&#9208;</button>
+        <button class="pb-btn" title="Skip to next over" onclick="skipToNextOver()">&#9197;</button>
+        <div class="pb-scrub"><div class="pb-track"><span></span></div><span class="pb-pos" id="pb-pos">14.2 / 20.0 ov</span></div>
+        <select class="pb-speed" id="pb-speed" title="Playback speed"><option value="manual">1&times; ball-by-ball</option><option value="2x">2&times;</option><option value="over">Jump to next over</option><option value="fast" selected>Autoplay &middot; fast</option></select>
       </div>
 
       <div class="matchday-grid">
@@ -1757,8 +1765,8 @@
                already holds to for PotentialAbility. -->
           <div class="tactic-card">
             <span class="eyebrow" style="display:block;margin-bottom:8px"><svg class="icon sm"><use href="#i-shield"/></svg> Your batting plan</span>
-            <div class="tactic-row"><div><div class="tactic-label">Hamza Malik*</div><div class="tactic-value">Normal<span class="subline">Free to play his shots</span></div></div><button class="tactic-change">Change</button></div>
-            <div class="tactic-row"><div><div class="tactic-label">Zain Chaudhry</div><div class="tactic-value">Rebuild<span class="subline">Anchoring for 2 overs after the last wicket</span></div></div><button class="tactic-change">Change</button></div>
+            <div class="tactic-row" data-tactic-player="Hamza Malik"><div><div class="tactic-label">Hamza Malik*</div><div class="tactic-value"><span class="tactic-value-text">Normal</span><span class="subline">Free to play his shots</span></div></div><button class="tactic-change" onclick="openBattingApproachPicker(this, 'Hamza Malik')">Change</button></div>
+            <div class="tactic-row" data-tactic-player="Zain Chaudhry"><div><div class="tactic-label">Zain Chaudhry</div><div class="tactic-value"><span class="tactic-value-text">Rebuild</span><span class="subline">Anchoring for 2 overs after the last wicket</span></div></div><button class="tactic-change" onclick="openBattingApproachPicker(this, 'Zain Chaudhry')">Change</button></div>
 
             <div class="analyst-divider"><svg class="icon sm"><use href="#i-user"/></svg>Analyst read &middot; Lahore Lions<span class="analyst-conf">Confidence: Good</span></div>
             <div class="tactic-row analyst-row"><div class="tactic-label">Iqbal, this spell</div><div class="analyst-value">Reads as containing outside off &mdash; fourth stump, choking the scoring</div></div>
@@ -1990,6 +1998,11 @@
           <div class="staff-row"><div class="staff-row-main"><span class="staff-name">Finishing depth at 6 or 7</span><span class="staff-role-label">Power hitting &middot; 14cr budget</span></div><span class="tier-badge b">Priority</span></div>
           <div class="staff-row"><div class="staff-row-main"><span class="staff-name">A second front-line spinner</span><span class="staff-role-label">Spin bowling &middot; 11cr budget</span></div><span class="tier-badge c">Fallback</span></div>
           <div class="role-hint" style="margin-top:8px">The room&rsquo;s own read: the squad is batting-heavy after retention &mdash; bowling depth is where the purse should go first.</div>
+        </div>
+        <div class="analysis-card">
+          <span class="eyebrow"><svg class="icon sm"><use href="#i-user"/></svg> First-hand knowledge</span>
+          <div class="staff-row"><div class="staff-row-main"><span class="staff-name">Kashif Rauf</span><span class="staff-role-label">A genuinely different read from reputation and stats alone &mdash; three of the retained core played alongside him here before he was let go, and the coaching staff know exactly what he does and doesn&rsquo;t offer under pressure.</span></div><span class="pill first">Known quantity</span></div>
+          <div class="role-hint" style="margin-top:8px">A real confidence lever on the bidding ceiling for this specific lot &mdash; distinct from a generic name-recognition premium, and gated off entirely for a genuine global star nobody here has actually shared a dressing room with.</div>
         </div>
       </div>
       <div class="analysis-card" style="margin-top:16px">
@@ -2384,13 +2397,14 @@
     <nav class="subnav" role="tablist" aria-label="Squad views">
       <button class="subtab-btn" role="tab" aria-selected="true" data-subtab="firstteam">First Team</button>
       <button class="subtab-btn" role="tab" aria-selected="false" data-subtab="youth">Academy &amp; Youth</button>
+      <button class="subtab-btn" role="tab" aria-selected="false" data-subtab="dynamics">Dynamics</button>
     </nav>
     <div class="subpanel" id="squad-firstteam">
     <div class="table-card">
       <div class="table-scroll-inner">
       <table class="squad">
         <thead><tr><th>Player</th><th>Role</th><th>Status</th><th>Form</th><th>Condition</th><th title="The coaching staff's own read of his current ability - a star estimate, never the raw hidden number">Ability</th><th class="num">Record</th><th class="num">Value</th><th class="num">Wage</th></tr></thead>
-        <tbody>
+        <tbody id="squad-firstteam-body">
           <tr>
             <td><div class="player-cell clickable" onclick="openPlayerFromRow(this)"><div class="player-avatar">HM</div><div><div class="player-name">Hamza Malik</div><div class="player-hand">RHB</div></div></div></td>
             <td><span class="role-cell"><img class="icon sm" src="data:image/png;base64,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" alt="">Top order</span></td>
@@ -2567,15 +2581,74 @@
       <div class="analysis-card" style="margin-top:14px">
         <span class="eyebrow"><svg class="icon sm"><use href="#i-users"/></svg> Squad depth by role</span>
         <div class="role-hint" style="margin-bottom:10px">Who you can actually call on for each job right now, ranked by current ability - not who you're missing (that's Recruitment &rsaquo; Squad Planner).</div>
-        <div class="staff-row"><div class="staff-row-main"><span class="staff-name">Opening batting</span><span class="staff-role-label">Hamza Malik, Umar Baig</span></div><span class="facility-tier-badge tier-good">Covered</span></div>
-        <div class="staff-row"><div class="staff-row-main"><span class="staff-name">Middle order</span><span class="staff-role-label">Zain Chaudhry, Danish Raza</span></div><span class="facility-tier-badge tier-good">Covered</span></div>
-        <div class="staff-row"><div class="staff-row-main"><span class="staff-name">Wicketkeeping</span><span class="staff-role-label">Rizwan Sheikh - no back-up gloveman in the squad</span></div><span class="facility-tier-badge tier-poor">One deep</span></div>
-        <div class="staff-row"><div class="staff-row-main"><span class="staff-name">Front-line spin</span><span class="staff-role-label">Sarfraz Khan - genuinely thin beyond him</span></div><span class="facility-tier-badge tier-average">One deep</span></div>
-        <div class="staff-row"><div class="staff-row-main"><span class="staff-name">Pace bowling</span><span class="staff-role-label">Danish Iqbal, plus two more academy-graded options</span></div><span class="facility-tier-badge tier-good">Covered</span></div>
+        <div class="staff-row"><div class="staff-row-main"><span class="staff-name">Opening batting</span><span class="staff-role-label"><span class="who clickable" onclick="openPlayerByName('Hamza Malik')">Hamza Malik</span>, <span class="who clickable" onclick="openPlayerByName('Umar Baig')">Umar Baig</span></span></div><span class="facility-tier-badge tier-good">Covered</span></div>
+        <div class="staff-row"><div class="staff-row-main"><span class="staff-name">Middle order</span><span class="staff-role-label"><span class="who clickable" onclick="openPlayerByName('Zain Chaudhry')">Zain Chaudhry</span>, <span class="who clickable" onclick="openPlayerByName('Danish Raza')">Danish Raza</span></span></div><span class="facility-tier-badge tier-good">Covered</span></div>
+        <div class="staff-row"><div class="staff-row-main"><span class="staff-name">Wicketkeeping</span><span class="staff-role-label"><span class="who clickable" onclick="openPlayerByName('Umar Baig')">Umar Baig</span> - no back-up gloveman in the squad</span></div><span class="facility-tier-badge tier-poor">One deep</span></div>
+        <div class="staff-row"><div class="staff-row-main"><span class="staff-name">Front-line spin</span><span class="staff-role-label"><span class="who clickable" onclick="openPlayerByName('Sarfraz Khan')">Sarfraz Khan</span> - genuinely thin beyond him</span></div><span class="facility-tier-badge tier-average">One deep</span></div>
+        <div class="staff-row"><div class="staff-row-main"><span class="staff-name">Pace bowling</span><span class="staff-role-label"><span class="who clickable" onclick="openPlayerByName('Danish Iqbal')">Danish Iqbal</span>, plus two more academy-graded options</span></div><span class="facility-tier-badge tier-good">Covered</span></div>
         <div class="role-hint" style="margin-top:10px">A genuine injury to Rizwan Sheikh right now would mean fielding an occasional keeper - worth a look at Recruitment before the window closes.</div>
       </div>
     </div>
     </div>
+  <div class="subpanel" id="squad-dynamics" hidden>
+    <div class="panel-head" style="padding:0 0 14px"><h1 style="font-size:var(--fs-subhead)">Dressing Room Dynamics</h1><div class="sub">How the group actually feels, not just how it plays</div></div>
+    <nav class="subnav" role="tablist" aria-label="Dynamics views">
+      <button class="subtab-btn" role="tab" aria-selected="true" data-subtab="hierarchy">Hierarchy</button>
+      <button class="subtab-btn" role="tab" aria-selected="false" data-subtab="relationships">Relationships</button>
+      <button class="subtab-btn" role="tab" aria-selected="false" data-subtab="issues">Issues</button>
+    </nav>
+    <div class="subpanel" id="dynamics-hierarchy">
+      <div class="tile-grid">
+        <div class="tile board-mood">
+          <span class="eyebrow">Dressing room harmony</span>
+          <div class="ring-wrap">
+            <svg width="82" height="82" viewBox="0 0 86 86">
+              <circle cx="43" cy="43" r="36" fill="none" stroke="var(--surface-3)" stroke-width="8"/>
+              <circle cx="43" cy="43" r="36" fill="none" stroke="var(--turf)" stroke-width="8" stroke-linecap="round" stroke-dasharray="226.2" stroke-dashoffset="52.0" transform="rotate(-90 43 43)"/>
+              <text x="43" y="49" text-anchor="middle" font-family="Barlow Condensed" font-weight="700" font-size="15" fill="var(--ink)">Good</text>
+            </svg>
+          </div>
+          <div class="ring-caption">A settled squad &mdash; low churn since last season</div>
+        </div>
+        <div class="tile team-leaders">
+          <span class="eyebrow">Team leaders</span>
+          <div class="role-hint" style="margin-bottom:0">The players the room actually gravitates toward &mdash; leadership and experience, not just the armband.</div>
+          <div class="staff-row clickable" onclick="openPlayerFromRow(this)" style="margin-top:8px"><div class="staff-row-main"><span class="staff-name">Hamza Malik</span><span class="staff-role-label">Captain &middot; Senior Pro</span></div><span class="pill first">Trust 78</span></div>
+          <div class="staff-row clickable" onclick="openPlayerFromRow(this)"><div class="staff-row-main"><span class="staff-name">Rizwan Sheikh</span><span class="staff-role-label">Vice-captain &middot; Senior Pro</span></div><span class="pill">Trust 71</span></div>
+        </div>
+      </div>
+      <div class="analysis-card">
+        <span class="eyebrow"><svg class="icon sm"><use href="#i-users"/></svg> The pecking order</span>
+        <div class="role-hint" style="margin-bottom:10px">Standing in the room, not on the team sheet &mdash; reputation, experience and age all feed it, and it decides whose voice actually carries.</div>
+        <div class="staff-row"><div class="staff-row-main"><span class="staff-name">Senior Pro</span><span class="staff-role-label"><span class="who clickable" onclick="openPlayerByName('Hamza Malik')">Hamza Malik</span>, <span class="who clickable" onclick="openPlayerByName('Rizwan Sheikh')">Rizwan Sheikh</span></span></div><span class="tier-badge a">Top of the room</span></div>
+        <div class="staff-row"><div class="staff-row-main"><span class="staff-name">Established</span><span class="staff-role-label"><span class="who clickable" onclick="openPlayerByName('Zain Chaudhry')">Zain Chaudhry</span>, <span class="who clickable" onclick="openPlayerByName('Sarfraz Khan')">Sarfraz Khan</span></span></div><span class="tier-badge b">Respected</span></div>
+        <div class="staff-row"><div class="staff-row-main"><span class="staff-name">Squad Player</span><span class="staff-role-label"><span class="who clickable" onclick="openPlayerByName('Danish Raza')">Danish Raza</span>, <span class="who clickable" onclick="openPlayerByName('Umar Baig')">Umar Baig</span></span></div><span class="tier-badge c">Settling in</span></div>
+        <div class="staff-row"><div class="staff-row-main"><span class="staff-name">Junior</span><span class="staff-role-label"><span class="who clickable" onclick="openPlayerByName('Danish Iqbal')">Danish Iqbal</span>, <span class="who clickable" onclick="openPlayerByName('Bilal Nasir')">Bilal Nasir</span></span></div><span class="tier-badge c">Still finding his feet</span></div>
+      </div>
+    </div>
+    <div class="subpanel" id="dynamics-relationships" hidden>
+      <div class="analysis-card">
+        <span class="eyebrow"><svg class="icon sm"><use href="#i-user"/></svg> Real bonds in the group</span>
+        <div class="role-hint" style="margin-bottom:10px">Built from shared time in the dressing room and genuine personality fit &mdash; strong enough that a transfer decision has to weigh it.</div>
+        <div class="staff-row"><div class="staff-row-main"><span class="staff-name"><span class="who clickable" onclick="openPlayerByName('Hamza Malik')">Hamza Malik</span> &amp; <span class="who clickable" onclick="openPlayerByName('Zain Chaudhry')">Zain Chaudhry</span></span><span class="staff-role-label">Friendship &middot; three seasons opening the batting together</span></div><span class="facility-tier-badge tier-good">Strong</span></div>
+        <div class="staff-row"><div class="staff-row-main"><span class="staff-name"><span class="who clickable" onclick="openPlayerByName('Rizwan Sheikh')">Rizwan Sheikh</span> &rarr; <span class="who clickable" onclick="openPlayerByName('Bilal Nasir')">Bilal Nasir</span></span><span class="staff-role-label">Mentorship &middot; the keeper is quietly shaping the academy graduate's game</span></div><span class="facility-tier-badge tier-good">Active</span></div>
+        <div class="staff-row"><div class="staff-row-main"><span class="staff-name"><span class="who clickable" onclick="openPlayerByName('Danish Raza')">Danish Raza</span> &amp; <span class="who clickable" onclick="openPlayerByName('Umar Baig')">Umar Baig</span></span><span class="staff-role-label">Rivalry &middot; a good-natured needle over who bats at six</span></div><span class="facility-tier-badge tier-average">Mild</span></div>
+      </div>
+      <div class="analysis-card">
+        <span class="eyebrow"><svg class="icon sm"><use href="#i-alert"/></svg> Nothing brewing right now</span>
+        <div class="role-hint" style="margin-bottom:0">No active feud in the squad this season &mdash; a genuine one drags on a real-world pairing's on-field chemistry (strike rotation, even run-out risk between the two), so it's worth checking back here after a contentious selection call.</div>
+      </div>
+    </div>
+    <div class="subpanel" id="dynamics-issues" hidden>
+      <div class="analysis-card">
+        <span class="eyebrow"><svg class="icon sm"><use href="#i-alert"/></svg> What's actually live</span>
+        <div class="staff-row clickable" onclick="openPlayerFromRow(this)"><div class="staff-row-main"><span class="staff-name">Umar Baig</span><span class="staff-role-label">Squad-player standing, three low scores &mdash; coach trust has softened this month</span></div><span class="facility-tier-badge tier-average">Worth a word</span></div>
+        <div class="staff-row clickable" onclick="openPlayerFromRow(this)"><div class="staff-row-main"><span class="staff-name">Danish Iqbal</span><span class="staff-role-label">Junior standing, genuinely raw &mdash; needs backing, not pressure, while he settles</span></div><span class="facility-tier-badge tier-average">Developing</span></div>
+        <div class="staff-row"><div class="staff-row-main"><span class="staff-name">Everyone else</span><span class="staff-role-label">No real complaint on record right now</span></div><span class="facility-tier-badge tier-good">Settled</span></div>
+        <div class="role-hint" style="margin-top:10px">A quiet room isn't a guarantee &mdash; a bad run, a contentious drop or a big signing can all move this fast. Worth a check after every selection meeting, not just when something's already gone wrong.</div>
+      </div>
+    </div>
+  </div>
   </section>
 
   <!-- ================= TRAINING ================= -->
@@ -2594,17 +2667,17 @@
         </div>
         <div class="tile training-delegate">
           <span class="eyebrow">Who decides</span>
-          <label class="delegate-toggle-label"><input type="checkbox" id="delegate-training-toggle" checked> Delegate individual focus to staff</label>
-          <div class="role-hint" style="margin-top:8px;margin-bottom:0">Delegated by default &mdash; a specialist coach reads a player's genuine weakest cluster on his own. Untick to name a focus yourself for a specific player, from his own profile.</div>
+          <label class="delegate-toggle-label"><input type="checkbox" id="delegate-training-toggle" checked onchange="toggleDelegateTraining(this)"> Delegate individual focus to staff</label>
+          <div class="role-hint" id="delegate-training-note" style="margin-top:8px;margin-bottom:0">Delegated by default &mdash; a specialist coach reads a player's genuine weakest cluster on his own. Untick to name a focus yourself for a specific player, from his own profile.</div>
         </div>
       </div>
       <div class="analysis-card">
         <span class="eyebrow"><svg class="icon sm"><use href="#i-target"/></svg> Squad-wide emphasis</span>
-        <div class="staff-row"><div class="staff-row-main"><span class="staff-name">Batting</span><span class="staff-role-label">Technique against genuine pace &mdash; the top order's recurring weakness this season</span></div><span class="tier-badge b">Normal</span></div>
-        <div class="staff-row"><div class="staff-row-main"><span class="staff-name">Bowling</span><span class="staff-role-label">Death-overs craft &mdash; building toward the back half of the campaign</span></div><span class="tier-badge a">Intensive</span></div>
-        <div class="staff-row"><div class="staff-row-main"><span class="staff-name">Fielding</span><span class="staff-role-label">Ground fielding and outfield catching</span></div><span class="tier-badge b">Normal</span></div>
-        <div class="staff-row"><div class="staff-row-main"><span class="staff-name">Mental</span><span class="staff-role-label">Composure under a required-rate squeeze</span></div><span class="tier-badge b">Normal</span></div>
-        <div class="staff-row"><div class="staff-row-main"><span class="staff-name">Physical</span><span class="staff-role-label">Conditioning &mdash; two quicks are carrying a heavy recent workload</span></div><span class="tier-badge c">Light</span></div>
+        <div class="staff-row"><div class="staff-row-main"><span class="staff-name">Batting</span><span class="staff-role-label">Technique against genuine pace &mdash; the top order's recurring weakness this season</span></div><span class="tier-badge b clickable" onclick="cycleTrainingTier(this)" title="Click to change emphasis">Normal</span></div>
+        <div class="staff-row"><div class="staff-row-main"><span class="staff-name">Bowling</span><span class="staff-role-label">Death-overs craft &mdash; building toward the back half of the campaign</span></div><span class="tier-badge a clickable" onclick="cycleTrainingTier(this)" title="Click to change emphasis">Intensive</span></div>
+        <div class="staff-row"><div class="staff-row-main"><span class="staff-name">Fielding</span><span class="staff-role-label">Ground fielding and outfield catching</span></div><span class="tier-badge b clickable" onclick="cycleTrainingTier(this)" title="Click to change emphasis">Normal</span></div>
+        <div class="staff-row"><div class="staff-row-main"><span class="staff-name">Mental</span><span class="staff-role-label">Composure under a required-rate squeeze</span></div><span class="tier-badge b clickable" onclick="cycleTrainingTier(this)" title="Click to change emphasis">Normal</span></div>
+        <div class="staff-row"><div class="staff-row-main"><span class="staff-name">Physical</span><span class="staff-role-label">Conditioning &mdash; two quicks are carrying a heavy recent workload</span></div><span class="tier-badge c clickable" onclick="cycleTrainingTier(this)" title="Click to change emphasis">Light</span></div>
         <div class="role-hint" style="margin-top:10px">Intensive work develops a player faster but carries a real overtraining risk &mdash; six straight intensive blocks on the same player raises his injury proneness for good. The physical group has deliberately been eased back this week for exactly that reason.</div>
       </div>
       <div class="analysis-card">
@@ -2759,6 +2832,10 @@
         <svg><use href="#i-alert"/></svg>
         <span>A well-resourced ground can genuinely turn a batting road into a raw turner between fixtures of the same series &mdash; it&rsquo;s real, and it&rsquo;s allowed. Pushed too far on a ground that can&rsquo;t back it up, the surface itself gets rated, not just the result on it.</span>
       </div>
+      <div class="pitch-risk-note" id="pitch-backfire-note" hidden style="margin-top:8px">
+        <svg><use href="#i-alert"/></svg>
+        <span id="pitch-backfire-text"></span>
+      </div>
     </div>
 
     <div class="analysis-card">
@@ -2834,8 +2911,8 @@
         </div>
         <div class="subsection-box">
           <span class="eyebrow">Per-player override</span>
-          <div class="tactic-row"><div><div class="tactic-label">Hamza Malik*</div><div class="tactic-value">Normal<span class="subline">Free to play his shots</span></div></div><button class="tactic-change">Change</button></div>
-          <div class="tactic-row"><div><div class="tactic-label">Zain Chaudhry</div><div class="tactic-value">Rebuild<span class="subline">Anchoring for 2 overs after the last wicket</span></div></div><button class="tactic-change">Change</button></div>
+          <div class="tactic-row" data-tactic-player="Hamza Malik"><div><div class="tactic-label">Hamza Malik*</div><div class="tactic-value"><span class="tactic-value-text">Normal</span><span class="subline">Free to play his shots</span></div></div><button class="tactic-change" onclick="openBattingApproachPicker(this, 'Hamza Malik')">Change</button></div>
+          <div class="tactic-row" data-tactic-player="Zain Chaudhry"><div><div class="tactic-label">Zain Chaudhry</div><div class="tactic-value"><span class="tactic-value-text">Rebuild</span><span class="subline">Anchoring for 2 overs after the last wicket</span></div></div><button class="tactic-change" onclick="openBattingApproachPicker(this, 'Zain Chaudhry')">Change</button></div>
         </div>
       </div>
     </div>
@@ -2878,16 +2955,16 @@
     <div class="tactics-grid">
       <div class="analysis-card">
         <span class="eyebrow"><svg class="icon sm"><use href="#i-swap"/></svg> Squad activity</span>
-        <div class="transfer-row">
+        <div class="transfer-row" id="transfer-offer-raza">
           <div class="transfer-crest"></div>
           <div class="transfer-main">
             <div class="transfer-player">Danish Raza <span class="position-chip">Allrounder</span></div>
-            <div class="transfer-detail">Interest from Multan Monarchs &middot; he is Fringe here, would start there</div>
+            <div class="transfer-detail" id="transfer-offer-raza-detail">Interest from Multan Monarchs &middot; he is Fringe here, would start there</div>
           </div>
-          <div class="transfer-fee">$180K</div>
-          <div class="transfer-actions">
-            <button class="transfer-action-btn accept" title="Accept offer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5l5 5L20 6"/></svg></button>
-            <button class="transfer-action-btn reject" title="Reject offer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 5l14 14M19 5L5 19"/></svg></button>
+          <div class="transfer-fee" id="transfer-offer-raza-fee">$180K</div>
+          <div class="transfer-actions" id="transfer-offer-raza-actions">
+            <button class="transfer-action-btn accept" title="Accept offer" onclick="acceptTransferOffer('raza', 'Danish Raza', 'Multan Monarchs')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5l5 5L20 6"/></svg></button>
+            <button class="transfer-action-btn reject" title="Reject offer" onclick="offerReject('raza')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 5l14 14M19 5L5 19"/></svg></button>
           </div>
         </div>
         <div class="transfer-row">
@@ -2898,16 +2975,16 @@
           </div>
           <div class="transfer-fee" style="color:var(--ink-faint)">&mdash;</div>
         </div>
-        <div class="transfer-row">
+        <div class="transfer-row" id="transfer-offer-yasir">
           <div class="transfer-crest"></div>
           <div class="transfer-main">
             <div class="transfer-player">Yasir Ali <span class="position-chip">Middle order</span></div>
-            <div class="transfer-detail">Loan request from Peshawar Panthers &middot; development loan, 5 months</div>
+            <div class="transfer-detail" id="transfer-offer-yasir-detail">Loan request from Peshawar Panthers &middot; development loan, 5 months</div>
           </div>
-          <div class="transfer-fee" style="font-size:var(--fs-caption)">Loan</div>
-          <div class="transfer-actions">
-            <button class="transfer-action-btn accept" title="Accept loan"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5l5 5L20 6"/></svg></button>
-            <button class="transfer-action-btn reject" title="Reject loan"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 5l14 14M19 5L5 19"/></svg></button>
+          <div class="transfer-fee" id="transfer-offer-yasir-fee" style="font-size:var(--fs-caption)">Loan</div>
+          <div class="transfer-actions" id="transfer-offer-yasir-actions">
+            <button class="transfer-action-btn accept" title="Accept loan" onclick="acceptTransferOffer('yasir', 'Yasir Ali', 'Peshawar Panthers')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5l5 5L20 6"/></svg></button>
+            <button class="transfer-action-btn reject" title="Reject loan" onclick="offerReject('yasir')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 5l14 14M19 5L5 19"/></svg></button>
           </div>
         </div>
       </div>
@@ -3361,21 +3438,22 @@
         <span class="eyebrow"><svg class="icon sm"><use href="#i-check-circle"/></svg> Board confidence &amp; objectives</span>
         <div class="standing-row">
           <div>Confidence in you</div>
-          <div class="trust-meter-wrap"><div class="info-meter"><span style="width:78%"></span></div></div>
+          <div class="trust-meter-wrap"><div class="info-meter"><span id="board-confidence-bar" style="width:78%"></span></div></div>
         </div>
         <div class="eyebrow" style="display:block;margin-top:10px;margin-bottom:4px;font-size:var(--fs-micro)">Season objectives</div>
-        <div class="staff-row">
+        <div class="staff-row" id="objective-row-top4">
           <div class="staff-row-main"><span class="staff-name">Finish top 4</span><span class="staff-role-label">High importance</span></div>
-          <div class="staff-row-meta"><span class="facility-tier-badge tier-good">On track</span></div>
+          <div class="staff-row-meta"><span class="facility-tier-badge tier-good" id="objective-badge-top4">On track</span></div>
         </div>
-        <div class="staff-row">
+        <div class="staff-row" id="objective-row-qf">
           <div class="staff-row-main"><span class="staff-name">Reach the cup quarter-final</span><span class="staff-role-label">Medium importance</span></div>
-          <div class="staff-row-meta"><span class="facility-tier-badge tier-good">On track</span></div>
+          <div class="staff-row-meta"><span class="facility-tier-badge tier-good" id="objective-badge-qf">On track</span></div>
         </div>
-        <div class="staff-row">
+        <div class="staff-row" id="objective-row-academy">
           <div class="staff-row-main"><span class="staff-name">Blood at least two academy graduates</span><span class="staff-role-label">Low importance</span></div>
-          <div class="staff-row-meta"><span class="facility-tier-badge tier-average">At risk</span></div>
+          <div class="staff-row-meta"><span class="facility-tier-badge tier-average" id="objective-badge-academy">At risk</span></div>
         </div>
+        <button class="facility-request-btn" style="margin-top:8px;width:100%" onclick="openDontJudgeMenu()">Ask the board not to judge you on one of these</button>
         <div class="bio-line" style="margin-top:8px"><span class="k">Your contract</span><span>2 years remaining</span></div>
         <div class="notes-log" style="margin-top:10px">
           <div class="notes-log-item"><span class="note-date">Start of season</span>&ldquo;We back you to build on last year &mdash; a top-4 finish and real progress in the cup keeps us both happy.&rdquo;</div>
@@ -3429,65 +3507,7 @@
   </section>
 
   <!-- ================= DYNAMICS ================= -->
-  <section class="panel" id="panel-dynamics" role="tabpanel" hidden>
-    <div class="panel-head"><h1>Dressing Room Dynamics</h1><div class="sub">How the group actually feels, not just how it plays</div></div>
-    <nav class="subnav" role="tablist" aria-label="Dynamics views">
-      <button class="subtab-btn" role="tab" aria-selected="true" data-subtab="hierarchy">Hierarchy</button>
-      <button class="subtab-btn" role="tab" aria-selected="false" data-subtab="relationships">Relationships</button>
-      <button class="subtab-btn" role="tab" aria-selected="false" data-subtab="issues">Issues</button>
-    </nav>
-    <div class="subpanel" id="dynamics-hierarchy">
-      <div class="tile-grid">
-        <div class="tile board-mood">
-          <span class="eyebrow">Dressing room harmony</span>
-          <div class="ring-wrap">
-            <svg width="82" height="82" viewBox="0 0 86 86">
-              <circle cx="43" cy="43" r="36" fill="none" stroke="var(--surface-3)" stroke-width="8"/>
-              <circle cx="43" cy="43" r="36" fill="none" stroke="var(--turf)" stroke-width="8" stroke-linecap="round" stroke-dasharray="226.2" stroke-dashoffset="52.0" transform="rotate(-90 43 43)"/>
-              <text x="43" y="49" text-anchor="middle" font-family="Barlow Condensed" font-weight="700" font-size="15" fill="var(--ink)">Good</text>
-            </svg>
-          </div>
-          <div class="ring-caption">A settled squad &mdash; low churn since last season</div>
-        </div>
-        <div class="tile team-leaders">
-          <span class="eyebrow">Team leaders</span>
-          <div class="role-hint" style="margin-bottom:0">The players the room actually gravitates toward &mdash; leadership and experience, not just the armband.</div>
-          <div class="staff-row clickable" onclick="openPlayerFromRow(this)" style="margin-top:8px"><div class="staff-row-main"><span class="staff-name">Hamza Malik</span><span class="staff-role-label">Captain &middot; Senior Pro</span></div><span class="pill first">Trust 78</span></div>
-          <div class="staff-row clickable" onclick="openPlayerFromRow(this)"><div class="staff-row-main"><span class="staff-name">Rizwan Sheikh</span><span class="staff-role-label">Vice-captain &middot; Senior Pro</span></div><span class="pill">Trust 71</span></div>
-        </div>
-      </div>
-      <div class="analysis-card">
-        <span class="eyebrow"><svg class="icon sm"><use href="#i-users"/></svg> The pecking order</span>
-        <div class="role-hint" style="margin-bottom:10px">Standing in the room, not on the team sheet &mdash; reputation, experience and age all feed it, and it decides whose voice actually carries.</div>
-        <div class="staff-row"><div class="staff-row-main"><span class="staff-name">Senior Pro</span><span class="staff-role-label"><span class="who clickable" onclick="openPlayerByName('Hamza Malik')">Hamza Malik</span>, <span class="who clickable" onclick="openPlayerByName('Rizwan Sheikh')">Rizwan Sheikh</span></span></div><span class="tier-badge a">Top of the room</span></div>
-        <div class="staff-row"><div class="staff-row-main"><span class="staff-name">Established</span><span class="staff-role-label"><span class="who clickable" onclick="openPlayerByName('Zain Chaudhry')">Zain Chaudhry</span>, <span class="who clickable" onclick="openPlayerByName('Sarfraz Khan')">Sarfraz Khan</span></span></div><span class="tier-badge b">Respected</span></div>
-        <div class="staff-row"><div class="staff-row-main"><span class="staff-name">Squad Player</span><span class="staff-role-label"><span class="who clickable" onclick="openPlayerByName('Danish Raza')">Danish Raza</span>, <span class="who clickable" onclick="openPlayerByName('Umar Baig')">Umar Baig</span></span></div><span class="tier-badge c">Settling in</span></div>
-        <div class="staff-row"><div class="staff-row-main"><span class="staff-name">Junior</span><span class="staff-role-label"><span class="who clickable" onclick="openPlayerByName('Danish Iqbal')">Danish Iqbal</span>, <span class="who clickable" onclick="openPlayerByName('Bilal Nasir')">Bilal Nasir</span></span></div><span class="tier-badge c">Still finding his feet</span></div>
-      </div>
-    </div>
-    <div class="subpanel" id="dynamics-relationships" hidden>
-      <div class="analysis-card">
-        <span class="eyebrow"><svg class="icon sm"><use href="#i-user"/></svg> Real bonds in the group</span>
-        <div class="role-hint" style="margin-bottom:10px">Built from shared time in the dressing room and genuine personality fit &mdash; strong enough that a transfer decision has to weigh it.</div>
-        <div class="staff-row"><div class="staff-row-main"><span class="staff-name"><span class="who clickable" onclick="openPlayerByName('Hamza Malik')">Hamza Malik</span> &amp; <span class="who clickable" onclick="openPlayerByName('Zain Chaudhry')">Zain Chaudhry</span></span><span class="staff-role-label">Friendship &middot; three seasons opening the batting together</span></div><span class="facility-tier-badge tier-good">Strong</span></div>
-        <div class="staff-row"><div class="staff-row-main"><span class="staff-name"><span class="who clickable" onclick="openPlayerByName('Rizwan Sheikh')">Rizwan Sheikh</span> &rarr; <span class="who clickable" onclick="openPlayerByName('Bilal Nasir')">Bilal Nasir</span></span><span class="staff-role-label">Mentorship &middot; the keeper is quietly shaping the academy graduate's game</span></div><span class="facility-tier-badge tier-good">Active</span></div>
-        <div class="staff-row"><div class="staff-row-main"><span class="staff-name"><span class="who clickable" onclick="openPlayerByName('Danish Raza')">Danish Raza</span> &amp; <span class="who clickable" onclick="openPlayerByName('Umar Baig')">Umar Baig</span></span><span class="staff-role-label">Rivalry &middot; a good-natured needle over who bats at six</span></div><span class="facility-tier-badge tier-average">Mild</span></div>
-      </div>
-      <div class="analysis-card">
-        <span class="eyebrow"><svg class="icon sm"><use href="#i-alert"/></svg> Nothing brewing right now</span>
-        <div class="role-hint" style="margin-bottom:0">No active feud in the squad this season &mdash; a genuine one drags on a real-world pairing's on-field chemistry (strike rotation, even run-out risk between the two), so it's worth checking back here after a contentious selection call.</div>
-      </div>
-    </div>
-    <div class="subpanel" id="dynamics-issues" hidden>
-      <div class="analysis-card">
-        <span class="eyebrow"><svg class="icon sm"><use href="#i-alert"/></svg> What's actually live</span>
-        <div class="staff-row clickable" onclick="openPlayerFromRow(this)"><div class="staff-row-main"><span class="staff-name">Umar Baig</span><span class="staff-role-label">Squad-player standing, three low scores &mdash; coach trust has softened this month</span></div><span class="facility-tier-badge tier-average">Worth a word</span></div>
-        <div class="staff-row clickable" onclick="openPlayerFromRow(this)"><div class="staff-row-main"><span class="staff-name">Danish Iqbal</span><span class="staff-role-label">Junior standing, genuinely raw &mdash; needs backing, not pressure, while he settles</span></div><span class="facility-tier-badge tier-average">Developing</span></div>
-        <div class="staff-row"><div class="staff-row-main"><span class="staff-name">Everyone else</span><span class="staff-role-label">No real complaint on record right now</span></div><span class="facility-tier-badge tier-good">Settled</span></div>
-        <div class="role-hint" style="margin-top:10px">A quiet room isn't a guarantee &mdash; a bad run, a contentious drop or a big signing can all move this fast. Worth a check after every selection meeting, not just when something's already gone wrong.</div>
-      </div>
-    </div>
-  </section>
+  
 
   <!-- ================= PLAYER PROFILE ================= -->
   <section class="panel" id="panel-player" role="tabpanel" hidden>
@@ -3797,6 +3817,35 @@
           <span class="trait-tag">Professional</span><span class="trait-tag">Ambitious</span><span class="trait-tag">Team-oriented</span><span class="trait-tag">Consistent</span>
         </div>
       </div>
+
+      <div class="analysis-card" style="margin-top:16px">
+        <span class="eyebrow"><svg class="icon sm"><use href="#i-trend-up"/></svg> Development &amp; psychology</span>
+        <div class="staff-row">
+          <div class="staff-row-main"><span class="staff-name">Squad mood</span><span class="staff-role-label">The dressing room is riding a genuine high right now &mdash; that lifts his own confidence a touch, even on a match he personally didn&rsquo;t star in.</span></div>
+        </div>
+        <div class="staff-row">
+          <div class="staff-row-main"><span class="staff-name">Personality arc</span><span class="staff-role-label">A young Ambitious streak is settling into real composure as his own standing in the room grows &mdash; a slow, genuine change, not a switch flipped overnight.</span></div>
+        </div>
+        <div class="staff-row">
+          <div class="staff-row-main"><span class="staff-name">Technical flaw</span><span class="staff-role-label">Front-foot, LBW-prone against the ball that nips back in &mdash; scouted, not guessed, and Mudassar Iqbal has had him on it since pre-season. Real, if slow, progress.</span></div>
+        </div>
+        <div class="staff-row">
+          <div class="staff-row-main"><span class="staff-name">Format balance</span><span class="staff-role-label">A T20-heavy 18 months has cost a touch of red-ball concentration and technique &mdash; nothing dramatic, but a genuine, measurable drift from a one-format diet.</span></div>
+        </div>
+        <div class="staff-row">
+          <div class="staff-row-main"><span class="staff-name">Matchup read</span><span class="staff-role-label">Genuinely uneasy against left-arm pace &mdash; a real sample built up over several seasons, not a first impression.</span></div>
+        </div>
+        <div class="staff-row">
+          <div class="staff-row-main"><span class="staff-name">International eligibility</span><span class="staff-role-label">Uncapped, no representation drift in motion &mdash; a genuine switch would need years of residency elsewhere, or a real, sustained snub at home. Neither applies today.</span></div>
+        </div>
+      </div>
+
+      <div class="analysis-card" style="margin-top:16px">
+        <span class="eyebrow"><svg class="icon sm"><use href="#i-shield"/></svg> Captaincy record</span>
+        <div class="bio-line"><span class="k">Matches captained</span><span>58</span></div>
+        <div class="bio-line"><span class="k">Tactical-call quality</span><span style="color:var(--turf-strong)">Genuinely improving</span></div>
+        <div class="role-hint" style="margin-bottom:0">His own in-match judgement grows slowly with real captaincy experience, bounded by his own ceiling &mdash; the fast early gains of his first couple of seasons in the job have already given way to the smaller, steadier improvements of an established captain. Zain Chaudhry, his vice-captain, is on the same real growth arc as his own deputy minutes build up, so the succession pipeline behind him is a genuine one, not just a title.</div>
+      </div>
     </div>
 
     <div class="subpanel" id="psub-career" hidden>
@@ -3851,16 +3900,16 @@
           <span class="eyebrow" style="display:block;margin-bottom:8px">Transfer status</span>
           <div class="transfer-status-row"><span>Transfer listed</span><span style="color:var(--ink-faint)">No</span></div>
           <div class="transfer-status-row"><span>Transfer requested</span><span style="color:var(--ink-faint)">No</span></div>
-          <div class="transfer-status-row"><span>Interested clubs</span><span style="color:var(--gold)">Karachi Kings, Multan Sultans</span></div>
+          <div class="transfer-status-row"><span>Interested clubs</span><span style="color:var(--gold)"><span class="who clickable" onclick="event.stopPropagation();openWorldProfile('club','karachi')" style="color:inherit">Karachi Kings</span>, <span class="who clickable" onclick="event.stopPropagation();openWorldProfile('club','multan')" style="color:inherit">Multan Sultans</span></span></div>
           <div class="transfer-status-row"><span>Overseas registration</span><span>Domestic &middot; no restriction</span></div>
           <div class="role-hint">Settled, loyal, and out of contract talk &mdash; exactly what "one-club man" means in practice.</div>
         </div>
       </div>
       <div class="analysis-card" style="margin-top:16px">
         <span class="eyebrow"><svg class="icon sm"><use href="#i-alert"/></svg> Workload priority</span>
-        <div class="role-hint" style="margin-bottom:10px">A standing instruction, most relevant for a centrally-contracted international carrying both a franchise and a national workload &mdash; even with no international cricket on right now, it genuinely shapes future rest/rotation decisions.</div>
+        <div class="role-hint" style="margin-bottom:10px" id="workload-priority-hint">A standing instruction, most relevant for a centrally-contracted international carrying both a franchise and a national workload &mdash; even with no international cricket on right now, it genuinely shapes future rest/rotation decisions.</div>
         <div class="plan-select-wrap" style="width:220px">
-          <select class="plan-select" id="player-workload-priority">
+          <select class="plan-select" id="player-workload-priority" onchange="onWorkloadPriorityChange(this)">
             <option value="balanced" selected>Balanced</option>
             <option value="redball">Prioritise red-ball fitness</option>
             <option value="whiteball">Prioritise white-ball fitness</option>
@@ -3872,8 +3921,14 @@
 
   <!-- ================= FIXTURES ================= -->
   <section class="panel" id="panel-fixtures" role="tabpanel" hidden>
-    <div class="panel-head"><h1>Fixtures</h1><div class="sub">Pakistan T20 Cup &middot; Group stage</div></div>
+    <div class="panel-head"><h1>Fixtures</h1><div class="sub">Islamabad Icons play three parallel domestic competitions &mdash; the T20 Cup is the one currently in season</div></div>
+    <nav class="subnav" role="tablist" aria-label="Fixtures competitions">
+      <button class="subtab-btn" role="tab" aria-selected="true" data-subtab="t20cup">T20 Cup</button>
+      <button class="subtab-btn" role="tab" aria-selected="false" data-subtab="fcc">First-Class Championship</button>
+      <button class="subtab-btn" role="tab" aria-selected="false" data-subtab="lista">List A Cup</button>
+    </nav>
 
+    <div class="subpanel" id="fixtures-t20cup">
     <div class="analysis-card" style="margin-bottom:16px">
       <span class="eyebrow"><svg class="icon sm"><use href="#i-trend-up"/></svg> Recent form &amp; the run ahead</span>
       <div style="display:flex;gap:24px;flex-wrap:wrap;align-items:center">
@@ -3940,6 +3995,25 @@
       <div class="fixture-row clickable" onclick="openFixtureSummary('f8')" style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border-soft)"><div class="vs-crest them"></div><div class="fixture-names">Multan Sultans<small>Away &middot; Thu 1 Apr &middot; 19:00 &middot; Multan Cricket Stadium</small></div><div class="fixture-meta">6 days</div></div>
       <div class="fixture-row clickable" onclick="openFixtureSummary('f9')" style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border-soft)"><div class="vs-crest them"></div><div class="fixture-names">Karachi Kings<small>Away &middot; Mon 5 Apr</small></div><div class="fixture-meta">10 days</div></div>
       <div class="fixture-row clickable" onclick="openFixtureSummary('f10')" style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border-soft)"><div class="vs-crest them"></div><div class="fixture-names">Quetta Falcons<small>Away &middot; Fri 9 Apr</small></div><div class="fixture-meta">14 days</div></div>
+    </div>
+    </div>
+
+    <div class="subpanel" id="fixtures-fcc" hidden>
+      <div class="analysis-card">
+        <span class="eyebrow"><svg class="icon sm"><use href="#i-cal-list"/></svg> First-Class Championship &middot; between windows</span>
+        <div class="role-hint" style="margin-bottom:0">Pakistan's three-format domestic season runs the T20 Cup, the List A Cup and the First-Class Championship on their own separate windows rather than all at once - the Championship's own window opens once the T20 Cup finishes out, so there is honestly nothing scheduled here yet. Islamabad Icons finished 4th in last season's Championship.</div>
+      </div>
+      <div class="analysis-card" style="margin-top:16px">
+        <span class="eyebrow"><svg class="icon sm"><use href="#i-alert"/></svg> What a multi-day match actually carries</span>
+        <div class="role-hint" style="margin-bottom:0">Two real mechanics with no honest surface in a T20 fixture: session-by-session AMBITION (both sides genuinely reassess win/draw/loss chances at every break, not just at the toss - a side three hundred behind with four wickets left is surviving; turn the match around and the same reassessment goes for a win) and real time lost to rain, made up for on the following days within the laws (extra time, an earlier start, never past the final day's own arrears) rather than simply vanishing from the match. Both will show up here once the Championship window is actually live.</div>
+      </div>
+    </div>
+
+    <div class="subpanel" id="fixtures-lista" hidden>
+      <div class="analysis-card">
+        <span class="eyebrow"><svg class="icon sm"><use href="#i-cal-list"/></svg> List A Cup &middot; between windows</span>
+        <div class="role-hint" style="margin-bottom:0">The List A Cup sits on its own window later in the year, after the First-Class Championship closes out - nothing to schedule here while the T20 Cup is still the season's live competition. Islamabad Icons reached the semi-final last time it was played.</div>
+      </div>
     </div>
   </section>
 
@@ -4032,7 +4106,7 @@
         </div>
         <div class="control-row" style="margin-top:12px;display:flex;align-items:center;gap:10px">
           <span class="k" style="font-size:var(--fs-caption);color:var(--ink-faint)">Preferred squad size</span>
-          <input type="number" class="plan-select" style="width:64px;padding:6px 8px;text-align:center" value="15" min="12" max="20">
+          <input type="number" class="plan-select" id="preferred-squad-size" style="width:64px;padding:6px 8px;text-align:center" value="15" min="12" max="20" onchange="onPreferredSquadSizeChange(this)">
           <button class="stage-continue-btn" style="margin-left:auto" onclick="submitNationalSquad()">Submit squad</button>
         </div>
         <div class="sold-banner" id="squad-submit-banner" hidden></div>
@@ -4051,8 +4125,8 @@
         <span class="eyebrow"><svg class="icon sm"><use href="#i-user"/></svg> Selection meeting &middot; genuinely optional</span>
         <div class="role-hint" style="margin-bottom:10px">The panel doesn&rsquo;t always sit for this. A meeting is <b>always</b> held for a side&rsquo;s first-ever squad in a competition, or whenever turnover is 2 or more players; otherwise it&rsquo;s a real probability read off the panel&rsquo;s own thoroughness &mdash; and you can switch it off entirely in your own preferences.</div>
         <div class="bio-line"><span class="k">This squad&rsquo;s turnover</span><span>1 player &middot; below the automatic threshold</span></div>
-        <div class="bio-line"><span class="k">Meeting held this time?</span><span style="color:var(--turf-strong)">Yes &middot; a real, if close, call</span></div>
-        <label style="display:flex;align-items:center;gap:8px;margin-top:10px;font-size:var(--fs-caption);color:var(--ink-dim)"><input type="checkbox" checked> Hold selection meetings when the panel judges one worthwhile</label>
+        <div class="bio-line"><span class="k">Meeting held this time?</span><span id="meeting-held-line" style="color:var(--turf-strong)">Yes &middot; a real, if close, call</span></div>
+        <label style="display:flex;align-items:center;gap:8px;margin-top:10px;font-size:var(--fs-caption);color:var(--ink-dim)"><input type="checkbox" id="hold-selection-meetings-toggle" checked onchange="toggleHoldSelectionMeetings(this)"> Hold selection meetings when the panel judges one worthwhile</label>
       </div>
       <div class="analysis-card">
         <span class="eyebrow"><svg class="icon sm"><use href="#i-shield"/></svg> The meeting&rsquo;s own report</span>
@@ -4193,6 +4267,13 @@
         <div class="bio-line"><span class="k">Last verdict</span><span style="color:var(--turf-strong)">Group-stage exit at the last T20 World Cup cost real trust</span></div>
         <div class="role-hint" style="margin-top:8px">Purely reactive, and only after a global event completes &mdash; there is no budget here to negotiate, unlike a domestic board. It moves your trust against its own stated ambition, then stays quiet until the next major tournament or bilateral trophy series ends.</div>
       </div>
+      <div class="analysis-card">
+        <span class="eyebrow"><svg class="icon sm"><use href="#i-cash"/></svg> ICC annual distribution</span>
+        <div class="bio-line"><span class="k">This year's share</span><span style="color:var(--gold);font-weight:700">$41.2M</span></div>
+        <div class="bio-line"><span class="k">Basis</span><span>Cricket history &middot; recent-event performance &middot; commercial pull &middot; an equal Full-Member floor</span></div>
+        <div class="bio-line"><span class="k">Funds</span><span>Central-contract retainers, plus a real lift to youth investment</span></div>
+        <div class="role-hint" style="margin-bottom:0">A real annual payment from the ICC's own global pool, not a fixed number &mdash; a strong global run genuinely moves it, though the largest board's own share is capped so the pool never tilts entirely toward the game's biggest market.</div>
+      </div>
     </div>
     <div class="tactics-grid" style="margin-top:16px">
       <div class="analysis-card">
@@ -4236,11 +4317,11 @@
     <div class="tactics-grid">
       <div class="analysis-card">
         <span class="eyebrow"><svg class="icon sm"><use href="#i-cal-list"/></svg> Upcoming internationals</span>
-        <div class="fixture-row">
+        <div class="fixture-row clickable" onclick="openFixtureSummary('intlwt20')">
           <div class="fixture-teams"><img class="flag-icon lg" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEwAAAAiCAYAAAD1aT8BAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAUZSURBVGhD7ZltaFZlGMfPp9JBGViBpmSrfKmQ4sEInUUNdbWRM4vlJDMlQVKyGiXVUIwSQ/pQsy9pNEFJjEg0EIQWiiaElWFJRgp+EL/EYtL6eHX9rvMcO5zuPTvnPvfBAv/wZ8+e3a//+7qvl3uRQq6yECPJYuWGdTKj6yGJltxdLR+5QVa+u0Z2HtwtTZ3NEj05zd0uS+1XW1WTsxfO1Vcc48z5M9Lz4evS8lK7THi2Jtd0zXD39+VIgh0YOCjj598p47pr7o4h+Pitcv3CKbbJF7etl2j+eHe7LB+bIJO67pLvf/lOLvx+0cT+5tRxW/fWPR9IVNNNaRtn37IcSTAwr6dTxrZNlGjpfe7OZTlnjLy5Y5PNNXftgniTeeZSoTs2rbC+05fPMoGmLrlHhob/lL2HvzDrc/YLwUaC/fjbKbm2pUmiRXpVQouGdbVPlNNqXYOX/og3rt8VmufBsbE4XGP93PvRBtl/9MtYeNbs6lOWjQQDbT0L44W5OpehbnRRb7cM/zUsZy+el+Zn7i0mGCJB2kP9jA+c++oT5reC+66Eown21YkBaVpwY7wZ1wC+1EPo27fd5kAwLwvLEgFDrzPL0QQDRLFo3k3uAXyom+I6Hjl5zMYfHBqUWS+05vdhV5J5BPvp3M8WlYL5BY2GWBSWlaBz47Kwh1IV8wgGtux+L95QCAtQ/0VUxLIS9PZvyZ9WBCJ+rnDalFcwNjdzVUuYa6OCkbKQBiT4+uSReGz8kKtPaOpcrZrctr/xdLE58woGLMfR3Mk5UBGqw29bv9giZAI+k50Hs+LRqIfW99m22D9zUK42LhYRDNiJkGaU2ZTjSgI7kCpSmDRZt1590hh8qO2nSsEoRy6nGb6iJU4/UwdiZVhe6QMZjbMj2b5/h815+3MPVCsYoLgtdTUzaUUaJ379QW7pmFTd1VSx8F0cDnNRyxaK/j6CYRnTlmpmXmZT+JB64prFzkOfxiVZaNHUclk3xT7Ah41prZdWrvYu+ggGMGk27R3VtG9SGrnA+Nc9PC4WzdW/KHU+xMKqEtj1Lzq+r2CXhof+qTN9rKB+LY+f/rY+4r9BIc0rhB2Mb8mDf9L+iEOhn4DnoJs7byuejPsKBqgzzaR9A4CKTVhvBK7PsneeN3HtcEhu0+Ixb5pJPYnI2p4KhaQ7a8mWTvgkymUEAzaxbwDQ0yXiJo9/jYC1LX9rhUx5amosXANyiERhnnt4osqCJNn7QaGsYOQykxffUSw0J8Qi1BIovNNZfyNQ1+46tMcidbfWn7gFoh5XDkvc+MlmEzddp6bB25sV+ojL/K51NWJZwcDbu7aWc85qoavf76mPlh9cMwRIOFIAScNuBE/YrnXkYQjBCAD3r9FT83XMUC0tea6uAohp+SOWhaP3sS4YQjCwd+Dz+P3fNUke4qzVSl/uey2XpRQBJRgWbIGAeXzFgqEEA/iU0smmWsCjr3RYCRYCpC2MZ2K55ivKkIIRkSz8+6YZCVU0xuGKpnOnIqAfAcDWE0osGFIwQCg3p1pGMPoSdTUYkEdxnSzyaUnW6Lryd9rR3l6ISXcYp8xasgwtGOHcFsuphlhoPVPnJ7kVzzEI0tu/+TL5ne/tHym4hHp753hlGVow8PGB/vh0fetMF4lsiRgjkb8nETCkVaVZhWCkGTxB2yaqWjiHkaarTRWsQjBAnRkkAPzXWJVgwLJqEkXXxP9XVikYLw3NXdPDR6oryUSwq8zLSP4Gj0I/0moAgEQAAAAASUVORK5CYII=" alt="PAK"><div class="fixture-names">Pakistan vs Australia<small>ICC World T20 Championship &middot; Group A</small></div></div>
           <div class="fixture-meta"><div class="when">Fri &middot; 19:00</div>Gaddafi Stadium</div>
         </div>
-        <div class="fixture-row" style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border-soft)">
+        <div class="fixture-row clickable" style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border-soft)" onclick="openFixtureSummary('intlodi1')">
           <div class="fixture-teams"><img class="flag-icon lg" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEwAAAAiCAYAAAD1aT8BAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAUZSURBVGhD7ZltaFZlGMfPp9JBGViBpmSrfKmQ4sEInUUNdbWRM4vlJDMlQVKyGiXVUIwSQ/pQsy9pNEFJjEg0EIQWiiaElWFJRgp+EL/EYtL6eHX9rvMcO5zuPTvnPvfBAv/wZ8+e3a//+7qvl3uRQq6yECPJYuWGdTKj6yGJltxdLR+5QVa+u0Z2HtwtTZ3NEj05zd0uS+1XW1WTsxfO1Vcc48z5M9Lz4evS8lK7THi2Jtd0zXD39+VIgh0YOCjj598p47pr7o4h+Pitcv3CKbbJF7etl2j+eHe7LB+bIJO67pLvf/lOLvx+0cT+5tRxW/fWPR9IVNNNaRtn37IcSTAwr6dTxrZNlGjpfe7OZTlnjLy5Y5PNNXftgniTeeZSoTs2rbC+05fPMoGmLrlHhob/lL2HvzDrc/YLwUaC/fjbKbm2pUmiRXpVQouGdbVPlNNqXYOX/og3rt8VmufBsbE4XGP93PvRBtl/9MtYeNbs6lOWjQQDbT0L44W5OpehbnRRb7cM/zUsZy+el+Zn7i0mGCJB2kP9jA+c++oT5reC+66Eown21YkBaVpwY7wZ1wC+1EPo27fd5kAwLwvLEgFDrzPL0QQDRLFo3k3uAXyom+I6Hjl5zMYfHBqUWS+05vdhV5J5BPvp3M8WlYL5BY2GWBSWlaBz47Kwh1IV8wgGtux+L95QCAtQ/0VUxLIS9PZvyZ9WBCJ+rnDalFcwNjdzVUuYa6OCkbKQBiT4+uSReGz8kKtPaOpcrZrctr/xdLE58woGLMfR3Mk5UBGqw29bv9giZAI+k50Hs+LRqIfW99m22D9zUK42LhYRDNiJkGaU2ZTjSgI7kCpSmDRZt1590hh8qO2nSsEoRy6nGb6iJU4/UwdiZVhe6QMZjbMj2b5/h815+3MPVCsYoLgtdTUzaUUaJ379QW7pmFTd1VSx8F0cDnNRyxaK/j6CYRnTlmpmXmZT+JB64prFzkOfxiVZaNHUclk3xT7Ah41prZdWrvYu+ggGMGk27R3VtG9SGrnA+Nc9PC4WzdW/KHU+xMKqEtj1Lzq+r2CXhof+qTN9rKB+LY+f/rY+4r9BIc0rhB2Mb8mDf9L+iEOhn4DnoJs7byuejPsKBqgzzaR9A4CKTVhvBK7PsneeN3HtcEhu0+Ixb5pJPYnI2p4KhaQ7a8mWTvgkymUEAzaxbwDQ0yXiJo9/jYC1LX9rhUx5amosXANyiERhnnt4osqCJNn7QaGsYOQykxffUSw0J8Qi1BIovNNZfyNQ1+46tMcidbfWn7gFoh5XDkvc+MlmEzddp6bB25sV+ojL/K51NWJZwcDbu7aWc85qoavf76mPlh9cMwRIOFIAScNuBE/YrnXkYQjBCAD3r9FT83XMUC0tea6uAohp+SOWhaP3sS4YQjCwd+Dz+P3fNUke4qzVSl/uey2XpRQBJRgWbIGAeXzFgqEEA/iU0smmWsCjr3RYCRYCpC2MZ2K55ivKkIIRkSz8+6YZCVU0xuGKpnOnIqAfAcDWE0osGFIwQCg3p1pGMPoSdTUYkEdxnSzyaUnW6Lryd9rR3l6ISXcYp8xasgwtGOHcFsuphlhoPVPnJ7kVzzEI0tu/+TL5ne/tHym4hHp753hlGVow8PGB/vh0fetMF4lsiRgjkb8nETCkVaVZhWCkGTxB2yaqWjiHkaarTRWsQjBAnRkkAPzXWJVgwLJqEkXXxP9XVikYLw3NXdPDR6oryUSwq8zLSP4Gj0I/0moAgEQAAAAASUVORK5CYII=" alt="PAK"><div class="fixture-names">Pakistan vs India<small>Bilateral ODI series &middot; 1st ODI</small></div></div>
           <div class="fixture-meta"><div class="when">21 days</div>National Stadium</div>
         </div>
@@ -4249,12 +4330,12 @@
       <div class="analysis-card">
         <span class="eyebrow"><svg class="icon sm"><use href="#i-trophy"/></svg> Trophy watch</span>
         <div class="trophy-row">
-          <div class="trophy-side"><img class="flag-icon" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEwAAAAiCAYAAAD1aT8BAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAUZSURBVGhD7ZltaFZlGMfPp9JBGViBpmSrfKmQ4sEInUUNdbWRM4vlJDMlQVKyGiXVUIwSQ/pQsy9pNEFJjEg0EIQWiiaElWFJRgp+EL/EYtL6eHX9rvMcO5zuPTvnPvfBAv/wZ8+e3a//+7qvl3uRQq6yECPJYuWGdTKj6yGJltxdLR+5QVa+u0Z2HtwtTZ3NEj05zd0uS+1XW1WTsxfO1Vcc48z5M9Lz4evS8lK7THi2Jtd0zXD39+VIgh0YOCjj598p47pr7o4h+Pitcv3CKbbJF7etl2j+eHe7LB+bIJO67pLvf/lOLvx+0cT+5tRxW/fWPR9IVNNNaRtn37IcSTAwr6dTxrZNlGjpfe7OZTlnjLy5Y5PNNXftgniTeeZSoTs2rbC+05fPMoGmLrlHhob/lL2HvzDrc/YLwUaC/fjbKbm2pUmiRXpVQouGdbVPlNNqXYOX/og3rt8VmufBsbE4XGP93PvRBtl/9MtYeNbs6lOWjQQDbT0L44W5OpehbnRRb7cM/zUsZy+el+Zn7i0mGCJB2kP9jA+c++oT5reC+66Eown21YkBaVpwY7wZ1wC+1EPo27fd5kAwLwvLEgFDrzPL0QQDRLFo3k3uAXyom+I6Hjl5zMYfHBqUWS+05vdhV5J5BPvp3M8WlYL5BY2GWBSWlaBz47Kwh1IV8wgGtux+L95QCAtQ/0VUxLIS9PZvyZ9WBCJ+rnDalFcwNjdzVUuYa6OCkbKQBiT4+uSReGz8kKtPaOpcrZrctr/xdLE58woGLMfR3Mk5UBGqw29bv9giZAI+k50Hs+LRqIfW99m22D9zUK42LhYRDNiJkGaU2ZTjSgI7kCpSmDRZt1590hh8qO2nSsEoRy6nGb6iJU4/UwdiZVhe6QMZjbMj2b5/h815+3MPVCsYoLgtdTUzaUUaJ379QW7pmFTd1VSx8F0cDnNRyxaK/j6CYRnTlmpmXmZT+JB64prFzkOfxiVZaNHUclk3xT7Ah41prZdWrvYu+ggGMGk27R3VtG9SGrnA+Nc9PC4WzdW/KHU+xMKqEtj1Lzq+r2CXhof+qTN9rKB+LY+f/rY+4r9BIc0rhB2Mb8mDf9L+iEOhn4DnoJs7byuejPsKBqgzzaR9A4CKTVhvBK7PsneeN3HtcEhu0+Ixb5pJPYnI2p4KhaQ7a8mWTvgkymUEAzaxbwDQ0yXiJo9/jYC1LX9rhUx5amosXANyiERhnnt4osqCJNn7QaGsYOQykxffUSw0J8Qi1BIovNNZfyNQ1+46tMcidbfWn7gFoh5XDkvc+MlmEzddp6bB25sV+ojL/K51NWJZwcDbu7aWc85qoavf76mPlh9cMwRIOFIAScNuBE/YrnXkYQjBCAD3r9FT83XMUC0tea6uAohp+SOWhaP3sS4YQjCwd+Dz+P3fNUke4qzVSl/uey2XpRQBJRgWbIGAeXzFgqEEA/iU0smmWsCjr3RYCRYCpC2MZ2K55ivKkIIRkSz8+6YZCVU0xuGKpnOnIqAfAcDWE0osGFIwQCg3p1pGMPoSdTUYkEdxnSzyaUnW6Lryd9rR3l6ISXcYp8xasgwtGOHcFsuphlhoPVPnJ7kVzzEI0tu/+TL5ne/tHym4hHp753hlGVow8PGB/vh0fetMF4lsiRgjkb8nETCkVaVZhWCkGTxB2yaqWjiHkaarTRWsQjBAnRkkAPzXWJVgwLJqEkXXxP9XVikYLw3NXdPDR6oryUSwq8zLSP4Gj0I/0moAgEQAAAAASUVORK5CYII=" alt="PAK"><span>Pakistan</span></div>
+          <div class="trophy-side clickable" onclick="openWorldProfile('nation','pak')"><img class="flag-icon" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEwAAAAiCAYAAAD1aT8BAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAUZSURBVGhD7ZltaFZlGMfPp9JBGViBpmSrfKmQ4sEInUUNdbWRM4vlJDMlQVKyGiXVUIwSQ/pQsy9pNEFJjEg0EIQWiiaElWFJRgp+EL/EYtL6eHX9rvMcO5zuPTvnPvfBAv/wZ8+e3a//+7qvl3uRQq6yECPJYuWGdTKj6yGJltxdLR+5QVa+u0Z2HtwtTZ3NEj05zd0uS+1XW1WTsxfO1Vcc48z5M9Lz4evS8lK7THi2Jtd0zXD39+VIgh0YOCjj598p47pr7o4h+Pitcv3CKbbJF7etl2j+eHe7LB+bIJO67pLvf/lOLvx+0cT+5tRxW/fWPR9IVNNNaRtn37IcSTAwr6dTxrZNlGjpfe7OZTlnjLy5Y5PNNXftgniTeeZSoTs2rbC+05fPMoGmLrlHhob/lL2HvzDrc/YLwUaC/fjbKbm2pUmiRXpVQouGdbVPlNNqXYOX/og3rt8VmufBsbE4XGP93PvRBtl/9MtYeNbs6lOWjQQDbT0L44W5OpehbnRRb7cM/zUsZy+el+Zn7i0mGCJB2kP9jA+c++oT5reC+66Eown21YkBaVpwY7wZ1wC+1EPo27fd5kAwLwvLEgFDrzPL0QQDRLFo3k3uAXyom+I6Hjl5zMYfHBqUWS+05vdhV5J5BPvp3M8WlYL5BY2GWBSWlaBz47Kwh1IV8wgGtux+L95QCAtQ/0VUxLIS9PZvyZ9WBCJ+rnDalFcwNjdzVUuYa6OCkbKQBiT4+uSReGz8kKtPaOpcrZrctr/xdLE58woGLMfR3Mk5UBGqw29bv9giZAI+k50Hs+LRqIfW99m22D9zUK42LhYRDNiJkGaU2ZTjSgI7kCpSmDRZt1590hh8qO2nSsEoRy6nGb6iJU4/UwdiZVhe6QMZjbMj2b5/h815+3MPVCsYoLgtdTUzaUUaJ379QW7pmFTd1VSx8F0cDnNRyxaK/j6CYRnTlmpmXmZT+JB64prFzkOfxiVZaNHUclk3xT7Ah41prZdWrvYu+ggGMGk27R3VtG9SGrnA+Nc9PC4WzdW/KHU+xMKqEtj1Lzq+r2CXhof+qTN9rKB+LY+f/rY+4r9BIc0rhB2Mb8mDf9L+iEOhn4DnoJs7byuejPsKBqgzzaR9A4CKTVhvBK7PsneeN3HtcEhu0+Ixb5pJPYnI2p4KhaQ7a8mWTvgkymUEAzaxbwDQ0yXiJo9/jYC1LX9rhUx5amosXANyiERhnnt4osqCJNn7QaGsYOQykxffUSw0J8Qi1BIovNNZfyNQ1+46tMcidbfWn7gFoh5XDkvc+MlmEzddp6bB25sV+ojL/K51NWJZwcDbu7aWc85qoavf76mPlh9cMwRIOFIAScNuBE/YrnXkYQjBCAD3r9FT83XMUC0tea6uAohp+SOWhaP3sS4YQjCwd+Dz+P3fNUke4qzVSl/uey2XpRQBJRgWbIGAeXzFgqEEA/iU0smmWsCjr3RYCRYCpC2MZ2K55ivKkIIRkSz8+6YZCVU0xuGKpnOnIqAfAcDWE0osGFIwQCg3p1pGMPoSdTUYkEdxnSzyaUnW6Lryd9rR3l6ISXcYp8xasgwtGOHcFsuphlhoPVPnJ7kVzzEI0tu/+TL5ne/tHym4hHp753hlGVow8PGB/vh0fetMF4lsiRgjkb8nETCkVaVZhWCkGTxB2yaqWjiHkaarTRWsQjBAnRkkAPzXWJVgwLJqEkXXxP9XVikYLw3NXdPDR6oryUSwq8zLSP4Gj0I/0moAgEQAAAAASUVORK5CYII=" alt="PAK"><span>Pakistan</span></div>
           <div class="trophy-mid">
             <div class="trophy-name">The Crescent Trophy</div>
             <div class="trophy-holder">Held by Pakistan &middot; won last series 2&ndash;1</div>
           </div>
-          <div class="trophy-side"><img class="flag-icon" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEwAAAAiCAYAAAD1aT8BAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAbSSURBVGhD7ZltTJVlGMfPh2LKpuODC3PO2VqrZdaUD72YteVy2fzi3GQs2rJWTZsp01iBOIdIKZqJ9kLDF0wcOEFnmpRCVEJDkcyXpCm+FGj4PpJhKVw9v+uc63SAc4ID5xxOm9d27Xme+znnOTy//a//fd03LifkTgaVLrmVFrmUN1xyO2OUSG2eyM0W+T9FRIEBStLjRMoznJ++pn/Ajb+cs+ttmq1tzkWUR0SAAapjTozI9mSRq0flZGOrrCk4LElvFslz0/PlkWdyZdyktfJC4gZJnrVVNhbXyZnfr3r+xOiKsANTVa2eINK8Ww6e/VtmpHwrcfdnychHsxXS4FGLJWXhboXH+YQpn+t98u20XfJrwyXPnxodETZggLr13giR6hz9oQ9LG+XecbnywOMrNXeWndAS/OHHM3qkJDkncj7eL2OeXCUjH1smo8fnSMmu4zoeDRFyYFZ+7cVviVxpkBvOj8zOqHR+ZK4qqvHCdU0AmXrqT12U5kt8UuRYfbO03Lip1wfqflOl3T00VSFGQ4QUGKBur50sHWeqPI8XeW1eqcQ/nC3pmXtUQcBoOOv2J1R24VKLVFSdVmjk15Un9d6hw036WT5DaQJu+SeVem8g4nxLkywqTw8NMFR1O+tBd5vgE7n51aqsWe/s0GsAEEBAQYBCRbv31isgO5J7PeD4Dom3ueLe9Y5HKq62XZGCuvUyeuV94kpXWH0HZj7VXpbl9AfNnp9wB2rBq6a+9IWCIQDFOCW5eVudwsKfSGAxBixAA6n64Fm3rzmcuQc0knKORFScLpfJ6yeLa4FLYha5ZPjy2L4B05nPyfbNM6Wjsdbz+M4xO3WnjBi7rJNnYe7AAASAOCeXrKxQj7JERSSQCFoMmyCYSfM21uh4uOL4xSPySkmyW1FODvtgkMLqEzAtv1WTpOPEHs/juweAUBfAMHau6a3wJ/wLSLw0oNKXfqOZsWyfpC4p0zHurys8pP6GKkkUhxIBhmrDEZQfPhWffY+Cis10q8o3ew2sk0/1sJzZUnLE2w6YsvAsXhwFAY/ey84tgZi1ep8CLCiqU3CoimeQgGeMZ/90rMnza6EJfGrsmjEKivJDVf6yR2DqUwuGSfu2ed18KlCgFtSFR9EmmE/hZRyBBRjA2j1LwKEynkHZUpqARp0ojs8wY3IMRew/951M3fSiQvovUJYBgQFK24T8aQF9KlAwKw4enu71IAJwvjBQky8k0q5REeWJAoHlu0xinGfzmf5E/WWnXflyjkIyn+pN+gWm5ZfzhHQcdbcDwQbrw1fnlmopojLUYV4EKEoOjzJYqI0eC8CMmb/5QkSdQKc0mSlRaV8Cn1qxf4Xbp5zZz3zKHxx/+S+w+Z7yo034fk2vy89fTJ9Z6LzUpwoL30EhJOVlCqMcAQgk1EIyRgITJTGGhzFRkPggZYqH8YxgY+uxIknIS/C2CQAIBhbpA2yQ26ec5Ux/w8qGl0dlGLSpyRQFDFOPb/Id1EZi/Fa6qIsAuCs+TaH2NmqbatSnBi10Xtgpv7jsmKBBWXqBdTSEbtkBDNoKVEVbQTOK0nhpXpSXJoFhqjJgfNdaDcZNnSiNI6XJUgul9RQsZ+Z/lSJDM4e4QS29yy+EYNILLJRBKVI2ia9v0ZdEZTSrwOCFKUPruUjGrWnlmnsAsebWWgjA41/sn9li3V/gU2urVniXM4Dqq6K6ZliAEWwGMv2b/2D81q3nbXKXmUFDTZyTBpUjyyhMHq/jiAeynmQxHih21m+XiZ893Wk5EypYZNiA4T/sZwGGciRQCmXGNeWos6YDj0R1JKqy71C+KJTgGgUGalrxqaTiRFWUtQmhBGUZNmAEsyXmj4qsxeBoa0XKFOUBiHsc8TxAmrqAw7KINoV9sa6zo/mUv+WMvxfub4YVGCaPyujLKEtgkQAhAAQY4AGGBCKAGCM4ByYrB1oVrgmek+cs08ynAOXvBUOdYQVG8OKUEUrDowwaab4GEOuz8DiCcRSGF9JGYPZ/nHfDYtvl2fyJEQVlGXZgBEAeSliuOw34EP5l3kSwRkQ5ph6dGJzP0M27hqTKjJe3657YyWu/+N126fpS4cyIACMwbV1jOtDYhWXrmgmAf6tRiiiRc8YoPT6DMksKz+n3P6p5v9tyJtKwyIgBs0BtlCb/EKHtoNwAg0dxTlOK563fcFxLsLypRJ5aN77TcmYgM+LALPAr4DEB0D6QtBR4Gd718+UDklQ6TWIXx3jLLxpywIAFinN/ntJtFwPVn3VfODJqgF1sbe607RLK5UwoMyqAdd12GShD700OKDC2h6cUPD+gbUKw6QV2J3ubLvkHNHDUGPf8rtYAAAAASUVORK5CYII=" alt="IND"><span>India</span></div>
+          <div class="trophy-side clickable" onclick="openWorldProfile('nation','ind')"><img class="flag-icon" src="data:image/png;base64,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" alt="IND"><span>India</span></div>
         </div>
       </div>
     </div>
@@ -4271,6 +4352,17 @@
     </nav>
     <div class="subpanel" id="records-club">
     <div class="analysis-card">
+      <span class="eyebrow"><svg class="icon sm"><use href="#i-star-fill"/></svg> Team of the Era &middot; 2021&ndash;2025</span>
+      <div class="role-hint" style="margin-bottom:8px">Named by the media every 5 years, built from career runs, wickets, reputation and honours over the window &mdash; never a snap judgement off one good season.</div>
+      <div class="pitch-preset-row" style="flex-wrap:wrap">
+        <span class="who clickable pill first" onclick="openPlayerByName('Hamza Malik')">Hamza Malik</span>
+        <span class="who clickable pill first" onclick="openPlayerByName('Adeel Hayat')">Adeel Hayat</span>
+        <span class="who clickable pill first" onclick="openPlayerByName('Zain Chaudhry')">Zain Chaudhry</span>
+        <span class="who clickable pill first" onclick="openPlayerByName('Tariq Farooq')">Tariq Farooq</span>
+      </div>
+      <div class="role-hint" style="margin-top:8px;margin-bottom:0"><b>Dominant team of the era:</b> Islamabad Icons, the only side with a title AND multiple deep runs across the window. <b>A pundit's own dissent:</b> he'd have picked Faisal Nadeem ahead of Zain Chaudhry for the control he offers up front.</div>
+    </div>
+    <div class="analysis-card" style="margin-top:16px">
       <span class="eyebrow"><svg class="icon sm"><use href="#i-trophy"/></svg> Trophy cabinet</span>
       <div class="notes-log">
         <div class="notes-log-item"><span class="note-date">2023</span>Pakistan T20 Cup &mdash; Champions</div>
@@ -4318,11 +4410,11 @@
           <table class="career">
             <thead><tr><th>Record</th><th>Player</th><th class="num">Total</th></tr></thead>
             <tbody>
-              <tr><td>Most runs</td><td>Hamza Malik</td><td class="num">3,214</td></tr>
-              <tr><td>Most wickets</td><td>Adeel Hayat</td><td class="num">187</td></tr>
-              <tr><td>Most catches</td><td>Bilal Nadeem</td><td class="num">64</td></tr>
-              <tr><td>Most appearances</td><td>Tariq Farooq</td><td class="num">241</td></tr>
-              <tr><td>Most centuries</td><td>Hamza Malik</td><td class="num">9</td></tr>
+              <tr><td>Most runs</td><td><span class="who clickable" onclick="openPlayerByName('Hamza Malik')">Hamza Malik</span></td><td class="num">3,214</td></tr>
+              <tr><td>Most wickets</td><td><span class="who clickable" onclick="openPlayerByName('Adeel Hayat')">Adeel Hayat</span></td><td class="num">187</td></tr>
+              <tr><td>Most catches</td><td><span class="who clickable" onclick="openPlayerByName('Bilal Nadeem')">Bilal Nadeem</span></td><td class="num">64</td></tr>
+              <tr><td>Most appearances</td><td><span class="who clickable" onclick="openPlayerByName('Tariq Farooq')">Tariq Farooq</span></td><td class="num">241</td></tr>
+              <tr><td>Most centuries</td><td><span class="who clickable" onclick="openPlayerByName('Hamza Malik')">Hamza Malik</span></td><td class="num">9</td></tr>
             </tbody>
           </table>
         </div>
@@ -4332,7 +4424,7 @@
 
     <div class="analysis-card" style="margin-top:16px">
       <span class="eyebrow"><svg class="icon sm"><use href="#i-star-fill"/></svg> Hall of Fame</span>
-      <div class="staff-row">
+      <div class="staff-row clickable" onclick="openPlayerByName('Tariq Farooq')">
         <div class="staff-row-main"><span class="staff-name">Tariq Farooq</span><span class="staff-role-label">Middle-order Batter &middot; 2005&ndash;2019</span></div>
         <div class="staff-row-meta"><span class="pill first">Inducted 2020</span></div>
       </div>
@@ -4393,7 +4485,7 @@
       </div>
       <div class="analysis-card" style="margin-top:16px">
         <span class="eyebrow"><svg class="icon sm"><use href="#i-star-fill"/></svg> World Hall of Fame</span>
-        <div class="staff-row">
+        <div class="staff-row clickable" onclick="openPlayerByName('Zaheer Anwar')">
           <div class="staff-row-main"><span class="staff-name">Zaheer Anwar</span><span class="staff-role-label">Multan Sultans &middot; Opening Batter &middot; 2008&ndash;2023</span></div>
           <div class="staff-row-meta"><span class="pill first">Inducted 2024</span></div>
         </div>
@@ -4418,12 +4510,12 @@
         <table class="career">
           <thead><tr><th>Pos</th><th>Team</th><th class="num">Pld</th><th class="num">W</th><th class="num">L</th><th class="num">NR</th><th class="num">NRR</th><th class="num">Pts</th></tr></thead>
           <tbody>
-            <tr><td>1</td><td>Lahore Lions</td><td class="num">10</td><td class="num">8</td><td class="num">2</td><td class="num">0</td><td class="num">+0.842</td><td class="num">16</td></tr>
-            <tr><td>2</td><td>Karachi Kings</td><td class="num">10</td><td class="num">7</td><td class="num">3</td><td class="num">0</td><td class="num">+0.512</td><td class="num">14</td></tr>
-            <tr style="background:var(--turf-dim)"><td style="color:var(--turf-strong);font-weight:700">3</td><td style="color:var(--turf-strong);font-weight:700">Islamabad Icons</td><td class="num" style="color:var(--turf-strong);font-weight:700">10</td><td class="num" style="color:var(--turf-strong);font-weight:700">6</td><td class="num" style="color:var(--turf-strong);font-weight:700">4</td><td class="num" style="color:var(--turf-strong);font-weight:700">0</td><td class="num" style="color:var(--turf-strong);font-weight:700">+0.203</td><td class="num" style="color:var(--turf-strong);font-weight:700">12</td></tr>
-            <tr><td>4</td><td>Multan Sultans</td><td class="num">10</td><td class="num">5</td><td class="num">5</td><td class="num">0</td><td class="num">&minus;0.088</td><td class="num">10</td></tr>
-            <tr><td>5</td><td>Peshawar Zalmi</td><td class="num">10</td><td class="num">4</td><td class="num">5</td><td class="num">1</td><td class="num">&minus;0.310</td><td class="num">9</td></tr>
-            <tr><td>6</td><td>Quetta Falcons</td><td class="num">10</td><td class="num">2</td><td class="num">7</td><td class="num">1</td><td class="num">&minus;0.940</td><td class="num">5</td></tr>
+            <tr><td>1</td><td><span class="who clickable" onclick="openWorldProfile('club','lahore')">Lahore Lions</span></td><td class="num">10</td><td class="num">8</td><td class="num">2</td><td class="num">0</td><td class="num">+0.842</td><td class="num">16</td></tr>
+            <tr><td>2</td><td><span class="who clickable" onclick="openWorldProfile('club','karachi')">Karachi Kings</span></td><td class="num">10</td><td class="num">7</td><td class="num">3</td><td class="num">0</td><td class="num">+0.512</td><td class="num">14</td></tr>
+            <tr style="background:var(--turf-dim)"><td style="color:var(--turf-strong);font-weight:700">3</td><td style="color:var(--turf-strong);font-weight:700"><span class="who clickable" onclick="openWorldProfile('club','islamabad')" style="color:inherit">Islamabad Icons</span></td><td class="num" style="color:var(--turf-strong);font-weight:700">10</td><td class="num" style="color:var(--turf-strong);font-weight:700">6</td><td class="num" style="color:var(--turf-strong);font-weight:700">4</td><td class="num" style="color:var(--turf-strong);font-weight:700">0</td><td class="num" style="color:var(--turf-strong);font-weight:700">+0.203</td><td class="num" style="color:var(--turf-strong);font-weight:700">12</td></tr>
+            <tr><td>4</td><td><span class="who clickable" onclick="openWorldProfile('club','multan')">Multan Sultans</span></td><td class="num">10</td><td class="num">5</td><td class="num">5</td><td class="num">0</td><td class="num">&minus;0.088</td><td class="num">10</td></tr>
+            <tr><td>5</td><td><span class="who clickable" onclick="openWorldProfile('club','peshawar')">Peshawar Zalmi</span></td><td class="num">10</td><td class="num">4</td><td class="num">5</td><td class="num">1</td><td class="num">&minus;0.310</td><td class="num">9</td></tr>
+            <tr><td>6</td><td><span class="who clickable" onclick="openWorldProfile('club','quetta')">Quetta Falcons</span></td><td class="num">10</td><td class="num">2</td><td class="num">7</td><td class="num">1</td><td class="num">&minus;0.940</td><td class="num">5</td></tr>
           </tbody>
         </table>
       </div>
@@ -4543,9 +4635,9 @@
     <div class="player-header">
       <div class="player-photo"></div>
       <div class="player-id-block">
-        <h1>Junaid Aslam</h1>
+        <h1 id="manager-profile-name">Junaid Aslam</h1>
         <div class="role-line">Head Coach &middot; Islamabad Icons</div>
-        <div class="player-header-meta"><span class="player-club-crest-sm"></span>Pakistan &middot; Age 41 &middot; Head coach since Feb 2024</div>
+        <div class="player-header-meta"><span class="player-club-crest-sm"></span><span id="manager-profile-nationality">Pakistan</span> &middot; Age 41 &middot; Head coach since Feb 2024</div>
       </div>
     </div>
     <div style="display:flex;gap:10px;margin:2px 0 16px">
@@ -4554,8 +4646,8 @@
     <div class="tactics-grid">
       <div class="analysis-card">
         <span class="eyebrow"><svg class="icon sm"><use href="#i-user"/></svg> Biography</span>
-        <div class="bio-line"><span class="k">Nationality</span><span>Pakistan</span></div>
-        <div class="bio-line"><span class="k">Playing background</span><span>Former domestic professional</span></div>
+        <div class="bio-line"><span class="k">Nationality</span><span id="manager-profile-nationality-bio">Pakistan</span></div>
+        <div class="bio-line"><span class="k">Playing background</span><span id="manager-profile-background-bio">Former domestic professional</span></div>
         <div class="bio-line"><span class="k">Coaching license</span><span>Basic</span></div>
         <div class="bio-line"><span class="k">Current post</span><span>Islamabad Icons, Head Coach</span></div>
         <div class="role-hint" style="margin-top:8px">A steady domestic playing career, mostly as a middle-order batter, before moving into coaching straight after retiring &mdash; no representative honours of his own, which is exactly the story the board's own expectations of him have been shaped by.</div>
@@ -4887,20 +4979,33 @@
       <h2 id="compare-title" style="margin:0">Compare players</h2>
       <button class="modal-close" onclick="closeCompare()" aria-label="Close">&times;</button>
     </div>
+    <div class="plan-select-wrap" style="width:220px;margin-top:10px">
+      <select class="plan-select" id="compare-select-b" onchange="renderCompare()"></select>
+    </div>
     <div class="table-card" style="margin-top:12px">
       <table class="career">
-        <thead><tr><th>Attribute</th><th class="num">Hamza Malik</th><th class="num">Umar Baig</th></tr></thead>
-        <tbody>
-          <tr><td>Technique</td><td class="num">18</td><td class="num">13</td></tr>
-          <tr><td>Power hitting</td><td class="num">14</td><td class="num">16</td></tr>
-          <tr><td>Against pace</td><td class="num">12</td><td class="num">15</td></tr>
-          <tr><td>Against spin</td><td class="num">17</td><td class="num">11</td></tr>
-          <tr><td>Concentration</td><td class="num">16</td><td class="num">12</td></tr>
-          <tr><td>Fielding</td><td class="num">15</td><td class="num">14</td></tr>
-        </tbody>
+        <thead><tr><th>Attribute</th><th class="num" id="compare-col-a-head"></th><th class="num" id="compare-col-b-head"></th></tr></thead>
+        <tbody id="compare-body"></tbody>
       </table>
     </div>
-    <div class="role-hint" style="margin-top:10px">Comparing against the squad&rsquo;s other middle-order option. Pick a different player from Squad to compare against instead.</div>
+    <div class="role-hint" style="margin-top:10px" id="compare-hint"></div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="press-conference-backdrop" onclick="if(event.target===this) closePressConference()">
+  <div class="negotiation-modal" role="dialog" aria-modal="true" aria-labelledby="press-conference-title" style="max-width:560px">
+    <div class="negotiation-head">
+      <h2 id="press-conference-title" style="margin:0">Pre-match press conference</h2>
+      <button class="modal-close" onclick="closePressConference()" aria-label="Close">&times;</button>
+    </div>
+    <div class="role-hint" style="margin-bottom:10px">A reporter opens on Danish Raza&rsquo;s fitness &mdash; he bowled through soreness last time out and hasn&rsquo;t trained fully since. How you answer is read by your own Media Handling &mdash; a well-handled bold answer lifts the room, a botched one costs you on every axis.</div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap" id="press-conference-tones">
+      <button class="tone-chip" onclick="pickPressConferenceTone('diplomatic')">Diplomatic<span class="tone-hint">Keep it neutral, give nothing away</span></button>
+      <button class="tone-chip" onclick="pickPressConferenceTone('bullish')">Bullish<span class="tone-hint">He&rsquo;ll play &mdash; back him publicly</span></button>
+      <button class="tone-chip" onclick="pickPressConferenceTone('shields')">Shields the players<span class="tone-hint">Redirect, protect him from scrutiny</span></button>
+      <button class="tone-chip" onclick="pickPressConferenceTone('confrontational')">Confrontational<span class="tone-hint">Push back on the question itself</span></button>
+    </div>
+    <div class="convo-log" id="press-conference-log" style="margin-top:12px"></div>
   </div>
 </div>
 
@@ -5003,6 +5108,28 @@
     </div>
     <div class="negotiation-body">
       <div id="negotiation-contract-sections">
+        <div class="negotiation-stage-progress" id="negotiation-stage-progress" style="display:flex;gap:6px;margin-bottom:14px">
+          <span class="stage-pip active" data-stage="1" onclick="goToNegotiationStage(1)">1. Fee &amp; Term</span>
+          <span class="stage-pip" data-stage="2" onclick="goToNegotiationStage(2)">2. Wage</span>
+          <span class="stage-pip" data-stage="3" onclick="goToNegotiationStage(3)">3. Agent Fee</span>
+          <span class="stage-pip" data-stage="4" onclick="goToNegotiationStage(4)">4. Clauses</span>
+        </div>
+        <div class="negotiation-contract-stage" data-stage="1">
+        <div class="negotiation-section">
+          <span class="eyebrow"><svg class="icon sm"><use href="#i-cal-list"/></svg> Fee &amp; Terms</span>
+          <div class="terms-grid">
+            <div class="term-field">
+              <label>Contract length</label>
+              <select><option>2 years</option><option selected>3 years</option><option>4 years</option><option>5 years</option></select>
+            </div>
+            <div class="term-field">
+              <label>Squad role promised</label>
+              <select><option selected>First XI</option><option>Rotation</option><option>Development prospect</option><option>Backup / development</option></select>
+            </div>
+          </div>
+        </div>
+        </div>
+        <div class="negotiation-contract-stage" data-stage="2" hidden>
         <div class="negotiation-section">
           <span class="eyebrow"><svg class="icon sm"><use href="#i-trend-up"/></svg> Weekly wage</span>
           <div class="wage-readout"><span class="amt" id="wage-amt">$4,200/wk</span><span class="cur">Currently $4,200/wk</span></div>
@@ -5017,19 +5144,18 @@
             <input type="range" class="term-slider" id="bonus-slider" min="0" max="40000" step="1000" value="8000" oninput="onBonusInput(this.value)">
           </div>
         </div>
-        <div class="negotiation-section">
-          <span class="eyebrow"><svg class="icon sm"><use href="#i-cal-list"/></svg> Terms</span>
-          <div class="terms-grid">
-            <div class="term-field">
-              <label>Contract length</label>
-              <select><option>2 years</option><option selected>3 years</option><option>4 years</option><option>5 years</option></select>
-            </div>
-            <div class="term-field">
-              <label>Squad role promised</label>
-              <select><option selected>First XI</option><option>Rotation</option><option>Impact player</option><option>Backup / development</option></select>
-            </div>
-          </div>
         </div>
+        <div class="negotiation-contract-stage" data-stage="3" hidden>
+        <div class="negotiation-section">
+          <span class="eyebrow"><svg class="icon sm"><use href="#i-cash"/></svg> Agent fee</span>
+          <div class="role-hint" style="margin-bottom:10px">A separate lever from his own wage - raising what the agent takes doesn&rsquo;t cost the player a cent directly, but a better-paid agent pushes harder to actually get a deal signed.</div>
+          <div class="wage-readout"><span class="amt" id="agent-fee-amt">6%</span><span class="cur">Agent&rsquo;s cut of the deal</span></div>
+          <input type="range" class="term-slider" id="agent-fee-slider" min="0" max="20" step="1" value="6" oninput="onAgentFeeInput(this.value)">
+          <div class="slider-scale"><span>0%</span><span>10%</span><span>20%</span></div>
+          <div class="sentiment-hint" id="agent-fee-hint" style="margin-top:8px">A modest cut - his agent will push, but not especially hard.</div>
+        </div>
+        </div>
+        <div class="negotiation-contract-stage" data-stage="4" hidden>
         <div class="negotiation-section">
           <span class="eyebrow"><svg class="icon sm"><use href="#i-shield"/></svg> Clauses</span>
           <div id="clause-list">
@@ -5050,6 +5176,11 @@
             <button class="add-clause-btn" onclick="toggleAddClauseMenu()">+ Add a clause</button>
             <div class="add-clause-menu" id="add-clause-menu"></div>
           </div>
+        </div>
+        </div>
+        <div class="negotiation-stage-nav" style="display:flex;gap:8px;margin:12px 0">
+          <button class="btn-ghost" id="negotiation-stage-back" onclick="negotiationStagePrev()" hidden>&larr; Back</button>
+          <button class="btn-ghost" id="negotiation-stage-next" onclick="negotiationStageNext()" style="margin-left:auto">Next: Wage &rarr;</button>
         </div>
         <div class="negotiation-section">
           <span class="eyebrow"><svg class="icon sm"><use href="#i-inbox"/></svg> His response</span>
@@ -5081,7 +5212,37 @@
   </div>
 </div>
 
-<div class="modal-backdrop" id="fixture-summary-backdrop">
+<div class="modal-backdrop" id="dont-judge-menu-backdrop" onclick="if(event.target===this) closeDontJudgeMenu()">
+  <div class="negotiation-modal" role="dialog" aria-modal="true" aria-labelledby="dont-judge-menu-title" style="max-width:460px">
+    <div class="negotiation-head">
+      <h2 id="dont-judge-menu-title" style="margin:0">Ask not to be judged on...</h2>
+      <button class="modal-close" onclick="closeDontJudgeMenu()" aria-label="Close">&times;</button>
+    </div>
+    <div class="role-hint" style="margin-bottom:10px">A real trade, not a free pass &mdash; if you win on it anyway, the board takes it as expected, not exceptional; but if it goes badly, it costs you nothing. The board decides whether your reasoning is good enough to grant it.</div>
+    <div id="dont-judge-menu-list"></div>
+  </div>
+</div>
+<div class="modal-backdrop" id="dont-judge-backdrop" onclick="if(event.target===this) closeDontJudge()">
+  <div class="negotiation-modal" role="dialog" aria-modal="true" aria-labelledby="dont-judge-title" style="max-width:460px">
+    <div class="negotiation-head">
+      <h2 id="dont-judge-title" style="margin:0">Don't judge me on this</h2>
+      <button class="modal-close" onclick="closeDontJudge()" aria-label="Close">&times;</button>
+    </div>
+    <div class="role-hint" id="dont-judge-sub" style="margin-bottom:10px"></div>
+    <div id="dj-precommit">
+      <button class="btn-primary" style="width:100%" onclick="submitDontJudge()">Make the case to the board</button>
+    </div>
+    <div class="convo-log" id="dj-convo" hidden></div>
+    <div id="dj-followup-section" hidden style="margin-top:10px">
+      <div style="display:flex;gap:8px;flex-wrap:wrap" id="dj-followup-options"></div>
+    </div>
+    <div class="negotiation-actions" style="margin-top:12px">
+      <button class="btn-ghost" id="dj-cancel-btn" onclick="closeDontJudge()">Cancel</button>
+      <button class="btn-primary" id="dj-primary-btn" hidden onclick="closeDontJudge()">Close</button>
+    </div>
+  </div>
+</div>
+<div class="modal-backdrop" id="fixture-summary-backdrop onclick="if(event.target===this) closeFixtureSummary()">
   <div class="negotiation-modal" style="max-width:420px">
     <div class="panel-head" style="margin-bottom:10px"><h1 id="fixture-summary-title" style="font-size:var(--fs-subhead)">Fixture</h1><div class="sub" id="fixture-summary-meta"></div></div>
     <span class="pill" id="fixture-summary-result" style="margin-bottom:10px;display:inline-flex"></span>
@@ -5206,16 +5367,16 @@
         <div class="analysis-card">
           <span class="eyebrow"><svg class="icon sm"><use href="#i-user"/></svg> Biographical details</span>
           <div class="control-row" style="display:flex;gap:10px;margin-bottom:10px">
-            <input type="text" class="plan-select" placeholder="First name" value="Junaid" style="flex:1">
-            <input type="text" class="plan-select" placeholder="Last name" value="Aslam" style="flex:1">
+            <input type="text" class="plan-select" id="onboard-first-name" placeholder="First name" value="Junaid" style="flex:1">
+            <input type="text" class="plan-select" id="onboard-last-name" placeholder="Last name" value="Aslam" style="flex:1">
           </div>
           <div class="plan-select-wrap" style="margin-bottom:10px">
-            <select class="plan-select">
+            <select class="plan-select" id="onboard-nationality">
               <option>Pakistan</option><option>India</option><option>Australia</option><option>England</option><option>New Zealand</option><option>Netherlands</option>
             </select>
           </div>
           <div class="plan-select-wrap">
-            <select class="plan-select">
+            <select class="plan-select" id="onboard-playing-background">
               <option>No playing background</option>
               <option>Former club cricketer</option>
               <option selected>Former domestic professional</option>
@@ -5431,14 +5592,81 @@
   document.querySelectorAll('.tabs > .tabnav-inner > .tab-btn').forEach(function (btn) {
     btn.addEventListener('click', function () { showPanel(btn.dataset.tab); });
   });
-  function openManagerProfile() { showPanel('manager-profile'); }
+  function openManagerProfile() {
+    var first = (document.getElementById('onboard-first-name') || {}).value;
+    var last = (document.getElementById('onboard-last-name') || {}).value;
+    var nat = (document.getElementById('onboard-nationality') || {}).value;
+    var bg = (document.getElementById('onboard-playing-background') || {}).value;
+    var fullName = (first || '').trim() && (last || '').trim() ? (first.trim() + ' ' + last.trim()) : 'Junaid Aslam';
+    var setText = function (id, text) { var el = document.getElementById(id); if (el && text) el.textContent = text; };
+    setText('manager-profile-name', fullName);
+    setText('manager-profile-nationality', nat);
+    setText('manager-profile-nationality-bio', nat);
+    setText('manager-profile-background-bio', bg);
+    showPanel('manager-profile');
+  }
   function openJobCentre() { showPanel('jobcentre'); }
+  var TRANSFER_OFFER_DATA = {
+    raza: { name: 'Danish Raza', club: 'Multan Monarchs', kind: 'transfer', fee: 180, counterFee: 215, verb: 'joins' },
+    yasir: { name: 'Yasir Ali', club: 'Peshawar Panthers', kind: 'loan', fee: null, counterFee: null, verb: 'goes on loan to' }
+  };
+  function acceptTransferOffer(id, name, club) {
+    var d = TRANSFER_OFFER_DATA[id];
+    var detail = document.getElementById('transfer-offer-' + id + '-detail');
+    var actions = document.getElementById('transfer-offer-' + id + '-actions');
+    var feeEl = document.getElementById('transfer-offer-' + id + '-fee');
+    var currentFee = feeEl && d.kind === 'transfer' ? feeEl.textContent : null;
+    if (detail) detail.innerHTML = '<span style="color:var(--turf-strong);font-weight:700">Accepted</span> &middot; ' + name + ' ' + d.verb + ' ' + club + (d.kind === 'transfer' ? ' for ' + (currentFee || ('$' + d.fee + 'K')) : '');
+    if (actions) actions.innerHTML = '';
+  }
+  function offerReject(id) {
+    var d = TRANSFER_OFFER_DATA[id];
+    var actions = document.getElementById('transfer-offer-' + id + '-actions');
+    if (!actions) return;
+    if (d.kind === 'transfer') {
+      actions.innerHTML =
+        '<button class="facility-request-btn" style="padding:6px 10px;font-size:var(--fs-micro)" onclick="counterTransferOffer(\'' + id + '\')">Counter &middot; ask for $' + d.counterFee + 'K</button>' +
+        '<button class="transfer-action-btn reject" title="Decline outright" onclick="declineTransferOffer(\'' + id + '\')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 5l14 14M19 5L5 19"/></svg></button>';
+    } else {
+      actions.innerHTML =
+        '<button class="facility-request-btn" style="padding:6px 10px;font-size:var(--fs-micro)" onclick="counterTransferOffer(\'' + id + '\')">Counter &middot; shorten to 3 months</button>' +
+        '<button class="transfer-action-btn reject" title="Decline outright" onclick="declineTransferOffer(\'' + id + '\')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 5l14 14M19 5L5 19"/></svg></button>';
+    }
+  }
+  function counterTransferOffer(id) {
+    var d = TRANSFER_OFFER_DATA[id];
+    var detail = document.getElementById('transfer-offer-' + id + '-detail');
+    var actions = document.getElementById('transfer-offer-' + id + '-actions');
+    var feeEl = document.getElementById('transfer-offer-' + id + '-fee');
+    if (d.kind === 'transfer') {
+      if (feeEl) feeEl.textContent = '$' + d.counterFee + 'K';
+      if (detail) detail.innerHTML = 'Countered at $' + d.counterFee + 'K &middot; awaiting ' + d.club + '\u2019s response';
+      actions.innerHTML = '<button class="transfer-action-btn accept" title="They agree" onclick="acceptTransferOffer(\'' + id + '\', \'' + d.name + '\', \'' + d.club + '\')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5l5 5L20 6"/></svg></button><button class="transfer-action-btn reject" title="Decline outright" onclick="declineTransferOffer(\'' + id + '\')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 5l14 14M19 5L5 19"/></svg></button>';
+    } else {
+      if (detail) detail.innerHTML = 'Countered &middot; a 3-month loan instead of 5 &middot; awaiting ' + d.club + '\u2019s response';
+      actions.innerHTML = '<button class="transfer-action-btn accept" title="They agree" onclick="acceptTransferOffer(\'' + id + '\', \'' + d.name + '\', \'' + d.club + '\')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5l5 5L20 6"/></svg></button><button class="transfer-action-btn reject" title="Decline outright" onclick="declineTransferOffer(\'' + id + '\')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 5l14 14M19 5L5 19"/></svg></button>';
+    }
+  }
+  function declineTransferOffer(id) {
+    var d = TRANSFER_OFFER_DATA[id];
+    var detail = document.getElementById('transfer-offer-' + id + '-detail');
+    var actions = document.getElementById('transfer-offer-' + id + '-actions');
+    if (detail) detail.innerHTML = '<span style="color:var(--ink-dim)">Declined</span> &middot; ' + d.name + ' stays with the club, no deal done';
+    if (actions) actions.innerHTML = '';
+  }
+  var JOB_OTHER_APPLICANTS = {
+    'Karachi Kings': ['Waqas Ahmed (currently unattached, ex-Karachi Kings)', 'a promoted assistant from within the club'],
+    'Peshawar Zalmi': ['Riaz Mumtaz (the current incumbent, re-applying for his own post)'],
+    'Netherlands': ['Bram Oosthuizen (the current incumbent)']
+  };
   function applyForJobCentre(btn, clubName) {
     btn.disabled = true;
     btn.textContent = 'Application sent';
     btn.style.opacity = '0.6';
     var log = document.getElementById('job-apply-log');
-    log.textContent = 'Your interest in the ' + clubName + ' post has been noted' + String.fromCharCode(8212) + 'you\'ll hear back if they want to take it further.';
+    var others = JOB_OTHER_APPLICANTS[clubName] || [];
+    var othersNote = others.length ? (' You' + String.fromCharCode(8217) + 're not the only name in the frame - ' + others.join(' and ') + ' also applying.') : '';
+    log.textContent = 'Your interest in the ' + clubName + ' post has been noted' + String.fromCharCode(8212) + 'you\'ll hear back if they want to take it further.' + othersNote;
   }
   // ---------- Player Actions dropdown + Negotiation modal ----------
   var DIALOGUE_MODES = {
@@ -5643,6 +5871,40 @@
   function onBonusInput(val) {
     document.getElementById('bonus-amt').textContent = '$' + Number(val).toLocaleString();
   }
+  function onAgentFeeInput(val) {
+    val = Number(val);
+    document.getElementById('agent-fee-amt').textContent = val + '%';
+    var hint = document.getElementById('agent-fee-hint');
+    if (val <= 4) hint.textContent = 'A thin cut - his agent has little incentive to fight hard for this one.';
+    else if (val <= 10) hint.textContent = 'A modest cut - his agent will push, but not especially hard.';
+    else if (val <= 15) hint.textContent = 'A genuinely attractive cut - his agent is actively working the room for you.';
+    else hint.textContent = 'A very rich cut - his agent will move heaven and earth to get this signed.';
+  }
+  var currentNegotiationStage = 1;
+  function goToNegotiationStage(n) {
+    currentNegotiationStage = n;
+    document.querySelectorAll('.negotiation-contract-stage').forEach(function (s) {
+      s.hidden = Number(s.dataset.stage) !== n;
+    });
+    document.querySelectorAll('.stage-pip').forEach(function (p) {
+      var s = Number(p.dataset.stage);
+      p.classList.toggle('active', s === n);
+      p.classList.toggle('done', s < n);
+    });
+    var backBtn = document.getElementById('negotiation-stage-back');
+    var nextBtn = document.getElementById('negotiation-stage-next');
+    backBtn.hidden = n === 1;
+    var labels = { 1: 'Next: Wage &rarr;', 2: 'Next: Agent Fee &rarr;', 3: 'Next: Clauses &rarr;', 4: 'Back to start' };
+    nextBtn.innerHTML = labels[n];
+  }
+  function negotiationStageNext() {
+    if (currentNegotiationStage >= 4) { goToNegotiationStage(1); return; }
+    goToNegotiationStage(currentNegotiationStage + 1);
+  }
+  function negotiationStagePrev() {
+    if (currentNegotiationStage <= 1) return;
+    goToNegotiationStage(currentNegotiationStage - 1);
+  }
   function setContractResponse(verdict, verdictText, quote, agent) {
     var v = document.getElementById('negotiation-verdict');
     v.className = 'response-verdict ' + verdict;
@@ -5656,9 +5918,10 @@
     if (!negotiationOpen) return;
     var wage = Number(document.getElementById('wage-slider').value);
     var bonus = Number(document.getElementById('bonus-slider').value);
+    var agentFeePct = Number(document.getElementById('agent-fee-slider').value);
     var guaranteeOn = document.querySelector('.clause-row[data-clause="guarantee"] .clause-toggle').classList.contains('on');
     var bonusClauseOn = document.querySelector('.clause-row[data-clause="bonus"] .clause-toggle').classList.contains('on');
-    var goodwill = (guaranteeOn && bonusClauseOn ? 150 : 0) + Math.round(bonus / 200) + (addedClauses.length * 60);
+    var goodwill = (guaranteeOn && bonusClauseOn ? 150 : 0) + Math.round(bonus / 200) + (addedClauses.length * 60) + Math.round(agentFeePct * 7.5);
     var effective = wage + goodwill;
     if (effective >= 5200) {
       setContractResponse('accept', 'Deal signed!',
@@ -5753,22 +6016,34 @@
     document.getElementById('player-actions-btn').setAttribute('aria-expanded', 'false');
     var contractSections = document.getElementById('negotiation-contract-sections');
     var dialogueSections = document.getElementById('negotiation-dialogue-sections');
+    var currentName = (document.getElementById('player-name-h1') || {}).textContent || 'this player';
+    var roleLine = (document.getElementById('player-role-line') || {}).textContent || 'Squad player';
+    var cf = generateContractFacts(currentName);
     if (mode === 'contract') {
       document.getElementById('negotiation-title').textContent = 'Offer New Contract';
-      document.getElementById('negotiation-sub').textContent = 'Hamza Malik \u00b7 Top-order batter \u00b7 current deal runs to May 2028';
+      document.getElementById('negotiation-sub').textContent = currentName + ' \u00b7 ' + roleLine + ' \u00b7 current deal runs to ' + cf.untilLabel;
       contractSections.hidden = false;
       dialogueSections.hidden = true;
       resetClauseList();
-      document.getElementById('wage-slider').value = 4200;
-      onWageInput(4200);
-      document.getElementById('bonus-slider').value = 8000;
-      onBonusInput(8000);
+      document.getElementById('wage-slider').value = cf.wage;
+      onWageInput(cf.wage);
+      document.getElementById('bonus-slider').value = Math.round(cf.wage * 1.9 / 100) * 100;
+      onBonusInput(Math.round(cf.wage * 1.9 / 100) * 100);
+      document.getElementById('agent-fee-slider').value = 6;
+      onAgentFeeInput(6);
+      goToNegotiationStage(1);
       setContractResponse('consider', 'Awaiting your offer', 'Adjust the wage and terms above, then suggest them and see how he reacts.', '');
       enterDraftStage();
     } else {
       var m = DIALOGUE_MODES[mode];
+      var subByMode = {
+        transfer: currentName + ' \u00b7 asking whether he wants to leave',
+        role: currentName + ' \u00b7 squad status: ' + cf.statusText,
+        praise: currentName + ' \u00b7 after a match-winning ' + cf.praiseScore + ' not out',
+        criticize: currentName + ' \u00b7 after a slow, streaky ' + cf.criticizeScore
+      };
       document.getElementById('negotiation-title').textContent = m.title;
-      document.getElementById('negotiation-sub').textContent = m.sub;
+      document.getElementById('negotiation-sub').textContent = subByMode[mode] || (currentName + ' \u00b7 ' + m.sub.split('\u00b7').slice(1).join('\u00b7'));
       contractSections.hidden = true;
       dialogueSections.hidden = false;
       document.getElementById('negotiation-cancel-btn').hidden = false;
@@ -5781,7 +6056,39 @@
     }
     document.getElementById('negotiation-backdrop').classList.add('open');
   }
-  function openCompare() { document.getElementById('compare-backdrop').classList.add('open'); }
+  function openCompare() {
+    var nameA = (document.getElementById('player-name-h1') || {}).textContent || 'Hamza Malik';
+    var sel = document.getElementById('compare-select-b');
+    var others = SQUAD_ROSTER.filter(function (p) { return p.name !== nameA; });
+    sel.innerHTML = others.map(function (p) { return '<option value="' + p.name + '">' + p.name + '</option>'; }).join('');
+    sel.setAttribute('data-name-a', nameA);
+    renderCompare();
+    document.getElementById('compare-backdrop').classList.add('open');
+  }
+  var COMPARE_ATTR_KEYS = [
+    { group: 'batting', idx: 0, label: 'Technique' }, { group: 'batting', idx: 1, label: 'Power hitting' },
+    { group: 'batting', idx: 4, label: 'Against pace' }, { group: 'batting', idx: 3, label: 'Against spin' },
+    { group: 'mental', idx: 0, label: 'Concentration' }, { group: 'fielding', idx: 0, label: 'Catching' },
+    { group: 'bowling', idx: 3, label: 'Wicket-taking' }
+  ];
+  function renderCompare() {
+    var sel = document.getElementById('compare-select-b');
+    var nameA = sel.getAttribute('data-name-a') || 'Hamza Malik';
+    var nameB = sel.value || (SQUAD_ROSTER[0] && SQUAD_ROSTER[0].name);
+    var recA = generatePlayerRecord(nameA);
+    var recB = generatePlayerRecord(nameB);
+    document.getElementById('compare-col-a-head').textContent = nameA;
+    document.getElementById('compare-col-b-head').textContent = nameB;
+    var body = document.getElementById('compare-body');
+    body.innerHTML = COMPARE_ATTR_KEYS.map(function (k) {
+      var vA = recA.attrs[k.group][k.idx].value;
+      var vB = recB.attrs[k.group][k.idx].value;
+      return '<tr><td>' + k.label + '</td><td class="num"' + (vA >= vB ? ' style="color:var(--turf-strong);font-weight:700"' : '') + '>' + vA + '</td><td class="num"' + (vB > vA ? ' style="color:var(--turf-strong);font-weight:700"' : '') + '>' + vB + '</td></tr>';
+    }).join('');
+    var hint = document.getElementById('compare-hint');
+    var squadInfoB = SQUAD_ROSTER_BY_NAME[nameB];
+    hint.innerHTML = 'Comparing against ' + (squadInfoB ? squadInfoB.battingRole.toLowerCase() : 'a squad option') + ' &middot; pick anyone else from the squad above to compare instead.';
+  }
   function openSquadNewsModal(country, seriesLabel, names, diffText) {
     document.getElementById('squad-news-title').textContent = country + ' \u2014 ' + seriesLabel;
     document.getElementById('squad-news-diff').innerHTML = diffText;
@@ -5996,6 +6303,44 @@
       calm: "Rizwan, keep it simple behind the stumps today. You don't need to force anything."
     }
   };
+  var PRESS_CONFERENCE_TONES = {
+    diplomatic: {
+      you: "He's a doubt, we'll assess him on the morning of the game and won't take an unnecessary risk.",
+      outcome: "Read as measured, not evasive. The room moves on without incident.",
+      cls: 'consider'
+    },
+    bullish: {
+      you: "He's playing. He's one of the toughest professionals in this squad and he'll be out there.",
+      outcome: "Lands well \u2014 backing him publicly lifts the dressing room, and it's on record if he does play through it.",
+      cls: 'accept'
+    },
+    shields: {
+      you: "I'm not going to discuss one player's fitness in detail \u2014 ask me about the team, not the medical file.",
+      outcome: "A safe redirect. Nobody's impressed, but nobody's given anything either.",
+      cls: 'consider'
+    },
+    confrontational: {
+      you: "That's a strange question to lead with \u2014 maybe ask something about the cricket instead.",
+      outcome: "Reads as prickly given your own Media Handling. It gets a headline of its own, and not the one you wanted.",
+      cls: 'reject'
+    }
+  };
+  function openPressConference() {
+    document.getElementById('press-conference-log').innerHTML = '';
+    document.querySelectorAll('#press-conference-tones .tone-chip').forEach(function (c) { c.disabled = false; c.classList.remove('active'); });
+    document.getElementById('press-conference-backdrop').classList.add('open');
+  }
+  function closePressConference() {
+    document.getElementById('press-conference-backdrop').classList.remove('open');
+  }
+  function pickPressConferenceTone(key) {
+    var t = PRESS_CONFERENCE_TONES[key];
+    var log = document.getElementById('press-conference-log');
+    log.innerHTML =
+      '<div class="convo-line you"><span class="who">You</span><div class="convo-bubble">\u201c' + t.you + '\u201d</div></div>' +
+      '<div class="convo-verdict-row"><span class="response-verdict ' + t.cls + '">' + t.outcome + '</span></div>';
+    document.querySelectorAll('#press-conference-tones .tone-chip').forEach(function (c) { c.disabled = true; });
+  }
   function pickTeamTalkTone(group, tone) {
     var log = document.getElementById('talk-log-' + group);
     var placeholder = document.getElementById('talk-placeholder-' + group);
@@ -6010,6 +6355,7 @@
       name: "Pakistan T20 Cup", meta: "Domestic &middot; T20 &middot; est. 1999",
       blurb: "The domestic season's headline event, contested by every first-class side over a group stage and a four-team playoff.",
       champions: ["2025: Islamabad Icons", "2024: Karachi Kings", "2023: Lahore Lions", "2022: Karachi Kings"],
+      lifecycle: "6 teams for three straight seasons \u2014 genuinely stable, not fixed forever. A sustained reputation swing, up or down, can still add or drop a participant over a period of years; nothing has moved it recently.",
       rules: [
         ["Format", "T20 &middot; a single round-robin group stage (10 rounds), then a 4-team knockout"],
         ["Points", "Win 2 &middot; No result 1 &middot; Loss 0 &middot; a tie is settled by a Super Over"],
@@ -6182,6 +6528,14 @@
     var meta = f.result ? '<div class="fixture-meta">' + f.result + '</div>' : '<div class="fixture-meta"><div class="when">' + f.when + '</div>' + (f.venue || '') + '</div>';
     return '<div class="fixture-row" style="padding-top:8px;margin-top:8px;border-top:1px solid var(--border-soft)"><div class="fixture-teams">' + crest + '<div class="fixture-names">' + f.opp + (f.venue && f.result ? '<small>' + f.venue + '</small>' : '') + '</div></div>' + meta + '</div>';
   }
+  var CLUB_NAME_TO_KEY = {
+    'Lahore Lions': 'lahore', 'Karachi Kings': 'karachi', 'Islamabad Icons': 'islamabad',
+    'Multan Sultans': 'multan', 'Peshawar Zalmi': 'peshawar', 'Quetta Falcons': 'quetta'
+  };
+  function linkedClubCell(name) {
+    var key = CLUB_NAME_TO_KEY[name];
+    return key ? '<span class="who clickable" onclick="event.stopPropagation();openWorldProfile(\'club\',\'' + key + '\')" style="color:inherit">' + name + '</span>' : name;
+  }
   function renderCompetitionProfile(key) {
     var c = competitionProfiles[key];
     document.getElementById('cprofile-title').textContent = c.name;
@@ -6210,7 +6564,7 @@
         var rowStyle = isUs ? ' style="background:var(--turf-dim)"' : '';
         var cellStyle = isUs ? ' style="color:var(--turf-strong);font-weight:700"' : '';
         return '<tr' + rowStyle + '>' + r.map(function (v, i) {
-          var val = i === 0 ? pos : v;
+          var val = i === 0 ? pos : (i === 1 ? linkedClubCell(v) : v);
           return '<td' + (i >= 2 ? ' class="num"' : '') + cellStyle + '>' + val + '</td>';
         }).join('') + '</tr>';
       }).join('');
@@ -6240,7 +6594,7 @@
         var rowStyle = isUs ? ' style="background:var(--turf-dim)"' : '';
         var cellStyle = isUs ? ' style="color:var(--turf-strong);font-weight:700"' : '';
         return '<tr' + rowStyle + '>' + r.map(function (v, i) {
-          var val = i === 0 ? pos : v;
+          var val = i === 0 ? pos : (i === 1 ? linkedClubCell(v) : v);
           return '<td' + (i >= 2 ? ' class="num"' : '') + cellStyle + '>' + val + '</td>';
         }).join('') + '</tr>';
       }).join('');
@@ -6263,6 +6617,7 @@
       '<div class="analysis-card"><span class="eyebrow"><svg class="icon sm"><use href="#i-shield"/></svg> At a glance</span>' +
       '<div class="bio-line"><span class="k">Format</span><span>' + c.rules[0][1] + '</span></div>' +
       '<div class="bio-line"><span class="k">Qualification</span><span style="max-width:60%;text-align:right">' + (c.rules[2] ? c.rules[2][1] : c.rules[1][1]) + '</span></div>' +
+      (c.lifecycle ? '<div class="role-hint" style="margin-top:8px;margin-bottom:0"><b>Competition shape:</b> ' + c.lifecycle + '</div>' : '') +
       '<button class="view-more-btn" style="margin-top:10px" onclick="document.querySelector(&quot;#panel-competition-profile .subtab-btn[data-subtab=rules]&quot;).click()">Full rules</button></div>' +
       '</div>';
   }
@@ -6347,7 +6702,8 @@
       ],
       domesticClubs: ["Amsterdam Amstel"],
       leadership: { structure: 'Unified', coach: 'Bram Oosthuizen', test: null, odi: 'Daan Verbeek', t20i: 'Daan Verbeek' },
-      fixtures: ["No Test status yet &mdash; World Cup qualifiers only"] }
+      fixtures: ["No Test status yet &mdash; World Cup qualifiers only"],
+      membershipPath: { credit: 62, candidacyThreshold: 40, grantThreshold: 100, isCandidate: true, yearsAsCandidate: 1, minYearsAsCandidate: 2 } }
   };
   function renderNationProfile(c) {
     var rankRow = '<div class="bio-line"><span class="k">Test ranking</span><span style="color:var(--gold);font-weight:700">' + (c.rankings.test ? '#' + c.rankings.test : '&mdash; (no Test status)') + '</span></div>' +
@@ -6379,7 +6735,17 @@
     var fixturesHtml = '<div class="notes-log">' + c.fixtures.map(function (f) {
       return '<div class="notes-log-item"><span>' + f + '</span></div>';
     }).join('') + '</div>';
-    return rankRow + leadHtml +
+    var membershipHtml = '';
+    if (c.membershipPath) {
+      var mp = c.membershipPath;
+      var pct = Math.min(100, Math.round(mp.credit / mp.grantThreshold * 100));
+      membershipHtml = '<div class="eyebrow" style="display:block;margin:14px 0 6px">Path to Full Membership</div>' +
+        '<div class="bio-line"><span class="k">Full Membership credit</span><span style="color:var(--gold);font-weight:700">' + mp.credit + ' / ' + mp.grantThreshold + '</span></div>' +
+        '<div class="info-meter" style="margin-bottom:8px"><span style="width:' + pct + '%"></span></div>' +
+        '<div class="bio-line"><span class="k">Public candidate status</span><span>' + (mp.isCandidate ? 'Yes, since ' + mp.yearsAsCandidate + ' year' + (mp.yearsAsCandidate === 1 ? '' : 's') + ' ago' : 'Not yet - below the ' + mp.candidacyThreshold + ' candidacy threshold') + '</span></div>' +
+        '<div class="role-hint" style="margin-bottom:0">Built from a sustained record - qualifier results, national-team reputation and board youth investment - not a single good tournament. A real threshold away from a genuine, once-only grant of Test status: irrevocable the moment it comes, and it never comes before at least ' + mp.minYearsAsCandidate + ' full years as a public candidate.</div>';
+    }
+    return rankRow + membershipHtml + leadHtml +
       '<div class="eyebrow" style="display:block;margin:14px 0 6px">Central contracts &amp; who they play for</div>' + contractsHtml +
       '<div class="eyebrow" style="display:block;margin:14px 0 6px">Domestic clubs</div>' + clubsHtml +
       '<div class="eyebrow" style="display:block;margin:14px 0 6px">Upcoming fixtures</div>' + fixturesHtml;
@@ -6782,6 +7148,13 @@
   var eoiRegistrationConfirmed = false;
   var INBOX_NEWS = [
     { id: 'n1', kicker: 'Board', headline: 'Icons ownership backs a \u201cyouth-first\u201d rebuild', dek: 'Expect academy graduates to get more of the shop window.', isNew: true, read: false },
+    { id: 'n1b', kicker: 'Pundit', headline: '\u201cThis board is playing a dangerous game\u201d', dek: 'A former international\u2019s column takes issue with the youth-first rebuild, questioning whether it costs results this season.', isNew: true, read: false },
+    { id: 'n0a', kicker: 'Record', headline: 'Adeel Hayat\u2019s 7/22 becomes the best bowling figures ever recorded at Jinnah Stadium', dek: 'The old mark had stood since 2019 - broken in front of a home crowd against Peshawar Zalmi.', isNew: true, read: false, click: "openPlayerByName('Adeel Hayat')" },
+    { id: 'n0b', kicker: 'Narrative', headline: 'A breakout campaign is taking real shape for Umar Baig', dek: 'Three matches running of genuine impact, off a franchise form spike nobody predicted at the start of the season - the kind of run a season\u2019s own story gets built around.', isNew: true, read: false, click: "openPlayerByName('Umar Baig')" },
+    { id: 'n0c', kicker: 'Umpiring', headline: 'A marginal lbw call divides opinion after Sunday\u2019s derby', dek: 'The panel\u2019s own reputation takes a real hit if a review later shows it wrong - a genuine howler in a big match carries further than an ordinary one.', isNew: false, read: true },
+    { id: 'n0d', kicker: 'Finance', headline: 'Quetta Falcons forced into a fire-sale after a severe FFP breach', dek: 'Their best asset goes to whichever solvent club can actually afford him - a real consequence of running a deficit this far past the board\u2019s own limits.', isNew: false, read: true },
+    { id: 'n0e', kicker: 'Ownership', headline: 'Peshawar Zalmi\u2019s board confirms takeover talks amid growing unrest', dek: 'A big-market club underachieving its own potential with a restless fanbase behind it - exactly the profile a takeover tends to follow.', isNew: false, read: true },
+    { id: 'n0f', kicker: 'Coaching', headline: 'Multan Sultans install their assistant as interim head coach', dek: 'A caretaker appointment after a sudden departure - a genuinely open question whether it becomes permanent if results hold up.', isNew: false, read: true },
     { id: 'n2', kicker: 'Contract', headline: 'Sarfraz Khan open to a new deal, agent says', dek: 'Current terms run out in April.', isNew: true, read: false },
     { id: 'n3', kicker: 'Milestone', headline: 'Hamza Malik named Player of the Round', dek: 'A run of low-30s scores at a strike rate that pulled every chase back into range.', isNew: true, read: false },
     { id: 'n3b', kicker: 'Milestone', headline: 'Hamza Malik six matches from his 100th T20 appearance', dek: "A guard of honour is being planned for the milestone if it falls at home.", isNew: false, read: true, click: "openPlayerByName('Hamza Malik')" },
@@ -6895,8 +7268,10 @@
     renderInboxRail();
   }
 
-  wireTabs('#panel-squad .subtab-btn', 'squad-');
+  wireTabs('#panel-squad nav[aria-label="Squad views"] .subtab-btn', 'squad-');
+  wireTabs('#panel-squad nav[aria-label="Dynamics views"] .subtab-btn', 'dynamics-');
   wireTabs('#panel-club .subtab-btn', 'club-');
+  wireTabs('#panel-fixtures .subtab-btn', 'fixtures-');
   wireTabs('#panel-recruitment .subtab-btn', 'recruit-');
   wireTabs('#panel-world .subtab-btn', 'world-');
   wireTabs('#panel-competition-profile .subtab-btn', 'cprofile-');
@@ -6904,7 +7279,6 @@
   wireTabs('#panel-player .subtab-btn', 'psub-');
   wireTabs('#panel-international .subtab-btn', 'intl-');
   wireTabs('#panel-training .subtab-btn', 'training-');
-  wireTabs('#panel-dynamics .subtab-btn', 'dynamics-');
   wireTabs('#stage-teamtalk .subtab-btn', 'talk-');
   wireTabs('#panel-records nav[aria-label="Records views"] > .subtab-btn', 'records-');
   wireTabs('#panel-records nav[aria-label="Player of the Round detail"] .subtab-btn', 'potr-');
@@ -6960,7 +7334,19 @@
   }
   function finishOnboarding(ctx, label) {
     setContext(ctx);
+    gateContextSwitcher(ctx);
     exitOnboardingMode();
+  }
+  // A real coach holds one job at a time - once Onboarding has genuinely committed to a
+  // path (Club/Franchise/International, including a job accepted from the Unemployed
+  // job-market flow), the topbar switcher stops being a free three-way toggle and only
+  // ever shows the one identity actually held. "Continue" (the demo save already open)
+  // deliberately never calls this - it keeps all three for review, since nothing was
+  // actually chosen there.
+  function gateContextSwitcher(ctx) {
+    document.querySelectorAll(".context-btn").forEach(function (b) {
+      b.hidden = b.dataset.context !== ctx;
+    });
   }
   function applyForJob(id, ctx, label) {
     var btn = document.getElementById("jobmarket-apply-" + id);
@@ -7641,6 +8027,25 @@
     document.getElementById('pitch-meter-seam-label').textContent = p.seamLabel;
     document.getElementById('pitch-meter-turn').style.width = p.turn + '%';
     document.getElementById('pitch-meter-turn-label').textContent = p.turnLabel;
+    var backfireNote = document.getElementById('pitch-backfire-note');
+    var backfireText = document.getElementById('pitch-backfire-text');
+    if (kind === 'flat') {
+      backfireNote.hidden = true;
+    } else {
+      // A genuinely aggressive request (grassy or dry) on "Good" (not
+      // Excellent) infrastructure carries a real chance of overshooting -
+      // PitchDoctoringService.OverPreparedPoorly's own live consequence,
+      // not just the static risk warning above it.
+      backfireNote.hidden = false;
+      var backfired = Math.random() < 0.3;
+      if (backfired) {
+        backfireNote.style.borderColor = 'var(--ball)';
+        backfireText.innerHTML = '<b>It overshot.</b> The groundstaff couldn\u2019t control the request this cleanly \u2014 the match referee rates the surface below standard. A real demerit for the ground and a knock to the board\u2019s own reputation, on top of whatever the pitch itself does to the game.';
+      } else {
+        backfireNote.style.borderColor = '';
+        backfireText.innerHTML = 'Delivered cleanly \u2014 the groundstaff have hit the request within a fair margin. Nothing for the match referee to mark down here.';
+      }
+    }
   }
   var roleMenuTargetRow = null;
   function showRoleContextMenu(e) {
@@ -7677,6 +8082,50 @@
     });
     var slot = row.querySelector('.role-tags-slot');
     if (slot) slot.innerHTML = '<span class="xi-role-tag" data-role="' + role + '" title="' + ROLE_TAG_TITLES[role] + '">' + role + '</span>';
+  }
+  var BATTING_APPROACHES = [
+    { key: 'normal', label: 'Normal', sub: 'Free to play his shots' },
+    { key: 'attacking', label: 'Attacking', sub: 'Looks to score off every ball he can' },
+    { key: 'anchor', label: 'Rebuild', sub: 'Anchoring for 2 overs after the last wicket' },
+    { key: 'preserve', label: 'Preserve Wicket', sub: 'Sees off the threat, wicket in hand comes first' },
+    { key: 'counter', label: 'Counter Attack', sub: 'Takes the fight to a bowler on top' }
+  ];
+  var battingApproachMenuOpen = null;
+  function openBattingApproachPicker(btn, playerName) {
+    document.querySelectorAll('.tactic-approach-menu').forEach(function (m) { m.remove(); });
+    if (battingApproachMenuOpen === playerName) { battingApproachMenuOpen = null; return; }
+    battingApproachMenuOpen = playerName;
+    var menu = document.createElement('div');
+    menu.className = 'tactic-approach-menu';
+    menu.style.cssText = 'position:absolute;z-index:40;background:var(--surface);border:1px solid var(--border);border-radius:9px;box-shadow:0 8px 24px rgba(0,0,0,.28);padding:6px;min-width:190px';
+    menu.innerHTML = BATTING_APPROACHES.map(function (a) {
+      return '<button style="display:block;width:100%;text-align:left;background:none;border:0;padding:7px 9px;border-radius:6px;cursor:pointer;font:inherit;color:var(--ink)" onmouseover="this.style.background=\'var(--surface-2)\'" onmouseout="this.style.background=\'none\'" onclick="setBattingApproach(\'' + playerName + '\',\'' + a.key + '\')">' + a.label + '<div style="font-size:var(--fs-micro);color:var(--ink-faint);font-weight:400">' + a.sub + '</div></button>';
+    }).join('');
+    document.body.appendChild(menu);
+    var r = btn.getBoundingClientRect();
+    menu.style.top = (window.scrollY + r.bottom + 4) + 'px';
+    menu.style.left = (window.scrollX + r.right - 190) + 'px';
+    setTimeout(function () {
+      document.addEventListener('click', function closeIt(e) {
+        if (!menu.contains(e.target) && e.target !== btn) {
+          menu.remove();
+          battingApproachMenuOpen = null;
+          document.removeEventListener('click', closeIt);
+        }
+      });
+    }, 0);
+  }
+  function setBattingApproach(playerName, key) {
+    var a = BATTING_APPROACHES.filter(function (x) { return x.key === key; })[0];
+    if (!a) return;
+    document.querySelectorAll('.tactic-row[data-tactic-player="' + playerName + '"]').forEach(function (row) {
+      var textEl = row.querySelector('.tactic-value-text');
+      var subEl = row.querySelector('.subline');
+      if (textEl) textEl.textContent = a.label;
+      if (subEl) subEl.textContent = a.sub;
+    });
+    document.querySelectorAll('.tactic-approach-menu').forEach(function (m) { m.remove(); });
+    battingApproachMenuOpen = null;
   }
   function applyRoleFromMenu(role) {
     if (roleMenuTargetRow) {
@@ -8053,6 +8502,109 @@
   };
   var currentBudgetRequestKey = null;
   var _budgetRequestFollowUps = [];
+  var DONT_JUDGE_OBJECTIVES = {
+    top4: {
+      label: 'Finish top 4', importance: 'High importance',
+      why: 'Two frontline bowlers are managing real workload concerns, and the fixture list has bunched up two tough away trips inside a fortnight.',
+      initialVerdict: 'consider',
+      initialLine: '\u201cTop 4 is exactly what we back you for. Convince me the squad genuinely can\u2019t manage it, not that it\u2019s merely hard.\u201d',
+      followUps: [
+        { key: 'press', you: 'The workload data is real - I\u2019m not asking to be let off, I\u2019m asking to be judged fairly against what the squad can actually give right now.', line: '\u201cFair enough. Genuine injury and fixture-congestion cases are exactly what this exists for. Granted.\u201d', verdict: 'accept', reason: 'The board grants downside protection on Finish top 4 - a shortfall here no longer costs you trust, though a top-4 finish is read as merely meeting expectations, not exceeding them.' },
+        { key: 'withdraw', you: 'Fair - I\u2019ll withdraw the request and take my chances on this one.', line: '\u201cAppreciate you not trying to dodge accountability. Noted.\u201d', verdict: 'reject', reason: 'Withdrawn. Finish top 4 stays a fully live objective - both the credit and the risk are still yours.' }
+      ]
+    },
+    qf: {
+      label: 'Reach the cup quarter-final', importance: 'Medium importance',
+      why: 'A tougher-than-expected group draw put you up against two sides well above your own level early.',
+      initialVerdict: 'accept',
+      initialLine: '\u201cA reasonable ask given the draw. Granted - focus your energy on the league.\u201d',
+      followUps: []
+    },
+    academy: {
+      label: 'Blood at least two academy graduates', importance: 'Low importance',
+      why: 'A genuine injury crisis in the middle order means a graduate is being fast-tracked ahead of schedule, not developed properly.',
+      initialVerdict: 'accept',
+      initialLine: '\u201cThis was always the softest of the three asks. Granted, no argument.\u201d',
+      followUps: []
+    }
+  };
+  function openDontJudgeMenu() {
+    var list = document.getElementById('dont-judge-menu-list');
+    list.innerHTML = Object.keys(DONT_JUDGE_OBJECTIVES).map(function (key) {
+      var o = DONT_JUDGE_OBJECTIVES[key];
+      var badge = document.getElementById('objective-badge-' + key);
+      var alreadyProtected = badge && badge.textContent === 'Protected';
+      return '<div class="staff-row' + (alreadyProtected ? '' : ' clickable') + '"' + (alreadyProtected ? '' : ' onclick="openDontJudge(\'' + key + '\')"') + '>' +
+        '<div class="staff-row-main"><span class="staff-name">' + o.label + '</span><span class="staff-role-label">' + o.importance + '</span></div>' +
+        '<div class="staff-row-meta">' + (alreadyProtected ? '<span class="facility-tier-badge tier-average">Already protected</span>' : '<span class="pill first">Ask</span>') + '</div></div>';
+    }).join('');
+    document.getElementById('dont-judge-menu-backdrop').classList.add('open');
+  }
+  function closeDontJudgeMenu() {
+    document.getElementById('dont-judge-menu-backdrop').classList.remove('open');
+  }
+  var currentDontJudgeKey = null;
+  function openDontJudge(key) {
+    closeDontJudgeMenu();
+    currentDontJudgeKey = key;
+    var o = DONT_JUDGE_OBJECTIVES[key];
+    document.getElementById('dont-judge-sub').textContent = o.label + ' (' + o.importance + ') \u2014 ' + o.why;
+    document.getElementById('dj-precommit').hidden = false;
+    document.getElementById('dj-convo').hidden = true;
+    document.getElementById('dj-convo').innerHTML = '';
+    document.getElementById('dj-followup-section').hidden = true;
+    document.getElementById('dj-cancel-btn').hidden = false;
+    var primaryBtn = document.getElementById('dj-primary-btn');
+    primaryBtn.hidden = true;
+    document.getElementById('dont-judge-backdrop').classList.add('open');
+  }
+  function closeDontJudge() {
+    document.getElementById('dont-judge-backdrop').classList.remove('open');
+  }
+  function appendDjVerdict(verdict, reason) {
+    var log = document.getElementById('dj-convo');
+    var label = verdict === 'accept' ? 'Granted' : (verdict === 'consider' ? 'Wants convincing' : 'Withdrawn');
+    log.innerHTML += '<div class="convo-verdict-row"><span class="response-verdict ' + verdict + '">' + label + '</span></div><div class="convo-agent">' + reason + '</div>';
+  }
+  function markObjectiveProtected(key) {
+    var badge = document.getElementById('objective-badge-' + key);
+    if (badge) { badge.className = 'facility-tier-badge tier-average'; badge.textContent = 'Protected'; }
+  }
+  function submitDontJudge() {
+    var o = DONT_JUDGE_OBJECTIVES[currentDontJudgeKey];
+    document.getElementById('dj-precommit').hidden = true;
+    document.getElementById('dj-convo').hidden = false;
+    appendFrConvo('you', 'Asking not to be judged on ' + o.label.toLowerCase() + ' - ' + o.why, 'dj-convo');
+    appendFrConvo('him', o.initialLine, 'dj-convo');
+    appendDjVerdict(o.initialVerdict, o.initialVerdict === 'accept'
+      ? 'The board grants downside protection on ' + o.label + ' - a shortfall here no longer costs you trust, though succeeding is read as merely meeting expectations.'
+      : 'The board wants a stronger case before granting this.');
+    if (o.initialVerdict === 'accept') markObjectiveProtected(currentDontJudgeKey);
+    if (o.initialVerdict !== 'accept' && o.followUps.length) {
+      var opts = document.getElementById('dj-followup-options');
+      opts.innerHTML = o.followUps.map(function (f) {
+        return '<button class="tone-chip" onclick="chooseDontJudgeFollowUp(\'' + f.key + '\')">' + (f.key === 'press' ? 'Press the case' : 'Withdraw the request') + '</button>';
+      }).join('');
+      document.getElementById('dj-followup-section').hidden = false;
+    } else {
+      var primaryBtn = document.getElementById('dj-primary-btn');
+      primaryBtn.hidden = false;
+      primaryBtn.textContent = 'Close';
+    }
+  }
+  function chooseDontJudgeFollowUp(key) {
+    var o = DONT_JUDGE_OBJECTIVES[currentDontJudgeKey];
+    var f = o.followUps.filter(function (x) { return x.key === key; })[0];
+    if (!f) return;
+    document.getElementById('dj-followup-section').hidden = true;
+    appendFrConvo('you', f.you, 'dj-convo');
+    appendFrConvo('him', f.line, 'dj-convo');
+    appendDjVerdict(f.verdict, f.reason);
+    if (f.verdict === 'accept') markObjectiveProtected(currentDontJudgeKey);
+    var primaryBtn = document.getElementById('dj-primary-btn');
+    primaryBtn.hidden = false;
+    primaryBtn.textContent = 'Close';
+  }
   function openBudgetRequest(key) {
     currentBudgetRequestKey = key;
     var r = BUDGET_INCREASE_REQUESTS[key];
@@ -8303,12 +8855,14 @@
     f7: { opp: 'Lahore Lions', meta: 'Away &middot; Sun 28 Mar &middot; 14:00 &middot; Jinnah Stadium', result: 'Next fixture', cls: 'fringe', headline: 'Won 3 of the last 5 meetings. Their form: W W L W L over the last 5. Key duel: Talha Iqbal has dismissed Hamza Malik 3 times in this fixture.' },
     f8: { opp: 'Multan Sultans', meta: 'Away &middot; Thu 1 Apr &middot; 19:00 &middot; Multan Cricket Stadium', result: 'In 6 days', cls: '', headline: 'A rematch of the March meeting Islamabad Icons won by 4 wickets, chasing.' },
     f9: { opp: 'Karachi Kings', meta: 'Away &middot; Mon 5 Apr', result: 'In 10 days', cls: '', headline: 'The league leaders, and the genuinely hard away trip worth protecting the strike bowlers\' workload for.' },
-    f10: { opp: 'Quetta Falcons', meta: 'Away &middot; Fri 9 Apr', result: 'In 14 days', cls: '', headline: 'A chance to avenge the 22-run defeat at home back in March.' }
+    f10: { opp: 'Quetta Falcons', meta: 'Away &middot; Fri 9 Apr', result: 'In 14 days', cls: '', headline: 'A chance to avenge the 22-run defeat at home back in March.' },
+    intlwt20: { title: 'Pakistan vs Australia', meta: 'ICC World T20 Championship &middot; Group A &middot; Fri &middot; 19:00 &middot; Gaddafi Stadium', result: 'Upcoming', cls: '', headline: 'A genuine heavyweight group meeting - Australia are the reigning champions, and Pakistan\u2019s own pace attack has the wrist-spin support to trouble a top order still adjusting to the surface.' },
+    intlodi1: { title: 'Pakistan vs India', meta: 'Bilateral ODI series &middot; 1st ODI &middot; 21 days &middot; National Stadium', result: 'Upcoming', cls: '', headline: 'The opener of a genuine series, not a one-off - both boards have real ranking points riding on it, and neither central-contract group has played a full series against the other in over a year.' }
   };
   function openFixtureSummary(key) {
     var f = FIXTURE_SUMMARIES[key];
     if (!f) return;
-    document.getElementById('fixture-summary-title').textContent = 'Islamabad Icons vs ' + f.opp;
+    document.getElementById('fixture-summary-title').textContent = f.title || ('Islamabad Icons vs ' + f.opp);
     document.getElementById('fixture-summary-meta').innerHTML = f.meta;
     var resultEl = document.getElementById('fixture-summary-result');
     resultEl.textContent = f.result;
@@ -8510,6 +9064,23 @@
     document.getElementById('midseries-btn').disabled = true;
     document.getElementById('midseries-btn').textContent = 'Replacement called up \u2014 eligible from the next match';
   }
+  var preferredSquadSize = 15;
+  function onPreferredSquadSizeChange(input) {
+    preferredSquadSize = parseInt(input.value, 10) || 15;
+  }
+  var holdSelectionMeetingsPref = true;
+  function toggleHoldSelectionMeetings(cb) {
+    holdSelectionMeetingsPref = cb.checked;
+    var line = document.getElementById('meeting-held-line');
+    if (!line) return;
+    if (!cb.checked) {
+      line.style.color = 'var(--ink-dim)';
+      line.textContent = 'No \u2014 switched off in your own preferences, whatever the panel would otherwise judge';
+    } else {
+      line.style.color = 'var(--turf-strong)';
+      line.textContent = 'Yes \u2014 a real, if close, call';
+    }
+  }
   function submitNationalSquad() {
     var fmt = currentSquadFormat;
     var sq = NATIONAL_SQUADS[fmt];
@@ -8520,7 +9091,10 @@
     sq.players.forEach(function (p) { if (p.status === 'Pending' || p.status === 'Pending, from next match') p.status = 'Confirmed'; });
     sq.previousPlayers = newNames.slice();
     sq.announcedDaysAgo = 0;
-    var diffText = (inNames.length ? 'IN: ' + inNames.join(', ') : 'No new faces') + (outNames.length ? ' &middot; OUT: ' + outNames.join(', ') : ' &middot; nobody dropped');
+    var sizeNote = newNames.length === preferredSquadSize
+      ? (' &middot; ' + newNames.length + ' named, matching your preferred size')
+      : (' &middot; ' + newNames.length + ' named against a preferred ' + preferredSquadSize + (newNames.length < preferredSquadSize ? ' \u2014 room for ' + (preferredSquadSize - newNames.length) + ' more' : ' \u2014 ' + (newNames.length - preferredSquadSize) + ' over your own preference'));
+    var diffText = (inNames.length ? 'IN: ' + inNames.join(', ') : 'No new faces') + (outNames.length ? ' &middot; OUT: ' + outNames.join(', ') : ' &middot; nobody dropped') + sizeNote;
     var banner = document.getElementById('squad-submit-banner');
     banner.hidden = false;
     banner.innerHTML = 'Squad announced. ' + diffText;
@@ -8967,6 +9541,402 @@
     'RAF': 'Right-arm fast bowler', 'Off-spin': 'Off-spin bowler', 'Off-spinner': 'Off-spin bowler',
     'Fast Bowler': 'Fast bowler', 'Top-order Batter': 'Top-order batter', 'Leg-spin': 'Leg-spin bowler'
   };
+  // Canonical senior squad (A3) - built directly from Tactics' own Lineup table, the most
+  // structurally authoritative source in the file (real role tags, not prose). Squad's
+  // header/First-Team table and Match Day's own lineup already agree with this list;
+  // this is what finally lets Squad agree with them too.
+  var SQUAD_ROSTER = [
+    { name: 'Umar Ansari', battingRole: 'Opener', hand: 'LHB', status: 'first' },
+    { name: 'Rizwan Sheikh', battingRole: 'Opener', hand: 'RAF', status: 'fringe' },
+    { name: 'Waqar Ansari', battingRole: 'Top order', hand: 'RHB', status: 'second' },
+    { name: 'Hamza Malik', battingRole: 'Top order', hand: 'RHB', status: 'first', tag: 'C' },
+    { name: 'Zain Chaudhry', battingRole: 'Middle order', hand: 'LHB / WK', status: 'first', tag: 'VC' },
+    { name: 'Sarfraz Khan', battingRole: 'Middle order', hand: 'Off-spin', status: 'second' },
+    { name: 'Umar Baig', battingRole: 'Keeper', hand: 'RHB', status: 'second', tag: 'WK', keeper: true },
+    { name: 'Danish Raza', battingRole: 'Allrounder', hand: 'RHB', status: 'second' },
+    { name: 'Bilal Nadeem', battingRole: 'Bowler', hand: 'Fast Bowler', status: 'fringe' },
+    { name: 'Fahad Sultan', battingRole: 'Bowler', hand: 'Fast Bowler', status: 'first', tag: 'B1' },
+    { name: 'Kamran Aslam', battingRole: 'Bowler', hand: 'Fast Bowler', status: 'first', tag: 'B2' },
+    { name: 'Noman Riaz', battingRole: 'Reserve batter', hand: 'RHB', status: 'fringe' },
+    { name: 'Asad Farid', battingRole: 'Reserve bowler', hand: 'Off-spin', status: 'fringe' },
+    { name: 'Yasir Ali', battingRole: 'Reserve allrounder', hand: 'LHB', status: 'fringe' }
+  ];
+  var SQUAD_ROSTER_BY_NAME = {};
+  SQUAD_ROSTER.forEach(function (p) { SQUAD_ROSTER_BY_NAME[p.name] = p; });
+
+  // ---------------------------------------------------------------------
+  // A1 - a real per-player record for ANY name, not just the 10 hand-authored
+  // in PLAYER_PROFILES. Deterministic (name-seeded) so the same player always
+  // renders the same way, grounded in whatever real facts already exist about
+  // him (hand, squad membership, central-contract tier, injury) rather than
+  // ignoring them.
+  // ---------------------------------------------------------------------
+  function nameSeed(name) {
+    var h = 0;
+    for (var i = 0; i < name.length; i++) { h = (h * 31 + name.charCodeAt(i)) | 0; }
+    return Math.abs(h);
+  }
+  var ATTR_GROUPS = [
+    { key: 'batting', label: 'Batting', names: ['Technique', 'Power hitting', 'Strike rotation', 'Against spin', 'Against pace'] },
+    { key: 'bowling', label: 'Bowling', names: ['Pace', 'Accuracy', 'Variation', 'Wicket-taking'] },
+    { key: 'fielding', label: 'Fielding', names: ['Catching', 'Ground fielding', 'Throwing', 'Reflexes'] },
+    { key: 'mental', label: 'Mental', names: ['Concentration', 'Pressure handling', 'Game awareness'] },
+    { key: 'physical', label: 'Physical', names: ['Fitness', 'Running between wickets', 'Strength'] }
+  ];
+  function attrTier(v) { if (v >= 17) return 'elite'; if (v >= 14) return 'strong'; if (v >= 11) return 'solid'; return 'weak'; }
+  var MINI_FIELD_POSITIONS = [
+    { name: 'Slip', cx: 40, cy: 60 }, { name: 'Gully', cx: 48, cy: 90 },
+    { name: 'Point', cx: 44, cy: 128 }, { name: 'Cover', cx: 150, cy: 72 },
+    { name: 'Mid-wicket', cx: 145, cy: 140 }, { name: 'Long-on', cx: 118, cy: 178 },
+    { name: 'Fine leg', cx: 168, cy: 148 }, { name: 'Third man', cx: 168, cy: 45 }
+  ];
+  function generatePlayerRecord(name) {
+    var seed = nameSeed(name);
+    function rnd(offset, min, max) { return min + ((seed + offset * 97) % (max - min + 1)); }
+    var known = PLAYER_PROFILES[name];
+    var squadInfo = SQUAD_ROSTER_BY_NAME[name];
+    var hand = (known && known.hand) || (squadInfo && squadInfo.hand) || (rnd(1, 0, 1) ? 'RHB' : 'LHB');
+    // A real batting SPOT in the XI (Opener/Top order/Middle order/Keeper/Allrounder)
+    // always wins over a hand string that merely also names a bowling style - Sarfraz
+    // Khan bats at 6 in the real order and must not read as a number-11 rabbit just
+    // because he's also the club's front-line spinner. Only "Bowler"/"Reserve bowler"
+    // genuinely means "not really a batter."
+    var battingRole = squadInfo && squadInfo.battingRole;
+    var isPureBowlerSpot = battingRole === 'Bowler' || battingRole === 'Reserve bowler';
+    var isAllrounder = name === 'Danish Raza' || (squadInfo && /Allrounder/.test(battingRole || ''));
+    var hasBattingSpot = !!battingRole && !isPureBowlerSpot;
+    var isBowlerHand = /Fast Bowler|Off-spin|Leg-spin|^RAF$/.test(hand);
+    var suppressBatting = isPureBowlerSpot || (!squadInfo && isBowlerHand && !isAllrounder);
+    var suppressBowling = (hasBattingSpot && !isAllrounder) || (!squadInfo && !isBowlerHand && !isAllrounder);
+    // A known player's own PLAYER_PROFILES.ca (1-5 stars) is a real, already-stated
+    // fact - his primary discipline must not roll BELOW what that already claims.
+    // ca 4-5 -> strong/elite floor; ca 3 -> solid floor; below that, no special floor.
+    var caFloor = 0;
+    if (known && known.ca >= 4) caFloor = 14;
+    else if (known && known.ca >= 3) caFloor = 11;
+    var primaryGroup = isPureBowlerSpot ? 'bowling' : (hasBattingSpot || (!squadInfo && !isBowlerHand)) ? 'batting' : 'bowling';
+    var attrs = {};
+    var groupAvg = {};
+    ATTR_GROUPS.forEach(function (g, gi) {
+      var rows = g.names.map(function (an, ai) {
+        var base = rnd(gi * 11 + ai, 6, 18);
+        if (g.key === 'batting' && suppressBatting) base = Math.max(3, base - 8);
+        if (g.key === 'bowling' && suppressBowling) base = Math.max(3, base - 9);
+        if (isAllrounder) base = Math.max(base, 10);
+        if (g.key === primaryGroup && caFloor) base = Math.max(base, caFloor + (rnd(gi * 3 + ai, 0, 3)));
+        return { name: an, value: base };
+      });
+      attrs[g.key] = rows;
+      groupAvg[g.key] = rows.reduce(function (s, r) { return s + r.value; }, 0) / rows.length;
+    });
+    // Role-fit ratings (0-5 stars), the same "derived from his own traits" shape the
+    // existing caption already promises rather than a separate, disconnected opinion.
+    var anchor = (attrs.batting[0].value + attrs.mental[0].value + attrs.batting[3].value) / 3;
+    var aggressor = (attrs.batting[1].value + attrs.batting[2].value) / 2;
+    var newBall = (attrs.batting[0].value + attrs.batting[4].value + attrs.mental[0].value) / 3;
+    var finisher = (attrs.batting[1].value + attrs.mental[1].value) / 2;
+    function toStars(v) { return Math.max(0, Math.min(5, Math.round(v / 20 * 5))); }
+    var roleStars = { anchor: toStars(anchor), aggressor: toStars(aggressor), newBall: toStars(newBall), finisher: toStars(finisher) };
+    var fieldPos = MINI_FIELD_POSITIONS[rnd(50, 0, MINI_FIELD_POSITIONS.length - 1)];
+    if (attrs.fielding[0].value >= 15 && attrs.batting[0].value < 12) fieldPos = MINI_FIELD_POSITIONS[0]; // a real slip catcher
+    // Pros & cons - the two strongest and two weakest attributes across every group,
+    // worded from a small template keyed by attribute name so it never reads as a
+    // number dump.
+    var allAttrs = [];
+    ATTR_GROUPS.forEach(function (g) { g.names.forEach(function (an, ai) { allAttrs.push({ group: g.key, name: an, value: attrs[g.key][ai].value }); }); });
+    var sorted = allAttrs.slice().sort(function (a, b) { return b.value - a.value; });
+    var PRO_TEXT = {
+      'Technique': 'Technically correct against pace and spin alike', 'Power hitting': 'A genuine six-hitter when the situation calls for it',
+      'Strike rotation': 'Rarely lets the scoreboard stand still', 'Against spin': 'Reads a turning ball early and plays it late',
+      'Against pace': 'Comfortable against genuine pace', 'Pace': 'Real gas through the air', 'Accuracy': 'Lands it on a length more often than not',
+      'Variation': 'A real change-up in his own repertoire', 'Wicket-taking': 'A genuine wicket-taking threat', 'Catching': 'Reliable hands under pressure',
+      'Ground fielding': 'Saves runs in the field as well as he takes them', 'Throwing': 'A real arm from the deep', 'Reflexes': 'Sharp reactions close to the bat',
+      'Concentration': 'Doesn\'t give his wicket away cheaply', 'Pressure handling': 'Trusted under pressure - a calm head in a crisis',
+      'Game awareness': 'Reads the state of the game well', 'Fitness': 'Rarely tires across a long spell', 'Running between wickets': 'Outstanding between the wickets',
+      'Strength': 'Physically imposing at the crease'
+    };
+    var CON_TEXT = {
+      'Technique': 'Technique can be exposed by real quality', 'Power hitting': 'Not a genuine six-hitter', 'Strike rotation': 'Can get bogged down for long spells',
+      'Against spin': 'Struggles to break down a good spinner', 'Against pace': 'Can be hurried by real pace', 'Pace': 'Rarely troubles a batter for pace alone',
+      'Accuracy': 'Sprays the odd loose over', 'Variation': 'A limited repertoire - reads predictably', 'Wicket-taking': 'More containment than genuine threat',
+      'Catching': 'Has put down regulation chances', 'Ground fielding': 'Not the quickest across the ground', 'Throwing': 'A modest arm from the deep',
+      'Reflexes': 'Can be slow to react close in', 'Concentration': 'Prone to a rush of blood', 'Pressure handling': 'Has wilted in a genuine crisis before',
+      'Game awareness': 'Can misread the state of the game', 'Fitness': 'Fades across a long day', 'Running between wickets': 'A liability between the wickets',
+      'Strength': 'Lacks the physical presence to dominate'
+    };
+    var pros = sorted.slice(0, 3).filter(function (a) { return a.value >= 13; }).map(function (a) { return PRO_TEXT[a.name] || (a.name + ' is a real strength'); });
+    var cons = sorted.slice(-2).filter(function (a) { return a.value <= 12; }).map(function (a) { return CON_TEXT[a.name] || (a.name + ' needs work'); });
+    if (!pros.length) pros = ['A solid, if unspectacular, all-round game'];
+    if (!cons.length) cons = ['No glaring technical weakness on record'];
+    // Career stats - real numbers for the formats this player's own established facts say
+    // he's actually played, honest "not played" dashes everywhere else - never a fabricated
+    // figure for a format he has no business having a record in.
+    var caps = (known && known.caps) || 'Uncapped';
+    var hasCentralContract = /Tier/.test(caps);
+    var mat = rnd(20, 40, 130);
+    // The one real anchor: a batting/bowling average DERIVED from this player's own
+    // attribute quality, so the numbers below can never contradict the grid above it.
+    var battingQuality = groupAvg.batting / 20; // ~0.15 (weak) to ~0.95 (elite)
+    var bowlingQuality = groupAvg.bowling / 20;
+    var battingAvg = 14 + battingQuality * 42 + (rnd(46, 0, 8));
+    var bowlingAvg = 42 - bowlingQuality * 22 + (rnd(47, 0, 6)); // lower is better
+    function battingFmtRow(matVal, offset) {
+      var inns = Math.max(1, matVal - Math.floor(matVal * (0.1 + rnd(offset, 0, 15) / 100)));
+      var no = Math.max(0, Math.floor(inns * 0.12));
+      var runs = Math.round(battingAvg * Math.max(1, inns - no));
+      return { mat: matVal, inns: inns, no: no, runs: runs };
+    }
+    var battingRows = {
+      'Test': hasCentralContract && rnd(22, 0, 3) === 0 ? battingFmtRow(rnd(23, 4, 14), 60) : null,
+      'First-Class': !suppressBatting ? battingFmtRow(rnd(25, 8, 30), 61) : { mat: rnd(25, 4, 14) },
+      'ODI': null,
+      'List A': battingFmtRow(rnd(27, 15, 60), 62),
+      'T20I': hasCentralContract ? battingFmtRow(rnd(29, 3, 40), 63) : null,
+      'T20': battingFmtRow(mat, 64),
+      'Pakistan Premier League': battingFmtRow(rnd(32, 5, 40), 65)
+    };
+    var bowlsAtAll = !suppressBowling;
+    function bowlingFmtRow(matVal, offset, isLongForm) {
+      var ballsPerMatch = isLongForm ? (170 + rnd(offset, 0, 60)) : (18 + rnd(offset, 0, 8));
+      var balls = matVal * ballsPerMatch;
+      var wkts = Math.max(1, Math.round(balls / (bowlingAvg * (isLongForm ? 1.85 : 0.82))));
+      return { mat: matVal, wkts: wkts, balls: balls };
+    }
+    var bowlingRows = {
+      'Test': hasCentralContract && bowlsAtAll && rnd(34, 0, 3) === 0 ? bowlingFmtRow(rnd(35, 4, 14), 70, true) : null,
+      'First-Class': bowlsAtAll ? bowlingFmtRow(rnd(37, 8, 30), 71, true) : { mat: rnd(37, 4, 14) },
+      'ODI': null,
+      'List A': bowlsAtAll ? bowlingFmtRow(rnd(39, 15, 60), 72, false) : { mat: rnd(39, 15, 60) },
+      'T20I': hasCentralContract && bowlsAtAll ? bowlingFmtRow(rnd(41, 3, 40), 73, false) : null,
+      'T20': bowlsAtAll ? bowlingFmtRow(mat, 74, false) : { mat: mat },
+      'Pakistan Premier League': bowlsAtAll ? bowlingFmtRow(rnd(44, 5, 40), 75, false) : { mat: rnd(44, 5, 40) }
+    };
+    return {
+      name: name, hand: hand, isBowlerHand: isBowlerHand, isAllrounder: isAllrounder, suppressBowling: suppressBowling,
+      attrs: attrs, groupAvg: groupAvg, roleStars: roleStars, fieldPos: fieldPos, pros: pros, cons: cons,
+      battingRows: battingRows, bowlingRows: bowlingRows, battingAvg: battingAvg, bowlingAvg: bowlingAvg, seed: seed
+    };
+  }
+  function fmtNum(n) { return n >= 1000 ? (Math.floor(n / 1000) + ',' + String(n % 1000).padStart(3, '0')) : String(n); }
+  function renderCareerRow(fmtCells, data, cols) {
+    if (!data) return cols.map(function () { return '<td class="num">&mdash;</td>'; }).join('');
+    return cols.map(function (c) { return '<td class="num">' + (data[c] !== undefined ? data[c] : '&mdash;') + '</td>'; }).join('');
+  }
+  var CLAUSE_LIBRARY = ['First XI guarantee', 'Century &amp; MOTM bonus', 'Loyalty bonus', 'Appearance fee', 'Release clause'];
+  function generateContractFacts(name) {
+    var rec = generatePlayerRecord(name);
+    var known = PLAYER_PROFILES[name];
+    var quality = Math.max(rec.groupAvg.batting, rec.groupAvg.bowling) / 20;
+    var wage = known ? parseInt(known.wage.replace(/[^0-9]/g, ''), 10) : Math.round((400 + quality * 5200) / 50) * 50;
+    var untilLabel = known ? known.until.replace('until ', '') : ['Mar 2027', 'Jul 2027', 'Nov 2027', 'Feb 2028', 'Jun 2028', 'Sep 2028'][rec.seed % 6];
+    var signedYear = 2023 + (rec.seed % 3);
+    var isLoyal = (rec.seed % 5) === 0;
+    var clauseCount = 1 + (rec.seed % 3);
+    var clauses = CLAUSE_LIBRARY.slice(0, clauseCount);
+    var praiseScore = 55 + (rec.seed % 60);
+    var criticizeScore = 3 + (rec.seed % 22);
+    var squadInfo = SQUAD_ROSTER_BY_NAME[name];
+    var statusText = { first: 'First choice', second: 'Second choice', fringe: 'Fringe' }[(squadInfo && squadInfo.status) || 'second'] || 'Second choice';
+    var ownTeam = (known && known.team) || 'Islamabad Icons';
+    var ALL_CLUBS = [
+      { name: 'Lahore Lions', key: 'lahore' }, { name: 'Karachi Kings', key: 'karachi' },
+      { name: 'Islamabad Icons', key: 'islamabad' }, { name: 'Multan Sultans', key: 'multan' },
+      { name: 'Peshawar Zalmi', key: 'peshawar' }, { name: 'Quetta Falcons', key: 'quetta' }
+    ];
+    var otherClubs = ALL_CLUBS.filter(function (c) { return c.name !== ownTeam; });
+    var interestedClubs = isLoyal ? [] : otherClubs.filter(function (c, i) { return i === rec.seed % otherClubs.length || i === (rec.seed + 2) % otherClubs.length; });
+    return {
+      wage: wage, untilLabel: untilLabel, signedYear: signedYear, isLoyal: isLoyal, clauses: clauses,
+      praiseScore: praiseScore, criticizeScore: criticizeScore, statusText: statusText, rec: rec, interestedClubs: interestedClubs
+    };
+  }
+  function renderFullPlayerProfile(name) {
+    var rec = generatePlayerRecord(name);
+    // --- Attributes grid ---
+    var groups = document.querySelectorAll('#psub-overview .attr-grid .attr-group');
+    ATTR_GROUPS.forEach(function (g, gi) {
+      if (!groups[gi]) return;
+      var rows = groups[gi].querySelectorAll('.attr-row');
+      rec.attrs[g.key].forEach(function (a, ai) {
+        if (!rows[ai]) return;
+        var numEl = rows[ai].querySelector('.attr-num');
+        numEl.textContent = a.value;
+        numEl.className = 'attr-num ' + attrTier(a.value);
+      });
+    });
+    // --- Radar chart (data polygon + aria-label only - the outer/mid rings are fixed
+    //     reference gridlines, not per-player data) ---
+    var radarSvg = document.querySelector('#psub-overview .radar-chart');
+    if (radarSvg) {
+      var cx = 70, cy = 63.4, maxR = 43.4;
+      var order = ['batting', 'bowling', 'fielding', 'mental', 'physical'];
+      var pts = order.map(function (k, i) {
+        var pct = Math.max(4, Math.min(100, rec.groupAvg[k] / 20 * 100));
+        var angle = -Math.PI / 2 + i * (2 * Math.PI / 5);
+        var r = maxR * (pct / 100);
+        return (cx + r * Math.cos(angle)).toFixed(1) + ',' + (cy + r * Math.sin(angle)).toFixed(1);
+      });
+      var dataPoly = radarSvg.querySelector('.radar-data');
+      if (dataPoly) dataPoly.setAttribute('points', pts.join(' '));
+      radarSvg.setAttribute('aria-label', order.map(function (k) { return k.charAt(0).toUpperCase() + k.slice(1) + ' ' + Math.round(rec.groupAvg[k] / 20 * 100) + '%'; }).join(', '));
+    }
+    // --- Position ladder + role-fit stars ---
+    var ladderSlots = document.querySelectorAll('#psub-overview .batting-order-ladder .ladder-slot');
+    var squadInfo = SQUAD_ROSTER_BY_NAME[name];
+    var slotIndex = squadInfo ? SQUAD_ROSTER.filter(function (p) { return /Opener|Top order|Middle order|Keeper|Allrounder/.test(p.battingRole); }).findIndex(function (p) { return p.name === name; }) : (rec.seed % 6);
+    if (slotIndex < 0 || slotIndex > 5) slotIndex = rec.seed % 6;
+    ladderSlots.forEach(function (slot, i) {
+      var numEl = slot.querySelector('.num');
+      var baseLabel = ['Opener', 'Opener', 'Top order', 'Top order', 'Middle order', 'Middle order'][i];
+      slot.classList.toggle('active', i === slotIndex);
+      slot.innerHTML = '';
+      if (numEl) slot.appendChild(numEl);
+      slot.appendChild(document.createTextNode(baseLabel + (i === slotIndex ? ' \u00b7 his slot' : '')));
+    });
+    var starRows = document.querySelectorAll('#psub-overview .role-star-row');
+    var starOrder = ['anchor', 'aggressor', 'newBall', 'finisher'];
+    starRows.forEach(function (row, i) {
+      var key = starOrder[i];
+      if (!key) return;
+      var n = rec.roleStars[key];
+      var starRow = row.querySelector('.star-row');
+      if (!starRow) return;
+      var svgs = '';
+      for (var s = 0; s < 5; s++) svgs += s < n ? '<svg class="icon filled"><use href="#i-star-fill"/></svg>' : '<svg class="icon empty"><use href="#i-star-line"/></svg>';
+      starRow.innerHTML = svgs;
+      starRow.setAttribute('aria-label', n + ' out of 5');
+    });
+    // --- Mini fielding position ---
+    var miniField = document.querySelector('#psub-overview .mini-field');
+    if (miniField) {
+      var marker = miniField.querySelector('circle[fill="var(--gold)"]');
+      if (marker) { marker.setAttribute('cx', rec.fieldPos.cx); marker.setAttribute('cy', rec.fieldPos.cy); }
+      miniField.setAttribute('aria-label', 'Usual fielding position: ' + rec.fieldPos.name);
+      var labelEl = document.querySelector('#psub-overview .mini-field-label strong');
+      if (labelEl) labelEl.textContent = rec.fieldPos.name;
+    }
+    // --- Pros & cons ---
+    var prosConsWrap = document.querySelector('#psub-overview .style-note-row').closest ? null : null;
+    var prosConsBlock = document.querySelectorAll('#psub-overview [style*="margin-bottom:12px"]')[0];
+    if (prosConsBlock) {
+      var html = '<span class="eyebrow" style="display:block;margin-bottom:4px;font-size:var(--fs-micro)">Pros &amp; cons</span>';
+      rec.pros.forEach(function (p) { html += '<div class="style-note-row" style="color:var(--turf-strong)"><svg class="icon"><use href="#i-check-circle"/></svg><span>' + p + '</span></div>'; });
+      rec.cons.forEach(function (c) { html += '<div class="style-note-row" style="color:var(--ball)"><svg class="icon"><use href="#i-alert"/></svg><span>' + c + '</span></div>'; });
+      prosConsBlock.innerHTML = html;
+    }
+    // --- Career stats tables ---
+    var battingTbody = document.querySelector('#psub-career table.career tbody');
+    if (battingTbody) {
+      var bRows = battingTbody.querySelectorAll('tr');
+      var order2 = ['Test', 'First-Class', 'ODI', 'List A', 'T20I', 'T20', 'Pakistan Premier League'];
+      order2.forEach(function (fmt, i) {
+        var d = rec.battingRows[fmt];
+        var row = bRows[i]; if (!row) return;
+        var cells = row.querySelectorAll('td');
+        if (!d || !d.runs) { for (var c = 1; c < cells.length; c++) cells[c].textContent = c === 1 ? (d ? d.mat : '0') : '\u2014'; return; }
+        var inns = d.inns; var no = d.no;
+        var hs = Math.min(d.runs, Math.round(d.runs / Math.max(1, inns - no) * (1.7 + (rec.seed % 10) / 10)));
+        var avgVal = (d.runs / Math.max(1, inns - no)).toFixed(1);
+        var sr = fmt === 'Test' || fmt === 'First-Class' ? (38 + (rec.seed % 28)).toFixed(1) : (95 + rec.groupAvg.batting * 3 + (rec.seed % 15)).toFixed(1);
+        cells[1].textContent = d.mat; cells[2].textContent = inns; cells[3].textContent = no;
+        cells[4].textContent = fmtNum(d.runs); cells[5].textContent = hs; cells[6].textContent = avgVal;
+        cells[7].textContent = sr; cells[8].textContent = Math.floor(d.runs / 900); cells[9].textContent = Math.floor(d.runs / 250);
+        cells[10].textContent = Math.floor(d.runs / 12); cells[11].textContent = Math.floor(d.runs / 90); cells[12].textContent = Math.floor(inns / 12); cells[13] && (cells[13].textContent = rec.hand.indexOf('WK') !== -1 ? Math.floor(inns / 15) : 0);
+      });
+    }
+    var bowlingTbody = document.querySelectorAll('#psub-career table.career tbody')[1];
+    if (bowlingTbody) {
+      var wRows = bowlingTbody.querySelectorAll('tr');
+      order2.forEach(function (fmt, i) {
+        var d = rec.bowlingRows[fmt];
+        var row = wRows[i]; if (!row) return;
+        var cells = row.querySelectorAll('td');
+        if (!d || !d.wkts) { for (var c = 1; c < cells.length; c++) cells[c].textContent = c === 1 ? (d ? d.mat : '0') : '\u2014'; return; }
+        var balls = d.balls;
+        var isLong = fmt === 'Test' || fmt === 'First-Class';
+        var econPerBall = isLong ? (2.4 + (20 - rec.groupAvg.bowling) * 0.06) : (6.0 + (20 - rec.groupAvg.bowling) * 0.22);
+        var runsConceded = Math.round(balls / 6 * econPerBall);
+        var econ = econPerBall.toFixed(2);
+        var avgB = (runsConceded / d.wkts).toFixed(1);
+        var bbi = Math.min(7, 2 + Math.round(rec.groupAvg.bowling / 5)) + '/' + (10 + (rec.seed % 25));
+        cells[1].textContent = d.mat; cells[2].textContent = '\u2014'; cells[3].textContent = balls;
+        cells[4].textContent = runsConceded; cells[5].textContent = d.wkts; cells[6].textContent = bbi;
+        cells[7].textContent = bbi; cells[8].textContent = avgB; cells[9].textContent = econ;
+        cells[10].textContent = (balls / d.wkts).toFixed(1); cells[11].textContent = Math.floor(d.wkts / 25); cells[12] && (cells[12].textContent = Math.floor(d.wkts / 55));
+      });
+      var hintEl = document.querySelector('#psub-career .table-card:nth-of-type(2) + .role-hint, #psub-career .role-hint');
+      if (hintEl) hintEl.textContent = !rec.suppressBowling ? 'A genuine bowling option across every format he has played.' : 'A specialist batter \u2014 never used as a bowling option, so every bowling row reads as not played rather than a fabricated figure.';
+    }
+    // --- Contract tab ---
+    var cf = generateContractFacts(name);
+    var contractLines = document.querySelectorAll('#psub-contract .bio-line');
+    if (contractLines[0]) contractLines[0].querySelector('span:last-child').textContent = '$' + cf.wage.toLocaleString() + ' / week';
+    if (contractLines[1]) contractLines[1].querySelector('span:last-child').textContent = cf.untilLabel;
+    if (contractLines[2]) contractLines[2].querySelector('span:last-child').textContent = (2027 - cf.signedYear + 1) + '-year deal \u00b7 ' + cf.signedYear;
+    if (contractLines[3]) { var loyEl = contractLines[3].querySelector('span:last-child'); loyEl.textContent = cf.isLoyal ? 'One-club man' : 'Journeyman'; loyEl.style.color = cf.isLoyal ? 'var(--turf-strong)' : ''; }
+    var clauseWrap = document.querySelector('#psub-contract [style*="margin-top:10px"]');
+    if (clauseWrap) { var chips = clauseWrap.querySelectorAll('.mini-clause-chip'); Array.prototype.forEach.call(chips, function (c) { c.remove(); }); cf.clauses.forEach(function (c) { clauseWrap.insertAdjacentHTML('beforeend', '<span class="mini-clause-chip">' + c + '</span>'); }); }
+    var transferRows = document.querySelectorAll('#psub-contract .transfer-status-row');
+    if (transferRows[2]) {
+      var interestSpan = transferRows[2].querySelector('span:last-child');
+      if (!cf.interestedClubs.length) {
+        interestSpan.textContent = 'None on record';
+      } else {
+        interestSpan.innerHTML = cf.interestedClubs.map(function (c) {
+          return '<span class="who clickable" onclick="event.stopPropagation();openWorldProfile(\'club\',\'' + c.key + '\')" style="color:inherit">' + c.name + '</span>';
+        }).join(', ');
+      }
+    }
+    return rec;
+  }
+  var SQUAD_ROLE_ICON = { 'Opener': 'i-bat-ball', 'Top order': 'i-bat-ball', 'Middle order': 'i-bat-ball', 'Reserve batter': 'i-bat-ball',
+    'Bowler': 'i-swing', 'Reserve bowler': 'i-swing', 'Keeper': 'i-glove', 'Allrounder': 'i-shield', 'Reserve allrounder': 'i-shield' };
+  function renderSquadFirstTeamTable() {
+    var tbody = document.getElementById('squad-firstteam-body');
+    if (!tbody) return;
+    var html = SQUAD_ROSTER.map(function (p) {
+      var rec = generatePlayerRecord(p.name);
+      var initials = p.name.split(' ').map(function (w) { return w[0]; }).join('').slice(0, 2).toUpperCase();
+      var statusText = { first: 'First choice', second: 'Second choice', fringe: 'Fringe' }[p.status] || 'Fringe';
+      var stars = Math.max(1, Math.min(5, Math.round((rec.battingAvg > rec.bowlingAvg ? rec.groupAvg.batting : rec.groupAvg.bowling) / 4)));
+      var starSvg = ''; for (var s = 0; s < 5; s++) starSvg += '<svg class="icon ' + (s < stars ? 'filled' : 'empty') + '"><use href="#i-star-' + (s < stars ? 'fill' : 'line') + '"/></svg>';
+      var isInjured = p.name === 'Danish Raza';
+      var pipsHtml = ''; for (var pi = 0; pi < 5; pi++) pipsHtml += '<div class="pip' + (pi < (3 + (rec.seed % 3)) ? ' on good' : '') + '"></div>';
+      var condPct = isInjured ? 0 : (55 + (rec.seed % 40));
+      var condLabel = isInjured ? 'Injured' : (condPct > 85 ? 'Fresh' : condPct > 65 ? 'Sharp' : 'Managed');
+      var mainlyBowls = rec.groupAvg.bowling > rec.groupAvg.batting;
+      var t20 = rec.battingRows['T20']; var t20w = rec.bowlingRows['T20'];
+      var record = mainlyBowls && t20w && t20w.wkts
+        ? (t20w.wkts + ' wkts @ ' + (t20w.balls / 6 / t20w.wkts * 2.1).toFixed(1))
+        : (t20 && t20.runs ? (t20.runs + ' runs @ ' + (t20.runs / Math.max(1, t20.inns - t20.no)).toFixed(1)) : '\u2014');
+      var value = '$' + (20 + (rec.seed % 300)) + 'K';
+      var wage = '$' + (400 + (rec.seed % 4000)) + '/wk';
+      var icon = SQUAD_ROLE_ICON[p.battingRole] || 'i-bat-ball';
+      return '<tr><td><div class="player-cell clickable" onclick="openPlayerFromRow(this)"><div class="player-avatar">' + initials + '</div><div><div class="player-name">' + p.name + (p.tag ? ' <span class="xi-role-tag" data-role="' + p.tag + '">' + p.tag + '</span>' : '') + '</div><div class="player-hand">' + p.hand + '</div></div></div></td>'
+        + '<td><span class="role-cell"><svg class="icon sm"><use href="#' + icon + '"/></svg>' + p.battingRole + '</span></td>'
+        + '<td><span class="pill ' + p.status + '"><svg class="icon sm"><use href="#i-check-circle"/></svg>' + statusText + '</span></td>'
+        + '<td><div class="pips">' + pipsHtml + '</div></td>'
+        + '<td><div class="qbar-wrap"><div class="qbar form"><span style="width:' + condPct + '%;' + (isInjured ? 'background:var(--ball)' : '') + '"></span></div><span class="qtier">' + condLabel + '</span></div></td>'
+        + '<td><div class="star-row compact" title="Current ability, per the scout\'s estimate">' + starSvg + '</div></td>'
+        + '<td class="num">' + record + '</td><td class="num">' + value + '</td><td class="num">' + wage + '</td></tr>';
+    }).join('');
+    tbody.innerHTML = html;
+    var headSub = document.querySelector('#panel-squad .panel-head .sub');
+    if (headSub) headSub.textContent = SQUAD_ROSTER.length + ' players \u00b7 1 unavailable';
+  }
+  renderSquadFirstTeamTable();
+  var BOARD_CONFIDENCE = 78;
+  function renderBoardConfidence() {
+    var ring = document.getElementById('board-mood-ring-fill');
+    var label = document.getElementById('board-mood-ring-label');
+    var bar = document.getElementById('board-confidence-bar');
+    var circumference = 226.2;
+    if (ring) ring.setAttribute('stroke-dashoffset', (circumference * (1 - BOARD_CONFIDENCE / 100)).toFixed(1));
+    if (label) label.textContent = BOARD_CONFIDENCE >= 70 ? 'Steady' : BOARD_CONFIDENCE >= 45 ? 'Watchful' : 'Under pressure';
+    if (bar) bar.style.width = BOARD_CONFIDENCE + '%';
+  }
+  renderBoardConfidence();
+
   function openPlayerFromRow(rowEl) {
     var nameEl = rowEl.querySelector('.player-name');
     var handEl = rowEl.querySelector('.player-hand');
@@ -8981,7 +9951,7 @@
     // it. This also retroactively fixes the Scorecard's own "Hamza Malik*"
     // row, which had the identical lookup miss before this fix.
     name = name.replace(/\*\s*$/, '').trim();
-    var hand = (PLAYER_PROFILES[name] && PLAYER_PROFILES[name].hand) || (handEl ? handEl.textContent.trim() : '');
+    var hand = (PLAYER_PROFILES[name] && PLAYER_PROFILES[name].hand) || (typeof SQUAD_ROSTER_BY_NAME !== 'undefined' && SQUAD_ROSTER_BY_NAME[name] && SQUAD_ROSTER_BY_NAME[name].hand) || (handEl ? handEl.textContent.trim() : '');
     var h1 = document.getElementById('player-name-h1');
     if (h1) h1.textContent = name;
     var roleLine = document.getElementById('player-role-line');
@@ -8989,6 +9959,7 @@
     var here = document.getElementById('player-breadcrumb-here');
     if (here) here.textContent = name;
     applyPlayerProfileData(name);
+    renderFullPlayerProfile(name);
     showPanel('player');
   }
   // A direct-string sibling of openPlayerFromRow, for a row that names TWO
@@ -8996,7 +9967,7 @@
   // is no single element to hand openPlayerFromRow in that case.
   function openPlayerByName(name) {
     name = name.replace(/\*\s*$/, '').trim();
-    var hand = (PLAYER_PROFILES[name] && PLAYER_PROFILES[name].hand) || '';
+    var hand = (PLAYER_PROFILES[name] && PLAYER_PROFILES[name].hand) || (typeof SQUAD_ROSTER_BY_NAME !== 'undefined' && SQUAD_ROSTER_BY_NAME[name] && SQUAD_ROSTER_BY_NAME[name].hand) || '';
     var h1 = document.getElementById('player-name-h1');
     if (h1) h1.textContent = name;
     var roleLine = document.getElementById('player-role-line');
@@ -9004,6 +9975,7 @@
     var here = document.getElementById('player-breadcrumb-here');
     if (here) here.textContent = name;
     applyPlayerProfileData(name);
+    renderFullPlayerProfile(name);
     showPanel('player');
   }
   function hireStaff(roleKey, name, tierClass, tierLabel, wage) {
@@ -9058,6 +10030,38 @@
   function pickNextBatsman(name) {
     document.getElementById('next-batsman-name').textContent = name;
     document.getElementById('next-batsman-menu').classList.remove('open');
+  }
+  function onWorkloadPriorityChange(sel) {
+    var hint = document.getElementById('workload-priority-hint');
+    if (!hint) return;
+    var name = (document.getElementById('player-name-h1') || {}).textContent || 'This player';
+    if (sel.value === 'redball') {
+      hint.textContent = name + ' will be protected first for red-ball cricket \u2014 rest/rotation now leans toward keeping him fresh for Test duty, at some cost to his white-ball workload.';
+    } else if (sel.value === 'whiteball') {
+      hint.textContent = name + ' will be protected first for white-ball cricket \u2014 rest/rotation now leans toward keeping him fresh for ODI/T20 duty, at some cost to his red-ball workload.';
+    } else {
+      hint.textContent = 'A standing instruction, most relevant for a centrally-contracted international carrying both a franchise and a national workload \u2014 even with no international cricket on right now, it genuinely shapes future rest/rotation decisions.';
+    }
+  }
+  function toggleDelegateTraining(cb) {
+    var note = document.getElementById('delegate-training-note');
+    if (cb.checked) {
+      note.textContent = 'Delegated by default \u2014 a specialist coach reads a player\u2019s genuine weakest cluster on his own. Untick to name a focus yourself for a specific player, from his own profile.';
+    } else {
+      note.textContent = 'You\u2019re setting individual focus yourself, player by player, from each profile. Tick this again to hand it back to the specialist coaches.';
+    }
+  }
+  var TRAINING_TIERS = [
+    { cls: 'c', label: 'Light' },
+    { cls: 'b', label: 'Normal' },
+    { cls: 'a', label: 'Intensive' }
+  ];
+  function cycleTrainingTier(badge) {
+    var cur = TRAINING_TIERS.findIndex(function (t) { return badge.classList.contains(t.cls); });
+    var next = TRAINING_TIERS[(cur + 1) % TRAINING_TIERS.length];
+    TRAINING_TIERS.forEach(function (t) { badge.classList.remove(t.cls); });
+    badge.classList.add(next.cls);
+    badge.textContent = next.label;
   }
   function toggleDelegateXi(cb) {
     var note = document.getElementById('delegate-xi-note');
@@ -9765,8 +10769,75 @@
     textWrap.innerHTML = '<span class=\"commentary-ball\">' + (document.querySelector('.pb-pos') ? document.querySelector('.pb-pos').textContent.split('/')[0].trim() : '') + '</span> ' + text;
     item.appendChild(iconSpan);
     item.appendChild(textWrap);
+    item.dataset.outcome = outcome;
     var first = log.querySelector('.commentary-item');
     if (first) log.insertBefore(item, first); else log.appendChild(item);
+    applyCommentaryFilter();
+  }
+  function applyCommentaryFilter() {
+    var showFours = (document.getElementById('filter-fours') || {}).checked;
+    var showSixes = (document.getElementById('filter-sixes') || {}).checked;
+    var showWickets = (document.getElementById('filter-wickets') || {}).checked;
+    var showDots = (document.getElementById('filter-dots') || {}).checked;
+    document.querySelectorAll('.commentary-card .commentary-item').forEach(function (item) {
+      var o = item.dataset.outcome;
+      var hide = (o === 'four' && !showFours) || (o === 'six' && !showSixes) ||
+        (o === 'wicket' && !showWickets) || (o === 'dot' && !showDots);
+      item.hidden = !!hide;
+    });
+  }
+  // A real ball/over counter - there is deliberately no engine-side match
+  // state to read here (deliveries are generated live, one manual click at
+  // a time), so this is the honest minimum needed to make Autoplay, Skip
+  // and the scrub position genuine rather than decorative.
+  var matchBallCount = 86; // 14.2 overs, matching the score already shown
+  var MATCH_MAX_BALLS = 120;
+  function formatOverPos(balls) {
+    return Math.floor(balls / 6) + '.' + (balls % 6) + ' / 20.0 ov';
+  }
+  function advanceBallCounter() {
+    if (matchBallCount < MATCH_MAX_BALLS) matchBallCount++;
+    var pos = document.getElementById('pb-pos');
+    if (pos) pos.textContent = formatOverPos(matchBallCount);
+  }
+  var autoplayTimer = null;
+  function stopAutoplay() {
+    if (autoplayTimer) { clearInterval(autoplayTimer); autoplayTimer = null; }
+    var btn = document.getElementById('pb-play-btn');
+    if (btn) { btn.classList.add('play'); btn.innerHTML = '&#9208;'; btn.title = 'Autoplay'; }
+  }
+  function autoAdvanceBalls(count, everyMs) {
+    stopAutoplay();
+    var fired = 0;
+    var btn = document.getElementById('pb-play-btn');
+    if (btn) { btn.classList.remove('play'); btn.innerHTML = '&#9632;'; btn.title = 'Stop'; }
+    autoplayTimer = setInterval(function () {
+      var bowlBtn = document.getElementById('bowl-btn');
+      if (!bowlBtn || bowlBtn.disabled || matchBallCount >= MATCH_MAX_BALLS) {
+        if (matchBallCount >= MATCH_MAX_BALLS) stopAutoplay();
+        return;
+      }
+      bowlBtn.click();
+      fired++;
+      if (count !== Infinity && fired >= count) stopAutoplay();
+    }, everyMs);
+  }
+  function skipToNextOver() {
+    var remaining = 6 - (matchBallCount % 6);
+    if (remaining === 6) remaining = 0;
+    if (remaining === 0) { return; }
+    autoAdvanceBalls(remaining, 200);
+  }
+  function togglePlaybackAutoplay(btn) {
+    if (autoplayTimer) { stopAutoplay(); return; }
+    var speed = (document.getElementById('pb-speed') || {}).value || 'fast';
+    if (speed === 'manual') {
+      var bowlBtn = document.getElementById('bowl-btn');
+      if (bowlBtn && !bowlBtn.disabled) bowlBtn.click();
+      return;
+    }
+    if (speed === 'over') { skipToNextOver(); return; }
+    autoAdvanceBalls(Infinity, speed === 'fast' ? 900 : 2200);
   }
   function animateDeliveryBall() {
     var wrap = document.querySelector('.matchday-grid .bowler-field-svg:not([hidden])') || document.querySelector('.bowler-field-svg');
@@ -9953,6 +11024,7 @@
           if (caption) caption.classList.remove('shown');
           var bb = document.getElementById('bowl-btn');
           if (bb) bb.disabled = false;
+          advanceBallCounter();
         }, 1700);
       }
       // Batters actually run the runs just scored - a run-out on the

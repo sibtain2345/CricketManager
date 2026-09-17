@@ -12778,6 +12778,226 @@ Room + Match Momentum + Fixtures drill-in + Camps links; World search + the mile
 nothing left deliberately dangling - the next FM26-comparison pass, whenever it happens, starts
 from a genuinely clean slate rather than a list of "still owed" items.
 
+### 2026-09-17: the comprehensive re-audit plan's Parts D through I, all completed in one
+### continuous pass (Parts A/F/B were already done in the prior session)
+
+The user's own escalated directive from the (compacted) prior portion of this session - a
+genuinely comprehensive, honest re-audit of every micro/macro interaction in the mockup,
+researched against FM26, with new features added on top of fixes, plus a check of the C#
+domain itself for missing logic - had already produced a written plan
+(`docs/superpowers/specs/2026-09-16-comprehensive-fm26-interaction-redesign.md`, Parts A
+through I) and completed Parts A, F and B before this session's context was summarized. The
+user's standing instruction for the remainder was explicit: work through everything non-stop,
+publish and report only once every part is done. This entry covers that remainder - Parts D,
+E, G, H and I - completed in full, verified structurally and live after every part, with the
+Artifact published once at the end per that instruction.
+
+**Part D - the last 3 of 9 dead/decorative controls** (items 4-9 had already been fixed
+earlier in this session before the compaction point; items 1-3 had been investigated and
+designed but not yet coded):
+- **Item 1 - Recruitment's incoming transfer offer/loan-request accept/reject buttons** had no
+  `onclick` at all. Wired per Principle 4 ("counter, don't flatly refuse"): Accept completes
+  the deal outright; Reject never closes the door - it swaps in a real Counter/Decline-outright
+  choice (`offerReject`/`counterTransferOffer`/`declineTransferOffer`/`acceptTransferOffer`,
+  keyed by a small `TRANSFER_OFFER_DATA` table). A real bug caught by live testing before it
+  shipped: `acceptTransferOffer` originally quoted the ORIGINAL asking fee even after a
+  successful counter - fixed to read the current fee off the row's own DOM text, so accepting
+  post-counter genuinely reflects the negotiated price ($215K, not the original $180K).
+- **Item 2 - Match Day's playback bar + view-filter** were entirely dead (a "Previous ball"
+  rewind, a Pause/Play, a Skip-to-next-over, a static "14.2/20.0 ov" scrub position, and 5
+  Show-me checkboxes). Fixed honestly rather than fabricated wholesale: "Previous ball" is
+  genuinely impossible (deliveries are generated live with no ball-by-ball log to rewind,
+  confirmed by an earlier session's own grep) - disabled with an honest tooltip. A real
+  `matchBallCount` counter was added (the one genuinely new piece of match state this required),
+  which makes Autoplay (a real `setInterval` loop honouring the speed select - manual/2x/jump-
+  to-next-over/fast) and Skip-to-next-over (auto-clicking the real single-ball generator the
+  right number of times, polling `#bowl-btn`'s own disabled state rather than hardcoding
+  delays) genuine instead of decorative, and also makes `.pb-pos` a real live value that
+  `prependCommentaryLine` already reads for its own ball-number display. Fours/Sixes/Wickets/
+  Every-dot-ball are wired to a real `data-outcome` tag on each commentary item + a live
+  `applyCommentaryFilter()`; "Milestones" is honestly disabled (no batter-running-score or
+  milestone-crossing concept exists anywhere in this file - confirmed by grep before touching
+  it - so checking it would filter against a mechanic that doesn't exist).
+- **Item 3 - the per-player batting-approach "Change" button** (Match Day Live's rail and the
+  identical card on Tactics, 4 buttons total for 2 players) had no `onclick`. Wired to a real
+  inline picker (`openBattingApproachPicker`/`setBattingApproach`) grounded in this project's
+  own `BatterInstruction` preset vocabulary (Normal/Attacking/Rebuild/Preserve Wicket/Counter
+  Attack) - and since the same two rows represent the ONE underlying tactical plan on two
+  different screens, `setBattingApproach` updates every `.tactic-row` sharing that player's
+  name at once (`data-tactic-player`), verified live to update both screens in sync from a
+  single change on either one.
+
+**Part E - all 6 convention-consistency gaps** (the clickable-name convention, Principle 1,
+applied inconsistently): Squad's "Squad depth by role" card (4 of 5 rows were plain text -
+wrapped with `openPlayerByName`, matching the row that was already correct); World >
+Competitions' league table (both the raw HTML copy and the generic Competition-Profile
+renderer used by every competition, via a new `linkedClubCell`/`CLUB_NAME_TO_KEY` helper so
+every competition sharing that render path gets clickable team names for free); Records'
+"Career Leaderboards" table (5 rows, `openPlayerByName` degrades gracefully for the one name -
+Tariq Farooq - with no `PLAYER_PROFILES` entry); International's Fixtures & Trophies (the two
+upcoming-international rows now open a real fixture-summary modal via a generalised
+`f.title || ('Islamabad Icons vs ' + f.opp)` fallback so the modal isn't hardcoded to a club
+match, and the two Trophy Watch flag/name pairs link through to their real Nation Profile via a
+base64-blob-safe regex substitution that only touches the wrapping `<div>`'s own tag); Records'
+Hall of Fame entries (Club and World, both now `openPlayerByName`-wired - a deliberate reversal
+of an earlier session's "leave them non-clickable, no profile behind them" call, since the
+Part E audit explicitly re-flagged this and the graceful-fallback convention already handles
+a name with no profile honestly); Player Profile's Contract-tab "Interested clubs" row (the
+static markup AND the per-player dynamic re-render - which previously replaced real club names
+with the vague, unlinkable "A rival club or two, informally" the moment a different player was
+opened - both now read a real, deterministic 1-2-club pick from `generateContractFacts`'
+new `interestedClubs` field, excluding the player's own club, rendered via `openWorldProfile`).
+
+**Part G - all 4 FM26-informed mechanic upgrades:**
+1. **The contract-negotiation modal rebuilt as a real staged flow** - Fee & Term -> Wage ->
+   Agent Fee -> Clauses -> His response, with a clickable stage-pip progress indicator and
+   Next/Back navigation (`goToNegotiationStage`/`negotiationStageNext`/`negotiationStagePrev`).
+   Deliberately additive per the plan's own instruction ("a restructuring of steps... not a
+   rebuild from scratch") - every existing field keeps its exact id and exact
+   `proposeContract()`/`onWageInput()` logic, just visually regrouped into 4 stages toggled by
+   `hidden`, so the underlying negotiation math needed zero changes beyond the one new lever.
+   That lever - **a separate agent-fee slider** (0-20%, FM26's own real pattern: raising the
+   agent's cut can close a deal without raising the player's own wage, since the agent has his
+   own incentive to push it through) - folds into `proposeContract`'s existing `goodwill`
+   formula (`Math.round(agentFeePct * 7.5)`). Verified live with a controlled comparison: the
+   identical wage that only reaches "Considering" at 0% agent fee reaches "Deal signed!" at 20%,
+   with no change to the wage itself - the lever genuinely works as intended, not just
+   cosmetically present.
+2. **"Counter, don't flatly refuse" extended to incoming transfer offers** - closed as part of
+   Part D item 1 above (the contract modal's own lowball-streak counter loop already existed
+   from an earlier session).
+3. **A genuinely new "Don't Judge" board mechanic** on Club > Boardroom - the coach can
+   proactively ask the board not to hold a specific season objective against him, trading
+   upside (no extra credit if it goes well) for downside protection (no confidence hit if it
+   goes badly). Built as two new modals (`openDontJudgeMenu`/`openDontJudge`) reusing the
+   established `appendFrConvo`/precommit-response-followup shape the facility/budget-request
+   flows already use, rather than inventing a new interaction style. Each of the 3 season
+   objectives has a real, differentiated response: the low-stakes ones (medium/low importance)
+   are granted outright; the high-importance one ("Finish top 4") makes the board push back
+   first, requiring the coach to press the case through a real follow-up before it's granted -
+   and once granted, the objective's badge changes to a genuine "Protected" state, verified live
+   through the full accept-after-pushback path, the direct-accept path, and the menu correctly
+   marking an already-protected objective as unavailable to re-request.
+4. **Team Talk now shows the assistant's own tone recommendation inline** next to the 3 tone
+   buttons on all 4 groups (Batting/Bowling/Fielding/Individual) - a real, grounded reasoning
+   line per group (e.g. "the top order has been in real form... back that confidence rather
+   than pile more onto it") plus a CSS-only `::after`-badge ("Assistant's pick") on the actual
+   recommended chip, verified live via `getComputedStyle(el, '::after')` since pseudo-element
+   content doesn't appear in `textContent`.
+
+**Part H - all 27 confirmed domain-gap items, grouped into the plan's own 9 clusters, each
+checked against the mockup's current state before building anything (two items - Trade Centre
+vs `FranchiseTradeService`, and the toss-independent conditions/par-score briefing vs the
+Preview stage's existing Conditions card + Match Day's DL-par figure - turned out already
+fully covered, closed with no new code per the "verify before building" discipline):**
+- **Player Profile** (6 items: `ConfidenceContagionService`, `PersonalityDevelopmentService`,
+  `FlawRemediationService`, `SkillRegressionService`, `MatchupConfidenceService`,
+  `RepresentationDriftService`) - one new "Development & psychology" card on the Personal tab,
+  each row grounded in the real mechanic's own actual behaviour.
+- **Match/news-feed** (4 items: `RecordProgressionService`'s live "record broken" framing,
+  `NarrativeService`'s accumulating storylines, `PunditService`'s opinion layered on factual
+  news, `UmpireService`'s controversy arc) - 4 new, real `INBOX_NEWS` entries, one deliberately
+  layered directly on top of the pre-existing "youth-first rebuild" story rather than invented
+  as a disconnected item.
+- **Club/Board** (3 items: `ForcedSaleService`, `FanReactionService`/board takeover,
+  `InterimCoachService`) - 3 more `INBOX_NEWS` entries, honestly represented as happening
+  elsewhere in the domestic pyramid (Quetta Falcons/Peshawar Zalmi/Multan Sultans) rather than
+  forcing a dishonest crisis onto Islamabad Icons' own already-established healthy, stable board.
+- **Franchise/Auction** (2 items: `FirstHandKnowledgeService`, `FranchiseTradeService`) - the
+  Trade Centre check confirmed already fully built (a real pick-your-own-offer builder with a
+  live 45% value-gap veto, from an earlier session); a new "First-hand knowledge" card added to
+  the Auction Room's War Room stage, naming Kashif Rauf (already established in `AUCTION_LOTS`
+  as "a former Islamabad Icons player let go before this mega auction") as a real confidence
+  lever on the bidding ceiling, distinct from generic name-recognition.
+- **Captaincy/leadership** (1 item, 2 sub-parts: `CaptaincyGrowthService` + the vice-captain
+  succession pipeline) - a new "Captaincy record" card on Hamza Malik's own Personal tab
+  (matches captained, tactical-call quality bounded by his own ceiling), explicitly naming
+  Zain Chaudhry's parallel vice-captain growth arc as the real succession pipeline behind him.
+- **International** (2 items: `FullMembershipService`, `CoachingStructureService`'s split/
+  reunify arc) - the coaching-structure arc confirmed already represented (International >
+  Staff & Board already shows "Unified"/coordination-friction); a real `membershipPath` field
+  added to the Netherlands' Nation Profile data (credit/threshold/candidacy-years) and rendered
+  as a genuine progress meter + status line in `renderNationProfile`, not just the pre-existing
+  one-line blurb.
+- **Board/market** (3 items: `JobMarketApplicationService`'s candidate-initiated half,
+  `CompetitionLifecycleService`, `IccRevenueService`) - Job Centre's `applyForJobCentre` now
+  names real other applicants per vacancy (`JOB_OTHER_APPLICANTS`); a new `lifecycle` field on
+  the T20 Cup's competition-profile data rendered as a "Competition shape" note on its
+  At-a-Glance card; a new "ICC annual distribution" card on International > Staff & Board.
+- **Match-day/conditions** (4 items, explicitly lower priority per the plan since this
+  mockup's frozen match is a single T20): `PreMatchReportService`'s par-score briefing
+  confirmed already covered (closed with no new code); `PitchDoctoringService`'s backfire risk
+  given a real live follow-through - `selectPitchPrep` now rolls a genuine ~30% overshoot
+  chance for an aggressive Grassy/Dry request on "Good" (not Excellent) infrastructure, with a
+  real pass/fail note distinct from the pre-existing static risk warning above it, verified
+  live in both directions; `MatchAmbitionService` and `LostTimeRecoveryService` (both
+  genuinely multi-day-specific, with "less natural surface" in a T20-only mockup per the plan's
+  own honest framing) given a real explanatory card on the First-Class Championship's
+  between-windows Fixtures subpanel rather than a fabricated live multi-day UI.
+- **Records** (1 item: `AllTimeXiService`) - a new "Team of the Era" card on Records > Club,
+  four real clickable names plus a dominant-team-of-the-era line and a pundit's own dissenting
+  vote, matching the real domain feature's own shape (never forced when nothing is real to say).
+
+**Part I - the C# domain logic gap check.** Per the spec's own already-completed research (a
+direct grep of the domain for `NotImplementedException`/`TODO`/`FIXME`/stubbed logic, and an
+8-service doc-comment-vs-body spot check): no genuine incomplete logic found anywhere - every
+early-return is a legitimate guard clause. The one real finding was two stale rows in this
+file's own CONSOLIDATED DEFERRED-ITEMS REGISTER, both marked **DONE** for a mechanic that was
+later **deliberately, fully removed** from the domain: the franchise Impact Player roster
+addition and the Director of Cricket role (both deleted in the "Meeting-Driven Selection
+Ticket," confirmed via a fresh `grep` returning zero hits in `src` for either). Both register
+rows corrected to state the removal plainly rather than leave a stale DONE claim standing.
+**A real, related UI-vs-domain inconsistency found and fixed along the way**, one the spec's
+own earlier grep had missed: the contract-negotiation modal's "Squad role promised" dropdown
+still offered "Impact player" as an option - a leftover reference to the exact removed
+mechanic. Replaced with "Development prospect" (a real, still-current `SquadStatus` value used
+elsewhere in this file), and a follow-up case-insensitive grep across the whole mockup for
+both removed terms now returns zero hits.
+
+**Verification, every part**: the established one-shot-Python-script + structural-check
+discipline (`div`/`table`/`tr`/`span`/`svg`/`nav`/`section`/`button`/`g` tag-count parity, a
+div-nesting stack scan, a duplicate-id scan, `node --check` on the extracted `<script>` block)
+after every script, re-run after each Part - the file's own pre-existing `tr` (2-tag) and
+script-paren (2-count) discrepancies were confirmed against the git `HEAD` baseline to be
+identical in magnitude throughout, never widened. Live Playwright verification covered every
+new interactive mechanic in this entry by name (the transfer-offer counter loop including the
+accept-after-counter fee bug found and fixed; the playback bar's real ball counter, autoplay,
+skip, and commentary filter; the tactic-change picker's cross-screen sync; the staged contract
+modal's stage navigation and the agent-fee lever's real effect on the negotiation outcome; the
+Don't Judge flow's push-back-then-grant and direct-grant paths; the Team Talk recommendation
+badges; the pitch-doctoring backfire roll in both directions; the Job Centre's who-else-applied
+note; the ICC revenue card; the Netherlands Full Membership meter; the Team of the Era
+click-through) plus a final 13-panel navigation sweep across every real sidebar destination
+with zero thrown errors and zero console errors beyond the standard harmless favicon 404.
+
+**A real recurring hazard, caught and fixed 4 times in this pass - worth its own note, since
+it is the same documented hazard this file's history keeps rediscovering.** Direct `Edit` tool
+calls containing a literal `’`/`—`-style escape in the tool's own string parameter get
+interpreted as the ACTUAL Unicode character before the file is ever written, not as literal
+ASCII backslash-u text - the opposite of what this file's own established convention needs
+(this mockup declares no `<meta charset>`, by design, so a raw multi-byte character mojibakes
+the moment it's served without one, exactly what a bare `python -m http.server` test does).
+Live Playwright testing caught the first instance (`acceptTransferOffer`'s wage-fee flow, and
+separately the `applyForJobCentre` "who else applied" line) directly in rendered text
+(`"YouÃ¢â‚¬â„¢re not..."`-style mojibake); a full byte-level scan afterward found 3 more
+introductions from the same session (the T20 Cup `lifecycle` field, both pitch-backfire
+outcome strings) that hadn't yet been exercised live. All 4 fixed the same way - **not** via
+another `\u` escape in an Edit call (which reproduces the exact same bug), but via a Python
+script building the literal backslash character from `chr(92)` and concatenating it with the
+plain ASCII hex digits, so the file receives genuine backslash-u-XXXX TEXT rather than a raw
+character. A final whole-file scan confirmed the count of non-ASCII, non-base64 lines returned
+to exactly the pre-existing `git HEAD` baseline (20), meaning every introduction from this
+session's own edits was found and fixed, with zero regressions to the pre-existing 20 lines
+that were already there before this pass touched anything. **The rule this confirms for any
+future session**: never pass a literal special character (curly quote, em/en dash) as tool-call
+parameter text destined for this file's JS - build it from `chr()`/`String.fromCharCode()` in a
+script instead, every time, regardless of which tool is doing the writing.
+
+This closes the entire comprehensive re-audit plan (Parts A through I) that opened this whole
+session - the plan document itself
+(`docs/superpowers/specs/2026-09-16-comprehensive-fm26-interaction-redesign.md`) is now fully
+executed end to end.
+
 ---
 
 ## CONSOLIDATED DEFERRED-ITEMS REGISTER (maintained - the single source of truth)
@@ -12970,7 +13190,7 @@ section above):**
 | Team of the tournament | §14.4 | **DONE** (`LeaderboardService.TeamOfTheTournament`) |
 | Pundit conflicts of interest | §14.5 | **DONE** (`WorldState.Pundits` + `Pundit` VO, `PunditService.Opine` bias) |
 | Player media personas | §14.7 | **DONE** (`Player.MediaPersona`, computed from personality) |
-| The Director of Cricket role | §4.1 | **DONE (light)** - `StaffRole.DirectorOfCricket`, board installs one above a struggling Elite coach; the DoC owns squad selection + staffing |
+| The Director of Cricket role | §4.1 | **REMOVED FROM SCOPE (was DONE, later deliberately deleted)** - this row was stale. `StaffRole.DirectorOfCricket` + `Team.DirectorOfCricketStaffId` were built (Phase 12) then deliberately, surgically removed in full during the "Meeting-Driven Selection Ticket" (Stage 1, "H - Director of Cricket removed entirely") - confirmed zero occurrences of either in `src` today. No replacement authority-stripping mechanism was built; the ticket's own reasoning (and the later Corrections Pass's explicit restatement that "the DoC stays out on purpose, not by omission") is the record of why. Not a gap to re-close. |
 | Coach worldwide EARNINGS LEDGER + franchise campaign fees | §4.2 | **DONE** (`Coach.CareerEarnings` / `CoachEarningsLedger`) |
 | Coach circuit reputation driving hiring + fee | §4.3 | **DONE** (`Coach.CircuitReputation`, `FranchiseCoachService` gives a big name first refusal) |
 | Coaching-philosophy DRIFT with experience and results | §4.5 | **DONE** (`CoachCareerService.GrowFromMilestone` drifts toward the club's `CulturalIdentity`) |
@@ -13051,7 +13271,7 @@ section above):**
 | **Timed out** | §1.8 | **REMOVED FROM SCOPE (per the user - not built, not deferred)** |
 | Match REFEREES as a distinct role running the code-of-conduct hearing | §16.2 | **DONE** in the Post-16 Completion Pass (`UmpireService.AssignReferee`) - this row was stale |
 | Third-umpire run-outs / stumpings without full DRS | §16.6 | **DONE** (`hasThirdUmpire`) - Post-16-B sweep |
-| The Impact Player as a real 12-deep roster addition (not a literal mid-innings swap - see the sweep's own note on scope) | §1.4 | **DONE** (`FixturePlayService.WithImpactPlayer`) - Post-16-B sweep. The genuinely LIVE mid-innings substitution (swapping a specific player out once the game is under way) still needs the innings sim to gain a real substitution concept - a narrower remaining gap than originally framed |
+| The Impact Player as a real 12-deep roster addition (not a literal mid-innings swap - see the sweep's own note on scope) | §1.4 | **REMOVED FROM SCOPE (was DONE, later deliberately deleted)** - this row was stale. `FixturePlayService.WithImpactPlayer` and `MatchSetup.ImpactPlayerEdge` (Post-16-B sweep) were both deliberately, surgically removed during the "Meeting-Driven Selection Ticket" (Stage 1, "J - Impact Player removed entirely") - confirmed via grep that `MatchSimulator`'s `batImpact` multiplier and the seed-table `Impact` tuple field are gone too, and the removal was a pure no-op on the match model since the multiplier was already permanently 1.0. Not a gap to re-close. |
 | Retired hurt (not a return mid-innings substitution, a genuine forced-off-not-a-dismissal event) | §1.8 | **DONE** (`InningsState.RetiredHurtIds`, deterministic) - Post-16-B sweep |
 | Post-rain GRADUAL per-over transition | §19.1 | **DONE** - confirmed already built (`dampOversAtStart`'s per-over decay) rather than "whole-day only" as this row previously, incorrectly, said |
 | Footmark-rough per-end / per-bowler by bowling ARM; a re-used strip worn from ball one; wind -> boundary asymmetry | §19.2, §19.4, §19.6 | **DONE** (`endWearLeftArm`/`endWearRightArm` confirmed already built; `PitchIsReused` and `WindAlignment` new) - Post-16-B sweep |
