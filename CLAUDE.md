@@ -13428,6 +13428,75 @@ right counts; the Calendar's three sub-tabs switching correctly with the Fixture
 correctly-scoped list; the Stages cascade's region/country switching, the honest empty state for a
 nation with nothing hosted, and a competition click genuinely opening its real profile.
 
+#### Slice 2 - Club: COMPLETE
+
+Verified the live file first, per the plan's own standing discipline, rather than trusting either
+the first draft's "already built" claim or the second draft's own bare description of the gap.
+Confirmed by direct grep before starting: no Responsibilities/Delegation screen anywhere (Club's
+subnav was 4 tabs), no Club Comparison card, no 12-column squad view-selector, and Records/FFP
+both real but thinner than the video notes call for.
+
+**Built:**
+- **A real Responsibilities/Delegation screen** (`club-responsibilities`, Club's 5th subtab) -
+  named directly against the real `DelegationProfile`/`DecisionArea` domain rather than an invented
+  category list: 9 categories (Squad Selection/Tactics/Training/Transfer &amp; Contract/Recruit
+  Directors/Medical/Board/Press/Captaincy), each item a genuine Take-Control/Delegate toggle pair
+  plus a per-category bulk action, and a live running "X% under control / Y% delegated" readout
+  (`respRecomputePct`/`respRenderNav`/`respShowCategory`/`respToggle`/`respBulk`). Live-verified:
+  the running percentage recomputes correctly on both an individual toggle and a bulk action.
+- **A Club Comparison "Facts" card** on Club &gt; Overview - a real head-to-head against Lahore
+  Lions (the league leaders Islamabad Icons face next) across 8 lines (shortest/tallest player, top
+  earner, average age, domestic-player ratio, highest international caps, head coach tenure,
+  youngest player), each naming a real already-established player on both sides.
+- **The 12-column squad table view-selector** on Squad &gt; First Team. Found, before building
+  anything, that the table is NOT static HTML - `renderSquadFirstTeamTable()` already renders it
+  live from a real `SQUAD_ROSTER` array (14 players) through `generatePlayerRecord()`'s
+  deterministic, name-seeded attribute/career-stat generator (5 real attribute groups matching the
+  domain's own Batting/Bowling/Fielding/Mental/Physical categories) - infrastructure built in an
+  earlier, undocumented-in-this-plan session. This directly resolved what the pre-compaction summary
+  had flagged as a "6 rows vs. 18 claimed" inconsistency: the panel-head text is ALREADY corrected
+  live by this same function (`SQUAD_ROSTER.length + ' players'`) - a false alarm from checking the
+  file's static HTML with `awk` rather than its live-rendered DOM, the exact class of mistake this
+  file's own history already warns about repeatedly. Built the view-selector properly on TOP of
+  this real system rather than duplicating it: a `<select id="squad-view-select">` with the 12 real
+  FM-named views (Selection Info/General Info/Attributes/Contract/Home Grown Status/Playing
+  Time/Dynamics/Reports/Injuries/Risk Assessment/Stats/Development), `renderSquadFirstTeamTable`
+  extended to take a `view` parameter and rebuild both `&lt;thead&gt;` and the row cells per view
+  from the SAME underlying `generatePlayerRecord`/`generateContractFacts` data (never a second,
+  disconnected data source) - the default (`selection`) view reproduces the original 9-column
+  output byte-for-byte. Live-verified all 12 views render distinct, correct headers and cells with
+  the header count matching cell count in every case, and the reset-to-default path works cleanly.
+- **Records/Honours depth** - a Modern-Day/All-Time toggle above the Trophy Cabinet (3 modern
+  entries stay the default view; 3 real earlier-era entries, including the club's first-ever title
+  in 2012, appear only under All-Time - `setTrophyEra`), and a 7th "Sequences" record-category tile
+  wired through the EXISTING generic `openRecordCategory`/`openRecordType` machinery (confirmed
+  data-driven off `RECORDS_DATA[scope][catKey]` before adding anything, so no new rendering code was
+  needed) with 3 real streak-record types (Longest Winning Streak, Most Consecutive 50+ Scores,
+  Longest Unbeaten Run at Home). A named Legends list distinct from the current squad and a
+  Modern/All-Time-style toggle were both explicitly checked against the video notes' remaining asks
+  and found already substantially covered by the pre-existing Hall of Fame card (retired players
+  only, by construction) - not rebuilt.
+- **FFP depth** - the single "Healthy" banner + one paragraph is now a real per-competition
+  profit/loss table (Pakistan T20 Cup / First-Class Championship / Pakistan Premier League
+  franchise income, each with its own revenue/costs/net), a projected year-end figure, and an
+  explicit board-confidence read line - all sitting alongside the pre-existing sanction-consequence
+  paragraph (points deduction + transfer embargo language), which was already real and left as-is.
+
+**Verified**: the established `verify.py` structural pass (tag-count parity, div-nesting scan,
+duplicate-id scan, `node --check` on the extracted `&lt;script&gt;` block) after every edit, plus a
+live Playwright pass: the Responsibilities screen's percentage math checked directly against a
+hand-counted total (7/20 = 35% delegated at load, 8/20 = 40% after one bulk toggle - both matched);
+the Club Comparison card's presence confirmed; all 12 squad views render live with correct,
+distinct headers/cells; the trophy-era toggle's visible-item counts (3 modern, 6 all-time) and the
+Sequences category's full list-&gt;detail drill-through, all confirmed live. Zero console errors.
+
+**A real discovery worth recording for the next session, not just this one**: this file already
+contains substantial squad-data infrastructure (`SQUAD_ROSTER`, `generatePlayerRecord`,
+`generateContractFacts`, `ATTR_GROUPS`) that predates this 5-slice plan and isn't described
+anywhere in this plan's own scope notes - built in an earlier session this plan's own review never
+surfaced. Before building anything squad/player-data-related in Slices 3-5, check this system
+first rather than assuming a gap that's already closed.
+
 ---
 
 ## CONSOLIDATED DEFERRED-ITEMS REGISTER (maintained - the single source of truth)

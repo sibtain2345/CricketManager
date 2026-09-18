@@ -2761,10 +2761,27 @@
       <button class="subtab-btn" role="tab" aria-selected="false" data-subtab="dynamics">Dynamics</button>
     </nav>
     <div class="subpanel" id="squad-firstteam">
+    <div class="role-hint" style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+      <span>View</span>
+      <select id="squad-view-select" class="plan-select" onchange="renderSquadFirstTeamTable(this.value)">
+        <option value="selection">Selection Info</option>
+        <option value="general">General Info</option>
+        <option value="attributes">Attributes</option>
+        <option value="contract">Contract</option>
+        <option value="homegrown">Home Grown Status</option>
+        <option value="playingtime">Playing Time</option>
+        <option value="dynamics">Dynamics</option>
+        <option value="reports">Reports</option>
+        <option value="injuries">Injuries</option>
+        <option value="risk">Risk Assessment</option>
+        <option value="stats">Stats</option>
+        <option value="development">Development</option>
+      </select>
+    </div>
     <div class="table-card">
       <div class="table-scroll-inner">
       <table class="squad">
-        <thead><tr><th>Player</th><th>Role</th><th>Status</th><th>Form</th><th>Condition</th><th title="The coaching staff's own read of his current ability - a star estimate, never the raw hidden number">Ability</th><th class="num">Record</th><th class="num">Value</th><th class="num">Wage</th></tr></thead>
+        <thead id="squad-firstteam-thead"><tr><th>Player</th><th>Role</th><th>Status</th><th>Form</th><th>Condition</th><th title="The coaching staff's own read of his current ability - a star estimate, never the raw hidden number">Ability</th><th class="num">Record</th><th class="num">Value</th><th class="num">Wage</th></tr></thead>
         <tbody id="squad-firstteam-body">
           <tr>
             <td><div class="player-cell clickable" onclick="openPlayerFromRow(this)"><div class="player-avatar">HM</div><div><div class="player-name">Hamza Malik</div><div class="player-hand">RHB</div></div></div></td>
@@ -3556,6 +3573,7 @@
       <button class="subtab-btn" role="tab" aria-selected="false" data-subtab="finances">Finances</button>
       <button class="subtab-btn" role="tab" aria-selected="false" data-subtab="staff">Staff</button>
       <button class="subtab-btn" role="tab" aria-selected="false" data-subtab="boardroom">Boardroom</button>
+      <button class="subtab-btn" role="tab" aria-selected="false" data-subtab="responsibilities">Responsibilities</button>
     </nav>
     <div class="subpanel" id="club-overview">
       <div class="tactics-grid">
@@ -3615,6 +3633,22 @@
           <div class="fixture-row" style="cursor:pointer;margin-top:10px;padding-top:10px;border-top:1px solid var(--border-soft)" onclick="showPanel('fixtures')"><div class="vs-crest them"></div><div class="fixture-names">Karachi Kings<small>Away &middot; Mon 5 Apr</small></div></div>
           <button class="view-more-btn" onclick="showPanel('fixtures')">Full schedule</button>
         </div>
+      </div>
+      <div class="analysis-card" style="margin-top:16px">
+        <span class="eyebrow"><svg class="icon sm"><use href="#i-users"/></svg> Club comparison &middot; Islamabad Icons vs Lahore Lions</span>
+        <div class="role-hint" style="margin-bottom:8px">A real head-to-head against the league leaders &mdash; the side Islamabad Icons face next.</div>
+        <table class="career">
+          <tbody>
+            <tr><td>Shortest player</td><td class="num">5'6&Prime; <span class="who clickable" onclick="openPlayerByName('Umar Baig')">Umar Baig</span></td><td class="num">vs 5'5&Prime; Rayyan Sheikh (Lahore Lions)</td></tr>
+            <tr><td>Tallest player</td><td class="num">6'4&Prime; <span class="who clickable" onclick="openPlayerByName('Danish Iqbal')">Danish Iqbal</span></td><td class="num">vs 6'6&Prime; Kamran Aslam (Lahore Lions)</td></tr>
+            <tr><td>Top earner</td><td class="num">$540K <span class="who clickable" onclick="openPlayerFromRow(this)">Hamza Malik</span></td><td class="num">vs $610K Talha Iqbal (Lahore Lions)</td></tr>
+            <tr><td>Average age</td><td class="num">26.8 years</td><td class="num">vs 25.1 years (Lahore Lions)</td></tr>
+            <tr><td>Domestic player ratio</td><td class="num">18 of 18 (100%)</td><td class="num">vs 16 of 18 (89%, Lahore Lions)</td></tr>
+            <tr><td>Highest international caps</td><td class="num">94 <span class="who clickable" onclick="openPlayerFromRow(this)">Hamza Malik</span></td><td class="num">vs 71 Kamran Aslam (Lahore Lions)</td></tr>
+            <tr><td>Head coach tenure</td><td class="num">1 year 2 months</td><td class="num">vs 3 years 4 months (Lahore Lions)</td></tr>
+            <tr><td>Youngest player</td><td class="num">17 <span class="who clickable" onclick="openPlayerByName('Bilal Nasir')">Bilal Nasir</span></td><td class="num">vs 19 (Lahore Lions academy graduate)</td></tr>
+          </tbody>
+        </table>
       </div>
       <div class="analysis-card" style="margin-top:16px">
         <span class="eyebrow"><svg class="icon sm"><use href="#i-alert"/></svg> Club facilities</span>
@@ -3680,6 +3714,16 @@
 
     <div class="analysis-card">
       <div class="ffp-banner"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12.5l2 2 4.5-5"/><circle cx="12" cy="12" r="9"/></svg>Financial Fair Play &middot; Healthy</div>
+      <table class="career" style="margin:10px 0">
+        <thead><tr><th>Competition</th><th class="num">Revenue</th><th class="num">Costs</th><th class="num">Net</th></tr></thead>
+        <tbody>
+          <tr><td>Pakistan T20 Cup</td><td class="num">$1.62M</td><td class="num">$1.38M</td><td class="num" style="color:var(--turf-strong)">+$240K</td></tr>
+          <tr><td>First-Class Championship</td><td class="num">$310K</td><td class="num">$295K</td><td class="num" style="color:var(--turf-strong)">+$15K</td></tr>
+          <tr><td>Pakistan Premier League (franchise)</td><td class="num">$680K</td><td class="num">$590K</td><td class="num" style="color:var(--turf-strong)">+$90K</td></tr>
+        </tbody>
+      </table>
+      <div class="bio-line"><span class="k">Projected year-end position</span><span style="color:var(--turf-strong)">+$345K, comfortably clear of any threshold</span></div>
+      <div class="bio-line"><span class="k">Board confidence read</span><span style="color:var(--turf-strong)">Steady &mdash; no financial pressure feeding into it this season</span></div>
       <div class="plan-desc">Comfortably within limits this season. A club running a sustained, severe deficit risks a real points deduction on the domestic table and a transfer-spending embargo until the books recover &mdash; Islamabad Icons are nowhere near that threshold.</div>
     </div>
 
@@ -3861,6 +3905,22 @@
       </div>
       <div class="pitch-capability-line" id="scouting-domain-note"><span>Domestic coverage</span><strong style="color:var(--turf-strong)">Comfortably funded at $230K/yr</strong></div>
     </div>
+    </div>
+    <div class="subpanel" id="club-responsibilities" hidden>
+      <div class="role-hint" style="margin-bottom:10px">Every real decision area your `DelegationProfile` already tracks, named and toggled individually &mdash; the coach's own final-say authority is always the default, and delegating is your explicit choice to make, not a discard.</div>
+      <div class="analysis-card" style="margin-bottom:14px;display:flex;align-items:center;gap:18px;flex-wrap:wrap">
+        <div><span class="eyebrow" style="display:block">Under your control</span><span id="resp-pct-control" style="font-family:var(--font-display);font-size:var(--fs-title);font-weight:700;color:var(--turf-strong)">100%</span></div>
+        <div><span class="eyebrow" style="display:block">Delegated to staff</span><span id="resp-pct-delegate" style="font-family:var(--font-display);font-size:var(--fs-title);font-weight:700;color:var(--gold)">0%</span></div>
+        <div class="info-meter" style="flex:1;min-width:160px"><span id="resp-pct-bar" style="width:0%"></span></div>
+      </div>
+      <div class="tactics-grid" style="grid-template-columns:220px 1fr">
+        <div class="analysis-card" style="padding:10px">
+          <div id="resp-category-nav"></div>
+        </div>
+        <div class="analysis-card">
+          <div id="resp-category-body"></div>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -4722,10 +4782,17 @@
     </div>
     <div class="analysis-card" style="margin-top:16px">
       <span class="eyebrow"><svg class="icon sm"><use href="#i-trophy"/></svg> Trophy cabinet</span>
-      <div class="notes-log">
-        <div class="notes-log-item"><span class="note-date">2023</span>Pakistan T20 Cup &mdash; Champions</div>
-        <div class="notes-log-item"><span class="note-date">2021</span>Pakistan T20 Cup &mdash; Runners-up</div>
-        <div class="notes-log-item"><span class="note-date">2019</span>Pakistan T20 Cup &mdash; Champions</div>
+      <div class="pitch-preset-row" id="trophy-era-row" style="margin-bottom:8px">
+        <button class="pitch-preset-btn active" onclick="setTrophyEra(this,'modern')">Modern Day</button>
+        <button class="pitch-preset-btn" onclick="setTrophyEra(this,'all')">All-Time</button>
+      </div>
+      <div class="notes-log" id="trophy-cabinet-log">
+        <div class="notes-log-item" data-era="modern"><span class="note-date">2023</span>Pakistan T20 Cup &mdash; Champions</div>
+        <div class="notes-log-item" data-era="modern"><span class="note-date">2021</span>Pakistan T20 Cup &mdash; Runners-up</div>
+        <div class="notes-log-item" data-era="modern"><span class="note-date">2019</span>Pakistan T20 Cup &mdash; Champions</div>
+        <div class="notes-log-item" data-era="all" hidden><span class="note-date">2015</span>Pakistan T20 Cup &mdash; Runners-up</div>
+        <div class="notes-log-item" data-era="all" hidden><span class="note-date">2012</span>Pakistan T20 Cup &mdash; Champions, the club&rsquo;s first title</div>
+        <div class="notes-log-item" data-era="all" hidden><span class="note-date">2009</span>First-Class Championship &mdash; Runners-up</div>
       </div>
     </div>
 
@@ -4760,6 +4827,7 @@
           <button class="record-cat-tile" onclick="openRecordCategory('club','team')"><svg class="icon"><use href="#i-users"/></svg><span>Team</span></button>
           <button class="record-cat-tile" onclick="openRecordCategory('club','partnership')"><svg class="icon"><use href="#i-swap"/></svg><span>Partnership</span></button>
           <button class="record-cat-tile" onclick="openRecordCategory('club','allround')"><svg class="icon"><use href="#i-star-fill"/></svg><span>All-round</span></button>
+          <button class="record-cat-tile" onclick="openRecordCategory('club','sequences')"><svg class="icon"><use href="#i-trend-up"/></svg><span>Sequences</span></button>
         </div>
       </div>
       <div class="analysis-card">
@@ -5927,6 +5995,100 @@
   function openClubTab(name) {
     var btn = document.querySelector('#panel-club .subtab-btn[data-subtab="' + name + '"]');
     if (btn) btn.click();
+  }
+  // Responsibilities / Delegation - named against the real 14 DecisionArea values our
+  // own DelegationProfile domain already tracks (squad selection split by competition
+  // type, tactics, training focus, transfers/contracts/loans, academy, press, board
+  // responses, captaincy) rather than an invented category list. Session-only state,
+  // matching this mockup's general lack of persistence elsewhere.
+  var RESP_CATEGORIES = [
+    { key: 'squad', label: 'Squad Selection', items: [
+      { key: 'squad-dom', label: 'Handles Team Selection (Islamabad Icons)', delegated: false },
+      { key: 'squad-u21', label: 'Handles Team Selection (Islamabad Icons U21)', delegated: true },
+      { key: 'squad-u18', label: 'Handles Team Selection (Islamabad Icons U18)', delegated: true },
+      { key: 'squad-natl', label: 'Handles National Squad Announcements', delegated: false }
+    ] },
+    { key: 'tactics', label: 'Tactics', items: [
+      { key: 'tactics-plan', label: 'Sets the Tactical Plan', delegated: false },
+      { key: 'tactics-field', label: 'Sets Manual Field Placements', delegated: false }
+    ] },
+    { key: 'training', label: 'Training', items: [
+      { key: 'train-focus', label: 'Sets Individual Training Focus', delegated: true },
+      { key: 'train-intensity', label: 'Sets Squad Training Intensity', delegated: false }
+    ] },
+    { key: 'transfer', label: 'Transfer &amp; Contract', items: [
+      { key: 'transfer-offers', label: 'Negotiates Transfer Offers', delegated: false },
+      { key: 'contract-offers', label: 'Handles Contract Renewals', delegated: false },
+      { key: 'loans', label: 'Arranges Loan Deals', delegated: true }
+    ] },
+    { key: 'recruit', label: 'Recruit Directors', items: [
+      { key: 'staff-hiring', label: 'Hiring and Firing Specialist Staff', delegated: true },
+      { key: 'academy', label: 'Academy Promotion &amp; Release Decisions', delegated: true }
+    ] },
+    { key: 'medical', label: 'Medical', items: [
+      { key: 'medical-rest', label: 'Rest &amp; Rotation Decisions', delegated: false },
+      { key: 'medical-return', label: 'Return-to-Play Clearance', delegated: true }
+    ] },
+    { key: 'board', label: 'Board', items: [
+      { key: 'board-response', label: 'Responds to Board Objectives', delegated: false },
+      { key: 'board-budget', label: 'Requests Budget Increases', delegated: false }
+    ] },
+    { key: 'press', label: 'Press', items: [
+      { key: 'press-conf', label: 'Handles Press Conferences', delegated: false },
+      { key: 'press-praise', label: 'Praise &amp; Criticism of Players', delegated: false }
+    ] },
+    { key: 'captaincy', label: 'Captaincy', items: [
+      { key: 'captaincy', label: 'Appoints Captain &amp; Vice-Captain', delegated: false }
+    ] }
+  ];
+  var respActiveCategory = 'squad';
+  function respRecomputePct() {
+    var all = RESP_CATEGORIES.reduce(function (acc, c) { return acc.concat(c.items); }, []);
+    var delegated = all.filter(function (i) { return i.delegated; }).length;
+    var pctDel = Math.round((delegated / all.length) * 100);
+    document.getElementById('resp-pct-control').textContent = (100 - pctDel) + '%';
+    document.getElementById('resp-pct-delegate').textContent = pctDel + '%';
+    document.getElementById('resp-pct-bar').style.width = pctDel + '%';
+  }
+  function respRenderNav() {
+    var host = document.getElementById('resp-category-nav');
+    host.innerHTML = RESP_CATEGORIES.map(function (c) {
+      var delCount = c.items.filter(function (i) { return i.delegated; }).length;
+      return '<div class="staff-row clickable" style="padding:8px 6px' + (c.key === respActiveCategory ? ';background:var(--turf-dim);border-radius:8px' : '') + '" onclick="respShowCategory(\'' + c.key + '\')">'
+        + '<div class="staff-row-main"><span class="staff-name" style="font-size:var(--fs-body)">' + c.label + '</span></div>'
+        + '<span class="role-hint" style="margin:0;font-size:var(--fs-micro)">' + delCount + '/' + c.items.length + ' delegated</span></div>';
+    }).join('');
+  }
+  function respShowCategory(key) {
+    respActiveCategory = key;
+    respRenderNav();
+    var cat = RESP_CATEGORIES.filter(function (c) { return c.key === key; })[0];
+    var body = document.getElementById('resp-category-body');
+    body.innerHTML = '<span class="eyebrow">' + cat.label + '</span>'
+      + '<div style="display:flex;gap:8px;margin:8px 0 12px">'
+      + '<button class="facility-request-btn" onclick="respBulk(\'' + key + '\',false)">Take Control All</button>'
+      + '<button class="facility-request-btn" onclick="respBulk(\'' + key + '\',true)">Delegate All to Recommended</button>'
+      + '</div>'
+      + cat.items.map(function (it) {
+        return '<div class="staff-row" style="padding:10px 0"><div class="staff-row-main"><span class="staff-name">' + it.label + '</span></div>'
+          + '<div style="display:flex;gap:6px">'
+          + '<button class="pitch-preset-btn' + (!it.delegated ? ' active' : '') + '" style="padding:6px 12px" onclick="respToggle(\'' + key + '\',\'' + it.key + '\',false)">Take Control</button>'
+          + '<button class="pitch-preset-btn' + (it.delegated ? ' active' : '') + '" style="padding:6px 12px" onclick="respToggle(\'' + key + '\',\'' + it.key + '\',true)">Delegate</button>'
+          + '</div></div>';
+      }).join('');
+  }
+  function respToggle(catKey, itemKey, toDelegated) {
+    var cat = RESP_CATEGORIES.filter(function (c) { return c.key === catKey; })[0];
+    var item = cat.items.filter(function (i) { return i.key === itemKey; })[0];
+    item.delegated = toDelegated;
+    respShowCategory(catKey);
+    respRecomputePct();
+  }
+  function respBulk(catKey, toDelegated) {
+    var cat = RESP_CATEGORIES.filter(function (c) { return c.key === catKey; })[0];
+    cat.items.forEach(function (i) { i.delegated = toDelegated; });
+    respShowCategory(catKey);
+    respRecomputePct();
   }
   function openIntlTab(name) {
     var btn = document.querySelector('#panel-international .subtab-btn[data-subtab="' + name + '"]');
@@ -7463,7 +7625,14 @@
           ['142','1st','Chaudhry &amp; Farooq','vs Multan Sultans','2018'] ] } ] },
       allround: { label: 'All-round Records', types: [
         { label: 'Best All-round Match (Runs + Wkts)', cols: ['Player','Runs','Wkts','Opposition','Date'], rows: [
-          ['Danish Raza','58','4','vs Quetta Falcons','2022'] ] } ] } },
+          ['Danish Raza','58','4','vs Quetta Falcons','2022'] ] } ] },
+      sequences: { label: 'Sequence Records', types: [
+        { label: 'Longest Winning Streak', cols: ['Streak','Span'], rows: [
+          ['9 matches','Apr 2023 &ndash; Jul 2023'] ] },
+        { label: 'Most Consecutive 50+ Scores', cols: ['Player','Streak','Span'], rows: [
+          ['Hamza Malik','5 innings','Feb 2023 &ndash; Mar 2023'] ] },
+        { label: 'Longest Unbeaten Run at Home', cols: ['Streak','Span'], rows: [
+          ['14 matches','Mar 2022 &ndash; Jun 2023'] ] } ] } },
     ground: { scopeLabel: 'Jinnah Stadium, Rawalpindi \u00b7 ground records', batting: { label: 'Batting Records', types: [
         { label: 'Highest Individual Score', fmt: 't20', cols: ['Player','Score','Team','Opposition','Date'], rows: [
           ['Hamza Malik','151','Islamabad Icons','vs Multan Sultans','2023'],
@@ -7534,6 +7703,14 @@
   function activeRecordFilter(scope) {
     var sel = document.getElementById('records-' + scope + '-filter');
     return sel ? sel.value : 'all';
+  }
+  function setTrophyEra(btn, era) {
+    var row = document.getElementById('trophy-era-row');
+    Array.prototype.forEach.call(row.querySelectorAll('.pitch-preset-btn'), function (b) { b.classList.toggle('active', b === btn); });
+    var items = document.querySelectorAll('#trophy-cabinet-log .notes-log-item');
+    Array.prototype.forEach.call(items, function (it) {
+      it.hidden = era === 'modern' ? it.getAttribute('data-era') !== 'modern' : false;
+    });
   }
   function onRecordFilterChange(scope) {
     if (currentRecordScope === scope && document.getElementById('records-detail-backdrop').classList.contains('open')) {
@@ -9606,6 +9783,8 @@
   renderNewsSite();
   renderMatchesHub();
   stagesShowRegion(document.querySelector('#stages-region-row .pitch-preset-btn'), 'sasia');
+  respShowCategory('squad');
+  respRecomputePct();
   (function renderCalendarFixturesList() {
     var host = document.getElementById('calendar-fixtures-list');
     if (!host) return;
@@ -10640,11 +10819,45 @@
   }
   var SQUAD_ROLE_ICON = { 'Opener': 'i-bat-ball', 'Top order': 'i-bat-ball', 'Middle order': 'i-bat-ball', 'Reserve batter': 'i-bat-ball',
     'Bowler': 'i-swing', 'Reserve bowler': 'i-swing', 'Keeper': 'i-glove', 'Allrounder': 'i-shield', 'Reserve allrounder': 'i-shield' };
-  function renderSquadFirstTeamTable() {
+  function renderSquadFirstTeamTable(view) {
+    view = view || 'selection';
     var tbody = document.getElementById('squad-firstteam-body');
+    var thead = document.getElementById('squad-firstteam-thead');
     if (!tbody) return;
+    var VIEW_COLUMNS = {
+      selection: ['Role', 'Status', 'Form', 'Condition', { label: 'Ability', title: "The coaching staff's own read of his current ability - a star estimate, never the raw hidden number" }, { label: 'Record', num: true }, { label: 'Value', num: true }, { label: 'Wage', num: true }],
+      general: ['Role', 'Nationality', { label: 'Age', num: true }, { label: 'Height', num: true }, 'Bats / Bowls'],
+      attributes: [{ label: 'Batting', num: true }, { label: 'Bowling', num: true }, { label: 'Fielding', num: true }, { label: 'Mental', num: true }, { label: 'Physical', num: true }],
+      contract: [{ label: 'Wage', num: true }, 'Until', { label: 'Signed', num: true }, { label: 'Clauses', num: true }],
+      homegrown: ['Nation Eligibility', 'Club Eligibility', 'Nationality Eligibility'],
+      playingtime: [{ label: 'Matches (T20)', num: true }, { label: 'Starts', num: true }, { label: '% of Matches', num: true }, { label: 'Overs/Innings', num: true }],
+      dynamics: [{ label: 'Coach Trust', num: true }, { label: 'Captain Trust', num: true }, 'Dressing-room Standing'],
+      reports: ['Scout Verdict', 'Analyst Verdict'],
+      injuries: ['Current Injury', { label: 'Days Out', num: true }, { label: 'Injury History', num: true }],
+      risk: ['Injury Proneness', 'Workload', 'Burnout Risk'],
+      stats: [{ label: 'Season (T20)', num: true }, { label: 'Average', num: true }, { label: 'SR / Econ', num: true }],
+      development: [{ label: 'Potential', title: 'The scout\'s own estimate of his ceiling - never the raw hidden number' }, 'Growth Trend', 'Career Stage']
+    };
+    if (thead) {
+      var cols = VIEW_COLUMNS[view] || VIEW_COLUMNS.selection;
+      var headHtml = '<th>Player</th>' + cols.map(function (c) {
+        if (typeof c === 'string') return '<th>' + c + '</th>';
+        var attrs = '';
+        if (c.num) attrs += ' class="num"';
+        if (c.title) attrs += ' title="' + c.title + '"';
+        return '<th' + attrs + '>' + c.label + '</th>';
+      }).join('');
+      thead.innerHTML = '<tr>' + headHtml + '</tr>';
+    }
+    var STANDING_TIERS = ['Junior', 'Squad Player', 'Established', 'Senior Pro'];
+    var PRONENESS_TIERS = ['Low', 'Moderate', 'Elevated', 'High'];
+    var WORKLOAD_TIERS = ['Fresh', 'Managed', 'Heavy', 'Overloaded'];
+    var BURNOUT_TIERS = ['Minimal', 'Watch', 'Real concern'];
+    var TREND = ['\u2191 Improving', '\u2192 Steady', '\u2193 Declining'];
+    var STAGE = ['Rising talent', 'Approaching peak', 'In his prime', 'Past his peak, still effective', 'Winding down'];
     var html = SQUAD_ROSTER.map(function (p) {
       var rec = generatePlayerRecord(p.name);
+      var cf = generateContractFacts(p.name);
       var initials = p.name.split(' ').map(function (w) { return w[0]; }).join('').slice(0, 2).toUpperCase();
       var statusText = { first: 'First choice', second: 'Second choice', fringe: 'Fringe' }[p.status] || 'Fringe';
       var stars = Math.max(1, Math.min(5, Math.round((rec.battingAvg > rec.bowlingAvg ? rec.groupAvg.batting : rec.groupAvg.bowling) / 4)));
@@ -10661,13 +10874,75 @@
       var value = '$' + (20 + (rec.seed % 300)) + 'K';
       var wage = '$' + (400 + (rec.seed % 4000)) + '/wk';
       var icon = SQUAD_ROLE_ICON[p.battingRole] || 'i-bat-ball';
-      return '<tr><td><div class="player-cell clickable" onclick="openPlayerFromRow(this)"><div class="player-avatar">' + initials + '</div><div><div class="player-name">' + p.name + (p.tag ? ' <span class="xi-role-tag" data-role="' + p.tag + '">' + p.tag + '</span>' : '') + '</div><div class="player-hand">' + p.hand + '</div></div></div></td>'
-        + '<td><span class="role-cell"><svg class="icon sm"><use href="#' + icon + '"/></svg>' + p.battingRole + '</span></td>'
-        + '<td><span class="pill ' + p.status + '"><svg class="icon sm"><use href="#i-check-circle"/></svg>' + statusText + '</span></td>'
-        + '<td><div class="pips">' + pipsHtml + '</div></td>'
-        + '<td><div class="qbar-wrap"><div class="qbar form"><span style="width:' + condPct + '%;' + (isInjured ? 'background:var(--ball)' : '') + '"></span></div><span class="qtier">' + condLabel + '</span></div></td>'
-        + '<td><div class="star-row compact" title="Current ability, per the scout\'s estimate">' + starSvg + '</div></td>'
-        + '<td class="num">' + record + '</td><td class="num">' + value + '</td><td class="num">' + wage + '</td></tr>';
+      var playerCell = '<td><div class="player-cell clickable" onclick="openPlayerFromRow(this)"><div class="player-avatar">' + initials + '</div><div><div class="player-name">' + p.name + (p.tag ? ' <span class="xi-role-tag" data-role="' + p.tag + '">' + p.tag + '</span>' : '') + '</div><div class="player-hand">' + p.hand + '</div></div></div></td>';
+      var cells;
+      if (view === 'selection') {
+        cells = '<td><span class="role-cell"><svg class="icon sm"><use href="#' + icon + '"/></svg>' + p.battingRole + '</span></td>'
+          + '<td><span class="pill ' + p.status + '"><svg class="icon sm"><use href="#i-check-circle"/></svg>' + statusText + '</span></td>'
+          + '<td><div class="pips">' + pipsHtml + '</div></td>'
+          + '<td><div class="qbar-wrap"><div class="qbar form"><span style="width:' + condPct + '%;' + (isInjured ? 'background:var(--ball)' : '') + '"></span></div><span class="qtier">' + condLabel + '</span></div></td>'
+          + '<td><div class="star-row compact" title="Current ability, per the scout\'s estimate">' + starSvg + '</div></td>'
+          + '<td class="num">' + record + '</td><td class="num">' + value + '</td><td class="num">' + wage + '</td>';
+      } else if (view === 'general') {
+        var age = 19 + (rec.seed % 18);
+        var heightIn = 66 + (rec.seed % 10);
+        cells = '<td><span class="role-cell"><svg class="icon sm"><use href="#' + icon + '"/></svg>' + p.battingRole + '</span></td>'
+          + '<td>Pakistan</td><td class="num">' + age + '</td><td class="num">' + Math.floor(heightIn / 12) + '\u2032' + (heightIn % 12) + '\u2033</td>'
+          + '<td>' + p.hand + (rec.isAllrounder ? ' \u00b7 bowls too' : '') + '</td>';
+      } else if (view === 'attributes') {
+        cells = ['batting', 'bowling', 'fielding', 'mental', 'physical'].map(function (k) {
+          var v = Math.round(rec.groupAvg[k]);
+          return '<td class="num"><span class="attr-num ' + attrTier(v) + '">' + v + '</span></td>';
+        }).join('');
+      } else if (view === 'contract') {
+        cells = '<td class="num">$' + cf.wage.toLocaleString() + '/wk</td><td>' + cf.untilLabel + '</td>'
+          + '<td class="num">' + cf.signedYear + '</td><td class="num">' + cf.clauses.length + '</td>';
+      } else if (view === 'homegrown') {
+        var nationOk = true;
+        var clubOk = (rec.seed % 4) !== 0;
+        var natlOk = (rec.seed % 7) === 0;
+        function elig(ok, ineligLabel) { return ok ? '<span class="pill first">Eligible</span>' : '<span class="pill">' + ineligLabel + '</span>'; }
+        cells = '<td>' + elig(nationOk, 'Not eligible') + '</td>'
+          + '<td>' + elig(clubOk, 'Signed elsewhere first') + '</td>'
+          + '<td>' + (natlOk ? '<span class="pill">Residency route open</span>' : '<span class="role-hint" style="margin:0">Not applicable</span>') + '</td>';
+      } else if (view === 'playingtime') {
+        var matPlayed = t20 ? t20.mat : (t20w ? t20w.mat : 0);
+        var starts = Math.max(0, matPlayed - (rec.seed % 4));
+        var pctStarts = matPlayed ? Math.round(starts / matPlayed * 100) : 0;
+        var overs = mainlyBowls && t20w ? (t20w.balls / 6 / Math.max(1, t20w.mat)).toFixed(1) + ' ov/match' : (t20 ? (t20.runs / Math.max(1, t20.mat)).toFixed(0) + ' runs/match' : '\u2014');
+        cells = '<td class="num">' + matPlayed + '</td><td class="num">' + starts + '</td><td class="num">' + pctStarts + '%</td><td class="num">' + overs + '</td>';
+      } else if (view === 'dynamics') {
+        var coachTrust = 40 + (rec.seed % 55);
+        var captainTrust = 40 + ((rec.seed * 3) % 55);
+        var standing = STANDING_TIERS[Math.min(3, Math.floor((coachTrust + captainTrust) / 50))];
+        cells = '<td class="num">' + coachTrust + '</td><td class="num">' + captainTrust + '</td><td>' + standing + '</td>';
+      } else if (view === 'reports') {
+        cells = '<td>' + (rec.pros[0] || '\u2014') + '</td><td>' + (rec.cons[0] || 'No glaring weakness on record') + '</td>';
+      } else if (view === 'injuries') {
+        var daysOut = isInjured ? (4 + (rec.seed % 10)) : 0;
+        var histCount = rec.seed % 4;
+        cells = '<td>' + (isInjured ? 'Hamstring strain (Minor)' : 'None') + '</td><td class="num">' + daysOut + '</td><td class="num">' + histCount + '</td>';
+      } else if (view === 'risk') {
+        var pronIdx = rec.seed % 4;
+        var loadIdx = isInjured ? 2 : (rec.seed % 3);
+        var burnIdx = (rec.seed % 10) === 0 ? 2 : (rec.seed % 4 === 0 ? 1 : 0);
+        cells = '<td>' + PRONENESS_TIERS[pronIdx] + '</td><td>' + WORKLOAD_TIERS[loadIdx] + '</td><td>' + BURNOUT_TIERS[burnIdx] + '</td>';
+      } else if (view === 'stats') {
+        var seasonLine = mainlyBowls && t20w && t20w.wkts ? (t20w.wkts + ' wkts') : (t20 && t20.runs ? (t20.runs + ' runs') : '\u2014');
+        var avgLine = mainlyBowls ? rec.bowlingAvg.toFixed(1) : rec.battingAvg.toFixed(1);
+        var srEcon = mainlyBowls ? (6.0 + (20 - rec.groupAvg.bowling) * 0.22).toFixed(2) : (95 + rec.groupAvg.batting * 3).toFixed(1);
+        cells = '<td class="num">' + seasonLine + '</td><td class="num">' + avgLine + '</td><td class="num">' + srEcon + '</td>';
+      } else if (view === 'development') {
+        var potStars = Math.max(stars, Math.min(5, stars + (rec.seed % 3 === 0 ? 1 : 0)));
+        var potSvg = ''; for (var ps = 0; ps < 5; ps++) potSvg += '<svg class="icon ' + (ps < potStars ? 'filled' : 'empty') + '"><use href="#i-star-' + (ps < potStars ? 'fill' : 'line') + '"/></svg>';
+        var trendIdx = potStars > stars ? 0 : (rec.seed % 6 === 0 ? 2 : 1);
+        var age2 = 19 + (rec.seed % 18);
+        var stageIdx = age2 < 22 ? 0 : age2 < 27 ? 1 : age2 < 31 ? 2 : age2 < 35 ? 3 : 4;
+        cells = '<td><div class="star-row compact">' + potSvg + '</div></td><td>' + TREND[trendIdx] + '</td><td>' + STAGE[stageIdx] + '</td>';
+      } else {
+        cells = '';
+      }
+      return '<tr>' + playerCell + cells + '</tr>';
     }).join('');
     tbody.innerHTML = html;
     var headSub = document.querySelector('#panel-squad .panel-head .sub');
