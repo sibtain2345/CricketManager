@@ -13645,6 +13645,156 @@ because of that discipline, not despite skipping it.
 
 ---
 
+### 2026-09-18: 9-section pending-changes directive - navigation bug, Tactics/Match Day merge,
+### Messages verification, editable Training, Club/Franchise/International depth, mini-calendar
+### fix, National Pool/Squad + camp corrections, Transfer-vs-Trade research, franchise auction
+### timeline rebuild - PLAN AGREED, IN PROGRESS (packages A-G)
+
+The user supplied a standalone document (`cricketmanager-pending-changes.md`, 9 numbered
+sections) with an explicit instruction to use design/creative judgment and brainstorm, but "do
+exactly what is needed" - then, once the plan below was presented and approved, to work through
+it non-stop, package by package, with no pause in between, documenting everything here first so
+nothing gets lost. This entry is that documentation, written before implementation started, per
+that instruction - update each package's own status as it lands rather than waiting for the end.
+
+**Audit findings (live file, not assumed from memory) before any code was touched:**
+
+1. **Top-bar dead click / Club-dropdown bug - confirmed, root cause found.** Every `.mega-btn`
+   only calls `toggleMegaMenu()` - there is no "navigate on direct click" path anywhere. Deeper
+   cause: `renderMegaMenuBar()` reads a hardcoded `MEGA_GROUPS` object with **zero** context
+   filtering, entirely separate from the older `data-context`-tagged `.tab-btn` elements
+   `setContext()` still correctly hides/shows. The mega-menu bar was never wired to the identity
+   switcher after the sidebar->navbar conversion - that's why Club's dropdown permanently lists
+   "Franchise" as a sub-item regardless of identity, and why only the Portal group has a real
+   "Overview" entry (squad/recruitment/club/career groups have none).
+2. **Tactics vs Match Day - confirmed duplicated.** `panel-tactics` (a Squad sub-tab) and
+   `panel-matchday` (its own top-level mega-group, currently empty of dropdown items) are two
+   separate screens with separate content, contradicting the correction that they're one screen.
+3. **Messages routing - code reads correct** (`renderMessageDetail` renders the clicked message's
+   own kicker/headline/dek, or a task's own detail + resolve bar, keyed off `selectedMessageId` -
+   nothing points at a player profile or competition screen by construction). Flagged for a live
+   Playwright re-check before trusting static reading alone, since the user reported it as
+   currently broken.
+4. **Training editability - confirmed gap.** Individual per-player training focus is already a
+   real editable control (Player Profile). The **team-wide weekly schedule is view-only** -
+   clicking a day shows detail, nothing lets the coach change what's scheduled.
+5. **Club/Franchise/International - mostly built, blocked on item 1's fix.** `setContext()`
+   already hides/shows domain-exclusive `.tab-btn`s correctly - but the *visible* nav (the
+   mega-menu) never reads that filtering, so none of it is currently visible to the user. Once
+   the mega-menu is made context-aware (package A), most of item 5 is already satisfied by
+   existing screens (Franchise already has Owner/Identity/Squad/Fixtures/multi-year Staff/
+   Finance/Recruitment+Player-Database). Academy-signing-anytime and a few finer points need a
+   closing pass (package F).
+6. **Portal mini calendar - a real, confirmed CSS bug, not a design gap.** `renderOverviewCalendarMini()`
+   builds a correct 7-per-row grid of `.mini-cal-cell` divs, and `.mini-cal-grid { display:grid;
+   grid-template-columns:repeat(7,1fr) }` already exists in the stylesheet - but the HOST div
+   (`<div id="overview-calendar-mini">`, line ~1515) never has the `mini-cal-grid` class applied
+   to it. With no grid/flex container, ~35-42 plain block-level day cells stack one below the
+   other - exactly the "never-finishing scrollable tile" the user described. **Fix: add
+   `class="mini-cal-grid"` to that one div.** Click-through to `openCalendarView()` (the full
+   Calendar screen, which already has real Next/Previous-month buttons) is already wired on the
+   wrapping `.mini-list-card` - no other change needed here.
+7. **National Pool vs Squad - the two-stage data model already exists** (`NATIONAL_POOL`/
+   `NATIONAL_SQUADS`, genuinely separate, with a real call-up/promote flow). Camp timing
+   corrections (franchise strictly T20-only; a non-franchise club holds a camp before EACH of its
+   three format competitions, not just one; international camps chosen by head coach + selectors,
+   timed end/mid off-season, always before the club/franchise camps line was more casually
+   stated) and a real "Coaching Assignments" feature (assign specific coaches to specific roles/
+   groups) are genuine gaps - package E.
+8. **Transfer vs Trade - researched.** Real IPL rules confirmed via web research: a trade moves a
+   player between franchises OUTSIDE the auction, needs the player's consent, and in the
+   **pre-auction** trade window only **retained** players are eligible (not a player just bought
+   at the auction). The window opens roughly a month after the season ends and closes about a
+   week before the auction, then reopens after the auction until about a month before the next
+   season starts. Sources: [Britannica](https://www.britannica.com/sports/How-Does-the-IPL-Auction-Process-Work),
+   [ESPN Africa](https://africa.espn.com/cricket/story/_/id/38990673/how-player-trades-work-ipl),
+   [Khelreport](https://khelreport.com/ipl-2026-trade-window-explained/). The mockup already has a
+   real Trade Centre screen (pick-your-own-offer, a live 45% value-gap veto) but it is dated only
+   AFTER the auction (a "quarterly" window) - there is no pre-auction trade stage at all.
+9. **Auction sequencing - the real conflict, resolved in the user's favour.** A
+   `franchiseButtonStage` state machine already exists (EOI -> Pre-Auction Meeting -> Auction/War
+   Room -> Trade), each on its own calendar date via `CALENDAR_EVENTS` - solid bones. But
+   **retention currently resolves INSIDE the Auction Room itself**, on the same date as the live
+   bidding ("the same sitting as today's auction, not a separate deadline days earlier" - the
+   War Room's own panel-head text, a deliberate earlier design decision recorded in the Meeting-
+   Driven Selection ticket's Corrections Pass). This directly contradicts the new ask (retention
+   as its own separate, earlier, locked-by-the-time-you-reach-EOI stage) - and the new ask matches
+   the real IPL 2025 timeline the user quoted verbatim, so it wins; retention is being pulled out
+   into its own dated stage. Also confirmed missing by direct code read: the call timer is flat
+   10s at every call stage (no 5s/3s speed-up, no base-timer choice - `startAuctionRound` always
+   resets to `auctionTimerSeconds = 10`); there is no Pass button for the human team (only a Bid
+   button that disables and reads "You hold the bid"); no Skip Player / Skip Set buttons; no
+   overseas plane-icon badges anywhere in `AUCTION_LOTS` or the squad table; no pause-on-navigate
+   (`exitAuctionMode()` exists but doesn't clear the running timer, and no `visibilitychange`/
+   equivalent hook exists at all); and commentary (`auctionLog`) appends to a growing scrollable
+   `.notes-log` list rather than swapping a single line in place with a separate history tile.
+
+**Agreed build order - 7 packages, each its own commit + live Playwright verification:**
+
+- **A - Top bar + identity-aware nav - DONE.** `MEGA_GROUPS` gained a per-group `context` field
+  (`renderMegaMenuBar()`'s `order` array is now filtered by `CURRENT_CONTEXT`, re-run from inside
+  `setContext()` so switching identity live-updates which top-level groups even exist - verified:
+  club context shows Portal/Squad/Recruitment/Match Day/Club/Career; franchise context swaps
+  Recruitment+Club for a standalone Franchise group; international swaps them for International).
+  Franchise is no longer nested under Club's dropdown - it's its own context-gated group, closing
+  the exact reported bug. Every group's first/only item is labeled "Overview". Squad lost its
+  "Tactics" item (folded fully into Match Day's own single item, ahead of Package B's content
+  merge - no more `TAB_TO_GROUP` collision between the two). A group with exactly one destination
+  (Recruitment/Match Day/Club/Franchise/International) now renders as a single plain button whose
+  own click navigates directly - no dropdown, no dead click. A group with several destinations
+  (Portal/Squad/Career) splits into a `.mega-btn-label` (click navigates to the first/default item)
+  and a separate `.mega-btn-chev` (click toggles the dropdown) inside the same visual `.mega-btn`
+  wrapper - verified live: the chevron opens the dropdown without navigating, the label navigates
+  and closes the dropdown, `toggleMegaMenu`/`closeAllMegaMenus`/`syncMegaMenuToPanel` all needed
+  zero changes since they already worked off the outer element's id/class rather than assuming it
+  was always a `<button>`. The Franchise/International `.tab-btn`s' own `data-group` moved off the
+  borrowed "club"/"career" values onto real "franchise"/"international" ones, with a matching
+  row-2 subnav-strip CSS rule added for each (mirroring the existing club/career rows exactly).
+  **The mini-calendar bug (item 6) was fixed in the same pass** - a real, confirmed CSS bug, not a
+  design gap: `.mini-cal-grid { display:grid; grid-template-columns:repeat(7,1fr) }` already
+  existed in the stylesheet, but the host div (`#overview-calendar-mini`) never had the class
+  applied, so ~35-42 plain block-level day cells stacked vertically instead of wrapping into a
+  7-column grid - exactly the "never-finishing scrollable tile" reported. One-line fix (add the
+  class); click-through to the full Calendar screen (with its own real Next/Previous-month
+  buttons) was already correctly wired and needed no change. Verified live: `overview-calendar-mini`
+  now computes `display:grid` with 31 children for the frozen month, no scrollbar.
+  Structural verification clean (tag-count parity, 0 div-nesting issues, 0 real duplicate ids -
+  the one flagged match was a false positive from JS template-string text, not real markup, `node
+  --check` exit 0). Committed.
+
+- **B - Merge Tactics into Match Day** (item 2): one screen, the existing tile-based nav pattern
+  kept, `panel-tactics` retired, its content folded into `panel-matchday` (checking the Match Day
+  screen's own existing content first to decide exactly what belongs on the merged screen).
+- **C - Messages live-verification** (item 3): confirm in-browser, fix only if a real bug is
+  found (code read suggests it's already correct).
+- **D - Training: real team-schedule editing** (item 4): editable session assignment per day/
+  group, on top of the existing read-only detail view.
+- **E - Franchise/International auction & camp rebuild** (items 7, 8, 9 - the largest package):
+  retention pulled into its own dated stage with a locked, reference-only multi-team display
+  inside the Auction Room + real per-team and combined-table news on submission; a Pre-Auction
+  Trade Window added (reusing the existing Trade Centre UI, redated + reframed to retained-only
+  players); Registration Close folded into the EOI screen's own existing narrative rather than a
+  new screen; a Post-Auction lock state + injury-replacement-wildcard note; a Pass button (human
+  team, live during bidding, becomes Next once sold); Skip Player + Skip Set (auto-bids the rest
+  of the set); overseas plane-icon badges in the auction lot view and the squad table; commentary
+  rebuilt to swap a single line in place next to the player with a separate click-to-open
+  scrollable Commentary History tile; a pause-on-navigate-away fix (clear the timer on
+  `exitAuctionMode`, don't silently resume on re-entry); an escalating 10s -> 5s (1st call) -> 3s
+  (2nd call) timer with a selectable base (10s/5s/3s, the 1st/2nd-call values scaling
+  proportionally); corrected camp timing rules; a real Coaching Assignments feature.
+- **F - Club/Franchise/International remaining gaps** (item 5 closeout - academy-signing-anytime
+  and any other finer point found not already covered by existing screens once package A makes
+  them properly visible).
+- **G - Final structural verification pass** across the whole file (tag-count parity, div-nesting
+  scan, duplicate-id scan, `node --check` on the extracted script block), matching this
+  sub-track's own established discipline, before the closing commit/report.
+
+Status: **package A starting now.** Update this entry's own status line (and add a short writeup
+per package, matching this sub-track's established style) as each package lands - do not let this
+entry go stale the way this project's own history repeatedly warns against.
+
+---
+
 ## CONSOLIDATED DEFERRED-ITEMS REGISTER (maintained - the single source of truth)
 
 This table is the index. Every item is either NOW (the wiring & tech-debt pass above), a

@@ -201,13 +201,23 @@
   .tabs[data-active-group="recruitment"] .tab-btn[data-group="recruitment"]:not([hidden]) { display: inline-flex; }
   .tabs[data-active-group="club"] .tab-btn[data-group="club"]:not([hidden]) { display: inline-flex; }
   .tabs[data-active-group="career"] .tab-btn[data-group="career"]:not([hidden]) { display: inline-flex; }
+  .tabs[data-active-group="franchise"] .tab-btn[data-group="franchise"]:not([hidden]) { display: inline-flex; }
+  .tabs[data-active-group="international"] .tab-btn[data-group="international"]:not([hidden]) { display: inline-flex; }
   .mega-btn {
-    appearance: none; border: none; background: none; color: var(--ink-dim); font: inherit;
-    font-size: var(--fs-body); font-weight: 600; padding: 8px 12px; border-radius: 7px;
-    cursor: pointer; display: inline-flex; align-items: center; gap: 5px; position: relative;
+    color: var(--ink-dim); font-size: var(--fs-body); font-weight: 600; border-radius: 7px;
+    display: inline-flex; align-items: center; position: relative; overflow: hidden;
   }
   .mega-btn:hover { color: var(--ink); background: var(--surface-2); }
   .mega-btn.active { color: var(--gold); }
+  .mega-btn-single { appearance: none; border: none; background: none; color: inherit; font: inherit;
+    padding: 8px 12px; cursor: pointer; }
+  .mega-btn-label, .mega-btn-chev {
+    appearance: none; border: none; background: none; color: inherit; font: inherit; font-weight: inherit;
+    cursor: pointer; display: inline-flex; align-items: center;
+  }
+  .mega-btn-label { padding: 8px 4px 8px 12px; }
+  .mega-btn-chev { padding: 8px 10px 8px 4px; }
+  .mega-btn-label:hover, .mega-btn-chev:hover { background: var(--surface-3); }
   .mega-btn .chev { width: 10px; height: 10px; transition: transform 0.12s ease; }
   .mega-btn[aria-expanded="true"] .chev { transform: rotate(180deg); }
   .mega-dropdown {
@@ -1454,11 +1464,11 @@
     <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-recruitment" data-tab="recruitment" data-group="recruitment" data-context="club" title="Recruitment"><svg class="icon"><use href="#i-swap"/></svg><span class="tab-label">Recruitment</span></button>
 
     <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-club" data-tab="club" data-group="club" data-context="club" title="Club"><svg class="icon"><use href="#i-briefcase"/></svg><span class="tab-label">Club</span></button>
-    <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-franchise" data-tab="franchise" data-group="club" data-context="franchise" title="Franchise"><svg class="icon"><use href="#i-badge"/></svg><span class="tab-label">Franchise</span></button>
+    <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-franchise" data-tab="franchise" data-group="franchise" data-context="franchise" title="Franchise"><svg class="icon"><use href="#i-badge"/></svg><span class="tab-label">Franchise</span></button>
 
     <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-manager-profile" data-tab="manager-profile" data-group="career" title="Manager Profile"><svg class="icon"><use href="#i-user"/></svg><span class="tab-label">Manager Profile</span></button>
     <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-jobcentre" data-tab="jobcentre" data-group="career" title="Job Centre"><svg class="icon"><use href="#i-briefcase"/></svg><span class="tab-label">Job Centre</span></button>
-    <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-international" data-tab="international" data-group="career" data-context="international" title="International"><svg class="icon"><use href="#i-plane"/></svg><span class="tab-label">International</span></button>
+    <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-international" data-tab="international" data-group="international" data-context="international" title="International"><svg class="icon"><use href="#i-plane"/></svg><span class="tab-label">International</span></button>
   </div>
 </nav>
 </div>
@@ -1512,7 +1522,7 @@
         </div>
         <div class="mini-list-card clickable" onclick="openCalendarView()" style="cursor:pointer">
           <span class="eyebrow"><svg class="icon sm"><use href="#i-cal-list"/></svg> This month</span>
-          <div id="overview-calendar-mini"></div>
+          <div id="overview-calendar-mini" class="mini-cal-grid"></div>
           <button class="view-more-btn" style="margin-top:8px">Open full calendar</button>
         </div>
       </div>
@@ -6252,6 +6262,17 @@
   // own sub-pages) + a persistent row-2 subnav strip (the existing .tab-btn elements,
   // regrouped via data-group - showPanel()/click wiring is completely unchanged) + a
   // breadcrumb. Replaces the old flat 11-item tab row. ----------
+  // Each group carries an optional `context` - when set, the group is only
+  // rendered while CURRENT_CONTEXT matches it (renderMegaMenuBar re-runs from
+  // setContext(), so switching identity live-updates which groups even exist
+  // in the bar). Club/Franchise/International are genuinely different top-
+  // level identities, not sibling pages of one "Club" group - the old nesting
+  // (Franchise as a dropdown item under Club) was the root cause of the
+  // reported bug and is gone. A group with exactly one item is rendered as a
+  // plain direct-navigate button (no dropdown, no dead click); a group with
+  // several items splits into a clickable label (navigates to items[0]) plus
+  // a separate chevron that opens the dropdown for the rest - see
+  // renderMegaMenuBar().
   var MEGA_GROUPS = {
     portal: { label: 'Portal', items: [
       { tab: 'portal', label: 'Overview' },
@@ -6265,22 +6286,27 @@
       { tab: 'team-report', label: 'Opposition Report' }
     ] },
     squad: { label: 'Squad', items: [
-      { tab: 'squad', label: 'Squad' },
-      { tab: 'training', label: 'Training' },
-      { tab: 'tactics', label: 'Tactics' }
+      { tab: 'squad', label: 'Overview' },
+      { tab: 'training', label: 'Training' }
     ] },
     recruitment: { label: 'Recruitment', items: [
-      { tab: 'recruitment', label: 'Recruitment' }
+      { tab: 'recruitment', label: 'Overview' }
+    ], context: 'club' },
+    matchday: { label: 'Match Day', items: [
+      { tab: 'tactics', label: 'Overview' }
     ] },
-    matchday: { label: 'Match Day', items: [] },
     club: { label: 'Club', items: [
-      { tab: 'club', label: 'Club' },
-      { tab: 'franchise', label: 'Franchise' }
-    ] },
+      { tab: 'club', label: 'Overview' }
+    ], context: 'club' },
+    franchise: { label: 'Franchise', items: [
+      { tab: 'franchise', label: 'Overview' }
+    ], context: 'franchise' },
+    international: { label: 'International', items: [
+      { tab: 'international', label: 'Overview' }
+    ], context: 'international' },
     career: { label: 'Career', items: [
       { tab: 'manager-profile', label: 'Manager Profile' },
-      { tab: 'jobcentre', label: 'Job Centre' },
-      { tab: 'international', label: 'International' }
+      { tab: 'jobcentre', label: 'Job Centre' }
     ] }
   };
   var TAB_TO_GROUP = {};
@@ -6410,19 +6436,27 @@
   function renderMegaMenuBar() {
     var bar = document.getElementById('mega-menu-bar');
     if (!bar) return;
-    var order = ['portal', 'squad', 'recruitment', 'matchday', 'club', 'career'];
-    bar.innerHTML = order.map(function (key) {
+    var order = ['portal', 'squad', 'recruitment', 'matchday', 'club', 'franchise', 'international', 'career'];
+    bar.innerHTML = order.filter(function (key) {
       var g = MEGA_GROUPS[key];
-      var hasItems = g.items.length > 0;
-      var dropdown = hasItems ? ('<div class="mega-dropdown" id="mega-dropdown-' + key + '">'
+      return !g.context || g.context === CURRENT_CONTEXT;
+    }).map(function (key) {
+      var g = MEGA_GROUPS[key];
+      var multi = g.items.length > 1;
+      var dropdown = multi ? ('<div class="mega-dropdown" id="mega-dropdown-' + key + '">'
         + g.items.map(function (it) {
           return '<button type="button" class="mega-dropdown-item" data-tab="' + it.tab + '" onclick="closeAllMegaMenus();showPanel(\'' + it.tab + '\')">' + it.label + '</button>';
         }).join('') + '</div>') : '';
-      var onclick = hasItems ? ("toggleMegaMenu('" + key + "')") : "closeAllMegaMenus();attemptAdvance('enterMatchMode')";
-      return '<button type="button" class="mega-btn" id="mega-btn-' + key + '" aria-expanded="false" onclick="' + onclick + '">'
-        + g.label
-        + (hasItems ? ' <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>' : '')
-        + '</button>' + dropdown;
+      var firstTab = g.items.length ? g.items[0].tab : null;
+      if (multi) {
+        return '<div class="mega-btn" id="mega-btn-' + key + '" aria-expanded="false">'
+          + '<button type="button" class="mega-btn-label" onclick="closeAllMegaMenus();showPanel(\'' + firstTab + '\')">' + g.label + '</button>'
+          + '<button type="button" class="mega-btn-chev" aria-label="' + g.label + ' menu" onclick="event.stopPropagation();toggleMegaMenu(\'' + key + '\')">'
+          + '<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>'
+          + '</button>' + dropdown + '</div>';
+      }
+      var onclick = firstTab ? ("closeAllMegaMenus();showPanel('" + firstTab + "')") : "closeAllMegaMenus();attemptAdvance('enterMatchMode')";
+      return '<button type="button" class="mega-btn mega-btn-single" id="mega-btn-' + key + '" onclick="' + onclick + '">' + g.label + '</button>';
     }).join('');
   }
   function closeAllMegaMenus() {
@@ -8053,6 +8087,7 @@
     if (wm) wm.innerHTML = CONTEXT_WORDMARK[ctx];
     renderActionButton();
     renderInboxRail();
+    renderMegaMenuBar();
     // If the panel on screen belongs to a domain we just switched away from,
     // fall back to Portal rather than leave a now-hidden tab looking selected.
     if (currentTabWasHidden) showPanel("portal");
