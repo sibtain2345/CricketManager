@@ -13787,8 +13787,26 @@ that instruction - update each package's own status as it lands rather than wait
   `.phase-toggle` tile pattern (New Ball/Middle Overs/Death Overs) stays exactly as it was, per the
   instruction to keep the tile-based nav pattern. Structurally verified clean; live-verified
   (heading reads "Match Day", direct click works, both row-2 strips correct). Committed.
-- **C - Messages live-verification** (item 3): confirm in-browser, fix only if a real bug is
-  found (code read suggests it's already correct).
+- **C - Messages live-verification - DONE, a real bug found and fixed.** Live testing (not just
+  static reading) caught the real bug behind the report: `openInboxItem(id)` marked the message
+  read, set `selectedMessageId`, then **immediately executed `item.click`** (e.g.
+  `openPlayerByName('Zain Chaudhry')`, `showPanel('recruitment')`, `openSquadNewsModal(...)`)
+  BEFORE the detail pane ever rendered - so clicking a message with an onward link never actually
+  showed the message's own content at all, it silently navigated straight past it. Confirmed live:
+  clicking "Chaudhry's rise has the dressing room talking" jumped straight to his player profile
+  with no detail view ever appearing. Fixed properly, not papered over: `openInboxItem` now only
+  selects/marks-read (matching `openInboxTask`'s own already-correct behaviour, which never
+  auto-fired its `go()`); a new `actionLabel` field was added to the 9 `INBOX_NEWS` entries that
+  carry a real `click` handler ("View Zain Chaudhry's profile", "Open Recruitment", "View the full
+  squad", ...); `renderMessageDetail`'s news branch now renders that as a real clickable tile at
+  the foot of the detail body (reusing the exact `.messages-response-btn` styling the task-resolve
+  path already established, not a new visual pattern) via a small new `fireMessageAction(src)`
+  helper. Live-verified all three shapes: a news item with a profile-link tile (message shows its
+  own headline/dek first, tile navigates only when explicitly clicked, confirmed landing on the
+  right player); a squad-announcement message (tile correctly opens the real squad-news modal); a
+  plain news item with no action (correctly shows zero tile, not even an empty bar); and the task
+  path (context-gated exactly as designed, `Resolve now` unaffected by any of this). Zero console
+  errors throughout. Structurally verified clean. Committed.
 - **D - Training: real team-schedule editing** (item 4): editable session assignment per day/
   group, on top of the existing read-only detail view.
 - **E - Franchise/International auction & camp rebuild** (items 7, 8, 9 - the largest package):
