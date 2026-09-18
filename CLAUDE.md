@@ -13807,8 +13807,26 @@ that instruction - update each package's own status as it lands rather than wait
   plain news item with no action (correctly shows zero tile, not even an empty bar); and the task
   path (context-gated exactly as designed, `Resolve now` unaffected by any of this). Zero console
   errors throughout. Structurally verified clean. Committed.
-- **D - Training: real team-schedule editing** (item 4): editable session assignment per day/
-  group, on top of the existing read-only detail view.
+- **D - Training: real team-schedule editing - DONE.** The per-day session detail (2-3 groups,
+  each with its own focus/priority/impact) was a pure click-through VIEW - `showTrainingDay`
+  only ever rendered `.staff-row` text, no control anywhere let a coach change what was scheduled.
+  individual per-player focus was already real (Player Profile); this closes the team-wide half.
+  A real `TRAINING_FOCUS_OPTIONS` vocabulary (18 entries, matching this project's own
+  `TrainingFocus` domain enum - BattingTechnique/Power/AgainstPace/AgainstSpin/Finishing, the
+  bowling equivalents, Fielding, Physical, Mental, role-conversion, recovery, full rest) each
+  carries its own honest impact line, reused rather than inventing a second wording style. Each
+  session row is now a real `<select>` (focus, re-deriving the impact line live via
+  `setTrainingSessionFocus`) plus a priority `<input type="range">` (`setTrainingSessionPct`),
+  both genuinely mutating `TRAINING_DAY_SESSIONS[dayIdx][i]` in place - session-scoped state, the
+  same established persistence discipline every other edit in this file already uses (contract
+  negotiation, role assignment, retention lists, ...), never a fake commit with no backing state.
+  **The actual match day itself stays locked and read-only, correctly** - `Match day` (the group
+  the fixture-day row carries) is the one case gated off entirely (the schedule there is
+  determined by the fixture, not a training choice); `Full rest` (Sunday) was deliberately left
+  editable, not locked, since a coach may genuinely want to schedule something on what's nominally
+  a rest day. Live-verified: changing Monday's focus + priority both mutate real state and update
+  the DOM live; Saturday (match day) correctly shows no select at all, unchanged read-only text.
+  Zero console errors. Structurally verified clean. Committed.
 - **E - Franchise/International auction & camp rebuild** (items 7, 8, 9 - the largest package):
   retention pulled into its own dated stage with a locked, reference-only multi-team display
   inside the Auction Room + real per-team and combined-table news on submission; a Pre-Auction

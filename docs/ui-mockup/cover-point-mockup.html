@@ -11318,13 +11318,76 @@
     [ { group: 'Match day', focus: 'Islamabad Icons vs Lahore Lions', pct: 100, impact: 'No training scheduled &mdash; a fixture day always overrides the programme.' } ],
     [ { group: 'Outfield', focus: 'Full rest', pct: 100, impact: 'No development this session &mdash; a genuine day off, not a light session.' } ]
   ];
+  // Real training-focus vocabulary, matching CricketManager's own TrainingFocus
+  // domain enum (see CLAUDE.md, Phase 5 Part 1) - a coach chooses what a
+  // session actually works on, not a generic "training" label. Each focus
+  // carries its own honest impact line, mirroring how the existing entries
+  // were already worded (which attribute cluster moves, and what - if
+  // anything - it costs).
+  var TRAINING_FOCUS_OPTIONS = [
+    { label: 'Technique against genuine pace', impact: 'Batting technique: slightly increased.' },
+    { label: 'Batting technique &amp; footwork', impact: 'Batting technique: increased.' },
+    { label: 'Power-hitting &amp; six-hitting range', impact: 'Batting power: increased. Fitness: slightly reduced from the extra load.' },
+    { label: 'Playing spin off the front and back foot', impact: 'Batting against spin: slightly increased.' },
+    { label: 'Finishing &amp; death-overs hitting', impact: 'Finishing under pressure: increased.' },
+    { label: 'New-ball swing &amp; seam craft', impact: 'Bowling swing/seam: slightly increased.' },
+    { label: 'Death-overs bowling craft', impact: 'Bowling wicket-taking: increased. Fitness: slightly reduced from the extra spells.' },
+    { label: 'Yorker &amp; slower-ball control', impact: 'Bowling execution under pressure: increased.' },
+    { label: 'Spin variation &amp; control', impact: 'Bowling variation: slightly increased.' },
+    { label: 'Containment &amp; middle-overs discipline', impact: 'Bowling economy: slightly increased.' },
+    { label: 'Ground fielding and outfield catching', impact: 'Fielding catching: slightly increased.' },
+    { label: 'Wicketkeeping to spin under a turning ball', impact: 'Fielding reflexes: slightly increased.' },
+    { label: 'Composure under a required-rate squeeze', impact: 'Mental pressure handling: slightly increased.' },
+    { label: 'Physical conditioning', impact: 'Physical fitness: increased, at a real fatigue cost this week.' },
+    { label: 'Conditioning &mdash; eased back this week', impact: 'Physical fitness: unaffected, deliberately light.' },
+    { label: 'Role-conversion work', impact: 'Slowly nudges the player toward a different batting/bowling role.' },
+    { label: 'Recovery &mdash; light skills only', impact: 'No development this session &mdash; the squad works on shape and recovery.' },
+    { label: 'Full rest', impact: 'No development this session &mdash; a genuine day off, not a light session.' }
+  ];
+  function trainingFocusOptionsHtml(current) {
+    var opts = TRAINING_FOCUS_OPTIONS.map(function (o) { return o.label; });
+    if (opts.indexOf(current) === -1) opts.unshift(current);
+    return opts.map(function (l) { return '<option' + (l === current ? ' selected' : '') + '>' + l + '</option>'; }).join('');
+  }
   function showTrainingDay(btn, dayIdx) {
     Array.prototype.forEach.call(document.querySelectorAll('#training-week-days .pitch-preset-btn'), function (b) { b.classList.toggle('active', b === btn); });
+    renderTrainingDayDetail(dayIdx);
+  }
+  var trainingDayShown = 0;
+  function renderTrainingDayDetail(dayIdx) {
+    trainingDayShown = dayIdx;
     var sessions = TRAINING_DAY_SESSIONS[dayIdx] || [];
     var host = document.getElementById('training-day-detail');
-    host.innerHTML = sessions.map(function (s) {
-      return '<div class="staff-row"><div class="staff-row-main"><span class="staff-name">' + s.group + '</span><span class="staff-role-label">' + s.focus + ' &mdash; ' + s.impact + '</span></div><span class="pill">' + s.pct + '%</span></div>';
-    }).join('');
+    var locked = sessions.length === 1 && sessions[0].group === 'Match day';
+    host.innerHTML = sessions.map(function (s, i) {
+      if (locked) {
+        return '<div class="staff-row"><div class="staff-row-main"><span class="staff-name">' + s.group + '</span><span class="staff-role-label">' + s.focus + ' &mdash; ' + s.impact + '</span></div><span class="pill">' + s.pct + '%</span></div>';
+      }
+      return '<div class="staff-row" style="align-items:flex-start">'
+        + '<div class="staff-row-main" style="flex:1;min-width:0">'
+        + '<span class="staff-name">' + s.group + '</span>'
+        + '<select class="plan-select" style="margin:4px 0" onchange="setTrainingSessionFocus(' + dayIdx + ',' + i + ',this)">' + trainingFocusOptionsHtml(s.focus) + '</select>'
+        + '<span class="staff-role-label" id="training-impact-' + dayIdx + '-' + i + '">' + s.impact + '</span>'
+        + '</div>'
+        + '<div style="display:flex;flex-direction:column;align-items:flex-end;gap:2px;min-width:76px">'
+        + '<span class="pill" id="training-pct-' + dayIdx + '-' + i + '">' + s.pct + '%</span>'
+        + '<input type="range" min="10" max="100" step="5" value="' + s.pct + '" style="width:74px" oninput="setTrainingSessionPct(' + dayIdx + ',' + i + ',this.value)">'
+        + '</div></div>';
+    }).join('') + (locked ? '' : '<div class="role-hint" style="margin-top:8px;margin-bottom:0">Choose what each group works on and how much of the session it gets &mdash; a real, standing change to this week\'s programme, not just a preview.</div>');
+  }
+  function setTrainingSessionFocus(dayIdx, i, sel) {
+    var s = TRAINING_DAY_SESSIONS[dayIdx][i];
+    s.focus = sel.value;
+    var known = TRAINING_FOCUS_OPTIONS.filter(function (o) { return o.label === sel.value; })[0];
+    s.impact = known ? known.impact : s.impact;
+    var impactEl = document.getElementById('training-impact-' + dayIdx + '-' + i);
+    if (impactEl) impactEl.textContent = s.impact;
+  }
+  function setTrainingSessionPct(dayIdx, i, val) {
+    val = parseInt(val, 10);
+    TRAINING_DAY_SESSIONS[dayIdx][i].pct = val;
+    var pill = document.getElementById('training-pct-' + dayIdx + '-' + i);
+    if (pill) pill.textContent = val + '%';
   }
   // 3b - a real per-unit mini-dashboard, headcount/top-attribute computed live
   // from the same SQUAD_ROSTER + generatePlayerRecord data the squad table and
