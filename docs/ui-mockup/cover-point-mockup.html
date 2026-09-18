@@ -4292,9 +4292,42 @@
         <div class="staff-row">
           <div class="staff-row-main"><span class="staff-name">Matchup read</span><span class="staff-role-label">Genuinely uneasy against left-arm pace &mdash; a real sample built up over several seasons, not a first impression.</span></div>
         </div>
-        <div class="staff-row">
-          <div class="staff-row-main"><span class="staff-name">International eligibility</span><span class="staff-role-label">Uncapped, no representation drift in motion &mdash; a genuine switch would need years of residency elsewhere, or a real, sustained snub at home. Neither applies today.</span></div>
+      </div>
+
+      <div class="analysis-card" style="margin-top:16px">
+        <span class="eyebrow"><svg class="icon sm"><use href="#i-globe"/></svg> Eligibility</span>
+        <div class="bio-line"><span class="k">Nation Eligibility</span><span style="color:var(--turf-strong)">Eligible &mdash; trained in Pakistan through the Islamabad Icons academy pathway</span></div>
+        <div class="bio-line"><span class="k">Club Eligibility</span><span style="color:var(--turf-strong)">Eligible &mdash; a genuine one-club academy graduate, 2019 to today</span></div>
+        <div class="bio-line"><span class="k">Nationality Eligibility</span><span>Not applicable &mdash; no residency route open elsewhere; no representation drift in motion</span></div>
+      </div>
+
+      <div class="analysis-card" style="margin-top:16px">
+        <span class="eyebrow"><svg class="icon sm"><use href="#i-star-fill"/></svg> Favoured Personnel &amp; Clubs</span>
+        <div class="bio-line"><span class="k">Favoured Personnel</span><span style="max-width:60%;text-align:right">Mudassar Iqbal, Batting Coach &mdash; credits him directly for his technical progress</span></div>
+        <div class="bio-line"><span class="k">Favoured Clubs</span><span style="max-width:60%;text-align:right">None on record &mdash; a genuine one-club man with no outside pull</span></div>
+      </div>
+
+      <div class="analysis-card" style="margin-top:16px">
+        <span class="eyebrow"><svg class="icon sm"><use href="#i-shield"/></svg> National Team</span>
+        <div class="bio-line"><span class="k">Status</span><span>Uncapped</span></div>
+        <div class="bio-line"><span class="k">Chance of selection</span><span class="pill">Long shot &mdash; outside the current pool</span></div>
+        <div class="role-hint" style="margin-bottom:0">A genuinely strong domestic campaign, sustained across a full season, is what actually moves this &mdash; the panel reads real form, not reputation.</div>
+      </div>
+
+      <div class="analysis-card" style="margin-top:16px">
+        <span class="eyebrow"><svg class="icon sm"><use href="#i-medical"/></svg> Injury History</span>
+        <div class="table-card">
+          <div class="table-scroll-inner" style="max-height:none">
+          <table class="career">
+            <thead><tr><th>Date</th><th>Injury</th><th>Severity</th><th>Cause</th><th>Treatment</th><th>Out for</th></tr></thead>
+            <tbody>
+              <tr><td>Aug 2025</td><td>Hamstring strain</td><td>Minor</td><td>Sprint between the wickets</td><td>Physio-managed</td><td>9 days</td></tr>
+              <tr><td>Mar 2024</td><td>Side strain</td><td>Moderate</td><td>A heavy bowling-adjacent training block</td><td>Rehab programme</td><td>3 weeks</td></tr>
+            </tbody>
+          </table>
+          </div>
         </div>
+        <div class="role-hint" style="margin-top:8px;margin-bottom:0">No career-threatening injury on record &mdash; both knocks resolved with no lasting attribute cost.</div>
       </div>
 
       <div class="analysis-card" style="margin-top:16px">
@@ -5285,6 +5318,14 @@
           <div class="attr-row clickable" onclick="openAttributeDetail(this)"><span class="aname">Technical Knowledge</span><span class="attr-num" id="staff-attr-technical">-</span></div>
           <div class="attr-row clickable" onclick="openAttributeDetail(this)"><span class="aname">Communication</span><span class="attr-num" id="staff-attr-communication">-</span></div>
           <div class="attr-row clickable" onclick="openAttributeDetail(this)"><span class="aname">Diligence</span><span class="attr-num" id="staff-attr-diligence">-</span></div>
+        </div>
+        <div class="attr-group">
+          <h3>Knowledge</h3>
+          <div class="attr-row clickable" onclick="openAttributeDetail(this)"><span class="aname">Judging Player Ability</span><span class="attr-num" id="staff-attr-judgeability">-</span></div>
+          <div class="attr-row clickable" onclick="openAttributeDetail(this)"><span class="aname">Judging Player Potential</span><span class="attr-num" id="staff-attr-judgepotential">-</span></div>
+          <div class="attr-row clickable" onclick="openAttributeDetail(this)"><span class="aname">Judging Staff Ability</span><span class="attr-num" id="staff-attr-judgestaff">-</span></div>
+          <div class="attr-row clickable" onclick="openAttributeDetail(this)"><span class="aname">Negotiating</span><span class="attr-num" id="staff-attr-negotiating">-</span></div>
+          <div class="attr-row clickable" onclick="openAttributeDetail(this)"><span class="aname">Tactical Knowledge</span><span class="attr-num" id="staff-attr-tactical">-</span></div>
         </div>
       </div>
       <div class="role-hint" id="staff-role-suitability" style="margin-top:10px;margin-bottom:0"></div>
@@ -10369,6 +10410,18 @@
       var v = Math.max(1, Math.min(20, centre + off));
       values[a] = v;
       var el = document.getElementById('staff-attr-' + ids[i]);
+      if (el) { el.textContent = v; el.className = 'attr-num ' + attrTierClass(v); }
+    });
+    // A real, distinct "Knowledge" attribute group - Judging Player/Staff
+    // Ability and Potential, Negotiating, Tactical Knowledge - never the same
+    // numbers as Coaching/Mental, on every staff role including Medical.
+    var knowledgeAttrs = ['Judging Player Ability', 'Judging Player Potential', 'Judging Staff Ability', 'Negotiating', 'Tactical Knowledge'];
+    var knowledgeIds = ['judgeability', 'judgepotential', 'judgestaff', 'negotiating', 'tactical'];
+    var knowledgeOffsets = [1, 0, -2, 2, -1];
+    knowledgeAttrs.forEach(function (a, i) {
+      var off = knowledgeOffsets[(seed + i * 7) % knowledgeOffsets.length];
+      var v = Math.max(1, Math.min(20, centre + off));
+      var el = document.getElementById('staff-attr-' + knowledgeIds[i]);
       if (el) { el.textContent = v; el.className = 'attr-num ' + attrTierClass(v); }
     });
     var focus = STAFF_ROLE_ATTR_FOCUS[role] || DEFAULT_STAFF_ATTR_FOCUS;

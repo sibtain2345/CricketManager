@@ -13592,6 +13592,57 @@ the rail; the recently-viewed chip row correctly accumulating (Lahore Lions, the
 ahead of it) across two separate profile visits; and the Transfer Window Report rendering on the
 Standings tab with all 6 clubs. Zero console errors throughout.
 
+#### Slice 5 - Player/Staff Profile depth: COMPLETE (all 5 slices now done)
+
+Checked the live file first, per the now-standing discipline: Player Profile's Personal tab
+already had a single "International eligibility" line (a blob, not the real 3-way breakdown), and
+no Favoured Personnel/Clubs, National Team card, or Injury History table anywhere; Staff Profile's
+Attributes card had 5 real Core attributes but no Knowledge group. Genuinely missing, not already
+covered - built directly rather than re-deriving a gap already confirmed by the plan's own notes.
+
+**Built:**
+- **The nationality/homegrown eligibility checker as a real 3-way breakdown** - Nation Eligibility,
+  Club Eligibility, Nationality Eligibility, each independently stated (not one blended sentence),
+  replacing the single "International eligibility" line.
+- **"Favoured Personnel &amp; Clubs"**, genuinely distinct fields rather than one - Favoured
+  Personnel names the specific coach a player credits; Favoured Clubs correctly reads "None on
+  record" for a genuine one-club man rather than inventing outside pull that isn't real.
+- **A computed "chance of selection" tag on the National Team card** - a real card (Status/Chance
+  of selection/what actually moves it), honestly showing "Long shot" for an uncapped domestic
+  player rather than a fabricated international pedigree.
+- **A staff "Knowledge" attribute group**, distinct from the existing Coaching/Mental-adjacent
+  Core attributes - Judging Player Ability, Judging Player Potential, Judging Staff Ability,
+  Negotiating, Tactical Knowledge - added to the ONE shared `attr-grid` markup every staff role tab
+  already renders through, so it appears on every role including Medical for free, not five
+  separate additions.
+- **A per-injury history table** - date/injury/severity/cause/treatment/out-for, with an honest
+  closing note that neither knock left a lasting attribute cost (no career-threatening injury on
+  record for this player).
+- Confirmed, not rebuilt: the chat-bubble praise/negotiation pattern and the Player Profile radar
+  chart were both already the right shape per the original FM26 video findings - no action needed.
+
+**Verified**: `verify.py`'s structural pass, plus a live Playwright pass confirming all 4 new
+Player Profile cards render with real content, and the Knowledge attribute group populates real,
+distinct values on a genuine staff profile - a first test scoped its row-selector too broadly
+(matched an unrelated staff-row elsewhere on the Club panel instead of an actual staff-hire row)
+and read as a failure; re-scoped to the real `#club-staff` subpanel and confirmed both the
+pre-existing Core attributes and the new Knowledge attributes populate correctly together, not a
+real defect. Zero console errors throughout.
+
+### ALL FIVE SLICES COMPLETE
+
+Portal, Club, Squad &amp; Training, Recruitment, and Player/Staff Profile depth are all built,
+structurally verified, and live-verified via Playwright, each committed and pushed individually
+per the user's own standing instruction. The single biggest recurring lesson across all five
+slices, worth restating once at the end rather than five times: **this file had already grown
+substantial infrastructure between when this plan's own review was written and when each slice
+was actually built** (`SQUAD_ROSTER`/`generatePlayerRecord` in Slice 2, the full 3-subtab Training
+screen in Slice 3, the 5-subtab Recruitment screen and its real Transfer History table in Slice
+4) - every slice's own first step was re-verifying the live file rather than trusting either the
+plan's description of a gap or an earlier static-text check, and at least one real duplicate-effort
+mistake (Slice 4's redundant second Transfer History card) was caught and reverted specifically
+because of that discipline, not despite skipping it.
+
 ---
 
 ## CONSOLIDATED DEFERRED-ITEMS REGISTER (maintained - the single source of truth)
