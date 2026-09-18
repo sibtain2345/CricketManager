@@ -3513,7 +3513,7 @@
          day - the button is genuinely live here, not a free-standing shortcut. -->
     <div class="analysis-card">
       <span class="eyebrow"><svg class="icon sm"><use href="#i-badge"/></svg> Franchise business</span>
-      <div class="plan-desc">The Pakistan Premier League auction, retention and trade activity moved to its own <a href="#" onclick="showPanel('franchise');return false" style="color:var(--chrome-strong)">Franchise</a> menu &mdash; a franchise is a genuinely different kind of organisation from this domestic club, not the same screens wearing a different badge.</div>
+      <div class="plan-desc">The Pakistan Premier League auction, retention and trade activity live under your <a href="#" onclick="showPanel('franchise');return false" style="color:var(--chrome-strong)">Franchise</a> identity &mdash; a franchise is a genuinely different kind of organisation from this domestic club, not the same screens wearing a different badge.</div>
     </div>
 
     <div class="analysis-card">
@@ -6377,7 +6377,8 @@
       { tab: 'tactics', label: 'Overview' }
     ] },
     club: { label: 'Club', items: [
-      { tab: 'club', label: 'Overview' }
+      { tab: 'club', label: 'Overview', context: 'club' },
+      { tab: 'franchise', label: 'Overview', context: 'franchise' }
     ], contexts: ['club', 'franchise'] },
     international: { label: 'International', items: [
       { tab: 'international', label: 'Overview' }
@@ -6391,7 +6392,6 @@
   Object.keys(MEGA_GROUPS).forEach(function (g) {
     MEGA_GROUPS[g].items.forEach(function (it) { TAB_TO_GROUP[it.tab] = g; });
   });
-  TAB_TO_GROUP['franchise'] = 'club';
   var activeMegaGroup = 'portal';
   // ---------- Renders the "needs your attention" tasks and Dynamics' own press card
   // straight from INBOX_NEWS, so this is the only place any of that wording lives -
@@ -6536,12 +6536,19 @@
       return !g.context || g.context === CURRENT_CONTEXT;
     }).map(function (key) {
       var g = MEGA_GROUPS[key];
-      var multi = g.items.length > 1;
+      // Most groups' items are always all valid at once (no per-item context) -
+      // this filter is a no-op for them. Club's two items (club/franchise) each
+      // carry their OWN context tag, since only one is ever real at a time -
+      // without this, Club would wrongly render as a two-entry dropdown showing
+      // both "Overview"s regardless of which identity is active.
+      var visItems = g.items.filter(function (it) { return !it.context || it.context === CURRENT_CONTEXT; });
+      if (!visItems.length) visItems = g.items;
+      var multi = visItems.length > 1;
       var dropdown = multi ? ('<div class="mega-dropdown" id="mega-dropdown-' + key + '">'
-        + g.items.map(function (it) {
+        + visItems.map(function (it) {
           return '<button type="button" class="mega-dropdown-item" data-tab="' + it.tab + '" onclick="closeAllMegaMenus();showPanel(\'' + it.tab + '\')">' + it.label + '</button>';
         }).join('') + '</div>') : '';
-      var firstTab = g.items.length ? g.items[0].tab : null;
+      var firstTab = visItems.length ? visItems[0].tab : null;
       if (multi) {
         return '<div class="mega-btn" id="mega-btn-' + key + '" aria-expanded="false">'
           + '<button type="button" class="mega-btn-label" onclick="closeAllMegaMenus();showPanel(\'' + firstTab + '\')">' + g.label + '</button>'

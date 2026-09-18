@@ -13936,6 +13936,47 @@ overrode an earlier, explicitly-researched design decision recorded elsewhere in
 user's own new, concrete reference example is the authority here, and this entry says so plainly
 rather than silently overwriting the earlier reasoning with no trace of why it changed.
 
+### 2026-09-18 (continued): two further undocumented commits, then a real Club/Franchise-merge
+### bug found and fixed
+
+Two more commits landed after the "ALL SEVEN PACKAGES COMPLETE" entry above was written, without
+their own CLAUDE.md writeup (caught and corrected here, not silently left stale, per this file's
+own repeatedly-restated discipline): **`1813e2d` merged Club and Franchise into one identity-aware
+nav destination** (`showPanel('club')` now redirects to `showPanel('franchise')` when
+`CURRENT_CONTEXT === 'franchise'`, and `MEGA_GROUPS.franchise` was removed - Franchise is no longer
+its own top-level mega-menu slot, it rides on Club's), and **`da6131c`** (Portal: merged the
+"Next Opposition Report" and "Next fixture" tiles into one shared card, and added a real
+"Today's Matches" tile in the freed slot, per Slice 1 of the `magical-purring-squid` plan).
+
+**The bug, found this session by live-testing the merge rather than trusting it as-shipped:**
+`MEGA_GROUPS.club.items` was never given an entry for the `franchise` tab (only
+`{tab:'club', label:'Overview'}`) - so `syncMegaMenuToPanel`'s breadcrumb lookup
+(`MEGA_GROUPS[group].items.filter(it => it.tab === name)[0]`) found nothing when `name ===
+'franchise'`, and the breadcrumb silently dropped its second segment (read plain "Club" instead of
+"Club › Overview") every time a franchise identity's Club destination - or ANY of the several
+`showPanel('franchise')` deep links, calendar action buttons, or Franchise-hub breadcrumb links
+already in the file - was reached. **Fixed** by adding `{tab:'franchise', label:'Overview',
+context:'franchise'}` alongside the existing club item (which itself got `context:'club'`) - and
+because `renderMegaMenuBar`'s single-vs-dropdown decision was `g.items.length > 1`, simply adding a
+second item to the array would have made Club wrongly render as a two-entry dropdown ("Overview" /
+"Overview", both always visible regardless of identity) - so `renderMegaMenuBar` was also updated to
+filter `g.items` by each item's own optional `context` tag (a no-op for every other group, none of
+which tag their items) before deciding `multi`/building the dropdown/picking `firstTab`. The
+now-redundant manual `TAB_TO_GROUP['franchise'] = 'club';` override line was removed - the group's
+own item-building `forEach` covers it once `franchise` is a real item. A stale phrase on the
+Recruitment screen ("moved to its own Franchise menu") was also corrected to "live under your
+Franchise identity", since Franchise no longer has "its own" menu slot post-merge. **Verified
+live** across all three identities (club/franchise/international): breadcrumb reads "Club ›
+Overview" in both club and franchise identity, the Club nav button stays a plain single button (no
+dropdown, no duplicate entries) in both, and the deep-link from Recruitment's own Franchise-business
+card auto-switches identity correctly (the pre-existing `data-context`-driven auto-switch in
+`showPanel` already handles this, confirmed unaffected). Structural checks (tag-count parity, the
+already-documented harmless 2-tag `tr` delta and JS-template-string duplicate-id false positive,
+`node --check` on the extracted `<script>` block) all clean. A separate, unrelated console error
+(`openFixtureSummary` throwing on a null `classList`) was investigated and confirmed to be a stale
+leftover from before this session's reload, not reproducible against the live file - all 14
+`FIXTURE_SUMMARIES` keys were exercised directly and none threw.
+
 ---
 
 ## CONSOLIDATED DEFERRED-ITEMS REGISTER (maintained - the single source of truth)
