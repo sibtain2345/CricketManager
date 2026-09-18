@@ -1509,22 +1509,21 @@
           <div id="overview-news-hero"></div>
           <div class="news-hero-dots" id="overview-news-dots"></div>
         </div>
-        <div class="mini-list-card clickable" onclick="showPanel('team-report')" style="cursor:pointer">
-          <span class="eyebrow"><svg class="icon sm"><use href="#i-alert"/></svg> Next Opposition Report</span>
-          <div class="fixture-row" style="padding-top:2px">
-            <div class="vs-crest them"></div><div class="fixture-names">Lahore Lions (A)<small>In 5 days</small></div>
-          </div>
-          <div class="role-hint" style="margin-top:6px;margin-bottom:0">1st in Pakistan T20 Cup</div>
-        </div>
         <div class="tile next-fixture" style="margin:0">
-          <div class="tile-eyebrow"><span class="eyebrow">Next fixture</span><span class="pill first">Home</span></div>
+          <div class="tile-eyebrow"><span class="eyebrow">Next fixture &amp; opposition</span><span class="pill first">Home</span></div>
           <div class="fixture-row">
             <div class="fixture-teams"><div class="vs-crest us"></div><div class="fixture-names">Islamabad Icons<small>vs Lahore Lions</small></div></div>
             <div class="fixture-meta"><div class="when">Sun &middot; 14:00</div>Jinnah Stadium &middot; T20</div>
           </div>
+          <div class="role-hint" style="margin-top:6px;margin-bottom:0">Lahore Lions (A) &middot; 1st in Pakistan T20 Cup</div>
           <div class="stage-actions" style="margin-top:10px">
             <button class="tactic-change" onclick="showPanel('tactics')">Set lineup &amp; tactics</button>
+            <button class="view-more-btn" style="margin:0" onclick="showPanel('team-report')">Opposition report</button>
           </div>
+        </div>
+        <div class="mini-list-card clickable" onclick="showPanel('matches')" style="cursor:pointer">
+          <span class="eyebrow"><svg class="icon sm"><use href="#i-bat-ball"/></svg> Today&rsquo;s Matches</span>
+          <div id="overview-matches-tile"></div>
         </div>
         <div class="mini-list-card clickable" onclick="openCalendarView()" style="cursor:pointer">
           <span class="eyebrow"><svg class="icon sm"><use href="#i-cal-list"/></svg> This month</span>
@@ -6500,8 +6499,22 @@
     }
     host.innerHTML = html;
   }
+  function renderOverviewMatchesTile() {
+    var host = document.getElementById('overview-matches-tile');
+    if (!host || typeof FIXTURE_SUMMARIES === 'undefined') return;
+    var today = Object.keys(FIXTURE_SUMMARIES).map(function (k) { return Object.assign({ key: k }, FIXTURE_SUMMARIES[k]); }).filter(function (f) { return f.when === 0; });
+    if (!today.length) {
+      host.innerHTML = '<div class="role-hint" style="margin-top:2px;margin-bottom:0">Nothing live today &mdash; the full Matches hub covers the week ahead, every competition.</div>';
+      return;
+    }
+    host.innerHTML = today.map(function (f) {
+      return '<div class="fixture-row" style="padding:6px 0"><div class="vs-crest them"></div><div class="fixture-names">' + (f.title || ('Islamabad Icons vs ' + f.opp)) + '<small>' + f.meta + '</small></div>'
+        + '<div class="fixture-meta"><span class="pill' + (f.cls ? ' ' + f.cls : '') + '">' + f.result + '</span></div></div>';
+    }).join('');
+  }
   function renderOverviewWidgets() {
     renderOverviewCalendarMini();
+    renderOverviewMatchesTile();
     var dynEl = document.getElementById('dynamics-press-list');
     if (dynEl) {
       dynEl.innerHTML = ['n1c', 'n1'].map(function (id, i) {
