@@ -203,6 +203,7 @@
   .tabs[data-active-group="career"] .tab-btn[data-group="career"]:not([hidden]) { display: inline-flex; }
   .tabs[data-active-group="franchise"] .tab-btn[data-group="franchise"]:not([hidden]) { display: inline-flex; }
   .tabs[data-active-group="international"] .tab-btn[data-group="international"]:not([hidden]) { display: inline-flex; }
+  .tabs[data-active-group="matchday"] .tab-btn[data-group="matchday"]:not([hidden]) { display: inline-flex; }
   .mega-btn {
     color: var(--ink-dim); font-size: var(--fs-body); font-weight: 600; border-radius: 7px;
     display: inline-flex; align-items: center; position: relative; overflow: hidden;
@@ -1459,7 +1460,7 @@
 
     <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-squad" data-tab="squad" data-group="squad" title="Squad"><svg class="icon"><use href="#i-users"/></svg><span class="tab-label">Squad</span></button>
     <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-training" data-tab="training" data-group="squad" title="Training"><svg class="icon"><use href="#i-target"/></svg><span class="tab-label">Training</span></button>
-    <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-tactics" data-tab="tactics" data-group="squad" title="Tactics"><svg class="icon"><use href="#i-shield"/></svg><span class="tab-label">Tactics</span></button>
+    <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-tactics" data-tab="tactics" data-group="matchday" title="Match Day"><svg class="icon"><use href="#i-shield"/></svg><span class="tab-label">Match Day</span></button>
 
     <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-recruitment" data-tab="recruitment" data-group="recruitment" data-context="club" title="Recruitment"><svg class="icon"><use href="#i-swap"/></svg><span class="tab-label">Recruitment</span></button>
 
@@ -3134,7 +3135,7 @@
 
   <!-- ================= TACTICS ================= -->
   <section class="panel" id="panel-tactics" role="tabpanel" hidden>
-    <div class="panel-head"><h1>Tactics</h1><div class="sub">Everything set here is the <strong>pre-match</strong> standing plan &mdash; the XI, the roles, and the plan you walk in with. In-match changes (a bowler's own plan, a batter's approach mid-innings) happen on the Match Day screen itself, while the game is live.</div></div>
+    <div class="panel-head"><h1>Match Day</h1><div class="sub">Everything set here is the <strong>pre-match</strong> standing plan &mdash; the XI, the roles, and the plan you walk in with. Once the fixture is actually live, this hands off into the live match experience (reached the same way as always, via <strong>Play Match</strong> on the day) where a bowler's own plan or a batter's approach can still be changed ball by ball.</div></div>
     <div class="role-hint" style="margin-bottom:10px">Not your call to make every week? <a href="#" onclick="event.preventDefault();showPanel('club');openClubTab('responsibilities');respShowCategory('squad')" style="color:var(--turf-strong)">Ask staff to handle team selection &rsaquo;</a></div>
 
     <div class="tactics-grid">

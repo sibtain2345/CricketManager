@@ -13762,9 +13762,31 @@ that instruction - update each package's own status as it lands rather than wait
   the one flagged match was a false positive from JS template-string text, not real markup, `node
   --check` exit 0). Committed.
 
-- **B - Merge Tactics into Match Day** (item 2): one screen, the existing tile-based nav pattern
-  kept, `panel-tactics` retired, its content folded into `panel-matchday` (checking the Match Day
-  screen's own existing content first to decide exactly what belongs on the merged screen).
+- **B - Merge Tactics into Match Day - DONE.** Read both panels' real content first before
+  deciding the merge shape, per this sub-track's own standing discipline. `panel-matchday` turned
+  out to be the LIVE, calendar-gated immersive flow only (Preview -> Lineup Check -> Toss -> XI
+  reveal -> Team Talk -> Live -> Scorecard/Analysis, reached solely via the global "Play Match"
+  action). `panel-tactics` was the browsable, any-time PRE-match standing-plan screen (next-
+  fixture/conditions, squad+lineup tables, Roles, a `.phase-toggle` tile pattern driving per-phase
+  bowling/batting plan + field placement, pitch preparation) - genuinely richer than
+  `panel-matchday`'s own pre-match stages in several places, not a lesser duplicate. Re-plumbing
+  the two panels into one literal DOM section would have meant moving the immersive live-match
+  machinery (`.match-immersive`, `enterMatchMode`/`exitMatchMode`, the back-bar) wholesale for no
+  real gain and real regression risk to a complex, working flow. **The actual complaint, read
+  literally, was the DUAL NAMING/access - "Tactics" existing as a second, differently-branded
+  destination (nested under Squad's own dropdown, per Package A already closed) - not that the two
+  panels' internal markup had to be textually merged.** Fix: `panel-tactics` is retired as a NAME,
+  not as a panel - its own `<h1>` and its underlying `.tab-btn` (previously `data-group="squad"`,
+  labeled "Tactics") both became "Match Day" (`data-group="matchday"`, matching the group Package A
+  already created), with a new row-2 CSS rule added for it. One identity, one entry point: Squad's
+  row-2 strip no longer lists Tactics at all (verified live: `Squad`/`Training` only); Match Day's
+  own row-2 correctly shows one "Match Day" item. The confusing self-referential sub-text ("happens
+  on the Match Day screen itself, while the game is live" - written as if from a DIFFERENT screen)
+  was reworded to describe the real hand-off honestly: this screen sets the standing plan, and on
+  the day itself the SAME global Play Match action carries it into the live experience - the
+  `.phase-toggle` tile pattern (New Ball/Middle Overs/Death Overs) stays exactly as it was, per the
+  instruction to keep the tile-based nav pattern. Structurally verified clean; live-verified
+  (heading reads "Match Day", direct click works, both row-2 strips correct). Committed.
 - **C - Messages live-verification** (item 3): confirm in-browser, fix only if a real bug is
   found (code read suggests it's already correct).
 - **D - Training: real team-schedule editing** (item 4): editable session assignment per day/
