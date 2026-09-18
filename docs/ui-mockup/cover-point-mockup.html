@@ -2339,15 +2339,15 @@
   <section class="panel" id="panel-franchise" role="tabpanel" hidden>
     <div class="panel-head"><h1>Islamabad Icons &middot; Pakistan Premier League</h1><div class="sub">A campaign-bound franchise, not a year-round club &mdash; real, distinct rules apply here</div></div>
     <div class="vitals-strip">
-      <div class="vitals-card clickable" onclick="enterAuctionMode()" style="cursor:pointer" title="The auction window has opened today">
+      <div class="vitals-card clickable" onclick="openFranchiseTab('overview')" style="cursor:pointer">
         <div class="icon-wrap"><svg class="icon"><use href="#i-badge"/></svg></div>
         <div class="vitals-body"><div class="vitals-label">Franchise identity</div><div class="vitals-value" style="font-size:var(--fs-body)">Balanced</div><div class="vitals-sub">Dynasty rating 58 / 100</div></div>
       </div>
-      <div class="vitals-card clickable" onclick="enterAuctionMode()" style="cursor:pointer">
+      <div class="vitals-card clickable" onclick="openFranchiseTab('finances')" style="cursor:pointer">
         <div class="icon-wrap"><svg class="icon"><use href="#i-cash"/></svg></div>
         <div class="vitals-body"><div class="vitals-label">Central pool this campaign</div><div class="vitals-value">18.4cr</div><div class="vitals-sub">Operating costs -6.2cr</div></div>
       </div>
-      <div class="vitals-card clickable" onclick="enterAuctionMode()" style="cursor:pointer" title="The auction window has opened today">
+      <div class="vitals-card clickable" onclick="enterCurrentFranchiseStage()" style="cursor:pointer" title="Jumps straight to whichever franchise stage is genuinely due today">
         <div class="icon-wrap"><svg class="icon"><use href="#i-cal-list"/></svg></div>
         <div class="vitals-body"><div class="vitals-label">Campaign stage</div><div class="vitals-value" style="color:var(--gold);font-size:var(--fs-body)">War Room &amp; Auction</div><div class="vitals-sub">Window opens today</div></div>
       </div>
@@ -2356,6 +2356,14 @@
         <div class="vitals-body"><div class="vitals-label">Circuit reputation</div><div class="vitals-value" style="font-size:var(--fs-body)">Building</div><div class="vitals-sub">Real, multi-year contract</div></div>
       </div>
     </div>
+    <nav class="subnav" role="tablist" aria-label="Franchise views">
+      <button class="subtab-btn" role="tab" aria-selected="true" data-subtab="overview">Overview</button>
+      <button class="subtab-btn" role="tab" aria-selected="false" data-subtab="finances">Finances</button>
+      <button class="subtab-btn" role="tab" aria-selected="false" data-subtab="staff">Staff</button>
+      <button class="subtab-btn" role="tab" aria-selected="false" data-subtab="timeline">Timeline</button>
+      <button class="subtab-btn" role="tab" aria-selected="false" data-subtab="boardroom">Boardroom</button>
+    </nav>
+    <div class="subpanel" id="franchise-overview">
     <div class="tactics-grid">
       <div class="analysis-card">
         <span class="eyebrow"><svg class="icon sm"><use href="#i-badge"/></svg> Franchise identity</span>
@@ -2372,7 +2380,8 @@
         <div class="role-hint" style="margin-top:8px">A domestic-club coach is available for a franchise role in any country &mdash; the franchise is the senior relationship, so its campaign window takes priority the moment it opens, whatever else is on the calendar.</div>
       </div>
     </div>
-    <div class="tactics-grid" style="margin-top:16px">
+    </div>
+    <div class="subpanel" id="franchise-finances" hidden>
       <div class="analysis-card">
         <span class="eyebrow"><svg class="icon sm"><use href="#i-trend-up"/></svg> Franchise finances</span>
         <div class="bio-line"><span class="k">Central pool this campaign</span><span>18.4cr</span></div>
@@ -2380,19 +2389,8 @@
         <div class="bio-line"><span class="k">Operating costs</span><span>-6.2cr</span></div>
         <div class="role-hint" style="margin-top:8px">Every franchise draws an equal share of a central pool sized to comfortably cover a full auction purse, on top of its own local revenue. A hard reserve floor of 3.0cr applies whatever the season did &mdash; a franchise cannot go bankrupt, and it carries no financial fair play exposure the way the domestic club does.</div>
       </div>
-      <div class="analysis-card">
-        <span class="eyebrow"><svg class="icon sm"><use href="#i-cal-list"/></svg> This campaign&rsquo;s own timeline</span>
-        <div class="plan-desc" style="margin-bottom:10px">Six genuinely separate, separately-dated events &mdash; not one sitting, and never skippable out of order. Retention locks in before EOI even opens; whichever players the EOI meeting finalises are what the auction actually bids on.</div>
-        <div class="staff-row"><div class="staff-row-main"><span class="staff-name">Pre-Auction Trade Window</span><span class="staff-role-label">Retained players only &middot; held 79 days ago</span></div><div class="staff-row-meta"><button class="facility-request-btn" onclick="enterTradeMode('pre')">Review</button></div></div>
-        <div class="staff-row"><div class="staff-row-main"><span class="staff-name">Retention Deadline</span><span class="staff-role-label">The earliest genuinely locked-in moment of the cycle &middot; held 66 days ago</span></div><div class="staff-row-meta"><button class="facility-request-btn" onclick="enterRetentionMode()">Review</button></div></div>
-        <div class="staff-row"><div class="staff-row-main"><span class="staff-name">EOI Meeting</span><span class="staff-role-label">Registered-player list finalised into the auction shortlist &middot; held 52 days ago</span></div><div class="staff-row-meta"><button class="facility-request-btn" onclick="enterEoiMode()">Review</button></div></div>
-        <div class="staff-row"><div class="staff-row-main"><span class="staff-name">Pre-Auction Meeting</span><span class="staff-role-label">The room locks in its plan and targets &middot; held 12 days ago</span></div><div class="staff-row-meta"><button class="facility-request-btn" onclick="enterPreAuctionMode()">Review</button></div></div>
-        <div class="staff-row"><div class="staff-row-main"><span class="staff-name">War Room &amp; Auction</span><span class="staff-role-label">The locked retention list, then the live bidding room &middot; auction window opens today</span></div><div class="staff-row-meta"><button class="facility-request-btn" onclick="enterAuctionMode()" title="The auction window has opened today">Enter</button></div></div>
-        <div class="staff-row"><div class="staff-row-main"><span class="staff-name">Trade Centre</span><span class="staff-role-label">The post-auction trade window &middot; reopens once the season is under way</span></div><div class="staff-row-meta"><button class="facility-request-btn" onclick="enterTradeMode('post')">Enter</button></div></div>
-      </div>
     </div>
-    <div class="analysis-card" style="margin-top:16px">
-      <span class="eyebrow"><svg class="icon sm"><use href="#i-users"/></svg> Campaign staff</span>
+    <div class="subpanel" id="franchise-staff" hidden>
       <div class="role-hint" style="margin-bottom:10px">Held on real, year-round multi-year contracts &mdash; the franchise is the senior relationship the moment its own window opens, but a specialist here isn&rsquo;t re-hired from scratch every campaign the way a fresh coaching fee would imply.</div>
       <div class="tactics-grid">
         <div>
@@ -2422,11 +2420,25 @@
         </div>
       </div>
     </div>
-    <div class="analysis-card" style="margin-top:16px">
-      <span class="eyebrow"><svg class="icon sm"><use href="#i-trophy"/></svg> Campaign review</span>
-      <div class="role-hint" style="margin-bottom:8px">Judged end-of-campaign only &mdash; never a mid-season sacking the way a domestic board can move. A title lifts your circuit reputation; a genuinely poor finish can end even a real multi-year deal early, with the replacement appointed immediately so the franchise is never coachless.</div>
-      <div class="convo-log">
-        <div class="convo-line him"><span class="who">Franchise Owner</span><div class="convo-bubble">&ldquo;A semi-final finish, and the identity is settling into something coherent. The multi-year deal stands &mdash; keep building.&rdquo;</div></div>
+    <div class="subpanel" id="franchise-timeline" hidden>
+      <div class="analysis-card">
+        <span class="eyebrow"><svg class="icon sm"><use href="#i-cal-list"/></svg> This campaign&rsquo;s own timeline</span>
+        <div class="plan-desc" style="margin-bottom:10px">Six genuinely separate, separately-dated events &mdash; not one sitting, and never skippable out of order. Retention locks in before EOI even opens; whichever players the EOI meeting finalises are what the auction actually bids on.</div>
+        <div class="staff-row"><div class="staff-row-main"><span class="staff-name">Pre-Auction Trade Window</span><span class="staff-role-label">Retained players only &middot; held 79 days ago</span></div><div class="staff-row-meta"><button class="facility-request-btn" onclick="enterTradeMode('pre')">Review</button></div></div>
+        <div class="staff-row"><div class="staff-row-main"><span class="staff-name">Retention Deadline</span><span class="staff-role-label">The earliest genuinely locked-in moment of the cycle &middot; held 66 days ago</span></div><div class="staff-row-meta"><button class="facility-request-btn" onclick="enterRetentionMode()">Review</button></div></div>
+        <div class="staff-row"><div class="staff-row-main"><span class="staff-name">EOI Meeting</span><span class="staff-role-label">Registered-player list finalised into the auction shortlist &middot; held 52 days ago</span></div><div class="staff-row-meta"><button class="facility-request-btn" onclick="enterEoiMode()">Review</button></div></div>
+        <div class="staff-row"><div class="staff-row-main"><span class="staff-name">Pre-Auction Meeting</span><span class="staff-role-label">The room locks in its plan and targets &middot; held 12 days ago</span></div><div class="staff-row-meta"><button class="facility-request-btn" onclick="enterPreAuctionMode()">Review</button></div></div>
+        <div class="staff-row"><div class="staff-row-main"><span class="staff-name">War Room &amp; Auction</span><span class="staff-role-label">The locked retention list, then the live bidding room &middot; auction window opens today</span></div><div class="staff-row-meta"><button class="facility-request-btn" onclick="enterAuctionMode()" title="The auction window has opened today">Enter</button></div></div>
+        <div class="staff-row"><div class="staff-row-main"><span class="staff-name">Trade Centre</span><span class="staff-role-label">The post-auction trade window &middot; reopens once the season is under way</span></div><div class="staff-row-meta"><button class="facility-request-btn" onclick="enterTradeMode('post')">Enter</button></div></div>
+      </div>
+    </div>
+    <div class="subpanel" id="franchise-boardroom" hidden>
+      <div class="analysis-card">
+        <span class="eyebrow"><svg class="icon sm"><use href="#i-trophy"/></svg> Campaign review</span>
+        <div class="role-hint" style="margin-bottom:8px">Judged end-of-campaign only &mdash; never a mid-season sacking the way a domestic board can move. A title lifts your circuit reputation; a genuinely poor finish can end even a real multi-year deal early, with the replacement appointed immediately so the franchise is never coachless.</div>
+        <div class="convo-log">
+          <div class="convo-line him"><span class="who">Franchise Owner</span><div class="convo-bubble">&ldquo;A semi-final finish, and the identity is settling into something coherent. The multi-year deal stands &mdash; keep building.&rdquo;</div></div>
+        </div>
       </div>
     </div>
   </section>
@@ -6160,6 +6172,14 @@
     var btn = document.querySelector('#panel-club .subtab-btn[data-subtab="' + name + '"]');
     if (btn) btn.click();
   }
+  function openFranchiseTab(name) {
+    var btn = document.querySelector('#panel-franchise .subtab-btn[data-subtab="' + name + '"]');
+    if (btn) btn.click();
+  }
+  function enterCurrentFranchiseStage() {
+    var s = FRANCHISE_STAGE_BUTTON[franchiseButtonStage] || FRANCHISE_STAGE_BUTTON.auction;
+    (new Function(s.action))();
+  }
   // Responsibilities / Delegation - named against the real 14 DecisionArea values our
   // own DelegationProfile domain already tracks (squad selection split by competition
   // type, tactics, training focus, transfers/contracts/loans, academy, press, board
@@ -6277,6 +6297,7 @@
   var navHistory = ['portal'];
   var navIndex = 0;
   function showPanel(name, fromHistory) {
+    if (name === 'club' && typeof CURRENT_CONTEXT !== 'undefined' && CURRENT_CONTEXT === 'franchise') name = 'franchise';
     document.querySelectorAll('.tabs > .tabnav-inner > .tab-btn').forEach(function (b) { b.setAttribute('aria-selected', b.dataset.tab === name ? 'true' : 'false'); });
     document.querySelectorAll('body > .app-body > .main-content > .shell > section.panel').forEach(function (p) { p.hidden = true; });
     // panel-staff-profile sits structurally outside .shell (a real, confirmed
@@ -6358,10 +6379,7 @@
     ] },
     club: { label: 'Club', items: [
       { tab: 'club', label: 'Overview' }
-    ], context: 'club' },
-    franchise: { label: 'Franchise', items: [
-      { tab: 'franchise', label: 'Overview' }
-    ], context: 'franchise' },
+    ], contexts: ['club', 'franchise'] },
     international: { label: 'International', items: [
       { tab: 'international', label: 'Overview' }
     ], context: 'international' },
@@ -6374,6 +6392,7 @@
   Object.keys(MEGA_GROUPS).forEach(function (g) {
     MEGA_GROUPS[g].items.forEach(function (it) { TAB_TO_GROUP[it.tab] = g; });
   });
+  TAB_TO_GROUP['franchise'] = 'club';
   var activeMegaGroup = 'portal';
   // ---------- Renders the "needs your attention" tasks and Dynamics' own press card
   // straight from INBOX_NEWS, so this is the only place any of that wording lives -
@@ -6497,9 +6516,10 @@
   function renderMegaMenuBar() {
     var bar = document.getElementById('mega-menu-bar');
     if (!bar) return;
-    var order = ['portal', 'squad', 'recruitment', 'matchday', 'club', 'franchise', 'international', 'career'];
+    var order = ['portal', 'squad', 'recruitment', 'matchday', 'club', 'international', 'career'];
     bar.innerHTML = order.filter(function (key) {
       var g = MEGA_GROUPS[key];
+      if (g.contexts) return g.contexts.indexOf(CURRENT_CONTEXT) !== -1;
       return !g.context || g.context === CURRENT_CONTEXT;
     }).map(function (key) {
       var g = MEGA_GROUPS[key];
@@ -8393,6 +8413,7 @@
   wireTabs('#panel-squad nav[aria-label="Squad views"] .subtab-btn', 'squad-');
   wireTabs('#panel-squad nav[aria-label="Dynamics views"] .subtab-btn', 'dynamics-');
   wireTabs('#panel-club .subtab-btn', 'club-');
+  wireTabs('#panel-franchise .subtab-btn', 'franchise-');
   wireTabs('#panel-fixtures .subtab-btn', 'fixtures-');
   wireTabs('#panel-calendar .subtab-btn', 'calendar-');
   wireTabs('#panel-recruitment .subtab-btn', 'recruit-');
