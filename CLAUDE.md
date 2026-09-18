@@ -13547,6 +13547,51 @@ the one unfit case); the per-player week modal opening/closing cleanly with the 
 the Rest Player action's corrected middle-dot rendering; and both new Responsibilities cross-links
 present and pointing at the right category. Zero console errors throughout.
 
+#### Slice 4 - Recruitment: COMPLETE
+
+Checked the live file first, per the standing discipline: Recruitment already had a real 5-subtab
+structure (Transfer Activity/Player Database/Staff Database/Shortlists/Squad Planner) from an
+earlier session, and Transfer Activity already had a real, season-filterable Transfer History table
+(`transfer-history-body`) - genuinely missing only the buy-back/sell-on columns the plan asked for,
+not a whole new feature. A first draft of this slice built a second, separate "Transfer history -
+this window" card before noticing the real one already existed and would have made two disagreeing
+transfer-history views sit side by side - reverted that duplicate immediately and extended the real
+table instead, the same "verify before building" lesson Slices 2-3 already relearned twice.
+
+**Built:**
+- **A Scout / Analyst tab toggle** on a real scouting-report card for the lead transfer target
+  (Ahsan Butt) - two genuinely differently-worded verdicts/pros/cons for the identical player,
+  mapped directly onto the real, already-separate `ScoutingAccuracyService` (a noisy estimate of
+  potential) vs `AnalystService` (a data-grounded opposition-weakness read) domain distinction,
+  each ending in its own honest confidence line rather than silently agreeing with the other tab.
+- **Inline buy-back/sell-on/join-date** - extended the REAL, pre-existing Transfer History table
+  (not a new one) with two new columns rather than duplicating it.
+- **A "recently viewed" quick-pick** on both of World's deep hierarchical pickers (Nations and
+  Clubs) - a small session-only `WORLD_RECENTLY_VIEWED` list, capped at 4, updated by the same
+  `openWorldProfile` every click-through in the file already calls, rendered as clickable chips
+  above the existing filter input on each list.
+- **Periodic shortlist re-scouting delivered to the inbox** - a new `INBOX_NEWS` entry (reusing the
+  exact same shape and rendering path every other inbox item already uses, including a real
+  click-through back into Recruitment) rather than a second notification mechanism.
+- **A league-wide Transfer Window Report**, distinct from the club-scoped Transfer History -
+  appended to the T20 Cup Competition Profile's Standings tab: every one of the 6 domestic clubs'
+  own in/out activity, net spend and headline move this window, each club name a real click-through
+  into its own Club Profile via the already-existing `linkedClubCell` helper.
+
+**A real duplicate-id bug caught before it reached the page**: the new inbox entry's first-picked
+id (`n0e`) collided with an already-existing entry of the same id (Peshawar Zalmi's ownership/
+takeover story) - caught by reading the real `INBOX_NEWS` array before writing, not after, and
+fixed to a genuinely unused id (`n0g`).
+
+**Verified**: `verify.py`'s structural pass after every edit, plus a live Playwright pass - the
+Scout/Analyst toggle producing two genuinely distinct verdicts and reverting cleanly (confirmed
+directly in an isolated check after one combined test run showed a confusing result that traced to
+a stray second browser tab left open from earlier in this session, not a real code defect); the
+extended Transfer History table's real header/cell content; the re-scouting inbox item present in
+the rail; the recently-viewed chip row correctly accumulating (Lahore Lions, then Karachi Kings
+ahead of it) across two separate profile visits; and the Transfer Window Report rendering on the
+Standings tab with all 6 clubs. Zero console errors throughout.
+
 ---
 
 ## CONSOLIDATED DEFERRED-ITEMS REGISTER (maintained - the single source of truth)

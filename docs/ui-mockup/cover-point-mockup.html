@@ -3414,6 +3414,16 @@
       </div>
     </div>
 
+    <div class="analysis-card">
+      <span class="eyebrow"><svg class="icon sm"><use href="#i-target"/></svg> Scouting report &middot; Ahsan Butt</span>
+      <div class="pitch-preset-row" id="scout-report-tabs" style="margin-bottom:8px">
+        <button class="pitch-preset-btn active" onclick="setScoutReportSource(this,'scout')">Scout</button>
+        <button class="pitch-preset-btn" onclick="setScoutReportSource(this,'analyst')">Analyst</button>
+      </div>
+      <div id="scout-report-body"></div>
+    </div>
+
+
     <!-- Reached the same way Match Day is (line ~1103): the room only opens once the calendar
          genuinely reaches the auction window, never on demand. Most days this tile shows a
          days-to-go countdown with the button disabled; this mockup is frozen ON the auction's
@@ -3436,15 +3446,15 @@
         </div>
       </div>
       <table class="transfer-history">
-        <thead><tr><th></th><th>Player</th><th>Club</th><th>Fee</th><th>Date</th></tr></thead>
+        <thead><tr><th></th><th>Player</th><th>Club</th><th>Fee</th><th>Date</th><th>Buy-back</th><th>Sell-on</th></tr></thead>
         <tbody id="transfer-history-body">
-          <tr data-season="2026/27"><td><span class="direction-badge in">IN</span></td><td class="transfer-player">Fahad Sultan</td><td>from Karachi Kings</td><td class="transfer-fee" style="font-size:var(--fs-small)">$140K</td><td>12 Feb 2027</td></tr>
-          <tr data-season="2026/27"><td><span class="direction-badge out">OUT</span></td><td class="transfer-player">Adeel Hayat</td><td>to Quetta Falcons</td><td class="transfer-fee" style="font-size:var(--fs-small)">$95K</td><td>28 Jan 2027</td></tr>
-          <tr data-season="2026/27"><td><span class="direction-badge in">IN</span></td><td class="transfer-player">Noman Riaz</td><td>free agent, ex-Lahore Lions</td><td class="transfer-fee" style="font-size:var(--fs-small);color:var(--ink-faint)">Free</td><td>15 Dec 2026</td></tr>
-          <tr data-season="2026/27"><td><span class="direction-badge out">OUT</span></td><td class="transfer-player">Salman Iftikhar</td><td>to Multan Monarchs</td><td class="transfer-fee" style="font-size:var(--fs-small)">$210K</td><td>3 Nov 2026</td></tr>
-          <tr data-season="2025/26" hidden><td><span class="direction-badge in">IN</span></td><td class="transfer-player">Junaid Malik</td><td>from Peshawar Panthers</td><td class="transfer-fee" style="font-size:var(--fs-small)">$60K</td><td>19 Jul 2026</td></tr>
-          <tr data-season="2025/26" hidden><td><span class="direction-badge out">OUT</span></td><td class="transfer-player">Tariq Bashir</td><td>to Karachi Kings</td><td class="transfer-fee" style="font-size:var(--fs-small)">$130K</td><td>4 Feb 2026</td></tr>
-          <tr data-season="2024/25" hidden><td><span class="direction-badge in">IN</span></td><td class="transfer-player">Waqar Ansari</td><td>free agent, ex-Multan Monarchs</td><td class="transfer-fee" style="font-size:var(--fs-small);color:var(--ink-faint)">Free</td><td>2 Sep 2024</td></tr>
+          <tr data-season="2026/27"><td><span class="direction-badge in">IN</span></td><td class="transfer-player">Fahad Sultan</td><td>from Karachi Kings</td><td class="transfer-fee" style="font-size:var(--fs-small)">$140K</td><td>12 Feb 2027</td><td style="font-size:var(--fs-small)">&mdash;</td><td style="font-size:var(--fs-small)">10%</td></tr>
+          <tr data-season="2026/27"><td><span class="direction-badge out">OUT</span></td><td class="transfer-player">Adeel Hayat</td><td>to Quetta Falcons</td><td class="transfer-fee" style="font-size:var(--fs-small)">$95K</td><td>28 Jan 2027</td><td style="font-size:var(--fs-small)">$140K until 2028</td><td style="font-size:var(--fs-small)">15%</td></tr>
+          <tr data-season="2026/27"><td><span class="direction-badge in">IN</span></td><td class="transfer-player">Noman Riaz</td><td>free agent, ex-Lahore Lions</td><td class="transfer-fee" style="font-size:var(--fs-small);color:var(--ink-faint)">Free</td><td>15 Dec 2026</td><td style="font-size:var(--fs-small)">&mdash;</td><td style="font-size:var(--fs-small)">&mdash;</td></tr>
+          <tr data-season="2026/27"><td><span class="direction-badge out">OUT</span></td><td class="transfer-player">Salman Iftikhar</td><td>to Multan Monarchs</td><td class="transfer-fee" style="font-size:var(--fs-small)">$210K</td><td>3 Nov 2026</td><td style="font-size:var(--fs-small)">&mdash;</td><td style="font-size:var(--fs-small)">12%</td></tr>
+          <tr data-season="2025/26" hidden><td><span class="direction-badge in">IN</span></td><td class="transfer-player">Junaid Malik</td><td>from Peshawar Panthers</td><td class="transfer-fee" style="font-size:var(--fs-small)">$60K</td><td>19 Jul 2026</td><td style="font-size:var(--fs-small)">&mdash;</td><td style="font-size:var(--fs-small)">&mdash;</td></tr>
+          <tr data-season="2025/26" hidden><td><span class="direction-badge out">OUT</span></td><td class="transfer-player">Tariq Bashir</td><td>to Karachi Kings</td><td class="transfer-fee" style="font-size:var(--fs-small)">$130K</td><td>4 Feb 2026</td><td style="font-size:var(--fs-small)">&mdash;</td><td style="font-size:var(--fs-small)">8%</td></tr>
+          <tr data-season="2024/25" hidden><td><span class="direction-badge in">IN</span></td><td class="transfer-player">Waqar Ansari</td><td>free agent, ex-Multan Monarchs</td><td class="transfer-fee" style="font-size:var(--fs-small);color:var(--ink-faint)">Free</td><td>2 Sep 2024</td><td style="font-size:var(--fs-small)">&mdash;</td><td style="font-size:var(--fs-small)">&mdash;</td></tr>
         </tbody>
       </table>
       <div class="role-hint" id="transfer-history-empty" hidden>No transfer activity on record for this season.</div>
@@ -5014,6 +5024,7 @@
       <div class="analysis-card">
         <span class="eyebrow"><svg class="icon sm"><use href="#i-globe"/></svg> Nations</span>
         <div class="plan-desc">Every Full Member and Associate nation your network covers &mdash; browsable, not just the ones you play.</div>
+        <div class="pitch-preset-row" id="recent-nations-row" style="margin-bottom:8px"></div>
         <input type="text" class="world-filter-input" placeholder="Filter nations by name&hellip;" oninput="filterWorldList('world-nations-list', this.value)">
         <div id="world-nations-list">
         <div class="staff-row clickable" onclick="openWorldProfile('nation','pak')">
@@ -5043,6 +5054,7 @@
       <div class="analysis-card">
         <span class="eyebrow"><svg class="icon sm"><use href="#i-users"/></svg> Clubs &middot; Pakistan T20 Cup</span>
         <div class="plan-desc">Every club in the world your network covers, starting with your own domestic pyramid.</div>
+        <div class="pitch-preset-row" id="recent-clubs-row" style="margin-bottom:8px"></div>
         <input type="text" class="world-filter-input" placeholder="Filter clubs by name&hellip;" oninput="filterWorldList('world-clubs-list', this.value)">
         <div id="world-clubs-list">
         <div class="staff-row clickable" onclick="openWorldProfile('club','lahore')">
@@ -7204,6 +7216,17 @@
           { us: true, opp: "Peshawar Zalmi", venue: "Away", when: "Fri, 3 days" },
           { us: false, opp: "Karachi Kings vs Quetta Falcons", venue: "National Stadium", when: "Sat, 4 days" }
         ]
+      },
+      transferWindow: {
+        note: "League-wide, every club's own business this window &mdash; distinct from your own club-scoped Transfer History.",
+        rows: [
+          ["Lahore Lions", "3 in / 1 out", "$310K spent", "Kamran Aslam &mdash; $180K"],
+          ["Karachi Kings", "2 in / 2 out", "$95K net spend", "Shahzaib Alam &mdash; $110K"],
+          ["Islamabad Icons", "2 in / 2 out", "$45K net spend", "Fahad Sultan &mdash; $140K"],
+          ["Multan Sultans", "1 in / 3 out", "$185K raised", "Junaid Sarwar &mdash; $260K"],
+          ["Peshawar Zalmi", "4 in / 1 out", "$420K spent", "Ahsan Butt &mdash; $220K (target)"],
+          ["Quetta Falcons", "1 in / 4 out", "$310K raised, forced by a severe FFP breach", "Adeel Hayat &mdash; $95K"]
+        ]
       }
     },
     fcc: {
@@ -7394,6 +7417,13 @@
     } else {
       standingsHtml = '<div class="analysis-card"><span class="eyebrow"><svg class="icon sm"><use href="#i-trend-up"/></svg> Standings</span>' +
         '<div class="role-hint">' + c.standingsNote + '</div></div>';
+    }
+    if (c.transferWindow) {
+      standingsHtml += '<div class="analysis-card" style="margin-top:16px"><span class="eyebrow"><svg class="icon sm"><use href="#i-swap"/></svg> Transfer Window Report &middot; every club</span>' +
+        '<div class="role-hint" style="margin-bottom:8px">' + c.transferWindow.note + '</div>' +
+        '<div class="table-card"><div class="table-scroll-inner" style="max-height:none"><table class="career"><thead><tr><th>Club</th><th>Activity</th><th>Net spend</th><th>Headline move</th></tr></thead><tbody>' +
+        c.transferWindow.rows.map(function (r) { return '<tr><td>' + linkedClubCell(r[0]) + '</td><td>' + r[1] + '</td><td>' + r[2] + '</td><td>' + r[3] + '</td></tr>'; }).join('') +
+        '</tbody></table></div></div></div>';
     }
     document.getElementById('cprofile-standings').innerHTML = standingsHtml;
 
@@ -7606,6 +7636,51 @@
       blurb: "The smallest budget in the domestic pyramid, leaning hard on its academy pipeline rather than the transfer market.",
       champions: ["2025: List A 1st"], captain: 'Sohail Marwat', coach: 'Zubair Ahsan' , repTier: 'tier-poor', repLabel: 'Developing', ground: 'Bugti Stadium, Quetta', ownership: 'Board-controlled regional association', budget: 'The smallest budget in the pyramid, leaning on the academy' }
   };
+  var WORLD_RECENTLY_VIEWED = { nation: [], club: [] };
+  function recordWorldRecentView(kind, key, label) {
+    var list = WORLD_RECENTLY_VIEWED[kind];
+    var idx = list.findIndex(function (e) { return e.key === key; });
+    if (idx !== -1) list.splice(idx, 1);
+    list.unshift({ key: key, label: label });
+    if (list.length > 4) list.length = 4;
+    renderWorldRecentRow(kind);
+  }
+  function renderWorldRecentRow(kind) {
+    var row = document.getElementById(kind === 'nation' ? 'recent-nations-row' : 'recent-clubs-row');
+    if (!row) return;
+    var list = WORLD_RECENTLY_VIEWED[kind];
+    if (!list.length) { row.innerHTML = ''; return; }
+    row.innerHTML = '<span class="role-hint" style="margin:0 4px 0 0;align-self:center">Recently viewed:</span>' + list.map(function (e) {
+      return '<button class="pitch-preset-btn" onclick="openWorldProfile(\'' + kind + '\',\'' + e.key + '\')">' + e.label + '</button>';
+    }).join('');
+  }
+  // Scout vs Analyst - the same underlying player read through two genuinely
+  // different lenses (ScoutingAccuracyService's noisy estimate-of-potential vs
+  // AnalystService's opposition-weakness read), each honestly worded rather
+  // than the two tabs quietly agreeing with each other.
+  var SCOUT_REPORT_TEXT = {
+    scout: {
+      verdict: 'A genuine pace option who fills our weakest group &mdash; his ceiling reads a shade higher than his current output, worth a real bid now rather than waiting for the price to rise.',
+      pros: ['Real gas through the air, still building', 'Clean action &mdash; low injury-history risk on the estimate'],
+      cons: ['Limited variation so far &mdash; a fairly narrow repertoire'],
+      confidence: 'Confidence: moderate &mdash; a domestic-level scouting department, not a specialist one.'
+    },
+    analyst: {
+      verdict: 'Reads as a containment option more than a genuine strike bowler at this level &mdash; his economy holds up, but the wicket-taking numbers are ordinary against sides who play him on merit.',
+      pros: ['Disciplined lines under pressure', 'Copes well with a required-rate squeeze in the middle overs'],
+      cons: ['Wicket-taking threat is modest once the opposition has seen him once'],
+      confidence: 'Confidence: high &mdash; drawn directly from his own recorded match data, not an estimate.'
+    }
+  };
+  function setScoutReportSource(btn, source) {
+    Array.prototype.forEach.call(document.querySelectorAll('#scout-report-tabs .pitch-preset-btn'), function (b) { b.classList.toggle('active', b === btn); });
+    var t = SCOUT_REPORT_TEXT[source];
+    var host = document.getElementById('scout-report-body');
+    host.innerHTML = '<div class="plan-desc">' + t.verdict + '</div>' +
+      t.pros.map(function (p) { return '<div class="style-note-row" style="color:var(--turf-strong)"><svg class="icon"><use href="#i-check-circle"/></svg><span>' + p + '</span></div>'; }).join('') +
+      t.cons.map(function (c) { return '<div class="style-note-row" style="color:var(--ball)"><svg class="icon"><use href="#i-alert"/></svg><span>' + c + '</span></div>'; }).join('') +
+      '<div class="role-hint" style="margin-top:8px;margin-bottom:0">' + t.confidence + '</div>';
+  }
   function openWorldProfile(kind, key) {
     var c = kind === 'nation' ? nationProfiles[key] : clubProfiles[key];
     document.getElementById('world-profile-kind-here').textContent = kind === 'nation' ? 'Nations' : 'Clubs';
@@ -7615,6 +7690,7 @@
     var bodyHtml = '<p style="font-size:var(--fs-body);color:var(--ink-dim);line-height:1.5;margin-top:0">' + c.blurb + '</p>' +
       (kind === 'nation' ? renderNationProfile(c) : renderClubProfile(c));
     document.getElementById('world-profile-body').innerHTML = bodyHtml;
+    recordWorldRecentView(kind, key, c.name);
     showPanel('world-profile');
   }
   var pendingOfferRow = null;
@@ -7982,6 +8058,7 @@
   // refuses to proceed while an unresolved task sits in the inbox.
   var eoiRegistrationConfirmed = false;
   var INBOX_NEWS = [
+    { id: 'n0g', kicker: 'Scouting', headline: 'Ahsan Butt re-scouted &mdash; his report has moved since last month', dek: 'Our own scout has taken another look at Ahsan Butt now three of his recent performances are in - worth checking the report again before making an offer.', isNew: true, read: false, click: "showPanel('recruitment')" },
     { id: 'n1', kicker: 'Board', headline: 'Icons ownership backs a \u201cyouth-first\u201d rebuild', dek: 'Expect academy graduates to get more of the shop window.', isNew: true, read: false },
     { id: 'n1c', kicker: 'Breakout Star', headline: 'Chaudhry\u2019s rise has the dressing room talking', dek: 'Three fifties in four innings \u2014 the 21-year-old is forcing his way past a settled top order.', isNew: true, read: false, click: "openPlayerByName('Zain Chaudhry')" },
     { id: 'a1', kicker: 'Contract', headline: 'Renew Hamza Malik\u2019s contract', dek: 'Expires in 34 days \u2014 below market wage.', isNew: false, read: true, attention: true, urgent: true, click: "openPlayerByName('Hamza Malik');openNegotiation('contract')" },
@@ -9825,6 +9902,7 @@
   stagesShowRegion(document.querySelector('#stages-region-row .pitch-preset-btn'), 'sasia');
   respShowCategory('squad');
   respRecomputePct();
+  setScoutReportSource(document.querySelector('#scout-report-tabs .pitch-preset-btn'), 'scout');
   (function renderCalendarFixturesList() {
     var host = document.getElementById('calendar-fixtures-list');
     if (!host) return;
