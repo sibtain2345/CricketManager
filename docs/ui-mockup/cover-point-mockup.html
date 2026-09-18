@@ -640,6 +640,12 @@
   .calendar-day-cell.selected { border-color: var(--gold); box-shadow: 0 0 0 1px var(--gold); }
   .calendar-day-cell .cal-day-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--gold); }
   .calendar-day-cell.today .cal-day-dot { background: var(--turf-strong); }
+  .mini-cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 3px; margin-top: 6px; }
+  .mini-cal-cell { aspect-ratio: 1; border-radius: 5px; background: var(--surface-3); display: flex; align-items: center; justify-content: center; position: relative; font-family: var(--font-mono); font-size: 10px; color: var(--ink-faint); }
+  .mini-cal-cell.empty { background: none; }
+  .mini-cal-cell.today { background: var(--turf-dim); color: var(--turf-strong); font-weight: 700; }
+  .mini-cal-cell .mini-cal-dot { position: absolute; bottom: 2px; width: 4px; height: 4px; border-radius: 50%; background: var(--gold); }
+  .mini-cal-cell.today .mini-cal-dot { background: var(--turf-strong); }
   .staff-row.clickable:hover { background: var(--surface-2); }
   .sparkline-wrap { margin-top: 12px; }
   .sparkline { width: 100%; height: 44px; display: block; }
@@ -1433,6 +1439,8 @@
   <div class="tabnav-inner">
     <button class="tab-btn" role="tab" aria-selected="true" aria-controls="panel-portal" data-tab="portal" data-group="portal" title="Overview"><svg class="icon"><use href="#i-home"/></svg><span class="tab-label">Overview</span></button>
     <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-messages" data-tab="messages" data-group="portal" title="Messages"><svg class="icon"><use href="#i-inbox"/></svg><span class="tab-label">Messages</span><span class="tab-badge" id="messages-tab-badge" hidden></span></button>
+    <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-news-site" data-tab="news-site" data-group="portal" title="News Site"><svg class="icon"><use href="#i-globe"/></svg><span class="tab-label">News Site</span></button>
+    <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-matches" data-tab="matches" data-group="portal" title="Matches"><svg class="icon"><use href="#i-cal-list"/></svg><span class="tab-label">Matches</span></button>
     <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-fixtures" data-tab="fixtures" data-group="portal" title="Fixture Schedule"><svg class="icon"><use href="#i-cal-list"/></svg><span class="tab-label">Fixture Schedule</span></button>
     <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-stages" data-tab="stages" data-group="portal" title="Stages"><svg class="icon"><use href="#i-trophy"/></svg><span class="tab-label">Stages</span></button>
     <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-records" data-tab="records" data-group="portal" title="Records"><svg class="icon"><use href="#i-trophy"/></svg><span class="tab-label">Records</span></button>
@@ -1464,25 +1472,6 @@
   <section class="panel" id="panel-portal" role="tabpanel">
     <div class="panel-head"><h1>Good morning, skip.</h1><div class="sub">Here's what needs you today</div></div>
 
-    <div class="vitals-strip">
-      <div class="vitals-card clickable" onclick="showPanel('world')" style="cursor:pointer">
-        <div class="icon-wrap"><svg class="icon"><use href="#i-trend-up"/></svg></div>
-        <div class="vitals-body"><div class="vitals-label">League position</div><div class="vitals-value">3rd</div><div class="vitals-sub">Pakistan T20 Cup &middot; 8 pts</div></div>
-      </div>
-      <div class="vitals-card clickable" onclick="showPanel('fixtures')" style="cursor:pointer">
-        <div class="icon-wrap"><svg class="icon"><use href="#i-star-fill"/></svg></div>
-        <div class="vitals-body"><div class="vitals-label">Recent form</div><div class="vitals-value" style="font-size:var(--fs-body);letter-spacing:.04em">W&nbsp;W&nbsp;L&nbsp;W&nbsp;W</div><div class="vitals-sub">4 wins from the last 5</div></div>
-      </div>
-      <div class="vitals-card clickable" onclick="showPanel('club')" style="cursor:pointer">
-        <div class="icon-wrap"><svg class="icon"><use href="#i-cash"/></svg></div>
-        <div class="vitals-body"><div class="vitals-label">Season budget</div><div class="vitals-value">$2.4M</div><div class="vitals-sub">$680K committed so far</div></div>
-      </div>
-      <div class="vitals-card clickable" onclick="showPanel('fixtures')" style="cursor:pointer">
-        <div class="icon-wrap"><svg class="icon"><use href="#i-cal-list"/></svg></div>
-        <div class="vitals-body"><div class="vitals-label">Season progress</div><div class="vitals-value">6 of 14</div><div class="vitals-sub">Played &middot; group stage</div></div>
-      </div>
-    </div>
-
     <div class="overview-hub">
       <div class="ov-col-messages">
         <div class="ov-messages-card">
@@ -1492,16 +1481,15 @@
           </div>
           <div class="inbox-filter-row" role="tablist" aria-label="Message filters">
             <button class="inbox-filter-btn" data-filter="all" aria-selected="true" onclick="setInboxFilter('all')">All</button>
-            <button class="inbox-filter-btn" data-filter="new" aria-selected="false" onclick="setInboxFilter('new')">New</button>
-            <button class="inbox-filter-btn" data-filter="unread" aria-selected="false" onclick="setInboxFilter('unread')">Unread</button>
             <button class="inbox-filter-btn" data-filter="tasks" aria-selected="false" onclick="setInboxFilter('tasks')">Tasks</button>
+            <button class="inbox-filter-btn" data-filter="unread" aria-selected="false" onclick="setInboxFilter('unread')">Unread</button>
           </div>
           <div class="inbox-rail-list" id="overview-messages-list"></div>
         </div>
       </div>
       <div class="ov-col-main">
         <div class="news-hero">
-          <div class="see-all" onclick="showPanel('messages')">&#127760; See All News <svg class="icon sm"><use href="#i-chevron-fwd"/></svg></div>
+          <div class="see-all" onclick="showPanel('news-site')">&#127760; See All News <svg class="icon sm"><use href="#i-chevron-fwd"/></svg></div>
           <div id="overview-news-hero"></div>
           <div class="news-hero-dots" id="overview-news-dots"></div>
         </div>
@@ -1521,6 +1509,11 @@
           <div class="stage-actions" style="margin-top:10px">
             <button class="tactic-change" onclick="showPanel('tactics')">Set lineup &amp; tactics</button>
           </div>
+        </div>
+        <div class="mini-list-card clickable" onclick="openCalendarView()" style="cursor:pointer">
+          <span class="eyebrow"><svg class="icon sm"><use href="#i-cal-list"/></svg> This month</span>
+          <div id="overview-calendar-mini"></div>
+          <button class="view-more-btn" style="margin-top:8px">Open full calendar</button>
         </div>
       </div>
       <div class="ov-col-side">
@@ -1547,48 +1540,6 @@
       </div>
     </div>
 
-    <div class="tile-grid" style="margin-top:16px">
-      <div class="tile tasks">
-        <span class="eyebrow">Needs your attention</span>
-        <div id="overview-attention-list"></div>
-      </div>
-      <div class="tile board-mood">
-        <span class="eyebrow">Board mood</span>
-        <div class="ring-wrap">
-          <svg width="82" height="82" viewBox="0 0 86 86">
-            <circle cx="43" cy="43" r="36" fill="none" stroke="var(--surface-3)" stroke-width="8"/>
-            <circle id="board-mood-ring-fill" cx="43" cy="43" r="36" fill="none" stroke="var(--turf)" stroke-width="8" stroke-linecap="round" stroke-dasharray="226.2" stroke-dashoffset="65.6" transform="rotate(-90 43 43)"/>
-            <text id="board-mood-ring-label" x="43" y="49" text-anchor="middle" font-family="Barlow Condensed" font-weight="700" font-size="15" fill="var(--ink)">Steady</text>
-          </svg>
-        </div>
-        <div class="ring-caption">Backed since last win</div>
-      </div>
-      <div class="tile squad-alert" style="grid-column:span 12">
-        <span class="eyebrow">Squad status</span>
-        <div class="squad-alert-row"><div><div class="squad-alert-name">Danish Raza</div><div class="squad-alert-role">Opening bowler</div></div><span class="pill injury"><img class="icon sm" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABEAAAAOCAYAAADJ7fe0AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAEISURBVDhPpdO9ioNAFAXg+8q+QMo0voQQCKQQBAtBgkUEC1kQf4oQUCJIAglYKCgqejaTRZkNN0V2Bz4YnHMPYzEkFv6xngXTNEEYx/FPTqcTaBgG9H3P+npccsadC/v9HtR1Hdq2ZcklWZaxGdu2QU3ToK5rllwirs1lLMsCVVWFsiwX8uA7ct40TZDY3G63BTf0KoqiJW8YBuh+v+NyuSy4oVdBECx5XddB1+sVeZ7/4vv+kzw4f5vN2d1uByqKAmmasuQSz/PYzHa7BZ3PZxyPR5Zccjgc2MxmswGJtiRJ3nIcZ8Gda5oGiuMYrusiDMOPiV9Zr9c/70dVVaxWq48pivIoIPoGBEvyCayinf4AAAAASUVORK5CYII=" alt="">Returning &middot; 6 days</span></div>
-        <div class="squad-alert-row"><div><div class="squad-alert-name">Umar Baig</div><div class="squad-alert-role">Middle order</div></div><span class="pill fringe"><svg class="icon sm"><use href="#i-alert"/></svg>3 low scores</span></div>
-        <div class="squad-alert-row"><div><div class="squad-alert-name">Zain Chaudhry</div><div class="squad-alert-role">Middle order</div></div><span class="pill first"><svg class="icon sm"><use href="#i-trend-up"/></svg>In form</span></div>
-      </div>
-      <div class="tile dev-watch clickable" onclick="showPanel('squad');document.querySelector('#panel-squad .subtab-btn[data-subtab=&quot;youth&quot;]').click()" style="cursor:pointer">
-        <span class="eyebrow"><svg class="icon sm"><use href="#i-cap"/></svg> Development watch</span>
-        <div class="squad-alert-row" style="border-top:none;padding-top:2px">
-          <div><div class="squad-alert-name">Bilal Nasir <span class="pill fringe" style="margin-left:4px">Academy</span></div><div class="squad-alert-role">Middle order &middot; age 17</div></div>
-          <span class="pill first"><svg class="icon sm"><use href="#i-star-fill"/></svg>2 centuries this month</span>
-        </div>
-        <div class="role-hint" style="margin-top:8px;margin-bottom:0">Scouted potential has him rated among the academy's best this intake &mdash; a real case for blooding him early.</div>
-      </div>
-      <div class="tile form-momentum clickable" onclick="showPanel('fixtures')" style="cursor:pointer">
-        <span class="eyebrow"><svg class="icon sm"><use href="#i-trend-up"/></svg> Form &amp; momentum</span>
-        <div class="squad-alert-row" style="border-top:none;padding-top:2px">
-          <div><div class="squad-alert-name">Team form momentum</div><div class="squad-alert-role">Building on the back of two dominant wins</div></div>
-          <span class="pill first">Rising</span>
-        </div>
-        <div class="squad-alert-row">
-          <div><div class="squad-alert-name">Next 5 opponents</div><div class="squad-alert-role">Two genuinely tough away trips inside the run</div></div>
-          <span class="pill" style="background:var(--gold-dim);color:var(--gold)">Mixed</span>
-        </div>
-      </div>
-    </div>
   </section>
 
   <!-- ================= MATCH DAY ================= -->
@@ -2525,9 +2476,8 @@
         </div>
         <div class="inbox-filter-row" role="tablist" aria-label="Message filters">
           <button class="inbox-filter-btn" data-filter="all" aria-selected="true" onclick="setInboxFilter('all')">All</button>
-          <button class="inbox-filter-btn" data-filter="new" aria-selected="false" onclick="setInboxFilter('new')">New</button>
-          <button class="inbox-filter-btn" data-filter="unread" aria-selected="false" onclick="setInboxFilter('unread')">Unread</button>
           <button class="inbox-filter-btn" data-filter="tasks" aria-selected="false" onclick="setInboxFilter('tasks')">Tasks</button>
+          <button class="inbox-filter-btn" data-filter="unread" aria-selected="false" onclick="setInboxFilter('unread')">Unread</button>
         </div>
         <div class="inbox-rail-list" id="inbox-rail-list"></div>
       </div>
@@ -2537,6 +2487,74 @@
     </div>
     <div class="role-hint" style="margin-top:12px">Portal &rsaquo; Messages - the real inbox, reached like any other page rather than pinned open over everything else. A pending task here is what turns the topbar's action pill into &ldquo;Response Required.&rdquo;</div>
   </section>
+
+  <!-- ================= NEWS SITE ================= -->
+  <section class="panel" id="panel-news-site" role="tabpanel" hidden>
+    <div class="panel-head" style="display:flex;align-items:center;gap:10px">
+      <svg class="icon" style="width:30px;height:30px"><use href="#i-globe"/></svg>
+      <div><h1 style="margin:0">Homepage</h1><div class="sub" style="margin:0">Worldwide</div></div>
+    </div>
+    <nav class="subnav" role="tablist" aria-label="News Site scope">
+      <button class="subtab-btn" role="tab" aria-selected="true" onclick="setNewsSiteScope(this,'foryou')">For You</button>
+      <button class="subtab-btn" role="tab" aria-selected="false" onclick="setNewsSiteScope(this,'world')">Around the World</button>
+      <button class="subtab-btn" role="tab" aria-selected="false" onclick="setNewsSiteScope(this,'home')">Pakistan T20 Cup</button>
+      <select class="plan-select" style="margin-left:auto;max-width:220px" onchange="if(this.value)openCompetitionProfile(this.value)">
+        <option value="">More competitions&hellip;</option>
+        <option value="fcc">Pakistan First-Class Championship</option>
+        <option value="lista">Pakistan List A Cup</option>
+        <option value="ppl">Pakistan Premier League</option>
+        <option value="crescent">The Crescent Trophy</option>
+        <option value="imf">Indian Masters League</option>
+        <option value="sbl">Southern Blaze League</option>
+      </select>
+    </nav>
+    <div class="tactics-grid" style="grid-template-columns:2.4fr 1fr;margin-top:14px">
+      <div class="tile-grid" id="news-site-grid"></div>
+      <div style="display:flex;flex-direction:column;gap:16px">
+        <div class="mini-list-card">
+          <span class="eyebrow"><svg class="icon sm"><use href="#i-cal-list"/></svg> Today&rsquo;s Top Fixtures</span>
+          <div class="fixture-row clickable" onclick="openFixtureSummary('f7')" style="padding-top:2px"><div class="vs-crest them"></div><div class="fixture-names">Lahore Lions<small>Away &middot; Sun 28 Mar</small></div></div>
+          <div class="fixture-row clickable" onclick="openFixtureSummary('intlwt20')" style="margin-top:8px;padding-top:8px;border-top:1px solid var(--border-soft)"><div class="vs-crest them"></div><div class="fixture-names">Pakistan vs Australia<small>ICC World T20 Championship</small></div></div>
+          <div class="fixture-row clickable" onclick="openFixtureSummary('intlodi1')" style="margin-top:8px;padding-top:8px;border-top:1px solid var(--border-soft)"><div class="vs-crest them"></div><div class="fixture-names">Pakistan vs India<small>Bilateral ODI series</small></div></div>
+          <button class="view-more-btn" style="margin-top:10px" onclick="showPanel('matches')">All matches</button>
+        </div>
+        <div class="mini-table-card">
+          <span class="eyebrow"><svg class="icon sm"><use href="#i-trophy"/></svg> Stages &middot; Pakistan T20 Cup</span>
+          <table class="career" style="font-size:var(--fs-small)">
+            <thead><tr><th>Pos</th><th>Team</th><th class="num">Pts</th></tr></thead>
+            <tbody>
+              <tr><td>1</td><td>Lahore Lions</td><td class="num">16</td></tr>
+              <tr><td>2</td><td>Karachi Kings</td><td class="num">14</td></tr>
+              <tr style="background:var(--turf-dim)"><td style="color:var(--turf-strong);font-weight:700">3</td><td style="color:var(--turf-strong);font-weight:700">Islamabad Icons</td><td class="num" style="color:var(--turf-strong);font-weight:700">12</td></tr>
+              <tr><td>4</td><td>Multan Sultans</td><td class="num">10</td></tr>
+            </tbody>
+          </table>
+          <button class="view-more-btn" style="margin-top:10px" onclick="showPanel('stages')">Full table</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= MATCHES ================= -->
+  <section class="panel" id="panel-matches" role="tabpanel" hidden>
+    <div class="panel-head"><h1>Matches</h1><div class="sub">Every fixture the scouting network covers &mdash; not just your own club&rsquo;s</div></div>
+    <nav class="subnav" role="tablist" aria-label="Matches filter">
+      <button class="subtab-btn" role="tab" aria-selected="true" onclick="setMatchesFilter(this,'today')">Today</button>
+      <button class="subtab-btn" role="tab" aria-selected="false" onclick="setMatchesFilter(this,'week')">This Week</button>
+      <button class="subtab-btn" role="tab" aria-selected="false" onclick="setMatchesFilter(this,'all')">All</button>
+      <select class="plan-select" style="margin-left:auto;max-width:240px" id="matches-comp-filter" onchange="renderMatchesHub()">
+        <option value="">Every competition</option>
+        <option value="t20cup">Pakistan T20 Cup</option>
+        <option value="international">International</option>
+        <option value="fcc">Pakistan First-Class Championship</option>
+        <option value="ppl">Pakistan Premier League</option>
+      </select>
+    </nav>
+    <div class="table-card" style="margin-top:12px">
+      <div id="matches-hub-list"></div>
+    </div>
+  </section>
+
   <section class="panel" id="panel-team-report" role="tabpanel" hidden>
     <div class="team-report-head">
       <div class="crest" style="background: radial-gradient(circle at 32% 28%, #c0392b, #7a231a 72%)">LL</div>
@@ -2720,6 +2738,18 @@
         </table>
       </div>
       <div class="role-hint" style="margin-top:10px">Top 4 qualify for the playoffs. Points, then net run rate, settle the order.</div>
+    </div>
+    <div class="analysis-card" style="margin-top:16px">
+      <span class="eyebrow"><svg class="icon sm"><use href="#i-globe"/></svg> Browse the world</span>
+      <div class="role-hint" style="margin-bottom:8px">Any competition your scouting network covers &mdash; sized to the world this save actually has, not a full continent of empty stubs.</div>
+      <div class="pitch-preset-row" id="stages-region-row" style="margin:0 0 8px">
+        <button class="pitch-preset-btn active" onclick="stagesShowRegion(this,'sasia')">South Asia</button>
+        <button class="pitch-preset-btn" onclick="stagesShowRegion(this,'oceania')">Oceania</button>
+        <button class="pitch-preset-btn" onclick="stagesShowRegion(this,'europe')">Europe</button>
+        <button class="pitch-preset-btn" onclick="stagesShowRegion(this,'intl')">International</button>
+      </div>
+      <div class="pitch-preset-row" id="stages-country-row" style="margin:0 0 8px"></div>
+      <div id="stages-competition-list" style="margin-top:8px"></div>
     </div>
   </section>
 
@@ -5182,6 +5212,18 @@
   </div>
 </div>
 
+<div class="modal-backdrop" id="news-story-backdrop" onclick="if(event.target===this) closeNewsStory()">
+  <div class="negotiation-modal" role="dialog" aria-modal="true" aria-labelledby="news-story-title" style="max-width:480px">
+    <div class="breadcrumb" style="margin-bottom:6px"><a onclick="closeNewsStory()">Portal</a><span class="sep">&rsaquo;</span><span class="here">News</span></div>
+    <div class="negotiation-head">
+      <h2 id="news-story-title" style="margin:0;font-size:var(--fs-body-lg)"></h2>
+      <button class="modal-close" onclick="closeNewsStory()" aria-label="Close">&times;</button>
+    </div>
+    <span class="eyebrow" id="news-story-kicker" style="margin-top:2px"></span>
+    <div class="role-hint" id="news-story-dek" style="margin-top:10px;font-size:var(--fs-body);color:var(--ink)"></div>
+    <div id="news-story-related" style="margin-top:14px"></div>
+  </div>
+</div>
 <div class="modal-backdrop" id="contract-petition-backdrop" onclick="if(event.target===this) closeContractPetition()">
   <div class="negotiation-modal" role="dialog" aria-modal="true" aria-labelledby="petition-title" style="max-width:480px">
     <div class="negotiation-head">
@@ -5570,7 +5612,7 @@
     </div>
   </div>
 </div>
-<div class="modal-backdrop" id="fixture-summary-backdrop onclick="if(event.target===this) closeFixtureSummary()">
+<div class="modal-backdrop" id="fixture-summary-backdrop" onclick="if(event.target===this) closeFixtureSummary()">
   <div class="negotiation-modal" style="max-width:420px">
     <div class="panel-head" style="margin-bottom:10px"><h1 id="fixture-summary-title" style="font-size:var(--fs-subhead)">Fixture</h1><div class="sub" id="fixture-summary-meta"></div></div>
     <span class="pill" id="fixture-summary-result" style="margin-bottom:10px;display:inline-flex"></span>
@@ -5786,6 +5828,12 @@
       <span class="match-back-title">Calendar</span>
     </div>
     <div class="panel-head"><h1>Calendar</h1><div class="sub">Every dated event across your coaching identities &mdash; click a day to see it, click through to act on it</div></div>
+    <nav class="subnav" role="tablist" aria-label="Calendar views">
+      <button class="subtab-btn" role="tab" aria-selected="true" data-subtab="general">General</button>
+      <button class="subtab-btn" role="tab" aria-selected="false" data-subtab="training">Training</button>
+      <button class="subtab-btn" role="tab" aria-selected="false" data-subtab="fixtures">Fixtures</button>
+    </nav>
+    <div class="subpanel" id="calendar-general">
     <div class="tactics-grid" style="grid-template-columns: 2fr 1fr">
       <div class="analysis-card">
         <div class="calendar-nav-row">
@@ -5800,6 +5848,33 @@
       <div class="analysis-card" id="calendar-day-detail">
         <span class="eyebrow">Select a day</span>
         <div class="role-hint" style="margin-top:8px">Click any date on the calendar to see what&rsquo;s happening.</div>
+      </div>
+    </div>
+    </div>
+    <div class="subpanel" id="calendar-training" hidden>
+      <div class="role-hint" style="margin-bottom:10px">A read-only week-by-week view of the training programme actually running &mdash; the same periodisation `TrainingWeekService` already resolves internally, shown here rather than only felt through its effects.</div>
+      <div class="table-card">
+        <table class="career">
+          <thead><tr><th>Week</th><th>Phase</th><th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th><th>Sat</th><th>Sun</th></tr></thead>
+          <tbody>
+            <tr><td>17&ndash;23 Mar</td><td><span class="pill first">Normal &middot; Mid</span></td><td>Physical</td><td>Outfield</td><td>Tactical</td><td>Recovery</td><td>Match Tactics</td><td colspan="2" style="color:var(--ink-faint)">Match &middot; Lahore Lions</td></tr>
+            <tr><td>24&ndash;30 Mar</td><td><span class="pill" style="background:var(--gold-dim);color:var(--gold)">Tactical &middot; Mid</span></td><td>Set Pieces</td><td>Possession</td><td>Physical</td><td>Rest</td><td>Team Bonding</td><td colspan="2" style="color:var(--ink-faint)">Match &middot; Lahore Lions</td></tr>
+            <tr><td>31 Mar&ndash;6 Apr</td><td><span class="pill" style="background:var(--gold-dim);color:var(--gold)">Technical &middot; Mid</span></td><td>Outfield</td><td>Attacking</td><td>Defending</td><td>Recovery</td><td colspan="3" style="color:var(--ink-faint)">Match &middot; Multan Sultans</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="role-hint" style="margin-top:10px">Match weeks carry no development work &mdash; prep, travel and recovery fill the slot instead. Off-season and preparation weeks are where a young player with real headroom genuinely rebuilds his game.</div>
+    </div>
+    <div class="subpanel" id="calendar-fixtures" hidden>
+      <div class="tactics-grid" style="grid-template-columns:1.4fr 1fr">
+        <div class="analysis-card">
+          <span class="eyebrow"><svg class="icon sm"><use href="#i-cal-list"/></svg> Upcoming, month-grouped</span>
+          <div id="calendar-fixtures-list"></div>
+        </div>
+        <div class="analysis-card">
+          <span class="eyebrow">Team news &amp; previous meetings</span>
+          <div class="role-hint" style="margin-top:8px">Click a fixture on the left to see the full pre-match brief.</div>
+        </div>
       </div>
     </div>
   </section>
@@ -5926,6 +6001,8 @@
     portal: { label: 'Portal', items: [
       { tab: 'portal', label: 'Overview' },
       { tab: 'messages', label: 'Messages' },
+      { tab: 'news-site', label: 'News Site' },
+      { tab: 'matches', label: 'Matches' },
       { tab: 'fixtures', label: 'Fixture Schedule' },
       { tab: 'stages', label: 'Stages' },
       { tab: 'records', label: 'Records' },
@@ -5968,24 +6045,102 @@
     var dots = document.getElementById('overview-news-dots');
     if (!hero || !dots) return;
     var n = slides[newsHeroIndex % slides.length];
+    hero.style.cursor = 'pointer';
+    hero.onclick = function () { openNewsStory(n.id); };
     hero.innerHTML = '<h2>' + n.headline + '</h2><div class="dek">' + n.dek + '</div>';
     dots.innerHTML = slides.map(function (s, i) { return '<span class="' + (i === (newsHeroIndex % slides.length) ? 'active' : '') + '"></span>'; }).join('');
   }
   function advanceNewsHero() { newsHeroIndex++; renderNewsHero(); }
+  // News Site: a real destination (Pattern A), distinct from an individual story
+  // popup (Pattern B, openNewsStory below). Scope is a simple, honest heuristic off
+  // each item's own kicker rather than a fabricated geo/club tag on every entry -
+  // "For You" is unfiltered (FM26's own personalised default); "Around the World"
+  // keeps only the genuinely non-club kickers; "Pakistan T20 Cup" keeps the rest.
+  var NEWS_WORLD_KICKERS = ['International', 'Franchise cricket', 'Rankings', 'Umpiring', 'Pundit', 'Record'];
+  var newsSiteScope = 'foryou';
+  function setNewsSiteScope(btn, scope) {
+    newsSiteScope = scope;
+    document.querySelectorAll('#panel-news-site .subtab-btn').forEach(function (b) { b.setAttribute('aria-selected', b === btn ? 'true' : 'false'); });
+    renderNewsSite();
+  }
+  function renderNewsSite() {
+    var grid = document.getElementById('news-site-grid');
+    if (!grid) return;
+    var items = INBOX_NEWS.filter(function (n) {
+      if (newsSiteScope === 'world') return NEWS_WORLD_KICKERS.indexOf(n.kicker) !== -1;
+      if (newsSiteScope === 'home') return NEWS_WORLD_KICKERS.indexOf(n.kicker) === -1;
+      return true;
+    }).slice(0, 9);
+    grid.innerHTML = items.map(function (n, i) {
+      var span = i === 0 ? 'grid-column:span 12' : 'grid-column:span 6';
+      return '<div class="tile clickable" style="' + span + ';cursor:pointer" onclick="openNewsStory(\'' + n.id + '\')">'
+        + '<span class="eyebrow">' + n.kicker + (i === 0 ? ' &middot; Trending' : '') + '</span>'
+        + '<div style="font-family:var(--font-display);font-weight:700;font-size:' + (i === 0 ? 'var(--fs-title)' : 'var(--fs-body-lg)') + ';margin-top:6px">' + n.headline + '</div>'
+        + '<div class="role-hint" style="margin-top:6px;margin-bottom:0">' + n.dek + '</div>'
+        + '</div>';
+    }).join('') || '<div class="role-hint">Nothing in this scope right now.</div>';
+  }
+  function openNewsStory(id) {
+    var n = INBOX_NEWS.filter(function (x) { return x.id === id; })[0];
+    if (!n) return;
+    document.getElementById('news-story-title').textContent = n.headline;
+    document.getElementById('news-story-kicker').textContent = n.kicker;
+    document.getElementById('news-story-dek').textContent = n.dek;
+    var rel = document.getElementById('news-story-related');
+    rel.innerHTML = n.click ? '<button class="view-more-btn" onclick="closeNewsStory();' + n.click.replace(/"/g, '&quot;') + '">Read the full story</button>' : '';
+    document.getElementById('news-story-backdrop').classList.add('open');
+  }
+  function closeNewsStory() { document.getElementById('news-story-backdrop').classList.remove('open'); }
+
+  // Matches hub: every fixture the scouting network covers, not just the human's own
+  // club - reuses FIXTURE_SUMMARIES/openFixtureSummary directly (the same scorecard
+  // popup Fixtures already opens) rather than a second modal.
+  var matchesFilter = 'today';
+  function setMatchesFilter(btn, filter) {
+    matchesFilter = filter;
+    document.querySelectorAll('#panel-matches .subtab-btn').forEach(function (b) { b.setAttribute('aria-selected', b === btn ? 'true' : 'false'); });
+    renderMatchesHub();
+  }
+  function renderMatchesHub() {
+    var host = document.getElementById('matches-hub-list');
+    if (!host) return;
+    var compFilter = document.getElementById('matches-comp-filter').value;
+    var rows = Object.keys(FIXTURE_SUMMARIES).map(function (k) { return Object.assign({ key: k }, FIXTURE_SUMMARIES[k]); }).filter(function (f) {
+      if (compFilter && f.comp !== compFilter) return false;
+      if (matchesFilter === 'today') return f.when === 0;
+      if (matchesFilter === 'week') return f.when >= 0 && f.when <= 7;
+      return true;
+    }).sort(function (a, b) { return a.when - b.when; });
+    host.innerHTML = rows.map(function (f) {
+      return '<div class="fixture-row clickable" onclick="openFixtureSummary(\'' + f.key + '\')" style="padding:10px 0;border-bottom:1px solid var(--border-soft)">'
+        + '<div class="vs-crest them"></div><div class="fixture-names">' + (f.title || ('Islamabad Icons vs ' + f.opp)) + '<small>' + f.meta + '</small></div>'
+        + '<div class="fixture-meta"><span class="pill' + (f.cls ? ' ' + f.cls : '') + '">' + f.result + '</span></div></div>';
+    }).join('') || '<div class="role-hint" style="padding:12px 0">Nothing in this window for the selected competition.</div>';
+  }
   function startNewsHeroCarousel() {
     renderNewsHero();
     if (newsHeroTimer) clearInterval(newsHeroTimer);
     newsHeroTimer = setInterval(advanceNewsHero, 6000);
   }
-  function renderOverviewWidgets() {
-    var attnEl = document.getElementById('overview-attention-list');
-    if (attnEl) {
-      attnEl.innerHTML = INBOX_NEWS.filter(function (n) { return n.attention; }).map(function (n) {
-        return '<div class="task-item clickable" onclick="' + (n.click || '').replace(/"/g, '&quot;') + '">'
-          + '<span class="task-dot ' + (n.urgent ? 'urgent' : 'normal') + '"></span>'
-          + '<div><div class="task-title">' + n.headline + '</div><div class="task-sub">' + n.dek + '</div></div></div>';
-      }).join('');
+  function renderOverviewCalendarMini() {
+    var host = document.getElementById('overview-calendar-mini');
+    if (!host || typeof CALENDAR_TODAY === 'undefined') return;
+    var y = CALENDAR_TODAY.getFullYear(), m = CALENDAR_TODAY.getMonth();
+    var first = new Date(y, m, 1);
+    var startWeekday = (first.getDay() + 6) % 7;
+    var daysInMonth = new Date(y, m + 1, 0).getDate();
+    var html = '';
+    for (var i = 0; i < startWeekday; i++) html += '<div class="mini-cal-cell empty"></div>';
+    for (var d = 1; d <= daysInMonth; d++) {
+      var key = calendarDateKey(y, m, d);
+      var evs = calendarEventsFor(key);
+      var isToday = d === CALENDAR_TODAY.getDate();
+      html += '<div class="mini-cal-cell' + (isToday ? ' today' : '') + '">' + d + (evs.length ? '<span class="mini-cal-dot"></span>' : '') + '</div>';
     }
+    host.innerHTML = html;
+  }
+  function renderOverviewWidgets() {
+    renderOverviewCalendarMini();
     var dynEl = document.getElementById('dynamics-press-list');
     if (dynEl) {
       dynEl.innerHTML = ['n1c', 'n1'].map(function (id, i) {
@@ -7716,7 +7871,6 @@
     if (!list) return;
     var tasks = currentContextTasks();
     var news = INBOX_NEWS.filter(function (n) {
-      if (inboxFilter === 'new') return n.isNew;
       if (inboxFilter === 'unread') return !n.read;
       if (inboxFilter === 'tasks') return false;
       return true;
@@ -7732,9 +7886,9 @@
     }).join('') : '';
     var newsHtml = news.map(function (n) {
       var sel = selectedMessageId === ('news:' + n.id) ? ' selected' : '';
-      return '<div class="inbox-item' + (!n.read ? ' unread' : '') + sel + '" onclick="openInboxItem(\'' + n.id + '\')">'
-        + '<div class="inbox-item-kicker">' + (!n.read ? '<span class="dot"></span>' : '') + n.kicker + '</div>'
-        + '<div class="inbox-item-headline">' + n.headline + '</div>'
+      return '<div class="inbox-item' + (!n.read ? ' unread' : '') + (n.attention ? ' attention' : '') + sel + '" onclick="openInboxItem(\'' + n.id + '\')">'
+        + '<div class="inbox-item-kicker">' + (!n.read ? '<span class="dot"></span>' : (n.urgent ? '<span class="dot urgent"></span>' : '')) + n.kicker + '</div>'
+        + '<div class="inbox-item-headline">' + (n.attention ? '⚠ ' : '') + n.headline + '</div>'
         + '<div class="inbox-item-dek">' + n.dek + '</div>'
         + '</div>';
     }).join('');
@@ -7800,6 +7954,7 @@
   wireTabs('#panel-squad nav[aria-label="Dynamics views"] .subtab-btn', 'dynamics-');
   wireTabs('#panel-club .subtab-btn', 'club-');
   wireTabs('#panel-fixtures .subtab-btn', 'fixtures-');
+  wireTabs('#panel-calendar .subtab-btn', 'calendar-');
   wireTabs('#panel-recruitment .subtab-btn', 'recruit-');
   wireTabs('#panel-world .subtab-btn', 'world-');
   wireTabs('#panel-team-report .subtab-btn', 'tr-');
@@ -9375,18 +9530,20 @@
 
   renderIccRankings('t20i');
   var FIXTURE_SUMMARIES = {
-    f1: { opp: 'Karachi Kings', meta: 'Home &middot; Tue 2 Mar', result: 'Won by 18 runs', cls: 'first', headline: "Hamza Malik's 68 set the platform, and Fahad Sultan's three-for at the death shut the chase down before it ever threatened." },
-    f2: { opp: 'Multan Sultans', meta: 'Away &middot; Sat 6 Mar', result: 'Won by 4 wickets', cls: 'first', headline: "A tense chase in the end, steadied by Zain Chaudhry's unbeaten 41 from number three." },
-    f3: { opp: 'Quetta Falcons', meta: 'Home &middot; Wed 10 Mar', result: 'Lost by 22 runs', cls: 'injury', headline: "Never got away from a slow start with the bat - the middle order couldn't find the boundaries a chase of that size needed." },
-    f4: { opp: 'Peshawar Zalmi', meta: 'Away &middot; Sun 14 Mar', result: 'Won by 7 wickets', cls: 'first', headline: "Umar Baig's quickfire 33 finished the chase inside 17 overs, with wickets in hand to spare." },
-    f5: { opp: 'Lahore Lions', meta: 'Home &middot; Thu 18 Mar', result: 'Lost by 9 runs', cls: 'injury', headline: "Led for long stretches, but a costly final over at the death proved the difference in a genuinely tight finish." },
-    f6: { opp: 'Peshawar Zalmi', meta: 'Home &middot; Tue 23 Mar', result: 'Won by 6 wickets', cls: 'first', headline: "Sarfraz Khan's three wickets through the middle overs broke the chase open early." },
-    f7: { opp: 'Lahore Lions', meta: 'Away &middot; Sun 28 Mar &middot; 14:00 &middot; Jinnah Stadium', result: 'Next fixture', cls: 'fringe', headline: 'Won 3 of the last 5 meetings. Their form: W W L W L over the last 5. Key duel: Talha Iqbal has dismissed Hamza Malik 3 times in this fixture.' },
-    f8: { opp: 'Multan Sultans', meta: 'Away &middot; Thu 1 Apr &middot; 19:00 &middot; Multan Cricket Stadium', result: 'In 6 days', cls: '', headline: 'A rematch of the March meeting Islamabad Icons won by 4 wickets, chasing.' },
-    f9: { opp: 'Karachi Kings', meta: 'Away &middot; Mon 5 Apr', result: 'In 10 days', cls: '', headline: 'The league leaders, and the genuinely hard away trip worth protecting the strike bowlers\' workload for.' },
-    f10: { opp: 'Quetta Falcons', meta: 'Away &middot; Fri 9 Apr', result: 'In 14 days', cls: '', headline: 'A chance to avenge the 22-run defeat at home back in March.' },
-    intlwt20: { title: 'Pakistan vs Australia', meta: 'ICC World T20 Championship &middot; Group A &middot; Fri &middot; 19:00 &middot; Gaddafi Stadium', result: 'Upcoming', cls: '', headline: 'A genuine heavyweight group meeting - Australia are the reigning champions, and Pakistan\u2019s own pace attack has the wrist-spin support to trouble a top order still adjusting to the surface.' },
-    intlodi1: { title: 'Pakistan vs India', meta: 'Bilateral ODI series &middot; 1st ODI &middot; 21 days &middot; National Stadium', result: 'Upcoming', cls: '', headline: 'The opener of a genuine series, not a one-off - both boards have real ranking points riding on it, and neither central-contract group has played a full series against the other in over a year.' }
+    f1: { opp: 'Karachi Kings', meta: 'Home &middot; Tue 2 Mar', result: 'Won by 18 runs', cls: 'first', comp: 't20cup', when: -25, headline: "Hamza Malik's 68 set the platform, and Fahad Sultan's three-for at the death shut the chase down before it ever threatened." },
+    f2: { opp: 'Multan Sultans', meta: 'Away &middot; Sat 6 Mar', result: 'Won by 4 wickets', cls: 'first', comp: 't20cup', when: -21, headline: "A tense chase in the end, steadied by Zain Chaudhry's unbeaten 41 from number three." },
+    f3: { opp: 'Quetta Falcons', meta: 'Home &middot; Wed 10 Mar', result: 'Lost by 22 runs', cls: 'injury', comp: 't20cup', when: -17, headline: "Never got away from a slow start with the bat - the middle order couldn't find the boundaries a chase of that size needed." },
+    f4: { opp: 'Peshawar Zalmi', meta: 'Away &middot; Sun 14 Mar', result: 'Won by 7 wickets', cls: 'first', comp: 't20cup', when: -13, headline: "Umar Baig's quickfire 33 finished the chase inside 17 overs, with wickets in hand to spare." },
+    f5: { opp: 'Lahore Lions', meta: 'Home &middot; Thu 18 Mar', result: 'Lost by 9 runs', cls: 'injury', comp: 't20cup', when: -9, headline: "Led for long stretches, but a costly final over at the death proved the difference in a genuinely tight finish." },
+    f6: { opp: 'Peshawar Zalmi', meta: 'Home &middot; Tue 23 Mar', result: 'Won by 6 wickets', cls: 'first', comp: 't20cup', when: -4, headline: "Sarfraz Khan's three wickets through the middle overs broke the chase open early." },
+    f7: { opp: 'Lahore Lions', meta: 'Away &middot; Sun 28 Mar &middot; 14:00 &middot; Jinnah Stadium', result: 'Next fixture', cls: 'fringe', comp: 't20cup', when: 1, headline: 'Won 3 of the last 5 meetings. Their form: W W L W L over the last 5. Key duel: Talha Iqbal has dismissed Hamza Malik 3 times in this fixture.' },
+    f8: { opp: 'Multan Sultans', meta: 'Away &middot; Thu 1 Apr &middot; 19:00 &middot; Multan Cricket Stadium', result: 'In 6 days', cls: '', comp: 't20cup', when: 6, headline: 'A rematch of the March meeting Islamabad Icons won by 4 wickets, chasing.' },
+    f9: { opp: 'Karachi Kings', meta: 'Away &middot; Mon 5 Apr', result: 'In 10 days', cls: '', comp: 't20cup', when: 10, headline: 'The league leaders, and the genuinely hard away trip worth protecting the strike bowlers\' workload for.' },
+    f10: { opp: 'Quetta Falcons', meta: 'Away &middot; Fri 9 Apr', result: 'In 14 days', cls: '', comp: 't20cup', when: 14, headline: 'A chance to avenge the 22-run defeat at home back in March.' },
+    intlwt20: { title: 'Pakistan vs Australia', meta: 'ICC World T20 Championship &middot; Group A &middot; Fri &middot; 19:00 &middot; Gaddafi Stadium', result: 'Upcoming', cls: '', comp: 'international', when: 2, headline: 'A genuine heavyweight group meeting - Australia are the reigning champions, and Pakistan\u2019s own pace attack has the wrist-spin support to trouble a top order still adjusting to the surface.' },
+    intlodi1: { title: 'Pakistan vs India', meta: 'Bilateral ODI series &middot; 1st ODI &middot; 21 days &middot; National Stadium', result: 'Upcoming', cls: '', comp: 'international', when: 21, headline: 'The opener of a genuine series, not a one-off - both boards have real ranking points riding on it, and neither central-contract group has played a full series against the other in over a year.' },
+    ko1: { title: 'Karachi Kings vs Peshawar Zalmi', meta: 'Pakistan T20 Cup &middot; Today &middot; 19:00 &middot; National Stadium', result: 'Today', cls: '', comp: 't20cup', when: 0, headline: 'The league leaders host a Peshawar Zalmi side already out of playoff contention - a routine occasion on paper, the kind of match a genuinely worldwide Matches list has to cover even when it means nothing to your own club.' },
+    fcc1: { title: 'Sindh Warriors vs Punjab Panthers', meta: 'Pakistan First-Class Championship &middot; Day 2 of 4 &middot; National Stadium', result: 'In progress', cls: '', comp: 'fcc', when: 0, headline: 'Sindh Warriors resume on 210 for 4, still 60 behind on first innings - a genuine grind on a wearing surface, the format Islamabad Icons themselves are chasing a first title in.' }
   };
   function openFixtureSummary(key) {
     var f = FIXTURE_SUMMARIES[key];
@@ -9402,6 +9559,65 @@
   function closeFixtureSummary() {
     document.getElementById('fixture-summary-backdrop').classList.remove('open');
   }
+  // Stages cascading world browser: Region -> Country -> Competition, sized to this
+  // save's actual 6-nation world rather than full continents of empty stubs. The end
+  // of the cascade opens the SAME real Competition Profile screen every other
+  // competition link in this file already opens - no second table-rendering path.
+  var STAGES_REGIONS = {
+    sasia: { label: 'South Asia', countries: ['pak', 'ind'] },
+    oceania: { label: 'Oceania', countries: ['aus', 'nz'] },
+    europe: { label: 'Europe', countries: ['eng', 'ned'] },
+    intl: { label: 'International', countries: ['__intl__'] }
+  };
+  var STAGES_COUNTRY_COMPS = {
+    pak: ['t20cup', 'fcc', 'lista', 'ppl'],
+    ind: ['imf'],
+    aus: ['sbl'],
+    eng: [],
+    nz: [],
+    ned: [],
+    __intl__: ['crescent']
+  };
+  var stagesActiveRegion = 'sasia';
+  function stagesShowRegion(btn, region) {
+    stagesActiveRegion = region;
+    document.querySelectorAll('#stages-region-row .pitch-preset-btn').forEach(function (b) { b.classList.toggle('active', b === btn); });
+    var countryRow = document.getElementById('stages-country-row');
+    var countries = STAGES_REGIONS[region].countries;
+    countryRow.innerHTML = countries.map(function (c, i) {
+      var label = c === '__intl__' ? 'ICC events' : nationProfiles[c].name;
+      return '<button class="pitch-preset-btn' + (i === 0 ? ' active' : '') + '" onclick="stagesShowCountry(this,\'' + c + '\')">' + label + '</button>';
+    }).join('');
+    stagesShowCountry(countryRow.firstElementChild, countries[0]);
+  }
+  function stagesShowCountry(btn, country) {
+    document.querySelectorAll('#stages-country-row .pitch-preset-btn').forEach(function (b) { b.classList.toggle('active', b === btn); });
+    var comps = STAGES_COUNTRY_COMPS[country] || [];
+    var host = document.getElementById('stages-competition-list');
+    if (!comps.length) {
+      host.innerHTML = '<div class="role-hint" style="margin:0">No club or international competitions on record for this nation in this world yet.</div>';
+      return;
+    }
+    host.innerHTML = comps.map(function (key) {
+      var c = competitionProfiles[key];
+      return '<div class="staff-row clickable" onclick="openCompetitionProfile(\'' + key + '\')"><div class="staff-row-main"><span class="staff-name">' + c.name + '</span><span class="staff-role-label">' + c.meta + '</span></div></div>';
+    }).join('');
+  }
+  renderNewsSite();
+  renderMatchesHub();
+  stagesShowRegion(document.querySelector('#stages-region-row .pitch-preset-btn'), 'sasia');
+  (function renderCalendarFixturesList() {
+    var host = document.getElementById('calendar-fixtures-list');
+    if (!host) return;
+    var rows = Object.keys(FIXTURE_SUMMARIES).map(function (k) { return Object.assign({ key: k }, FIXTURE_SUMMARIES[k]); })
+      .filter(function (f) { return f.comp === 't20cup' && f.when >= 0 && f.opp; })
+      .sort(function (a, b) { return a.when - b.when; });
+    host.innerHTML = rows.map(function (f) {
+      return '<div class="fixture-row clickable" onclick="openFixtureSummary(\'' + f.key + '\')" style="padding:8px 0;border-bottom:1px solid var(--border-soft)">'
+        + '<div class="vs-crest them"></div><div class="fixture-names">Islamabad Icons vs ' + f.opp + '<small>' + f.meta + '</small></div>'
+        + '<div class="fixture-meta"><span class="pill' + (f.cls ? ' ' + f.cls : '') + '">' + f.result + '</span></div></div>';
+    }).join('');
+  })();
   function filterWorldList(listId, query) {
     var list = document.getElementById(listId);
     if (!list) return;
@@ -9792,6 +10008,7 @@
     document.body.classList.remove("match-immersive");
     document.getElementById("panel-calendar").hidden = true;
   }
+  renderOverviewCalendarMini();
 
   // Role -> a philosophy line that actually matches the job (a Chief Scout
   // and a Batting Coach should never share one "technique-first developer"

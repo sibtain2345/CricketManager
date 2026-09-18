@@ -13291,6 +13291,143 @@ isi ko sahi trh se improve kro").
     resulting mockup changes, matching the standing end-of-slice ritual already established for
     this sub-track ("commit hoga jb tum review kr lo gay").
 
+### Full-scope FM26 mockup pass, 5 slices (Portal, Club, Squad/Training, Recruitment, Player/Staff
+### Profile) - approved plan, corrected once before approval, then executed one slice at a time
+
+A separate, later thread than the "PLAN ONLY" Portal-only entry directly above - this one starts
+from the completed FM26-video re-watch pass (all 8 videos, the four longer ones re-watched
+segmented and denser) and asks "now turn the findings into real mockup changes." The plan was
+built through EnterPlanMode, and **the first draft was rejected by the user** for excluding Club
+and Portal (reasoning: Club's major findings were "already built" per this file's own history,
+Portal had its own separate plan already) - direct pushback: both exclusions were checked against
+the LIVE file and found wrong. Grepping the actual file found the Club-video's own flagged MAJOR
+finding - a Responsibilities/Delegation screen mapping onto the real `DelegationProfile` domain -
+**does not exist anywhere**, nor does the 12-column squad table view-selector, nor the Club
+Comparison Facts card; Club's own subnav is still just 4 tabs (Overview/Finances/Staff/Boardroom).
+Portal's own "PLAN ONLY" plan (directly above) was likewise still genuinely half-executed - the
+mega-menu shell was done, but the tile cleanup / News Site / story popup / Matches hub it calls
+for were still outstanding. **The corrected, approved plan puts everything in scope** (Portal,
+Club, Squad/Training, Recruitment, Player/Staff Profile, worked one at a time, five ordered
+slices), with an explicit standing discipline for the rest of this pass: **never trust this file's
+own prior "already built" claims without grepping the live file first** - the plan file itself
+(`C:\Users\user 1\.claude\plans\magical-purring-squid.md`) is the full record of this correction
+and the per-slice item list. The user's own explicit standing instruction for the whole pass:
+work slice after slice with no pause for confirmation in between, update this file and commit +
+push after every single slice, and only message back once ALL FIVE are done.
+
+**4 minor open design questions surfaced by the re-watch, decided as part of the approved plan**
+(the user's own call: "decide now"), same DECIDED-checkpoint discipline as videos 1-2 earlier in
+this sub-track's history:
+1. FM26's squad-status ladder is far finer than ours (14 tiers incl. goalkeeper sub-tiers vs our
+   8) - **keep the 8-tier `SquadStatus` domain model as-is** (a C# backend question, out of scope
+   for a mockup pass); the mockup may still compute a richer DISPLAY label (role + status
+   combined, e.g. "First-Choice Wicketkeeper") wherever a status pill renders - presentation only.
+2. A salary floor alongside our cap (FM26 states one, age-differentiated) - **informational text
+   only**, on the Competition Profile Rules tab, same voice as the other static rule lines
+   already there (FFP thresholds, stadium capacity) - not backed by a live enforcement check.
+3. Ground/infrastructure eligibility gating a competition - **deferred, logged only**; no domain
+   support exists to honestly show a ground as "ineligible."
+4. Staff-side foreign-quota rules, distinct from the player-side one already modelled -
+   **deferred, logged only**, same reasoning as #3.
+
+#### Slice 1 - Portal: COMPLETE
+
+Verified the live file's actual current state before touching anything (per the plan's own
+standing discipline) rather than trusting the half-executed "PLAN ONLY" plan's own description of
+itself - confirmed via direct grep: the vitals-strip (League Position/Recent Form/Season Budget/
+Season Progress) and all 5 lower Overview tiles (Needs your attention/Board mood/Squad status/
+Development watch/Form &amp; momentum) were all still present; News Site, the Pattern-B story
+popup, and a Matches hub did not exist at all; the Calendar destination existed but as a single
+month-grid view only, no General/Training/Fixtures sub-tabs; Stages was a single fixed T20 Cup
+table with no world-browsing cascade.
+
+**Built:**
+- Removed the entire vitals-strip and all 5 lower tiles from Portal &gt; Overview. Verified each
+  one's real content already lives on its proper destination before deleting (not just deleting
+  and hoping): Board mood duplicates Boardroom's own "Confidence in you" bar; Squad status
+  duplicates Squad &gt; First Team's Treatment Room card; Development watch duplicates the Bilal
+  Nasir row already on Squad &gt; Academy &amp; Youth; Form &amp; momentum duplicates Fixtures'
+  own richer "Recent form &amp; the run ahead" card almost exactly (kept, deleted the redundant
+  simpler copy). Fixed `renderInboxRail`'s news-item template to add a real urgent visual marker
+  (a `dot urgent` span, a leading &#9888; on the headline, an `attention` CSS hook) for
+  `attention`/`urgent`-flagged `INBOX_NEWS` items BEFORE deleting the standalone "Needs your
+  attention" tile - without this fix the reminders would have silently lost their visual
+  prominence once merged into the ordinary Messages list, not just relocated cleanly.
+- Added a real mini Calendar month-grid preview to Overview's middle column (a genuine gap against
+  the video: FM26's own middle column is News hero + Next Opposition Report + Matches (small) +
+  a mini Calendar - ours was missing the 4th). New `renderOverviewCalendarMini()`, guarded against
+  running before `CALENDAR_TODAY` is assigned (a real ordering hazard found while wiring this -
+  `renderOverviewWidgets()` fires BEFORE the calendar data block later in the same script; fixed
+  with a `typeof CALENDAR_TODAY === 'undefined'` guard plus a second, correctly-ordered call once
+  the calendar block has actually run).
+- **A real News Site destination** (`panel-news-site`) - Homepage/Worldwide header, a real
+  For You/Around the World/Pakistan T20 Cup tab strip (a "More competitions" select for the rest),
+  a 9-card story grid reading straight from `INBOX_NEWS` (never a duplicated data set), plus
+  Today's Top Fixtures and a Stages mini-table side column. Scope filtering is a stated, honest
+  heuristic off each item's own `kicker` (no fabricated per-item geo/club tag added to the ~29
+  existing entries) - documented as such in the code itself.
+- **A real Pattern-B story popup** (`#news-story-backdrop`) - a centred overlay with its own
+  breadcrumb ("Portal &rsaquo; News") and close button, the rest of the screen dimmed-not-hidden
+  behind it, matching the video's own confirmed distinct-from-Pattern-A behaviour. Wired from
+  every News Site card AND the Overview news-hero carousel's current slide.
+- **A world-wide Matches hub** (`panel-matches`) - Today/This Week/All filters plus a competition
+  dropdown, spanning every seeded competition rather than only the human's own club. Reuses
+  `FIXTURE_SUMMARIES`/`openFixtureSummary` directly (no second scorecard modal) - extended the
+  data with a `comp` tag and a `when` (days-from-today) field on every existing entry, plus two
+  new entries for genuine world-wide breadth (a same-day Karachi Kings v Peshawar Zalmi T20 Cup
+  match, a First-Class Championship match in progress) - verified live: Today shows 2, This Week
+  5, All 14, and the competition filter narrows correctly (e.g. International -&gt; 2).
+- **Calendar restructured into real General/Training/Fixtures sub-tabs** (was one bare month-grid).
+  General = the pre-existing month-grid, unchanged. Training = an illustrative week-by-week
+  periodisation table (Normal/Tactical/Technical phase tags, daily session tags, match weeks
+  correctly showing no development slot) - stated explicitly as a READ view of what
+  `TrainingWeekService`'s real periodisation already resolves internally, not a new simulated
+  mechanic. Fixtures = a real Islamabad-Icons-only upcoming list reading `FIXTURE_SUMMARIES`
+  (a real bug caught and fixed here before shipping: the first filter used `comp === 't20cup'`
+  alone, which incorrectly pulled in the new Karachi-Kings-v-Peshawar-Zalmi entry too since it
+  also happens to be T20 Cup - fixed to also require the entry actually have an `opp` field,
+  i.e. genuinely be an Islamabad Icons fixture).
+- **The Stages cascading Region &rarr; Country &rarr; Competition browser**, sized to this save's
+  real 6-nation world (South Asia: Pakistan/India; Oceania: Australia/New Zealand; Europe:
+  England/Netherlands; a 4th "International" pseudo-region for the Crescent Trophy) rather than
+  full continents of empty stubs, per the standing DECIDED item from the videos-1-2 checkpoint.
+  A country with nothing hosted (England, New Zealand, Netherlands in this fictional world) shows
+  a real, honest empty state rather than a fabricated competition. The cascade's end point reuses
+  the SAME `openCompetitionProfile()` every other competition link in this file already opens -
+  no second, duplicate table-rendering path built. The pre-existing, hand-coded, real-club-linked
+  default T20 Cup table on the main Stages screen was left completely untouched (its own
+  `openWorldProfile('club', ...)` links and Islamabad-Icons row highlight are real, working, and
+  not worth risking for a generic renderer).
+- Dropped the "New" Messages filter (both the Overview and the full Messages page's own filter
+  rows) - confirmed by the video as not a real FM26 filter (only All/Tasks/Unread exist); removed
+  the matching dead `inboxFilter === 'new'` branch in `renderInboxRail`.
+
+**A real, previously-invisible, pre-existing bug found and fixed while testing the Matches hub -
+not something this pass's own edits caused.** `openFixtureSummary`'s backdrop element had a
+malformed attribute: `id="fixture-summary-backdrop onclick="if(event.target===this)
+closeFixtureSummary()"` - the closing quote after the id VALUE was missing, so the browser parsed
+the entire string as one broken `id` attribute with no separate `onclick` at all. This meant
+`document.getElementById('fixture-summary-backdrop')` could **never** find the element -
+`openFixtureSummary` has silently done nothing on every single call, on every screen that uses it
+(Fixtures' own Season Schedule rows, the new Matches hub, the new Calendar Fixtures tab), for as
+long as this bug has existed. Caught by a live Playwright click-through test throwing a real
+`TypeError`, not by static inspection - the structural tag/id verifier used throughout this
+sub-track cannot catch a malformed-but-technically-parseable attribute like this one. Fixed with
+one quote; re-verified live afterward across Fixtures, Matches, and Calendar &gt; Fixtures - the
+scorecard popup now genuinely opens and closes everywhere it's wired.
+
+**Verified**: the established `verify.py` structural pass (tag-count parity for
+div/table/tr/span/svg/nav/section/button - `tr`'s own pre-existing 2-tag delta and the script's
+own pre-existing 2-paren delta both confirmed unchanged against the git baseline before relying on
+them as "known, not a regression" - a div-nesting stack scan, a duplicate-id scan, `node --check`
+on the extracted `&lt;script&gt;` block) run after every edit, plus a full live Playwright pass: a
+navigation sweep through all 18 real destinations with zero thrown errors and zero console errors
+(bar the standing harmless favicon 404); News Site's scope filter and story popup opening/closing
+with real content; the Matches hub's three time filters and competition filter all producing the
+right counts; the Calendar's three sub-tabs switching correctly with the Fixtures tab's real,
+correctly-scoped list; the Stages cascade's region/country switching, the honest empty state for a
+nation with nothing hosted, and a competition click genuinely opening its real profile.
+
 ---
 
 ## CONSOLIDATED DEFERRED-ITEMS REGISTER (maintained - the single source of truth)
