@@ -13827,29 +13827,114 @@ that instruction - update each package's own status as it lands rather than wait
   a rest day. Live-verified: changing Monday's focus + priority both mutate real state and update
   the DOM live; Saturday (match day) correctly shows no select at all, unchanged read-only text.
   Zero console errors. Structurally verified clean. Committed.
-- **E - Franchise/International auction & camp rebuild** (items 7, 8, 9 - the largest package):
-  retention pulled into its own dated stage with a locked, reference-only multi-team display
-  inside the Auction Room + real per-team and combined-table news on submission; a Pre-Auction
-  Trade Window added (reusing the existing Trade Centre UI, redated + reframed to retained-only
-  players); Registration Close folded into the EOI screen's own existing narrative rather than a
-  new screen; a Post-Auction lock state + injury-replacement-wildcard note; a Pass button (human
-  team, live during bidding, becomes Next once sold); Skip Player + Skip Set (auto-bids the rest
-  of the set); overseas plane-icon badges in the auction lot view and the squad table; commentary
-  rebuilt to swap a single line in place next to the player with a separate click-to-open
-  scrollable Commentary History tile; a pause-on-navigate-away fix (clear the timer on
-  `exitAuctionMode`, don't silently resume on re-entry); an escalating 10s -> 5s (1st call) -> 3s
-  (2nd call) timer with a selectable base (10s/5s/3s, the 1st/2nd-call values scaling
-  proportionally); corrected camp timing rules; a real Coaching Assignments feature.
-- **F - Club/Franchise/International remaining gaps** (item 5 closeout - academy-signing-anytime
-  and any other finer point found not already covered by existing screens once package A makes
-  them properly visible).
-- **G - Final structural verification pass** across the whole file (tag-count parity, div-nesting
-  scan, duplicate-id scan, `node --check` on the extracted script block), matching this
-  sub-track's own established discipline, before the closing commit/report.
+- **E - Franchise/International auction & camp rebuild (items 7, 8, 9) - DONE, in three parts.**
 
-Status: **package A starting now.** Update this entry's own status line (and add a short writeup
-per package, matching this sub-track's established style) as each package lands - do not let this
-entry go stale the way this project's own history repeatedly warns against.
+  **E1 - the sequencing fix (the heart of item 9).** Confirmed a real, direct conflict before
+  touching anything: the War Room's own panel-head text said retention "resolves as the very
+  first order of business this morning - the same sitting as today's auction" - a deliberate
+  earlier design decision (Meeting-Driven Selection ticket's Corrections Pass), but one that
+  directly contradicts the real IPL 2025 timeline the user quoted verbatim (retention finalises
+  weeks before the auction, not same-day). The user's own new instruction wins over the earlier
+  decision. Built: a genuine new top-level screen (`panel-retention`, mirroring the existing EOI/
+  Pre-Auction panel shape exactly) carrying the real editable retention table + submit flow,
+  moved out of the War Room verbatim. `enterAuctionMode()` now **refuses to open at all** until
+  `retentionSubmitted` is true, redirecting to the retention screen instead - verified live: an
+  auction entry with retention outstanding lands on Retention, not the Auction Room. The War Room
+  itself became reference-only (`renderRetentionSummary()`, no checkboxes, nothing editable) -
+  verified live (`warRoomHasNoCheckbox: true`). `submitRetentionList()` now generates two real
+  `INBOX_NEWS` entries the moment the deadline is met (a per-team item + a combined league-wide
+  roundup), exactly matching the pending-changes doc's own ask. A genuine **Pre-Auction Trade
+  Window** was added by extending the existing Trade Centre UI with a real `mode` parameter
+  (`enterTradeMode('pre'|'post')`) rather than building a second trade screen - 'pre' shows a
+  real eligibility restriction (retained players only, per the researched real IPL rule: trades
+  pre-auction are retained-only, confirmed via
+  [Britannica](https://www.britannica.com/sports/How-Does-the-IPL-Auction-Process-Work),
+  [ESPN Africa](https://africa.espn.com/cricket/story/_/id/38990673/how-player-trades-work-ipl),
+  [Khelreport](https://khelreport.com/ipl-2026-trade-window-explained/)). Six real, non-
+  overlapping calendar dates now exist in strict chronological order: Pre-Auction Trade
+  (2026-12-10) -> Retention (2027-01-20) -> EOI (2027-02-03) -> Pre-Auction Meeting (2027-03-15)
+  -> Auction (2027-03-27) -> Trade Centre/post-auction (2027-04-15). Registration Window Close
+  folded into the EOI screen's own existing narrative (a one-line addition, no new screen, per
+  the plan's own scope call). A Post-Auction/Pre-Season lock note (with the real injury-
+  replacement-wildcard exception named) was added to the auction's own Review stage. The
+  Franchise Overview timeline card and the `task-retention` inbox task were both updated to
+  match the corrected sequence. Live-verified end to end (redirect-when-unsubmitted, news
+  generation, the locked summary, both trade-window framings) with zero console errors.
+
+  **E2 - the bidding-room UX.** A real **Pass** button next to Bid (live while bidding is
+  genuinely open, disabled once the human holds the bid or has already passed) - marks the human
+  out of contention for THIS lot without ending it for the rest of the room. **Skip Player**
+  fast-forwards the current lot to a genuine resolution (rivals get real chances to bid via
+  repeated `maybeRivalBid()` calls) without the human sitting through the timer; **Skip Set**
+  does the same for every remaining player in the current set, then genuinely advances to the
+  next set's own overview (or Review, if it was the last set) - both verified live end to end,
+  including a real SOLD resolution and a real set-to-set transition. A new `auctionAutoResolving`
+  flag lets `auctionFinishLot` bypass an RTM prompt during an automated skip (an unexercised RTM
+  card is treated as declined, keeping the skip fully synchronous). **Commentary rebuilt**: a
+  single swap-in-place line (`.commentary-swap`, a brief fade transition) next to the player,
+  never a growing scrollable list, plus a separate **Commentary History** tile
+  (`#commentary-history-backdrop`, reusing the established `.modal-backdrop`/`.negotiation-modal`
+  shell) that builds the full log fresh from a real `auctionCommentaryHistory` array on open.
+  **Escalating call timer**: `timerSecondsForStage(stage)` returns the base timer at stage 0, ~50%
+  of it at the 1st call, ~30% at the 2nd (verified live: base 10 -> 10/5/3; base 5 -> 5/3/2), with
+  a real, selectable base-timer row (10s/5s/3s) wired into `startAuctionRound`/`auctionTimerTick`/
+  `renderAuctionLot`. **Overseas plane-icon badges** added to two auction lots (Naveed Sultan -
+  New Zealand, Farhan Dawood - South Africa) with a real nationality tooltip, wired into the
+  current-lot header, the Full Player List table, and the Squads tab (via a name-lookup against
+  `AUCTION_LOTS`). **Pause-on-navigate** was confirmed already correct rather than rebuilt -
+  `exitAuctionMode()` already called `clearAuctionTimer()`, and the room's own state fully resets
+  on re-entry, so nothing ticks in the background once the user leaves.
+  **A real bug found and fixed by live testing, not by static reading** - after the commentary
+  rebuild, `renderAuctionLot()` still referenced the deleted `#auction-bid-log` id, throwing on
+  every single auction entry (`TypeError: Cannot set properties of null`). Caught immediately by
+  the very first live test of the flow (not assumed working from the edit alone) and fixed to use
+  the new swap+history mechanism. Re-verified clean afterward, zero console errors throughout.
+
+  **E3 - camp timing corrections + Coaching Assignments.** The Training > Camps & Calendar
+  subtab was a single, hardcoded, context-blind "Club pre-season camp" card - rebuilt into a real
+  `renderTrainingCamps()` function, keyed off `CURRENT_CONTEXT` and re-run from `setContext()` so
+  switching identity live-updates the content (verified for all three): **club** now shows THREE
+  camps, one before each of the three format competitions (T20 Cup/First-Class Championship/List
+  A Cup), each stated as the coach's own optional decision, held once that competition's own
+  squad is confirmed; **franchise** states plainly that a franchise cannot hold a camp for any
+  format other than T20; **international** shows the three real camp types (Test/Limited-overs/
+  Combined) with skills-coach framing, the head-coach-and-selectors' own discretion to leave out
+  a domestic performer stated explicitly, and the end-of/mid-off-season timing. A genuine
+  **Coaching Assignments** feature was added (`COACHING_ASSIGNMENTS`, `renderCoachingAssignments`,
+  `setCoachingAssignment`) - six squad groups (top-order/middle-order/pace/spin/fielding/S&C),
+  each with a real, editable `<select>` assigning one of the already-established staff names
+  (Mudassar Iqbal/Sohail Raza/Haroon Wattoo/Vacant), genuinely mutating state - verified live
+  (Fielding: Vacant -> Haroon Wattoo). A small note on the franchise coach's own auction-day
+  invitation (present even if not physically based at the club otherwise) was added to the War
+  Room's own intro. Zero console errors throughout; structurally verified clean after every part.
+
+  All three parts committed separately (three real commits, each independently verified) rather
+  than as one undifferentiated block, matching this sub-track's own established discipline.
+
+- **F - Club/Franchise/International remaining gaps (item 5 closeout) - DONE.** Checked the
+  Academy & Youth screen's real Sign/Release flow (`decideAcademyProspect`) before assuming a gap
+  existed - confirmed it was ALREADY correct: no transfer-window gating anywhere in the sign/
+  release path, a prospect can already be signed into the senior squad any day of the year. The
+  one genuine addition: an explicit role-hint stating this plainly ("Signing a prospect into the
+  senior squad happens directly, any day of the year - never gated by a transfer window"), since
+  the pending doc calls this out as a real requirement worth being explicit about, not merely
+  implicit in the absence of a wrong statement.
+
+- **G - Final structural verification pass - DONE.** Tag-count parity (div/table/tr/span/svg/
+  nav/section/button all balanced), a div-nesting stack scan (0 unclosed, 0 extra closes), a
+  duplicate-id scan (the one flagged match remains the same JS-template-string false positive
+  named throughout this whole pass, not real markup), and `node --check` on the extracted
+  `<script>` block (exit 0) - all clean after every single edit across all seven packages, not
+  just at the end. A full live navigation sweep across all 20 real top-level destinations, in all
+  three identity contexts (club/franchise/international), confirmed zero thrown errors and zero
+  console warnings/errors anywhere.
+
+Status: **ALL SEVEN PACKAGES COMPLETE.** Every item in the user's 9-section pending-changes
+document is built, live-verified, and committed. The one deliberate design call worth restating:
+item 9's real IPL-timeline correction (retention as its own separate, earlier stage) directly
+overrode an earlier, explicitly-researched design decision recorded elsewhere in this file - the
+user's own new, concrete reference example is the authority here, and this entry says so plainly
+rather than silently overwriting the earlier reasoning with no trace of why it changed.
 
 ---
 

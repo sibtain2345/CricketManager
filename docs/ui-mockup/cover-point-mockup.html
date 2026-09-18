@@ -2066,6 +2066,7 @@
     <!-- ============ WAR ROOM: retention + pre-auction plan ============ -->
     <div id="auction-retention" class="auction-stage">
       <div class="panel-head"><h1>Islamabad Icons &middot; War Room</h1><div class="sub">Retention was finalised at its own, separate deadline weeks ago &mdash; locked in below for reference, then EOI, then the pre-auction meeting, then today&rsquo;s auction itself</div></div>
+      <div class="role-hint" style="margin-bottom:10px">A franchise coach who isn&rsquo;t physically based at the club the rest of the year still gets a real invitation on auction day itself, and chooses whether to enter &mdash; you&rsquo;ve just accepted it by walking in.</div>
       <div class="tactics-grid">
         <div class="analysis-card">
           <span class="eyebrow"><svg class="icon sm"><use href="#i-badge"/></svg> Your retention &middot; locked</span>
@@ -2919,7 +2920,7 @@
         <div class="bio-line"><span class="k">Cohort size</span><span>6 prospects</span></div>
         <div class="bio-line"><span class="k">Elite talents</span><span>1</span></div>
         <div class="bio-line"><span class="k">Assessed by</span><span>Waseem Butt, Chief Scout</span></div>
-        <div class="role-hint" style="margin-top:10px">The scouted read below is an ESTIMATE, not the truth &mdash; a stronger scouting department gets closer to a prospect&rsquo;s real ceiling; a weak one over- or under-rates him.</div>
+        <div class="role-hint" style="margin-top:10px">The scouted read below is an ESTIMATE, not the truth &mdash; a stronger scouting department gets closer to a prospect&rsquo;s real ceiling; a weak one over- or under-rates him. Signing a prospect into the senior squad happens directly, any day of the year &mdash; never gated by a transfer window.</div>
       </div>
     </div>
 
@@ -3176,16 +3177,18 @@
       <div class="role-hint" style="margin-top:10px">This is the squad-wide view of the same per-player focus set on each Player Profile &mdash; change it there, or here, and both stay in sync.</div>
     </div>
     <div class="subpanel" id="training-camps" hidden>
-      <div class="analysis-card">
-        <span class="eyebrow"><svg class="icon sm"><use href="#i-cal-list"/></svg> Club pre-season camp</span>
-        <div class="role-hint" style="margin-bottom:10px">Due in 6 days &mdash; a genuine development boost for the squad's under-26s, plus a real lift to dressing-room harmony for a squad that has churned this off-season.</div>
-        <div class="staff-row"><div class="staff-row-main"><span class="staff-name">Eligible</span><span class="staff-role-label">Every contracted player not on national or franchise duty during the window</span></div><span class="pill first">14 of 18</span></div>
-        <div class="staff-row clickable" onclick="openPlayerByName('Danish Iqbal')"><div class="staff-row-main"><span class="staff-name">Excused</span><span class="staff-role-label">Danish Iqbal &mdash; still contracted to the Pakistan Premier League until its window closes</span></div><span class="pill">1</span></div>
-      </div>
+      <div id="training-camps-content"></div>
       <div class="analysis-card">
         <span class="eyebrow"><svg class="icon sm"><use href="#i-alert"/></svg> Workload &amp; overtraining watch</span>
         <div class="staff-row clickable" onclick="openPlayerByName('Danish Raza')"><div class="staff-row-main"><span class="staff-name">Danish Raza</span><span class="staff-role-label">4 consecutive intensive blocks &mdash; two more and his injury proneness takes a permanent step up</span></div><span class="facility-tier-badge tier-average">Watch</span></div>
         <div class="staff-row"><div class="staff-row-main"><span class="staff-name">Rest of the squad</span><span class="staff-role-label">No player currently past 2 consecutive intensive blocks</span></div><span class="facility-tier-badge tier-good">Clear</span></div>
+      </div>
+      <div class="analysis-card">
+        <div style="display:flex;align-items:center;justify-content:space-between">
+          <span class="eyebrow" style="margin:0"><svg class="icon sm"><use href="#i-briefcase"/></svg> Coaching Assignments</span>
+        </div>
+        <div class="role-hint" style="margin-bottom:8px">Which specialist coach actually runs each group's own sessions &mdash; a real assignment, not just a title. Whoever is assigned here is also who a camp&rsquo;s skills-coach slot for that discipline defaults to.</div>
+        <div id="coaching-assignments-body"></div>
       </div>
     </div>
   </section>
@@ -8146,6 +8149,7 @@
     renderActionButton();
     renderInboxRail();
     renderMegaMenuBar();
+    renderTrainingCamps();
     // If the panel on screen belongs to a domain we just switched away from,
     // fall back to Portal rather than leave a now-hidden tab looking selected.
     if (currentTabWasHidden) showPanel("portal");
@@ -11604,6 +11608,67 @@
     var pill = document.getElementById('training-pct-' + dayIdx + '-' + i);
     if (pill) pill.textContent = val + '%';
   }
+  // Camps & Calendar - genuinely context-aware, correcting the earlier,
+  // over-simplified framing: a franchise camp is strictly T20-only; a
+  // non-franchise club runs THREE competitions across three formats and
+  // holds a camp before EACH one, once that competition's squad is
+  // confirmed - not just one camp for the season; an international camp is
+  // chosen by the head coach + selectors (who may leave out domestic
+  // performers), timed at the end of or mid off-season, always before the
+  // new season starts. In every case, holding the camp at all remains the
+  // coach's own optional decision - stated explicitly for all three.
+  var COACHING_ASSIGNMENTS = [
+    { group: 'Top-order &amp; opening batting', coach: 'Mudassar Iqbal' },
+    { group: 'Middle-order &amp; finishing', coach: 'Mudassar Iqbal' },
+    { group: 'Pace bowling', coach: 'Sohail Raza' },
+    { group: 'Spin bowling', coach: 'Sohail Raza' },
+    { group: 'Fielding &amp; ground work', coach: 'Vacant' },
+    { group: 'Strength &amp; conditioning', coach: 'Haroon Wattoo' }
+  ];
+  var COACHING_ASSIGNMENT_OPTIONS = ['Mudassar Iqbal', 'Sohail Raza', 'Haroon Wattoo', 'Vacant'];
+  function renderCoachingAssignments() {
+    var host = document.getElementById('coaching-assignments-body');
+    if (!host) return;
+    host.innerHTML = COACHING_ASSIGNMENTS.map(function (a, i) {
+      return '<div class="staff-row"><div class="staff-row-main"><span class="staff-name">' + a.group + '</span></div>'
+        + '<select class="plan-select" style="width:180px" onchange="setCoachingAssignment(' + i + ',this.value)">'
+        + COACHING_ASSIGNMENT_OPTIONS.map(function (o) { return '<option' + (o === a.coach ? ' selected' : '') + '>' + o + '</option>'; }).join('')
+        + '</select></div>';
+    }).join('');
+  }
+  function setCoachingAssignment(i, val) {
+    COACHING_ASSIGNMENTS[i].coach = val;
+  }
+  function renderTrainingCamps() {
+    var host = document.getElementById('training-camps-content');
+    if (!host) return;
+    if (CURRENT_CONTEXT === 'franchise') {
+      host.innerHTML = '<div class="analysis-card">'
+        + '<span class="eyebrow"><svg class="icon sm"><use href="#i-cal-list"/></svg> Franchise camp &mdash; T20 only</span>'
+        + '<div class="pitch-risk-note" style="margin-bottom:10px"><svg><use href="#i-alert"/></svg><span>A franchise cannot hold a camp for any format other than T20 &mdash; there is no First-Class or List A campaign to prepare for here.</span></div>'
+        + '<div class="role-hint" style="margin-bottom:8px">Held once the auction-assembled squad is confirmed, ahead of the campaign &mdash; the biggest development chance of the cycle, since the squad has the furthest to gel. Entirely the coach&rsquo;s own call whether to hold it at all.</div>'
+        + '<div class="staff-row"><div class="staff-row-main"><span class="staff-name">This campaign</span><span class="staff-role-label">Not yet due &mdash; the campaign camp opens once the auction-assembled squad is locked</span></div><span class="pill">Optional</span></div>'
+        + '</div>';
+    } else if (CURRENT_CONTEXT === 'international') {
+      host.innerHTML = '<div class="analysis-card">'
+        + '<span class="eyebrow"><svg class="icon sm"><use href="#i-cal-list"/></svg> International camp</span>'
+        + '<div class="role-hint" style="margin-bottom:8px">Chosen by the head coach and selectors, who may leave out a domestic performer at their own discretion &mdash; this is not the same list a franchise or domestic-club camp would draw. Timed at the end of, or mid, the off-season, always before the new season starts. Holding it at all remains the coach&rsquo;s own optional call.</div>'
+        + '<div class="staff-row"><div class="staff-row-main"><span class="staff-name">Test camp</span><span class="staff-role-label">Skills coaches: red-ball-focused specialists, chosen by the head coach</span></div><span class="pill">Optional</span></div>'
+        + '<div class="staff-row"><div class="staff-row-main"><span class="staff-name">Limited-overs camp</span><span class="staff-role-label">Skills coaches: white-ball-focused specialists, chosen by the head coach</span></div><span class="pill">Optional</span></div>'
+        + '<div class="staff-row"><div class="staff-row-main"><span class="staff-name">Combined camp</span><span class="staff-role-label">A blended squad across formats &mdash; a genuine alternative to running two separate camps</span></div><span class="pill">Optional</span></div>'
+        + '</div>';
+    } else {
+      host.innerHTML = '<div class="analysis-card">'
+        + '<span class="eyebrow"><svg class="icon sm"><use href="#i-cal-list"/></svg> Club camps &mdash; one before each of the three competitions</span>'
+        + '<div class="role-hint" style="margin-bottom:8px">A non-franchise club plays three competitions across three formats, and holds a real camp before EACH one &mdash; never just one camp for the whole season. Every camp is only held once that competition&rsquo;s own squad is confirmed, and holding it at all stays the coach&rsquo;s own optional decision, format by format.</div>'
+        + '<div class="staff-row"><div class="staff-row-main"><span class="staff-name">Pakistan T20 Cup camp</span><span class="staff-role-label">Due in 6 days &mdash; a genuine development boost for the squad&rsquo;s under-26s, plus a real lift to dressing-room harmony for a squad that has churned this off-season</span></div><span class="pill first">Optional</span></div>'
+        + '<div class="staff-row"><div class="staff-row-main"><span class="staff-name">First-Class Championship camp</span><span class="staff-role-label">Not yet due &mdash; held once that competition&rsquo;s own squad is confirmed, closer to its own start</span></div><span class="pill">Optional</span></div>'
+        + '<div class="staff-row"><div class="staff-row-main"><span class="staff-name">List A Cup camp</span><span class="staff-role-label">Not yet due &mdash; held once that competition&rsquo;s own squad is confirmed, closer to its own start</span></div><span class="pill">Optional</span></div>'
+        + '<div class="staff-row"><div class="staff-row-main"><span class="staff-name">Eligible for the T20 Cup camp</span><span class="staff-role-label">Every contracted player not on national or franchise duty during the window</span></div><span class="pill first">14 of 18</span></div>'
+        + '<div class="staff-row clickable" onclick="openPlayerByName(\'Danish Iqbal\')"><div class="staff-row-main"><span class="staff-name">Excused</span><span class="staff-role-label">Danish Iqbal &mdash; still contracted to the Pakistan Premier League until its window closes</span></div><span class="pill">1</span></div>'
+        + '</div>';
+    }
+  }
   // 3b - a real per-unit mini-dashboard, headcount/top-attribute computed live
   // from the same SQUAD_ROSTER + generatePlayerRecord data the squad table and
   // player profiles already use, never a second, disconnected data source.
@@ -11631,6 +11696,8 @@
     }).join('');
   }
   renderTrainingUnits();
+  renderTrainingCamps();
+  renderCoachingAssignments();
   // 4c - a real, per-player weekly schedule pulled from the same training-day
   // data the calendar grid above already uses, filtered to what this specific
   // player actually does (delegated players get the staff-set line, a named
