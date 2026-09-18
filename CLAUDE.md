@@ -13497,6 +13497,56 @@ anywhere in this plan's own scope notes - built in an earlier session this plan'
 surfaced. Before building anything squad/player-data-related in Slices 3-5, check this system
 first rather than assuming a gap that's already closed.
 
+#### Slice 3 - Squad &amp; Training: COMPLETE
+
+Checked the live file before building, again per the plan's own standing discipline: `panel-training`
+already existed with 3 real subtabs (Team Focus/Individual Assignments/Camps &amp; Calendar) - a
+genuine gap from an earlier session this plan's review never surfaced either, matching Slice 2's
+own squad-data-infrastructure finding. Only 3a/3b/3c/3d's own specific asks were genuinely missing.
+
+**Built:**
+- **3a - training sessions as genuinely group-scoped, click-through calendar days.** A real
+  "This week's sessions" grid (Mon-Sun chips) on Team Focus, replacing the implicit idea that a
+  week is one blanket instruction: each day opens (`showTrainingDay`) 1-3 stacked group rows -
+  group name, a one-line focus, a priority%, and a plain attribute-impact read (Slightly
+  Increased/Reduced-style, honestly stating "no development" on the fixture day and the full-rest
+  day rather than inventing a session that doesn't happen).
+- **3b - a real per-unit mini-dashboard.** A new "Training units" card (Batting/Bowling/Fielding
+  Unit) computing its OWN headcount and strongest group attribute live from the same
+  `SQUAD_ROSTER`/`generatePlayerRecord` data every other screen already reads (`renderTrainingUnits`)
+  - never a second, hand-typed data source - plus a real fit-count badge (Danish Raza's injury
+  already correctly drops the Batting/Fielding Unit's fit count).
+- **3c - contextual delegate shortcuts, cross-linked to Slice 2's now-real Responsibilities
+  screen.** A link on Training's own Units card ("Ask staff to handle this") and a new one on the
+  Tactics screen's own panel-head ("Ask staff to handle team selection"), both jumping straight to
+  the correct Responsibilities category (`respShowCategory('training'|'squad')`) - a real
+  cross-link between two screens built in two different slices, not two disconnected mentions of
+  "delegation."
+- **3d - the four small additions**: a live improvements/regressions line on Training's "This
+  week" tile; a real "Rest Player" quick action with a day-count picker on the Player Profile
+  Fitness widget (`restPlayerQuickAction`, genuinely updates the widget's own state rather than
+  just closing a dialog); a per-player "his own resulting weekly schedule" view
+  (`openPlayerWeek`/`#player-week-backdrop`, a new lightweight modal reusing the established
+  `.modal-backdrop`/`.negotiation-modal` shell) reachable from each Individual Assignments row,
+  showing the squad-wide session AND his own individually assigned focus side by side for every day.
+
+**Two real bugs caught by live Playwright testing before shipping, not after:** the Rest Player
+sub-text set via `textContent` with an `&middot;` HTML entity in it rendered the raw entity text
+instead of a middle dot (`textContent` never parses entities) - fixed to `innerHTML`, the same
+class of bug this file's own history already documents finding and fixing more than once, still
+worth re-checking on every new `textContent` assignment carrying an entity. The first draft of
+`openPlayerWeek`'s per-day line concatenated an unrelated day's squad-session focus directly onto
+the player's own individual focus with no label, reading as nonsense for a batter on a bowling
+focus day ("Batting against genuine pace &mdash; Death-overs bowling craft") - re-worded to
+clearly label both halves ("Squad session: ... &middot; individual work: ...").
+
+**Verified**: `verify.py`'s full structural pass after every edit, plus a live Playwright pass -
+the Wednesday session detail's 3 stacked group rows with correct priority%s; the three Training
+Units' real computed headcounts (7/4/14) and fit counts (7/7, 4/4, 13/14 - Danish Raza correctly
+the one unfit case); the per-player week modal opening/closing cleanly with the corrected wording;
+the Rest Player action's corrected middle-dot rendering; and both new Responsibilities cross-links
+present and pointing at the right category. Zero console errors throughout.
+
 ---
 
 ## CONSOLIDATED DEFERRED-ITEMS REGISTER (maintained - the single source of truth)

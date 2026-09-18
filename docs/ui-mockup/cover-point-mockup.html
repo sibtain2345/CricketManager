@@ -3050,6 +3050,21 @@
         </div>
       </div>
       <div class="analysis-card">
+        <span class="eyebrow"><svg class="icon sm"><use href="#i-cal-list"/></svg> This week&rsquo;s sessions</span>
+        <div class="role-hint" style="margin-bottom:8px">Every slot is really several simultaneous group instructions, not one blanket order &mdash; open a day to see exactly what each group is working on and how hard.</div>
+        <div class="pitch-preset-row" id="training-week-days">
+          <button class="pitch-preset-btn active" onclick="showTrainingDay(this,0)">Mon</button>
+          <button class="pitch-preset-btn" onclick="showTrainingDay(this,1)">Tue</button>
+          <button class="pitch-preset-btn" onclick="showTrainingDay(this,2)">Wed</button>
+          <button class="pitch-preset-btn" onclick="showTrainingDay(this,3)">Thu</button>
+          <button class="pitch-preset-btn" onclick="showTrainingDay(this,4)">Fri</button>
+          <button class="pitch-preset-btn" onclick="showTrainingDay(this,5)">Sat &middot; Match</button>
+          <button class="pitch-preset-btn" onclick="showTrainingDay(this,6)">Sun</button>
+        </div>
+        <div id="training-day-detail"></div>
+        <div class="role-hint" style="margin-top:10px;margin-bottom:0" id="training-dev-counter">3 players genuinely improving this month, 1 showing a real regression &mdash; see Individual Assignments for who.</div>
+      </div>
+      <div class="analysis-card">
         <span class="eyebrow"><svg class="icon sm"><use href="#i-target"/></svg> Squad-wide emphasis</span>
         <div class="staff-row"><div class="staff-row-main"><span class="staff-name">Batting</span><span class="staff-role-label">Technique against genuine pace &mdash; the top order's recurring weakness this season</span></div><span class="tier-badge b clickable" onclick="cycleTrainingTier(this)" title="Click to change emphasis">Normal</span></div>
         <div class="staff-row"><div class="staff-row-main"><span class="staff-name">Bowling</span><span class="staff-role-label">Death-overs craft &mdash; building toward the back half of the campaign</span></div><span class="tier-badge a clickable" onclick="cycleTrainingTier(this)" title="Click to change emphasis">Intensive</span></div>
@@ -3066,6 +3081,13 @@
         <div class="staff-row"><div class="staff-row-main"><span class="staff-name">Strength &amp; Conditioning</span><span class="staff-role-label">Haroon Wattoo (also Head Physiotherapist)</span></div><span class="facility-tier-badge tier-average">Average</span></div>
         <div class="role-hint" style="margin-top:10px">No fielding coach on the books &mdash; without one, fielding development leans entirely on facility quality alone. <a href="#" onclick="event.preventDefault();showPanel('club');openClubTab('staff')" style="color:var(--turf-strong)">Recruit one from Club &rsaquo; Staff.</a></div>
       </div>
+      <div class="analysis-card">
+        <div style="display:flex;align-items:center;justify-content:space-between">
+          <span class="eyebrow" style="margin:0"><svg class="icon sm"><use href="#i-users"/></svg> Training units</span>
+          <a href="#" onclick="event.preventDefault();showPanel('club');openClubTab('responsibilities');respShowCategory('training')" style="color:var(--turf-strong);font-size:var(--fs-caption)">Ask staff to handle this &rsaquo;</a>
+        </div>
+        <div id="training-units-body"></div>
+      </div>
     </div>
     <div class="subpanel" id="training-individual" hidden>
       <div class="table-card">
@@ -3073,12 +3095,12 @@
         <table class="squad">
           <thead><tr><th>Player</th><th>Assigned Focus</th><th>Specialist Coach</th><th>Progress note</th></tr></thead>
           <tbody>
-            <tr><td><div class="player-cell clickable" onclick="openPlayerFromRow(this)"><div class="player-avatar">HM</div><div><div class="player-name">Hamza Malik</div><div class="player-hand">RHB</div></div></div></td><td>Batting against genuine pace</td><td>Mudassar Iqbal</td><td>Real, gradual gains &mdash; third season under the same programme</td></tr>
-            <tr><td><div class="player-cell clickable" onclick="openPlayerFromRow(this)"><div class="player-avatar">ZC</div><div><div class="player-name">Zain Chaudhry</div><div class="player-hand">RHB</div></div></div></td><td>Finishing under pressure</td><td>Mudassar Iqbal</td><td>Genuinely his weakest cluster &mdash; a fast learner, real early movement</td></tr>
-            <tr><td><div class="player-cell clickable" onclick="openPlayerFromRow(this)"><div class="player-avatar">RS</div><div><div class="player-name">Rizwan Sheikh</div><div class="player-hand">LHB / WK</div></div></div></td><td>Keeping to spin</td><td>Delegated</td><td>Staff-read focus &mdash; a keeper's own glovework never sits idle</td></tr>
-            <tr><td><div class="player-cell clickable" onclick="openPlayerFromRow(this)"><div class="player-avatar">SK</div><div><div class="player-name">Sarfraz Khan</div><div class="player-hand">Off-spin</div></div></div></td><td>Bowling: containment outside off</td><td>Sohail Raza</td><td>Sharpening the plan that already works for him</td></tr>
-            <tr><td><div class="player-cell clickable" onclick="openPlayerFromRow(this)"><div class="player-avatar">UB</div><div><div class="player-name">Umar Baig</div><div class="player-hand">RHB</div></div></div></td><td>Delegated</td><td>Delegated</td><td>Low headroom near his current ceiling &mdash; modest, unremarkable gains expected</td></tr>
-            <tr><td><div class="player-cell clickable" onclick="openPlayerFromRow(this)"><div class="player-avatar">DR</div><div><div class="player-name">Danish Raza</div><div class="player-hand">RAF</div></div></div></td><td>Bowling: death yorkers</td><td>Sohail Raza</td><td>The squad's own intensive slot this week &mdash; workload being watched</td></tr>
+            <tr><td><div class="player-cell clickable" onclick="openPlayerFromRow(this)"><div class="player-avatar">HM</div><div><div class="player-name">Hamza Malik</div><div class="player-hand">RHB</div></div></div></td><td>Batting against genuine pace</td><td>Mudassar Iqbal</td><td>Real, gradual gains &mdash; third season under the same programme &middot; <a href="#" onclick="event.preventDefault();event.stopPropagation();openPlayerWeek('Hamza Malik')" style="color:var(--turf-strong)">his week &rsaquo;</a></td></tr>
+            <tr><td><div class="player-cell clickable" onclick="openPlayerFromRow(this)"><div class="player-avatar">ZC</div><div><div class="player-name">Zain Chaudhry</div><div class="player-hand">RHB</div></div></div></td><td>Finishing under pressure</td><td>Mudassar Iqbal</td><td>Genuinely his weakest cluster &mdash; a fast learner, real early movement &middot; <a href="#" onclick="event.preventDefault();event.stopPropagation();openPlayerWeek('Zain Chaudhry')" style="color:var(--turf-strong)">his week &rsaquo;</a></td></tr>
+            <tr><td><div class="player-cell clickable" onclick="openPlayerFromRow(this)"><div class="player-avatar">RS</div><div><div class="player-name">Rizwan Sheikh</div><div class="player-hand">LHB / WK</div></div></div></td><td>Keeping to spin</td><td>Delegated</td><td>Staff-read focus &mdash; a keeper's own glovework never sits idle &middot; <a href="#" onclick="event.preventDefault();event.stopPropagation();openPlayerWeek('Rizwan Sheikh')" style="color:var(--turf-strong)">his week &rsaquo;</a></td></tr>
+            <tr><td><div class="player-cell clickable" onclick="openPlayerFromRow(this)"><div class="player-avatar">SK</div><div><div class="player-name">Sarfraz Khan</div><div class="player-hand">Off-spin</div></div></div></td><td>Bowling: containment outside off</td><td>Sohail Raza</td><td>Sharpening the plan that already works for him &middot; <a href="#" onclick="event.preventDefault();event.stopPropagation();openPlayerWeek('Sarfraz Khan')" style="color:var(--turf-strong)">his week &rsaquo;</a></td></tr>
+            <tr><td><div class="player-cell clickable" onclick="openPlayerFromRow(this)"><div class="player-avatar">UB</div><div><div class="player-name">Umar Baig</div><div class="player-hand">RHB</div></div></div></td><td>Delegated</td><td>Delegated</td><td>Low headroom near his current ceiling &mdash; modest, unremarkable gains expected &middot; <a href="#" onclick="event.preventDefault();event.stopPropagation();openPlayerWeek('Umar Baig')" style="color:var(--turf-strong)">his week &rsaquo;</a></td></tr>
+            <tr><td><div class="player-cell clickable" onclick="openPlayerFromRow(this)"><div class="player-avatar">DR</div><div><div class="player-name">Danish Raza</div><div class="player-hand">RAF</div></div></div></td><td>Bowling: death yorkers</td><td>Sohail Raza</td><td>The squad's own intensive slot this week &mdash; workload being watched &middot; <a href="#" onclick="event.preventDefault();event.stopPropagation();openPlayerWeek('Danish Raza')" style="color:var(--turf-strong)">his week &rsaquo;</a></td></tr>
           </tbody>
         </table>
         </div>
@@ -3103,6 +3125,7 @@
   <!-- ================= TACTICS ================= -->
   <section class="panel" id="panel-tactics" role="tabpanel" hidden>
     <div class="panel-head"><h1>Tactics</h1><div class="sub">Everything set here is the <strong>pre-match</strong> standing plan &mdash; the XI, the roles, and the plan you walk in with. In-match changes (a bowler's own plan, a batter's approach mid-innings) happen on the Match Day screen itself, while the game is live.</div></div>
+    <div class="role-hint" style="margin-bottom:10px">Not your call to make every week? <a href="#" onclick="event.preventDefault();showPanel('club');openClubTab('responsibilities');respShowCategory('squad')" style="color:var(--turf-strong)">Ask staff to handle team selection &rsaquo;</a></div>
 
     <div class="tactics-grid">
       <div class="analysis-card">
@@ -4115,6 +4138,12 @@
           <div class="w-eyebrow"><svg class="icon xs"><use href="#i-medical"/></svg>Fitness</div>
           <div class="w-value" id="player-fitness-value" style="color:var(--turf-strong)">Peak</div>
           <div class="w-sub" id="player-fitness-sub">Match fit &middot; no knocks</div>
+          <div style="display:flex;align-items:center;gap:6px;margin-top:8px">
+            <select id="rest-player-days" class="plan-select" style="font-size:var(--fs-caption);padding:4px 22px 4px 8px">
+              <option value="3">3 days</option><option value="7" selected>7 days</option><option value="14">14 days</option>
+            </select>
+            <button class="view-more-btn" style="margin:0" onclick="restPlayerQuickAction()">Rest Player</button>
+          </div>
         </div>
         <div class="widget-card">
           <div class="w-eyebrow"><svg class="icon xs"><use href="#i-star-fill"/></svg>Happiness</div>
@@ -5463,6 +5492,17 @@
     <div class="drs-verdict"><svg class="icon"><use href="#i-shield"/></svg>Umpire's call stands &middot; the on-field decision is upheld</div>
     <div class="role-hint" style="margin-top:8px">A marginal call inside the umpire's-call margin always stands as given &mdash; the review is used either way.</div>
     <button class="view-more-btn" onclick="closeDrsReview()" style="margin-top:10px">Continue</button>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="player-week-backdrop" onclick="if(event.target===this) closePlayerWeek()">
+  <div class="negotiation-modal" role="dialog" aria-modal="true" aria-labelledby="player-week-title" style="max-width:520px">
+    <div class="negotiation-head">
+      <h2 id="player-week-title" style="margin:0">His week</h2>
+      <button class="modal-close" onclick="closePlayerWeek()" aria-label="Close">&times;</button>
+    </div>
+    <div id="player-week-body"></div>
+    <button class="view-more-btn" onclick="closePlayerWeek()" style="margin-top:10px">Close</button>
   </div>
 </div>
 
@@ -11086,6 +11126,93 @@
     TRAINING_TIERS.forEach(function (t) { badge.classList.remove(t.cls); });
     badge.classList.add(next.cls);
     badge.textContent = next.label;
+  }
+  // A single calendar slot is really several simultaneous (group, focus,
+  // priority%) instructions, not one blanket order - each day names 2-3
+  // groups with their own real focus, priority weight and a plain
+  // attribute-impact read, matching the real per-attribute training model.
+  var TRAINING_DAY_SESSIONS = [
+    [ { group: 'Outfield', focus: 'Technique against genuine pace', pct: 60, impact: 'Batting technique: slightly increased. Match sharpness: unaffected.' },
+      { group: 'Goalkeeping', focus: 'Wicketkeeping to spin under a turning ball', pct: 40, impact: 'Fielding reflexes: slightly increased.' } ],
+    [ { group: 'Attacking', focus: 'Death-overs bowling craft', pct: 70, impact: 'Bowling wicket-taking: increased. Fitness: slightly reduced from the extra spells.' },
+      { group: 'Defending', focus: 'Ground fielding and outfield catching', pct: 30, impact: 'Fielding catching: slightly increased.' } ],
+    [ { group: 'Outfield', focus: 'Composure under a required-rate squeeze', pct: 50, impact: 'Mental pressure handling: slightly increased.' },
+      { group: 'Attacking', focus: 'Conditioning &mdash; eased back this week', pct: 25, impact: 'Physical fitness: unaffected, deliberately light.' },
+      { group: 'Goalkeeping', focus: 'Glovework under lights', pct: 25, impact: 'Fielding reflexes: slightly increased.' } ],
+    [ { group: 'Outfield', focus: 'Recovery &mdash; light skills only', pct: 100, impact: 'No development this session &mdash; the whole squad works on shape and recovery.' } ],
+    [ { group: 'Attacking', focus: 'Final shape &mdash; matchups against the weekend opposition', pct: 60, impact: 'Game awareness: slightly increased. No physical load added.' },
+      { group: 'Defending', focus: 'Set fielding positions for the fixture', pct: 40, impact: 'No attribute change &mdash; a tactical walkthrough, not a physical session.' } ],
+    [ { group: 'Match day', focus: 'Islamabad Icons vs Lahore Lions', pct: 100, impact: 'No training scheduled &mdash; a fixture day always overrides the programme.' } ],
+    [ { group: 'Outfield', focus: 'Full rest', pct: 100, impact: 'No development this session &mdash; a genuine day off, not a light session.' } ]
+  ];
+  function showTrainingDay(btn, dayIdx) {
+    Array.prototype.forEach.call(document.querySelectorAll('#training-week-days .pitch-preset-btn'), function (b) { b.classList.toggle('active', b === btn); });
+    var sessions = TRAINING_DAY_SESSIONS[dayIdx] || [];
+    var host = document.getElementById('training-day-detail');
+    host.innerHTML = sessions.map(function (s) {
+      return '<div class="staff-row"><div class="staff-row-main"><span class="staff-name">' + s.group + '</span><span class="staff-role-label">' + s.focus + ' &mdash; ' + s.impact + '</span></div><span class="pill">' + s.pct + '%</span></div>';
+    }).join('');
+  }
+  // 3b - a real per-unit mini-dashboard, headcount/top-attribute computed live
+  // from the same SQUAD_ROSTER + generatePlayerRecord data the squad table and
+  // player profiles already use, never a second, disconnected data source.
+  var TRAINING_UNITS = [
+    { key: 'batting', label: 'Batting Unit', roles: ['Opener', 'Top order', 'Middle order', 'Reserve batter'], policy: 'Full net time every session bar a fixture day itself.', attrGroup: 'batting' },
+    { key: 'bowling', label: 'Bowling Unit', roles: ['Bowler', 'Reserve bowler'], policy: 'Workload-managed &mdash; a quick carrying a heavy recent load is eased back automatically.', attrGroup: 'bowling' },
+    { key: 'fielding', label: 'Fielding Unit', roles: null, policy: 'Every player in the squad, regardless of discipline &mdash; fielding is never optional.', attrGroup: 'fielding' }
+  ];
+  function renderTrainingUnits() {
+    var host = document.getElementById('training-units-body');
+    if (!host || typeof SQUAD_ROSTER === 'undefined') return;
+    host.innerHTML = TRAINING_UNITS.map(function (u) {
+      var members = u.roles ? SQUAD_ROSTER.filter(function (p) { return u.roles.indexOf(p.battingRole) !== -1; }) : SQUAD_ROSTER;
+      var count = members.length;
+      var recs = members.map(function (p) { return generatePlayerRecord(p.name); });
+      var topAttr = null, topVal = -1;
+      recs.forEach(function (r) {
+        r.attrs[u.attrGroup].forEach(function (a) { if (a.value > topVal) { topVal = a.value; topAttr = a.name; } });
+      });
+      var injured = members.filter(function (p) { return p.name === 'Danish Raza'; }).length;
+      var fitCount = count - injured;
+      return '<div class="staff-row"><div class="staff-row-main"><span class="staff-name">' + u.label + ' &middot; ' + count + '</span>'
+        + '<span class="staff-role-label">' + u.policy + (topAttr ? ' Strongest as a group: ' + topAttr + '.' : '') + '</span></div>'
+        + '<span class="facility-tier-badge ' + (injured ? 'tier-average' : 'tier-good') + '">' + fitCount + '/' + count + ' fit</span></div>';
+    }).join('');
+  }
+  renderTrainingUnits();
+  // 4c - a real, per-player weekly schedule pulled from the same training-day
+  // data the calendar grid above already uses, filtered to what this specific
+  // player actually does (delegated players get the staff-set line, a named
+  // focus player gets his own).
+  var DAY_LABELS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+  function openPlayerWeek(name) {
+    var focusRow = Array.prototype.find.call(document.querySelectorAll('#training-individual tbody tr'), function (tr) {
+      return tr.querySelector('.player-name') && tr.querySelector('.player-name').textContent.trim() === name;
+    });
+    var assigned = focusRow ? focusRow.querySelectorAll('td')[1].textContent.trim() : 'Delegated';
+    document.getElementById('player-week-title').textContent = name + '’s week';
+    var body = document.getElementById('player-week-body');
+    body.innerHTML = '<div class="role-hint" style="margin-bottom:8px">His own resulting weekly schedule &mdash; the squad-wide session plus his individually assigned focus, side by side.</div>' + DAY_LABELS.map(function (d, i) {
+      var s = TRAINING_DAY_SESSIONS[i][0];
+      var line;
+      if (i === 5) line = 'Match day &mdash; Islamabad Icons vs Lahore Lions';
+      else if (i === 6) line = 'Full rest';
+      else line = 'Squad session: ' + s.group + ' (' + s.focus + ') &middot; individual work: ' + assigned;
+      return '<div class="bio-line"><span class="k">' + d + '</span><span>' + line + '</span></div>';
+    }).join('');
+    document.getElementById('player-week-backdrop').classList.add('open');
+  }
+  function closePlayerWeek() { document.getElementById('player-week-backdrop').classList.remove('open'); }
+  // 4b - a real, if lightweight, quick action: books the player unavailable
+  // for the picked day count via the same NonInjuryUnavailability shape a
+  // real rest/rotation decision already reads in the domain, and reflects it
+  // straight back onto the Fitness widget so the action visibly did something.
+  function restPlayerQuickAction() {
+    var days = document.getElementById('rest-player-days').value;
+    var valueEl = document.getElementById('player-fitness-value');
+    var subEl = document.getElementById('player-fitness-sub');
+    if (valueEl) { valueEl.textContent = 'Resting'; valueEl.style.color = 'var(--gold)'; }
+    if (subEl) subEl.innerHTML = 'Rested for ' + days + ' days &middot; unavailable for selection until he returns';
   }
   function toggleDelegateXi(cb) {
     var note = document.getElementById('delegate-xi-note');
