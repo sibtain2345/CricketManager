@@ -2060,22 +2060,12 @@
 
     <!-- ============ WAR ROOM: retention + pre-auction plan ============ -->
     <div id="auction-retention" class="auction-stage">
-      <div class="panel-head"><h1>Islamabad Icons &middot; War Room</h1><div class="sub">Retention resolves as the very first order of business this morning &mdash; the same sitting as today&rsquo;s auction, not a separate deadline days earlier</div></div>
+      <div class="panel-head"><h1>Islamabad Icons &middot; War Room</h1><div class="sub">Retention was finalised at its own, separate deadline weeks ago &mdash; locked in below for reference, then EOI, then the pre-auction meeting, then today&rsquo;s auction itself</div></div>
       <div class="tactics-grid">
         <div class="analysis-card">
-          <span class="eyebrow"><svg class="icon sm"><use href="#i-badge"/></svg> Choose your retentions</span>
-          <div class="role-hint" style="margin-bottom:8px">Up to 5 capped and up to 2 uncapped, 6 in total &mdash; tick from the full squad below. Anything left unused becomes a Right-to-Match card for the auction itself.</div>
-          <div class="table-card">
-            <div class="table-scroll-inner">
-            <table class="squad" id="retention-table">
-              <thead><tr><th></th><th>Player</th><th>Role</th><th>Slab</th><th class="num">Cost</th></tr></thead>
-              <tbody id="retention-table-body"></tbody>
-            </table>
-            </div>
-          </div>
-          <div class="role-hint" style="margin-top:8px" id="retention-purse-readout">Purse remaining after retention: <b style="color:var(--gold)">67cr</b> of a 96cr mega-auction purse. RTM cards remaining: <b>2</b>.</div>
-          <button class="stage-continue-btn" onclick="submitRetentionList()" id="retention-submit-btn">Submit retention list</button>
-          <div class="sold-banner" id="retention-submit-banner" hidden></div>
+          <span class="eyebrow"><svg class="icon sm"><use href="#i-badge"/></svg> Your retention &middot; locked</span>
+          <div class="role-hint" style="margin-bottom:8px">Set at its own deadline, before EOI even opened &mdash; shown here for reference only. Nothing on this card can be changed from inside the auction room.</div>
+          <div id="retention-locked-summary"></div>
         </div>
         <div class="analysis-card">
           <span class="eyebrow"><svg class="icon sm"><use href="#i-briefcase"/></svg> Pre-auction plan</span>
@@ -2244,6 +2234,10 @@
         <div class="staff-row"><div class="staff-row-main"><span class="staff-name">Karachi Kings</span><span class="staff-role-label">Cautious throughout &middot; 31cr unspent</span></div><span class="tier-badge c">C</span></div>
         <div class="staff-row"><div class="staff-row-main"><span class="staff-name">Peshawar Zalmi</span><span class="staff-role-label">Overpaid for name recognition twice &middot; 3cr unspent</span></div><span class="tier-badge c">C-</span></div>
       </div>
+      <div class="pitch-risk-note" style="margin-top:16px">
+        <svg><use href="#i-alert"/></svg>
+        <span><b>Squads are now locked.</b> No further trading or signing is permitted between now and the season opener &mdash; the one exception is a genuine injury-replacement wildcard, a like-for-like signing to cover a player ruled out, and nothing broader than that.</span>
+      </div>
       <div class="stage-actions"><button class="stage-continue-btn" onclick="exitAuctionMode()">Return to Recruitment <svg class="icon sm"><use href="#i-chevron-fwd"/></svg></button></div>
     </div>
 
@@ -2256,6 +2250,7 @@
       <span class="match-back-title">Pakistan Premier League &middot; Trade Centre</span>
     </div>
     <div class="panel-head"><h1>Trade Centre</h1><div class="sub">The quarterly trade window &mdash; outside the auction, and not right before a mega auction resets every squad anyway</div></div>
+    <div class="pitch-risk-note" id="trade-eligibility-note" hidden style="margin-bottom:16px"></div>
 
     <div class="analysis-card">
       <span class="eyebrow"><svg class="icon sm"><use href="#i-badge"/></svg> League needs board</span>
@@ -2358,11 +2353,13 @@
       </div>
       <div class="analysis-card">
         <span class="eyebrow"><svg class="icon sm"><use href="#i-cal-list"/></svg> This campaign&rsquo;s own timeline</span>
-        <div class="plan-desc" style="margin-bottom:10px">Four genuinely separate, separately-dated events &mdash; not one sitting. Whichever players the EOI meeting finalises are what the auction actually bids on.</div>
+        <div class="plan-desc" style="margin-bottom:10px">Six genuinely separate, separately-dated events &mdash; not one sitting, and never skippable out of order. Retention locks in before EOI even opens; whichever players the EOI meeting finalises are what the auction actually bids on.</div>
+        <div class="staff-row"><div class="staff-row-main"><span class="staff-name">Pre-Auction Trade Window</span><span class="staff-role-label">Retained players only &middot; held 79 days ago</span></div><div class="staff-row-meta"><button class="facility-request-btn" onclick="enterTradeMode('pre')">Review</button></div></div>
+        <div class="staff-row"><div class="staff-row-main"><span class="staff-name">Retention Deadline</span><span class="staff-role-label">The earliest genuinely locked-in moment of the cycle &middot; held 66 days ago</span></div><div class="staff-row-meta"><button class="facility-request-btn" onclick="enterRetentionMode()">Review</button></div></div>
         <div class="staff-row"><div class="staff-row-main"><span class="staff-name">EOI Meeting</span><span class="staff-role-label">Registered-player list finalised into the auction shortlist &middot; held 52 days ago</span></div><div class="staff-row-meta"><button class="facility-request-btn" onclick="enterEoiMode()">Review</button></div></div>
         <div class="staff-row"><div class="staff-row-main"><span class="staff-name">Pre-Auction Meeting</span><span class="staff-role-label">The room locks in its plan and targets &middot; held 12 days ago</span></div><div class="staff-row-meta"><button class="facility-request-btn" onclick="enterPreAuctionMode()">Review</button></div></div>
-        <div class="staff-row"><div class="staff-row-main"><span class="staff-name">War Room &amp; Auction</span><span class="staff-role-label">Retention, RTM cards and the live bidding room &middot; auction window opens today</span></div><div class="staff-row-meta"><button class="facility-request-btn" onclick="enterAuctionMode()" title="The auction window has opened today">Enter</button></div></div>
-        <div class="staff-row"><div class="staff-row-main"><span class="staff-name">Trade Centre</span><span class="staff-role-label">The quarterly trade window &middot; outside the auction cycle</span></div><div class="staff-row-meta"><button class="facility-request-btn" onclick="enterTradeMode()">Enter</button></div></div>
+        <div class="staff-row"><div class="staff-row-main"><span class="staff-name">War Room &amp; Auction</span><span class="staff-role-label">The locked retention list, then the live bidding room &middot; auction window opens today</span></div><div class="staff-row-meta"><button class="facility-request-btn" onclick="enterAuctionMode()" title="The auction window has opened today">Enter</button></div></div>
+        <div class="staff-row"><div class="staff-row-main"><span class="staff-name">Trade Centre</span><span class="staff-role-label">The post-auction trade window &middot; reopens once the season is under way</span></div><div class="staff-row-meta"><button class="facility-request-btn" onclick="enterTradeMode('post')">Enter</button></div></div>
       </div>
     </div>
     <div class="analysis-card" style="margin-top:16px">
@@ -2405,6 +2402,37 @@
     </div>
   </section>
 
+  <!-- ================= RETENTION DEADLINE (its own, separately-dated event, before EOI) ================= -->
+  <section class="panel" id="panel-retention" role="tabpanel" hidden>
+    <div class="match-back-bar">
+      <button class="match-back-btn" onclick="exitRetentionMode()" title="Back to Franchise"><svg class="icon"><use href="#i-chevron-fwd"/></svg></button>
+      <span class="match-back-title">Pakistan Premier League &middot; Retention Deadline</span>
+    </div>
+    <div class="panel-head"><h1>Retention Deadline</h1><div class="sub">The earliest of the four dated franchise moments &mdash; weeks before EOI, months before the auction itself. Once submitted, this list is locked and carried into the War Room as a reference, uneditable from there.</div></div>
+    <div class="tactics-grid">
+      <div class="analysis-card">
+        <span class="eyebrow"><svg class="icon sm"><use href="#i-badge"/></svg> Choose your retentions</span>
+        <div class="role-hint" style="margin-bottom:8px">Up to 5 capped and up to 2 uncapped, 6 in total &mdash; tick from the full squad below. Anything left unused becomes a Right-to-Match card for the auction itself.</div>
+        <div class="table-card">
+          <div class="table-scroll-inner">
+          <table class="squad" id="retention-table">
+            <thead><tr><th></th><th>Player</th><th>Role</th><th>Slab</th><th class="num">Cost</th></tr></thead>
+            <tbody id="retention-table-body"></tbody>
+          </table>
+          </div>
+        </div>
+        <div class="role-hint" style="margin-top:8px" id="retention-purse-readout">Purse remaining after retention: <b style="color:var(--gold)">67cr</b> of a 96cr mega-auction purse. RTM cards remaining: <b>2</b>.</div>
+        <button class="stage-continue-btn" onclick="submitRetentionList()" id="retention-submit-btn">Submit retention list</button>
+        <div class="sold-banner" id="retention-submit-banner" hidden></div>
+        <div class="stage-actions" id="retention-continue-actions" hidden><button class="stage-continue-btn" onclick="exitRetentionMode()">Back to Franchise <svg class="icon sm"><use href="#i-chevron-fwd"/></svg></button></div>
+      </div>
+      <div class="analysis-card">
+        <span class="eyebrow"><svg class="icon sm"><use href="#i-alert"/></svg> Why this comes first</span>
+        <div class="plan-desc">Real auction cycles finalise retention weeks before a single player is even shortlisted &mdash; the retained core is what every other franchise plans its own EOI votes and pre-auction targets around. Submitting here locks the list before EOI opens; it cannot be revisited once the auction itself begins.</div>
+      </div>
+    </div>
+  </section>
+
   <!-- ================= EOI MEETING (its own, separately-dated event) ================= -->
   <section class="panel" id="panel-eoi" role="tabpanel" hidden>
     <div class="match-back-bar">
@@ -2415,6 +2443,7 @@
     <div class="tactics-grid">
       <div class="analysis-card">
         <span class="eyebrow"><svg class="icon sm"><use href="#i-users"/></svg> League-wide registration</span>
+        <div class="bio-line"><span class="k">Registration window closed</span><span>6 days before this meeting</span></div>
         <div class="bio-line"><span class="k">Players registered league-wide</span><span>214</span></div>
         <div class="bio-line"><span class="k">Dropped out before the room even sat down</span><span>38</span></div>
         <div class="bio-line"><span class="k">Still live in the room&rsquo;s own conversation</span><span>176</span></div>
@@ -8101,10 +8130,12 @@
   // not just the one this file happens to be frozen on.
   var franchiseButtonStage = "auction";
   var FRANCHISE_STAGE_BUTTON = {
+    pretrade: { label: "Enter Pre-Auction Trade Window", action: "enterTradeMode('pre')", title: "Retained players only can be traded before the auction, right up until roughly a week before it" },
+    retention: { label: "Enter Retention Deadline", action: "enterRetentionMode()", title: "Today is the retention deadline - the earliest of the dated franchise moments" },
     eoi: { label: "Enter EOI Meeting", action: "enterEoiMode()", title: "The EOI window is open today" },
     preauction: { label: "Enter Pre-Auction Meeting", action: "enterPreAuctionMode()", title: "The pre-auction planning meeting is due today" },
     auction: { label: "Enter Auction Room", action: "enterAuctionMode()", title: "The auction window has opened today" },
-    trade: { label: "Enter Trade Centre", action: "enterTradeMode()", title: "The quarterly trade window is open today" }
+    trade: { label: "Enter Trade Centre", action: "enterTradeMode('post')", title: "The post-auction trade window is open today" }
   };
   function jumpToFranchiseStage(stage) {
     franchiseButtonStage = stage;
@@ -8183,10 +8214,10 @@
     },
     {
       id: 'task-retention', context: 'franchise',
-      title: 'Retention & Trade window closes today',
-      detail: 'Lock in the retained core before the auction opens \u2014 RTM cards and purse both depend on it.',
+      title: 'Retention deadline \u2014 due today',
+      detail: 'Its own dated moment, weeks before EOI and months before the auction itself \u2014 lock in the retained core now; RTM cards and purse both depend on it.',
       resolved: function () { return retentionSubmitted; },
-      go: function () { closeInboxBlock(); enterAuctionMode(); }
+      go: function () { closeInboxBlock(); enterRetentionMode(); }
     }
   ];
   var inboxFilter = 'all';
@@ -8960,9 +8991,11 @@
     document.getElementById(id).hidden = false;
   }
   function enterAuctionMode() {
-    retentionSubmitted = false;
-    FRANCHISE_FULL_SQUAD.forEach(function (p) { p.retained = (p.name === 'Hamza Malik' || p.name === 'Adeel Hayat' || p.name === 'Zain Chaudhry' || p.name === 'Rizwan Sheikh'); });
-    renderRetentionTable();
+    // Retention is a genuinely separate, earlier stage now - the auction
+    // room can never be entered ahead of it. Matches into the room refuse
+    // to open at all rather than silently letting the user skip ahead.
+    if (!retentionSubmitted) { enterRetentionMode(); return; }
+    renderRetentionSummary();
     document.body.classList.add("match-immersive");
     document.querySelectorAll("body > .app-body > .main-content > .shell > section.panel").forEach(function (p) { p.hidden = true; });
     document.getElementById("panel-auction").hidden = false;
@@ -8980,6 +9013,25 @@
     renderAuctionSets();
     showAuctionStage("auction-retention");
   }
+  // ---- Retention Deadline: its own, separately-dated event, before EOI ----
+  function enterRetentionMode() {
+    document.body.classList.add("match-immersive");
+    document.querySelectorAll("body > .app-body > .main-content > .shell > section.panel").forEach(function (p) { p.hidden = true; });
+    document.getElementById("panel-retention").hidden = false;
+    var btn = document.getElementById('retention-submit-btn');
+    if (btn) { btn.disabled = retentionSubmitted; btn.textContent = retentionSubmitted ? 'Retention list submitted' : 'Submit retention list'; }
+    var banner = document.getElementById('retention-submit-banner');
+    if (banner) banner.hidden = !retentionSubmitted;
+    var cont = document.getElementById('retention-continue-actions');
+    if (cont) cont.hidden = !retentionSubmitted;
+    renderRetentionTable();
+  }
+  function exitRetentionMode() {
+    document.body.classList.remove("match-immersive");
+    document.querySelectorAll(".tab-btn").forEach(function (b) { b.setAttribute("aria-selected", b.dataset.tab === "franchise" ? "true" : "false"); });
+    document.querySelectorAll("body > .app-body > .main-content > .shell > section.panel").forEach(function (p) { p.hidden = true; });
+    document.getElementById("panel-franchise").hidden = false;
+  }
   function exitAuctionMode() {
     clearAuctionTimer();
     document.body.classList.remove("match-immersive");
@@ -8988,15 +9040,29 @@
     document.getElementById("panel-franchise").hidden = false;
   }
   // ---- Trade Centre: a real complementary-need match, a value-gap check, a cash sweetener ----
-  function enterTradeMode() {
+  var tradeWindowMode = 'post';
+  function enterTradeMode(mode) {
+    tradeWindowMode = mode || 'post';
     document.body.classList.add("match-immersive");
     document.querySelectorAll("body > .app-body > .main-content > .shell > section.panel").forEach(function (p) { p.hidden = true; });
     document.getElementById("panel-trade").hidden = false;
     document.getElementById("trade-confirm-actions").hidden = false;
     document.getElementById("trade-done-banner").hidden = true;
-    document.getElementById("trade-news-log").innerHTML = "<div class=\"notes-log-item\"><span>No trade has been agreed yet this quarter.</span></div>";
+    document.getElementById("trade-news-log").innerHTML = "<div class=\"notes-log-item\"><span>No trade has been agreed yet this window.</span></div>";
     document.getElementById('trade-my-player').value = 'Junaid Sarwar|1.20';
     document.getElementById('trade-their-player').value = 'Rameez Toru|1.90';
+    var titleEl = document.querySelector('#panel-trade h1');
+    var subEl = document.querySelector('#panel-trade .panel-head .sub');
+    var restrictEl = document.getElementById('trade-eligibility-note');
+    if (tradeWindowMode === 'pre') {
+      if (titleEl) titleEl.textContent = 'Pre-Auction Trade Window';
+      if (subEl) subEl.innerHTML = 'Opens roughly a month after the season ends, closes about a week before the auction &mdash; its own real window, well before retention even locks in';
+      if (restrictEl) { restrictEl.hidden = false; restrictEl.innerHTML = '<svg><use href="#i-alert"/></svg><span>Pre-auction rule: only a player your franchise has <b>retained</b> is eligible to be traded here &mdash; a player who was bought at a previous auction cannot be moved until the post-auction window instead.</span>'; }
+    } else {
+      if (titleEl) titleEl.textContent = 'Trade Centre';
+      if (subEl) subEl.innerHTML = 'The post-auction trade window &mdash; reopens once the auction itself is done, closes again roughly a month before next season starts';
+      if (restrictEl) restrictEl.hidden = true;
+    }
     renderTradeGap();
   }
   function exitTradeMode() {
@@ -10283,8 +10349,32 @@
     var banner = document.getElementById('retention-submit-banner');
     banner.hidden = false;
     var kept = FRANCHISE_FULL_SQUAD.filter(function (p) { return p.retained; }).map(function (p) { return p.name; });
-    banner.innerHTML = 'Retention locked in: ' + kept.join(', ') + '. On to the auction.';
+    banner.innerHTML = 'Retention locked in: ' + kept.join(', ') + '. EOI, the pre-auction meeting and the auction itself all still lie ahead, each on its own date.';
+    var cont = document.getElementById('retention-continue-actions');
+    if (cont) cont.hidden = false;
+    // Real, dated news the moment the deadline is met - a per-team item, then
+    // the league-wide roundup once every franchise's list is in (modelled
+    // here as firing together, since the AI franchises have no separate
+    // submission moment of their own to wait on).
+    if (typeof INBOX_NEWS !== 'undefined') {
+      INBOX_NEWS.unshift({ id: 'n-retn-league', kicker: 'Retention', headline: 'Every franchise\'s retained core is now public', dek: 'Islamabad Icons: ' + kept.join(', ') + '. Karachi Kings: Shahzaib Alam, Nouman Bhatti. Lahore Lions: Kamran Hussain (c), Talha Iqbal. Multan Sultans: Faisal Nadeem, Rayyan Sheikh. Peshawar Zalmi: Umair Chaudhry, Shoaib Niazi. Quetta Falcons: Sohail Marwat, Danyal Qureshi.', isNew: true, read: false });
+      INBOX_NEWS.unshift({ id: 'n-retn-own', kicker: 'Retention', headline: 'Islamabad Icons finalise their retained core', dek: 'Locked in: ' + kept.join(', ') + '. Right-to-Match cards carry into the auction for whatever\'s left unused.', isNew: true, read: false });
+    }
+    renderRetentionSummary();
     renderInboxRail();
+  }
+  // War Room's own reference-only view of the SAME retained list, once it's
+  // locked - never editable from here, matching "shown at the very start of
+  // the auction room as reference, uneditable at that point."
+  function renderRetentionSummary() {
+    var host = document.getElementById('retention-locked-summary');
+    if (!host) return;
+    var kept = FRANCHISE_FULL_SQUAD.filter(function (p) { return p.retained; });
+    var counts = retentionCounts();
+    host.innerHTML = kept.map(function (p) {
+      return '<div class="staff-row"><div class="player-cell clickable" onclick="openPlayerFromRow(this)"><div class="player-avatar">' + p.name.split(' ').map(function (w) { return w[0]; }).join('') + '</div><div class="player-name">' + p.name + '</div></div>'
+        + '<span class="tier-badge ' + (p.slab === 'capped' ? 'a' : 'c') + '">' + (p.slab === 'capped' ? 'Capped' : 'Uncapped') + '</span></div>';
+    }).join('') + '<div class="role-hint" style="margin-top:8px;margin-bottom:0">Purse spent on retention: <b style="color:var(--gold)">' + counts.spent + 'cr</b> of ' + RETENTION_PURSE_TOTAL + 'cr. Right-to-Match cards carried in: <b>' + (5 - counts.capped) + '</b>.</div>';
   }
   // Everything the inbox rail's tasks read (NATIONAL_SQUADS, retentionSubmitted) now
   // exists - this is the first safe point to render it for real.
@@ -10301,6 +10391,8 @@
   var CALENDAR_TODAY = new Date(2027, 2, 27);
   var calendarViewYear = 2027, calendarViewMonth = 2;
   var CALENDAR_EVENTS = [
+    { date: '2026-12-10', context: 'franchise', title: 'Pre-auction trade window opens', detail: 'Roughly a month after the season ended — only retained players are eligible for a trade here, and the window closes again about a week before the auction. The action button reads &ldquo;Enter Pre-Auction Trade Window&rdquo; on a day like this one.', action: function () { jumpToFranchiseStage('pretrade'); showPanel('franchise'); }, actionLabel: 'See the button on this day' },
+    { date: '2027-01-20', context: 'franchise', title: 'Retention deadline', detail: 'The earliest of the dated franchise moments — every franchise’s retained list locks in today, weeks before EOI even opens. The action button reads &ldquo;Enter Retention Deadline&rdquo; on a day like this one.', action: function () { jumpToFranchiseStage('retention'); showPanel('franchise'); }, actionLabel: 'See the button on this day' },
     { date: '2027-02-03', context: 'franchise', title: 'EOI meeting held', detail: 'The registered-player list was finalised into the auction shortlist. The calendar-gated action button reads &ldquo;Enter EOI Meeting&rdquo; on a day like this one — try it.', action: function () { jumpToFranchiseStage('eoi'); showPanel('franchise'); }, actionLabel: 'See the button on this day' },
     { date: '2027-03-15', context: 'franchise', title: 'Pre-Auction meeting held', detail: 'The room locked in its plan and targets ahead of today’s auction. The calendar-gated action button reads &ldquo;Enter Pre-Auction Meeting&rdquo; on a day like this one — try it.', action: function () { jumpToFranchiseStage('preauction'); showPanel('franchise'); }, actionLabel: 'See the button on this day' },
     { date: '2027-03-21', context: 'international', title: 'T20I squad vs Sri Lanka announced', detail: 'One change from the last squad \u2014 Umar Baig in for Rizwan Sheikh.', action: function () { showPanel('international'); var b = document.querySelector('#panel-international .subtab-btn[data-subtab="poolsquad"]'); if (b) b.click(); }, actionLabel: 'Open National Pool & Squad' },
