@@ -852,6 +852,11 @@
   .auction-set-row { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; margin-bottom: 12px; }
   .lot-price-block .auction-countdown-unit { display: flex; align-items: center; justify-content: center; gap: 4px; }
   .commentary-feed { max-height: 230px; overflow-y: auto; }
+  .commentary-swap { min-height: 44px; display: flex; align-items: center; padding: 10px 14px; background: var(--surface-2); border-radius: 8px; margin-top: 4px; }
+  .commentary-swap span { transition: opacity 0.15s ease; }
+  .commentary-swap span.swapping { opacity: 0; }
+  .overseas-flag { display: inline-flex; vertical-align: -2px; margin-left: 5px; color: var(--turf-strong); }
+  .overseas-flag svg { width: 13px; height: 13px; }
   .rtm-prompt[hidden] { display: none; }
   .rtm-prompt { background: var(--turf-dim); border: 1px solid var(--turf-strong); border-radius: 10px; padding: 10px 12px; margin: 10px 0; font-size: var(--fs-body); line-height: 1.5; }
   .franchise-pick-row { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
@@ -2116,6 +2121,10 @@
           <span class="tier-badge a" id="current-set-badge">Set: Marquee Players</span>
           <span class="role-cell" id="current-set-progress">Player 1 of 1 in this set</span>
         </div>
+        <div class="stage-actions" style="margin-bottom:10px">
+          <button class="view-more-btn" style="margin:0" onclick="auctionSkipPlayer()">Skip Player</button>
+          <button class="view-more-btn" style="margin:0" onclick="auctionSkipSet()">Skip Set</button>
+        </div>
 
         <div class="analysis-card" id="set-overview-card" hidden>
           <span class="eyebrow"><svg class="icon sm"><use href="#i-badge"/></svg> Set overview</span>
@@ -2138,12 +2147,18 @@
               <span class="call-stage-badge" id="call-stage-badge">Open bidding</span>
               <span class="call-timer" id="call-timer">10s</span>
             </div>
+            <div class="pitch-preset-row" id="auction-timer-speed" style="margin-top:6px">
+              <button class="pitch-preset-btn active" onclick="setAuctionBaseTimer(10,this)">10s</button>
+              <button class="pitch-preset-btn" onclick="setAuctionBaseTimer(5,this)">5s</button>
+              <button class="pitch-preset-btn" onclick="setAuctionBaseTimer(3,this)">3s</button>
+            </div>
             <div class="lot-price-block">
               <div class="auction-countdown" id="lot-price">1.25cr</div>
               <div class="auction-countdown-unit">current bid &middot; held by <span id="lot-bidder">nobody yet</span></div>
             </div>
             <div class="bid-actions">
               <button class="auction-continue-btn stage-continue-btn" id="auction-bid-btn" onclick="auctionBid()">Bid</button>
+              <button class="view-more-btn" id="auction-pass-btn" style="margin:0" onclick="auctionPass()">Pass</button>
             </div>
             <div class="rtm-prompt" id="rtm-prompt" hidden></div>
             <div class="sold-banner" id="lot-sold-banner" hidden></div>
@@ -2174,8 +2189,11 @@
           </div>
         </div>
         <div class="analysis-card" style="margin-top:16px">
-          <span class="eyebrow"><svg class="icon sm"><use href="#i-clock"/></svg> Live commentary</span>
-          <div class="notes-log commentary-feed" id="auction-bid-log"><div class="notes-log-item"><span>Base price set at 1.25cr.</span></div></div>
+          <div style="display:flex;align-items:center;justify-content:space-between">
+            <span class="eyebrow" style="margin:0"><svg class="icon sm"><use href="#i-clock"/></svg> Live commentary</span>
+            <button class="view-more-btn" style="margin:0;width:auto;padding:5px 10px" onclick="openCommentaryHistory()">Commentary History</button>
+          </div>
+          <div class="commentary-swap" id="auction-commentary-swap"><span id="auction-commentary-line">Base price set at 1.25cr.</span></div>
         </div>
         <div class="stage-actions"><button class="stage-continue-btn" id="auction-next-lot-btn" disabled onclick="auctionNextLot()">Next lot <svg class="icon sm"><use href="#i-chevron-fwd"/></svg></button></div>
         </div>
@@ -2239,6 +2257,16 @@
         <span><b>Squads are now locked.</b> No further trading or signing is permitted between now and the season opener &mdash; the one exception is a genuine injury-replacement wildcard, a like-for-like signing to cover a player ruled out, and nothing broader than that.</span>
       </div>
       <div class="stage-actions"><button class="stage-continue-btn" onclick="exitAuctionMode()">Return to Recruitment <svg class="icon sm"><use href="#i-chevron-fwd"/></svg></button></div>
+    </div>
+
+    <div class="modal-backdrop" id="commentary-history-backdrop">
+      <div class="negotiation-modal">
+        <div class="history-head-row">
+          <span class="eyebrow" style="margin-bottom:0">Commentary History</span>
+          <button class="match-back-btn" onclick="closeCommentaryHistory()" title="Close"><svg class="icon"><use href="#i-chevron-fwd"/></svg></button>
+        </div>
+        <div class="notes-log commentary-feed" id="auction-commentary-history" style="max-height:360px"></div>
+      </div>
     </div>
 
   </section>
@@ -8491,7 +8519,7 @@
         { comp: "Domestic T20", mat: 44, inns: 41, no: 3, runs: 1120, hs: "68*", avg: 29.5, sr: 148.9, fifty: 6, hundred: 0 },
         { comp: "Pakistan Premier League", mat: 9, inns: 8, no: 1, runs: 201, hs: 45, avg: 28.7, sr: 156.1, fifty: 1, hundred: 0 }
       ] },
-    { name: "Naveed Sultan", role: "Finisher", set: "uncapped-ar", bracket: "Uncapped &middot; 40L base", base: 4000000, blurb: "A power-hitting middle-order option who forced his way into the conversation with a strong domestic T20 season.", rival: "Lahore Lions", playerType: "Middle-order &middot; power hitter",
+    { name: "Naveed Sultan", role: "Finisher", set: "uncapped-ar", bracket: "Uncapped &middot; 40L base", base: 4000000, blurb: "A power-hitting middle-order option who forced his way into the conversation with a strong domestic T20 season.", rival: "Lahore Lions", playerType: "Middle-order &middot; power hitter", overseas: true, nationality: "New Zealand",
       battingStats: [
         { comp: "Domestic T20", mat: 21, inns: 19, no: 5, runs: 588, hs: "58*", avg: 42.0, sr: 162.4, fifty: 3, hundred: 0 }
       ], noPplNote: "No Pakistan Premier League appearances yet." },
@@ -8509,7 +8537,7 @@
         { comp: "Domestic T20", mat: 46, balls: 1102, runs: 1304, wkts: 58, bbi: "4/24", avg: 22.5, econ: 7.1, sr: 19.0 },
         { comp: "Pakistan Premier League", mat: 10, balls: 204, runs: 231, wkts: 12, bbi: "3/19", avg: 19.3, econ: 6.8, sr: 17.0 }
       ] },
-    { name: "Farhan Dawood", role: "Fast-medium bowler", set: "accelerated", bracket: "Uncapped &middot; 30L base", base: 3000000, blurb: "Went unsold twice earlier in the auction \u2014 back for the accelerated round at a lower base price.", rival: "Peshawar Zalmi", playerType: "Fast-medium bowler",
+    { name: "Farhan Dawood", role: "Fast-medium bowler", set: "accelerated", bracket: "Uncapped &middot; 30L base", base: 3000000, blurb: "Went unsold twice earlier in the auction \u2014 back for the accelerated round at a lower base price.", rival: "Peshawar Zalmi", playerType: "Fast-medium bowler", overseas: true, nationality: "South Africa",
       bowlingStats: [
         { comp: "Domestic T20", mat: 17, balls: 407, runs: 549, wkts: 22, bbi: "3/28", avg: 25.0, econ: 8.1, sr: 18.5 }
       ], noPplNote: "No Pakistan Premier League appearances yet." }
@@ -8550,6 +8578,17 @@
   var auctionCurrentBidder = null;
   var auctionCallStage = 0;
   var auctionTimerSeconds = 10;
+  var auctionBaseTimer = 10;
+  function timerSecondsForStage(stage) {
+    if (stage === 0) return auctionBaseTimer;
+    if (stage === 1) return Math.max(1, Math.round(auctionBaseTimer * 0.5));
+    return Math.max(1, Math.round(auctionBaseTimer * 0.3));
+  }
+  function setAuctionBaseTimer(val, btn) {
+    auctionBaseTimer = val;
+    document.querySelectorAll('#auction-timer-speed .pitch-preset-btn').forEach(function (b) { b.classList.toggle('active', b === btn); });
+    if (!auctionLotResolved) { auctionTimerSeconds = timerSecondsForStage(auctionCallStage); updateCallUi(); }
+  }
   var auctionTimerHandle = null;
   var auctionLotResolved = false;
   var auctionTeamStatus = {};
@@ -8618,13 +8657,21 @@
     if (v < 50000000) return 2000000;
     return 2500000;
   }
+  var auctionCommentaryHistory = [];
   function auctionLog(text) {
-    var log = document.getElementById("auction-bid-log");
-    var row = document.createElement("div");
-    row.className = "notes-log-item";
-    row.innerHTML = "<span>" + text + "</span>";
-    log.appendChild(row);
-    log.scrollTop = log.scrollHeight;
+    auctionCommentaryHistory.push(text);
+    var line = document.getElementById("auction-commentary-line");
+    if (line) {
+      line.classList.add("swapping");
+      setTimeout(function () {
+        line.textContent = text;
+        line.classList.remove("swapping");
+      }, 150);
+    }
+    var histHost = document.getElementById("auction-commentary-history");
+    if (histHost && !document.getElementById("commentary-history-backdrop").classList.contains("open")) {
+      // keep it cheap while the modal is closed - built fresh on open instead
+    }
   }
   function auctionSetLabel(key) {
     for (var i = 0; i < AUCTION_SETS.length; i++) { if (AUCTION_SETS[i].key === key) return AUCTION_SETS[i].label; }
@@ -8697,17 +8744,30 @@
     badge.className = "call-stage-badge" + (classes[auctionCallStage] ? " " + classes[auctionCallStage] : "");
     document.getElementById("call-timer").textContent = auctionTimerSeconds + "s";
     var bidBtn = document.getElementById("auction-bid-btn");
+    var passBtn = document.getElementById("auction-pass-btn");
+    var humanHolding = auctionCurrentBidder === "Islamabad Icons";
+    var humanPassed = auctionTeamStatus["Islamabad Icons"] === "passed";
     if (!auctionLotResolved) {
-      bidBtn.disabled = (auctionCurrentBidder === "Islamabad Icons");
-      bidBtn.textContent = auctionCurrentBidder === "Islamabad Icons" ? "You hold the bid" : "Bid";
+      bidBtn.disabled = humanHolding || humanPassed;
+      bidBtn.textContent = humanHolding ? "You hold the bid" : (humanPassed ? "You have passed" : "Bid");
+      if (passBtn) { passBtn.disabled = humanHolding || humanPassed; passBtn.hidden = false; }
+    } else if (passBtn) {
+      passBtn.hidden = true;
     }
+  }
+  function auctionPass() {
+    if (auctionLotResolved || auctionCurrentBidder === "Islamabad Icons") return;
+    auctionTeamStatus["Islamabad Icons"] = "passed";
+    auctionLog("You pass on " + AUCTION_LOTS[auctionLotIndex].name + ".");
+    renderTeamStatusList();
+    updateCallUi();
   }
   function clearAuctionTimer() {
     if (auctionTimerHandle) { clearInterval(auctionTimerHandle); auctionTimerHandle = null; }
   }
   function startAuctionRound(resetStage) {
     if (resetStage) auctionCallStage = 0;
-    auctionTimerSeconds = 10;
+    auctionTimerSeconds = timerSecondsForStage(auctionCallStage);
     updateCallUi();
     clearAuctionTimer();
     auctionTimerHandle = setInterval(auctionTimerTick, 1000);
@@ -8747,7 +8807,7 @@
       auctionCallStage++;
       var labels = ["Open bidding", "First call", "Second call"];
       auctionLog(labels[auctionCallStage] + (auctionCurrentBidder ? (" \u2014 " + (auctionCurrentBidder === "Islamabad Icons" ? "you" : auctionCurrentBidder) + " at " + auctionMoneyFmt(auctionCurrentPrice) + ".") : " \u2014 no bids yet."));
-      auctionTimerSeconds = 10;
+      auctionTimerSeconds = timerSecondsForStage(auctionCallStage);
     }
     updateCallUi();
   }
@@ -8779,10 +8839,10 @@
     auctionCurrentPrice = lot.base;
     auctionCurrentBidder = null;
     auctionCallStage = 0;
-    auctionTimerSeconds = 10;
+    auctionTimerSeconds = auctionBaseTimer;
     auctionLotResolved = false;
     resetTeamStatusForLot(lot);
-    document.getElementById("lot-name").textContent = lot.name;
+    document.getElementById("lot-name").innerHTML = lot.name + overseasFlagHtml(lot.overseas, lot.nationality);
     document.getElementById("lot-role").textContent = lot.role;
     document.getElementById("lot-bracket").innerHTML = lot.bracket;
     document.getElementById("lot-blurb").textContent = lot.blurb;
@@ -8795,7 +8855,10 @@
     var posInSet = setLots.indexOf(lot) + 1;
     document.getElementById("current-set-badge").textContent = "Set: " + auctionSetLabel(lot.set);
     document.getElementById("current-set-progress").textContent = "Player " + posInSet + " of " + setLots.length + " in this set";
-    document.getElementById("auction-bid-log").innerHTML = "<div class=\"notes-log-item\"><span>Base price set at " + auctionMoneyFmt(auctionCurrentPrice) + " for the " + auctionSetLabel(lot.set).toLowerCase() + " set.</span></div>";
+    auctionCommentaryHistory = [];
+    var initialCommentaryLine = document.getElementById("auction-commentary-line");
+    if (initialCommentaryLine) initialCommentaryLine.textContent = "Base price set at " + auctionMoneyFmt(auctionCurrentPrice) + " for the " + auctionSetLabel(lot.set).toLowerCase() + " set.";
+    auctionCommentaryHistory.push("Base price set at " + auctionMoneyFmt(auctionCurrentPrice) + " for the " + auctionSetLabel(lot.set).toLowerCase() + " set.");
     document.getElementById("auction-bid-btn").disabled = false;
     var nextBtn = document.getElementById("auction-next-lot-btn");
     nextBtn.disabled = true;
@@ -8862,13 +8925,54 @@
     renderAuctionPurse();
     renderTeamStatusList();
   }
+  var auctionAutoResolving = false;
   function auctionFinishLot(winner, price) {
     var lot = AUCTION_LOTS[auctionLotIndex];
-    if (lot.rtm && winner !== "you" && !lot._rtmResolved) {
+    if (lot.rtm && winner !== "you" && !lot._rtmResolved && !auctionAutoResolving) {
       showRtmPrompt(winner, price);
       return;
     }
     finalizeLot(winner, price);
+  }
+  // Skip Player - fast-forwards the CURRENT lot to a real resolution without
+  // the human sitting through the timer; the human is marked passed (they
+  // are choosing not to bid, not being timed out) and any rival with real
+  // interest gets a genuine chance to buy before the lot is finalised.
+  function auctionSkipPlayer() {
+    if (auctionLotResolved) { auctionNextLot(); return; }
+    clearAuctionTimer();
+    auctionTeamStatus["Islamabad Icons"] = "passed";
+    auctionAutoResolving = true;
+    for (var i = 0; i < 8 && !auctionLotResolved; i++) { maybeRivalBid(); }
+    if (!auctionLotResolved) resolveCurrentLot();
+    auctionAutoResolving = false;
+  }
+  // Skip Set - the same fast-forward, repeated for every remaining player in
+  // the CURRENT set, then genuinely moves on (to the next set's own overview,
+  // or Review if this was the last set) - never partway through a set.
+  function auctionSkipSet() {
+    var startSet = AUCTION_LOTS[auctionLotIndex] && AUCTION_LOTS[auctionLotIndex].set;
+    if (!startSet) return;
+    clearAuctionTimer();
+    while (auctionLotIndex < AUCTION_LOTS.length && AUCTION_LOTS[auctionLotIndex].set === startSet) {
+      if (!auctionLotResolved) {
+        renderAuctionLot();
+        auctionTeamStatus["Islamabad Icons"] = "passed";
+        auctionAutoResolving = true;
+        for (var i = 0; i < 8 && !auctionLotResolved; i++) { maybeRivalBid(); }
+        if (!auctionLotResolved) resolveCurrentLot();
+        auctionAutoResolving = false;
+      }
+      if (auctionLotIndex >= AUCTION_LOTS.length - 1) { auctionLotIndex = AUCTION_LOTS.length; break; }
+      auctionLotIndex++;
+    }
+    if (auctionLotIndex >= AUCTION_LOTS.length) {
+      auctionLotIndex = AUCTION_LOTS.length - 1;
+      renderAuctionSets();
+      showAuctionStage("auction-review");
+      return;
+    }
+    presentLot();
   }
   function showRtmPrompt(winner, price) {
     var lot = AUCTION_LOTS[auctionLotIndex];
@@ -8893,6 +8997,19 @@
       box.innerHTML = "Islamabad Icons must now match <b>" + auctionMoneyFmt(finalPrice) + "</b> to retain " + lot.name + ", or " + winner + " take him at that price." +
         "<div class=\"bid-actions\" style=\"margin-top:8px\"><button class=\"auction-continue-btn stage-continue-btn\" onclick=\"rtmMatch(" + finalPrice + ")\">Match &amp; retain (use RTM card)</button><button class=\"view-more-btn\" style=\"margin-top:0\" onclick=\"rtmDecline('" + winner + "'," + finalPrice + ")\">Let him go</button></div>";
     }, 900);
+  }
+  function openCommentaryHistory() {
+    var host = document.getElementById("auction-commentary-history");
+    if (host) {
+      host.innerHTML = auctionCommentaryHistory.map(function (t) {
+        return '<div class="notes-log-item"><span>' + t + '</span></div>';
+      }).join("") || '<div class="notes-log-item"><span>Nothing logged yet.</span></div>';
+      host.scrollTop = host.scrollHeight;
+    }
+    document.getElementById("commentary-history-backdrop").classList.add("open");
+  }
+  function closeCommentaryHistory() {
+    document.getElementById("commentary-history-backdrop").classList.remove("open");
   }
   function rtmMatch(price) {
     var lot = AUCTION_LOTS[auctionLotIndex];
@@ -8931,13 +9048,17 @@
     document.querySelectorAll("#auction-live .subtab-btn").forEach(function (b) { b.setAttribute("aria-selected", b.dataset.subtab === "current" ? "true" : "false"); });
     document.querySelectorAll("#auction-live > .subpanel").forEach(function (p) { p.hidden = (p.id !== "auction-current"); });
   }
+  function overseasFlagHtml(overseas, nationality) {
+    if (!overseas) return "";
+    return '<span class="overseas-flag" title="Overseas registration' + (nationality ? " \u2014 " + nationality : "") + '"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><use href="#i-plane"/></svg></span>';
+  }
   function renderAuctionPlayers() {
     var body = document.getElementById("auction-players-body");
     if (!body) return;
     body.innerHTML = AUCTION_LOTS.map(function (lot, i) {
       var status = auctionStatusForLot(i);
       var statusHtml = status === "Live now" ? "<span class=\"tier-badge a\">Live now</span>" : (status.indexOf("Sold") === 0 ? "<span class=\"tier-badge b\">" + status + "</span>" : "<span class=\"role-cell\">" + status + "</span>");
-      return "<tr><td><div class=\"player-cell\"><div class=\"player-avatar\">" + lot.name.split(" ").map(function (p) { return p[0]; }).join("") + "</div><div class=\"player-name\">" + lot.name + "</div></div></td><td><span class=\"role-cell\">" + lot.role + "</span></td><td>" + auctionSetLabel(lot.set) + "</td><td class=\"num\">" + auctionMoneyFmt(lot.base) + "</td><td>" + statusHtml + "</td></tr>";
+      return "<tr><td><div class=\"player-cell\"><div class=\"player-avatar\">" + lot.name.split(" ").map(function (p) { return p[0]; }).join("") + "</div><div class=\"player-name\">" + lot.name + overseasFlagHtml(lot.overseas, lot.nationality) + "</div></div></td><td><span class=\"role-cell\">" + lot.role + "</span></td><td>" + auctionSetLabel(lot.set) + "</td><td class=\"num\">" + auctionMoneyFmt(lot.base) + "</td><td>" + statusHtml + "</td></tr>";
     }).join("");
   }
   function renderAuctionSquadPicker() {
@@ -8959,7 +9080,9 @@
     if (!body) return;
     var squad = franchiseSquad[auctionSquadsPicked] || [];
     body.innerHTML = squad.map(function (p) {
-      return "<tr><td><div class=\"player-cell clickable\" onclick=\"openPlayerFromRow(this)\"><div class=\"player-avatar\">" + p.name.split(" ").map(function (x) { return x[0]; }).join("") + "</div><div class=\"player-name\">" + p.name + "</div></div></td><td><span class=\"role-cell\">" + p.role + "</span></td><td>" + p.status + "</td></tr>";
+      var lotMatch = AUCTION_LOTS.filter(function (l) { return l.name === p.name; })[0];
+      var flag = lotMatch ? overseasFlagHtml(lotMatch.overseas, lotMatch.nationality) : "";
+      return "<tr><td><div class=\"player-cell clickable\" onclick=\"openPlayerFromRow(this)\"><div class=\"player-avatar\">" + p.name.split(" ").map(function (x) { return x[0]; }).join("") + "</div><div class=\"player-name\">" + p.name + flag + "</div></div></td><td><span class=\"role-cell\">" + p.role + "</span></td><td>" + p.status + "</td></tr>";
     }).join("");
   }
   function renderAuctionPurse() {
