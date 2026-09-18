@@ -9,8 +9,16 @@ decisions and phase status don't have to be re-explained from scratch every time
 > the three most recent tickets are archived in `docs/plan-archive/`. As of the last session:
 > **699/699 tests, three consecutive clean runs, 0 build warnings; Phases 0-16 + all follow-up
 > passes complete; Phase 17 Part 1 (`WorldStateStore` + `CricketManager.App`) is DONE - the
-> project is a saveable, resumable, git-tracked game now. The graphical UI and the live
-> seeded-world domestic-pyramid determinism fix are still open.**
+> project is a saveable, resumable, git-tracked game now. The live seeded-world domestic-pyramid
+> determinism fix is still open.**
+> **The graphical UI mockup (`docs/ui-mockup/cover-point-mockup.html`) is FEATURE-COMPLETE** -
+> every screen/flow named across the mockup's own long build history is built and wired
+> end to end (Portal, Squad, Tactics/Match Day, Recruitment, Club/Franchise/International,
+> Records, World, Training, Dynamics, Fixtures, Matches, News Site, the Auction Room and its
+> full EOI/Retention/Pre-Auction/Trade sequencing, Calendar, Onboarding). **The next work on it
+> is a design-refinement-with-functionality pass** - polishing visual/interaction quality and
+> tightening the mechanics on what already exists, not adding new screens. See "GRAPHICAL UI
+> MOCKUP" below for the full build history and its own closing status note.
 > **First-time testing is NOT needed - the baseline is already verified; a single `dotnet build`
 > to confirm a clean compile is enough to start.**
 > **The project is now tracked in git** (the earlier "no git" standing decision was reversed by
@@ -9873,7 +9881,31 @@ since the runner prints nothing until it finishes and a long silent wait is expe
 
 ---
 
-## GRAPHICAL UI MOCKUP (Phase 17 sub-track) - IN PROGRESS
+## GRAPHICAL UI MOCKUP (Phase 17 sub-track) - FEATURE-COMPLETE, entering a design-refinement pass
+
+**Status as of 2026-09-18: every screen/flow this sub-track's own build history names is built and
+wired end to end** - Portal (hub tiles, News Site, the Pattern-B story popup, a world-wide Matches
+hub, a mini Calendar), Squad (First Team + Academy & Youth, the 12-view table selector), Tactics/
+Match Day (merged into one identity - see the entry below), Training (editable team schedule +
+individual assignments + Coaching Assignments), Dynamics, Recruitment (Transfer Activity/Player
+Database/Staff Database/Shortlists/Squad Planner), Club (Overview/Finances/Staff/Boardroom/
+Responsibilities - merged with Franchise under one identity-aware nav slot), Franchise (Owner/
+Identity/Squad/Fixtures/Staff/Finance, the full Retention -> EOI -> Pre-Auction Meeting -> Auction
+-> Trade sequencing with its own dated calendar events), International (Overview/Central Contracts
+&amp; Duty/Fixtures &amp; Trophies/National Pool &amp; Squad/Staff &amp; Board), Records (Club/
+Ground/World, filterable, two-level drill-down), World (Competitions/Nations/Clubs, filterable),
+Fixtures, Messages/Inbox, Calendar (General/Training/Fixtures), and Onboarding (New Game/Load Game/
+Job Market). Published as a Claude Artifact (republish the same local file path to update the same
+URL) whenever the user wants to view it live, matching this sub-track's own end-of-slice ritual.
+
+**The next phase of work on this mockup is design-refinement-with-functionality** - polishing
+visual/interaction quality (spacing, hierarchy, motion, empty/edge states, cross-screen consistency)
+and tightening the mechanics of what already exists (filters that are still presentational-only in
+places, finer interaction polish), not adding new top-level screens or flows. Treat any future
+"add X screen" request as a genuine departure from this closing state, not a continuation of the
+long build list above - confirm scope with the user before assuming it's part of the same push.
+
+---
 
 The graphical-UI sub-track flagged above ("its own long sub-track after the console app exists")
 is under active development as a single-file HTML mockup at `docs/ui-mockup/cover-point-mockup.html`
